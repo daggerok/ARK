@@ -64,11 +64,11 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Baseline recovery, live source/sibling research, and Bun installation are complete and published/recorded; implementation is ready to begin. The original .worklog.txt was read in full before changes. At start, local main and origin/main agreed at 969a3a09d91cab15ab5f3c1f732180ccaa178862 and the tree was clean.
+- Status: Recovery/research and Bun setup are complete. The JPMorgan UI shell has been copied and ARK brand/source substitutions are locally applied; Bun transpilation and parity assertions pass. The updater/API are not yet implemented. Local uncommitted UI files are `app.tsx`, `index.html`, and `favicon.ico`; the starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: f1c1446ec6b01eaba28a3805c677edae354bfd03 on origin/feat/ark-etfs.
+- Last confirmed pushed SHA: db67771b5fe0b8035a87326e6bb0ff5bd4dffa49 on origin/feat/ark-etfs.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -76,12 +76,14 @@ CURRENT STATE
   4. Live-checked official fund pages, site metadata API, Yahoo chart API, and SEC registrants; found corrections to stale names and one incorrect CIK in the original plan (details in journal below).
   5. Pinned the UI/updater/README reference revisions and verified shared dependency pins across the 20 sibling README repositories.
   6. Installed Bun 1.4.2 using the official installer at `/home/user/.bun/bin/bun`; the installer changed no project files.
-  7. Preserved the original plan and made no request for 00-generic.txt.
+  7. Copied the pinned JPMorgan UI shell locally and applied only brand/path/provenance substitutions; `bun build app.tsx --target=browser --outfile=/dev/null` passed, 56/56 tooltip keys/order and the rich-header CSS/behavior blocks match the reference.
+  8. Preserved the original plan and made no request for 00-generic.txt.
 - Active / remaining:
-  1. Scaffold from the pinned siblings and implement the app, updater, ARKY parser, offline fixtures/tests, generated API, workflow, Dependabot, and README while preserving exact JPMorgan UI parity and toolchain constraints.
-  2. Run offline tests/build, type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
-  3. Update target repository metadata as authorized by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
-- Exact next action: add `/home/user/.bun/bin` to PATH, verify `bun --version` is 1.4.2, then copy the pinned sibling shell/UI/workflow/README files into the feature branch.
+  1. Record the exact UI substitutions/tests below, commit/push `app.tsx`, `index.html`, `favicon.ico` plus this log update, and verify remote SHA.
+  2. Implement the updater with ARK official CSVs/API, Yahoo history, correct SEC trust fallback, ARKY parser, and offline fixtures/tests; then add manifests/workflow/README.
+  3. Run offline tests/build, type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
+  4. Update target repository metadata as authorized by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
+- Exact next action: append the exact parity substitutions and successful checks below, then commit/push the UI shell checkpoint.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -175,6 +177,14 @@ CHRONOLOGICAL JOURNAL
 - Installed Bun using the official installer with `BUN_INSTALL=/home/user/.bun`; `bun --version` returned `1.4.2`, matching the exact sibling `@types/bun` pin. The binary is `/home/user/.bun/bin/bun`; add that directory to PATH for each shell command.
 - Installation did not modify repository files. Feature branch was clean at pushed SHA `f1c1446ec6b01eaba28a3805c677edae354bfd03` before this log update.
 - Next: scaffold from the pinned sibling files, then verify the app/index diff consists only of permitted brand/source substitutions plus the documented frequency/header rules.
+
+### 2026-09-28 — Sibling-parity UI shell (completed locally; checkpoint pending)
+- Copied `app.tsx`, `index.html`, and `favicon.ico` from `daggerok/JPMorgan` commit `128b02d334767b4b2ad9263ae2498881c9ff3165`; no app logic, JSX/component structure, styling, layout, row-selection behavior, tab/search/filter/export behavior, or financial rows were rewritten.
+- Exact `app.tsx` substitutions: file header now names ARK Invest; API paths are `./api/ark/...`; the eight localStorage keys use the `ark-` prefix; export filename prefix is `ark-`; visible brand/status text says ARK Invest; tooltip text changes only issuer/source attribution from JPMorgan/am.jpmorgan.com to ARK Invest/ark-funds.com; the hidden source attribution includes the correct ARK ETF Trust CIK 0001579982 and Ark 21Shares Bitcoin ETF CIK 0001869699. The tooltip key set/order remains 56/56 identical to the pinned reference.
+- Exact `index.html` substitutions: ARK title/meta description, `ark-theme`, ARK h1/status/upload-tooltip text, `api/ark/index.json`, and official ARK source link/attribution. The shared hidden-summary CSS and event behavior blocks are byte-identical to JPMorgan's, preserving hover, keyboard focus, pointer travel, touch/click pinning, Escape, and viewport repositioning. The existing JPMorgan category comment remains unchanged (comment-only, not displayed).
+- Frequency presentation already matches the mandatory shared rule in the pinned source: null/empty/dash displays `00 - None`, explicit Unknown stays `00 - Unknown`; we did not change the UI logic. Add target regression tests when the updater test suite is created.
+- Verified `app.tsx` and `index.html` line counts remain identical to reference (2,410 and 346); all 56 tooltip keys/order match; header blocks compare byte-for-byte; row selection remains checkbox-only in reference logic. `bun build app.tsx --target=browser --outfile=/dev/null` succeeded with Bun 1.4.2. Browser interaction checks remain pending until app/API is runnable.
+- Local files currently changed: `app.tsx`, `index.html`, `favicon.ico`; no tests or generated data yet. Next: commit/push this UI checkpoint with the updated CURRENT STATE, then implement the updater separately.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
