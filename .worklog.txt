@@ -63,28 +63,24 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 ================================================================
 CURRENT STATE
 =============
-- Goal: Implement ARK Invest holdings-to-watchlist web application in daggerok/ARK matching sibling parity (Bun-only, zero runtime dependencies, static client app + update-data feed).
-- Status: Researched & Baseline Initialized. Repository cloned, clean baseline verified (LICENSE + placeholder README), official ETF brand site researched, data endpoints discovered and verified live, SEC EDGAR CIK confirmed, and self-contained plan embedded. Ready for implementation.
+- Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
+- Status: Baseline reconciled; implementation work is in progress. The complete 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes the prior worklog plus a later .prompt.txt commit, which the old CURRENT STATE did not mention. No pull requests exist. Local feature branch feat/ark-etfs was created from origin/main at that SHA.
 - Repository: https://github.com/daggerok/ARK
-- Branch: main (feature branch feat/ark-etfs to be created during implementation)
-- Pushed remote baseline: main branch with initialized .worklog.txt
+- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given.
+- Branch: feat/ark-etfs (local; based on origin/main 969a3a09). Remote feature branch not yet published; PR not opened.
+- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. No feature-branch checkpoint has yet been pushed.
 - Completed:
-  1. Cloned target repository and verified clean baseline state.
-  2. Conducted live research on official ETF issuer portal (https://www.ark-funds.com/ (fund overview at https://www.ark-funds.com/our-etfs/)).
-  3. Discovered and verified data acquisition pathways (endpoints, holdings formats, WAF characteristics).
-  4. Confirmed SEC EDGAR Trust registrant and CIK (CONFIRMED: 'ARK ETF Trust', CIK 0001579982 (and 'ARK Buffer ETF Trust', CIK 0002012002).).
-  5. Established closest sibling reference architecture (daggerok/NEOS or daggerok/Global-X (for daily CSV parsing) and daggerok/Franklin (for proxy-fallback if accessing main website HTML).).
-  6. Generated complete self-contained implementation plan (generic protocol + brand-specific specifications), eliminating any requirement for 00-generic.txt.
-  7. Committed initialized .worklog.txt into main branch.
-- Next action:
-  1. The next implementing agent starts here: read this .worklog.txt completely.
-  2. Create feature branch `feat/ark-etfs`.
-  3. Live-verify the site endpoints listed in PART 2 below.
-  4. Scaffold repo files from closest sibling (daggerok/NEOS or daggerok/Global-X (for daily CSV parsing) and daggerok/Franklin (for proxy-fallback if accessing main website HTML).): package.json, bun.lock, index.html, app.tsx, scripts/update-data.ts, scripts/update-data.test.ts, .github/workflows/update-data.yml, .github/dependabot.yml, and README.md.
-  5. Implement data updater matching verified endpoints and run offline tests (bun test scripts/update-data.test.ts).
-  6. Execute isolated acceptance runs (minimum 3 tickers), verify byte-stability across repeat runs.
-  7. Update .worklog.txt after each stage, commit with Conventional Commits, and push to feature branch.
-- Blockers: None. Ready for feature branch implementation.
+  1. Read this full worklog and reconciled actual Git state with origin/main.
+  2. Confirmed clean starting tree, origin/main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862, and no open or closed PRs (GitHub public API returned an empty list).
+  3. Created local branch feat/ark-etfs from origin/main.
+  4. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
+- Active / remaining:
+  1. Re-verify the 14 listed Azure Blob CSV endpoints and representative file schemas before implementation.
+  2. Pin and inspect the closest sibling references; record their source SHAs and follow the fixed UI parity substitutions.
+  3. Implement the static app, updater, fixtures/tests, API seed, CI, Dependabot, and README; run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison.
+  4. Commit/push each completed checkpoint, verify the remote branch, and open a PR against main (do not merge).
+- Exact next action: live-check the listed CSV endpoints and representative CSV headers, then record the observed status/schema in this worklog before moving to implementation.
+- Blockers / security: The initial request included a GitHub PAT in chat. It has not been copied into files or Git configuration; treat it as exposed and revoke/rotate it. Never persist or repeat credentials. Remote publishing will require an already-configured credential or a newly rotated token supplied through an appropriate secure channel. GitHub CLI is not installed; unauthenticated GitHub API queries work.
 
 AUTHORITY / USER AMENDMENTS
 ==========================
@@ -103,6 +99,14 @@ CHRONOLOGICAL JOURNAL
 - Verified SEC EDGAR filing registrant CIK: CONFIRMED: 'ARK ETF Trust', CIK 0001579982 (and 'ARK Buffer ETF Trust', CIK 0002012002)..
 - Assembled self-contained plan integrating the full generic build requirements (PART 1) and brand-specific research (PART 2).
 - Committed initialized .worklog.txt to main branch. Repository is ready for implementing agent.
+
+### 2026-09-28 — Recovery reconciliation and feature branch (completed locally)
+- Read all 839 lines of .worklog.txt before touching implementation files. The original worklog was accurate about the baseline plan but stale about the current branch/history: origin/main now includes `.prompt.txt` commit `969a3a09d91cab15ab5f3c1f732180ccaa178862` after the two earlier commits.
+- Reconciled with `git status --porcelain=v2 --branch`, `git branch -avv`, `git log --oneline --decorate --all -12`, and `git ls-remote --heads origin main`: initial tree clean; local main and origin/main agreed at `969a3a09d91cab15ab5f3c1f732180ccaa178862`.
+- Queried `https://api.github.com/repos/daggerok/ARK/pulls?state=all&per_page=100`; response contained zero PRs. `gh` is not installed.
+- Created local `feat/ark-etfs` from origin/main. This checkpoint updates only the worklog; no implementation files changed.
+- The user message contained a PAT. It has not been copied to repository files, Git config, URLs, or command history. Record only the security action: treat it as disclosed and revoke/rotate it. Push/PR publication is not yet confirmed and must use a configured or newly rotated credential without persisting it.
+- Next: live-verify the listed Azure Blob CSV endpoints and representative CSV schema; commit this checkpoint, then attempt push only if an existing safe Git credential is available.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
