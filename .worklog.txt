@@ -64,23 +64,24 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Baseline reconciled; implementation work is in progress. The complete 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes the prior worklog plus a later .prompt.txt commit, which the old CURRENT STATE did not mention. No pull requests exist. Local feature branch feat/ark-etfs was created from origin/main at that SHA.
+- Status: Baseline reconciled; the first worklog checkpoint is committed locally, but implementation is paused at an authentication blocker. The complete 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes a later .prompt.txt commit not recorded in the old CURRENT STATE. No pull requests exist. Local feat/ark-etfs was created from origin/main.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given.
-- Branch: feat/ark-etfs (local; based on origin/main 969a3a09). Remote feature branch not yet published; PR not opened.
-- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. No feature-branch checkpoint has yet been pushed.
+- Branch: feat/ark-etfs (local, based on origin/main 969a3a09); not yet published. PR not opened.
+- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. Local feature HEAD is `3987eca` (`docs(worklog): reconcile baseline and branch state`), not pushed.
 - Completed:
   1. Read this full worklog and reconciled actual Git state with origin/main.
   2. Confirmed clean starting tree, origin/main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862, and no open or closed PRs (GitHub public API returned an empty list).
   3. Created local branch feat/ark-etfs from origin/main.
-  4. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
+  4. Updated .worklog.txt with the reconciliation and committed it as 3987eca.
+  5. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
 - Active / remaining:
-  1. Re-verify the 14 listed Azure Blob CSV endpoints and representative file schemas before implementation.
-  2. Pin and inspect the closest sibling references; record their source SHAs and follow the fixed UI parity substitutions.
+  1. Publish the local checkpoint to origin/feat/ark-etfs after safe Git credentials are configured and verify the remote SHA.
+  2. Re-verify the 14 listed Azure Blob CSV endpoints and representative file schemas; pin/inspect sibling references.
   3. Implement the static app, updater, fixtures/tests, API seed, CI, Dependabot, and README; run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison.
   4. Commit/push each completed checkpoint, verify the remote branch, and open a PR against main (do not merge).
-- Exact next action: live-check the listed CSV endpoints and representative CSV headers, then record the observed status/schema in this worklog before moving to implementation.
-- Blockers / security: The initial request included a GitHub PAT in chat. It has not been copied into files or Git configuration; treat it as exposed and revoke/rotate it. Never persist or repeat credentials. Remote publishing will require an already-configured credential or a newly rotated token supplied through an appropriate secure channel. GitHub CLI is not installed; unauthenticated GitHub API queries work.
+- Exact next action: configure an authorized Git credential through the environment's trusted credential mechanism (do not paste a new token into chat), then run `git push -u origin feat/ark-etfs` and verify the pushed SHA. Resume endpoint verification only after the required checkpoint is published.
+- Blockers / security: `GIT_TERMINAL_PROMPT=0 git push -u origin feat/ark-etfs` failed with `fatal: could not read Username for 'https://github.com': terminal prompts disabled`; the feature branch is not pushed. The initial request included a GitHub PAT in chat. It was not copied into files, Git config, URLs, or commits; treat it as disclosed and revoke/rotate it. No secure token-entry tool is available in this session, so publishing requires an already-configured credential or trusted runtime setup. GitHub CLI is not installed; unauthenticated GitHub API queries work.
 
 AUTHORITY / USER AMENDMENTS
 ==========================
@@ -104,9 +105,10 @@ CHRONOLOGICAL JOURNAL
 - Read all 839 lines of .worklog.txt before touching implementation files. The original worklog was accurate about the baseline plan but stale about the current branch/history: origin/main now includes `.prompt.txt` commit `969a3a09d91cab15ab5f3c1f732180ccaa178862` after the two earlier commits.
 - Reconciled with `git status --porcelain=v2 --branch`, `git branch -avv`, `git log --oneline --decorate --all -12`, and `git ls-remote --heads origin main`: initial tree clean; local main and origin/main agreed at `969a3a09d91cab15ab5f3c1f732180ccaa178862`.
 - Queried `https://api.github.com/repos/daggerok/ARK/pulls?state=all&per_page=100`; response contained zero PRs. `gh` is not installed.
-- Created local `feat/ark-etfs` from origin/main. This checkpoint updates only the worklog; no implementation files changed.
-- The user message contained a PAT. It has not been copied to repository files, Git config, URLs, or command history. Record only the security action: treat it as disclosed and revoke/rotate it. Push/PR publication is not yet confirmed and must use a configured or newly rotated credential without persisting it.
-- Next: live-verify the listed Azure Blob CSV endpoints and representative CSV schema; commit this checkpoint, then attempt push only if an existing safe Git credential is available.
+- Created local `feat/ark-etfs` from origin/main. The checkpoint changes only `.worklog.txt`; no implementation files changed. Commit `3987eca` (`docs(worklog): reconcile baseline and branch state`) was created with a per-command author identity; no Git identity was persisted in repository config.
+- Attempted `GIT_TERMINAL_PROMPT=0 git push -u origin feat/ark-etfs`; it failed because no GitHub username/credential is configured (`fatal: could not read Username for 'https://github.com': terminal prompts disabled`). Local commit `3987eca` remains unpushed; the remote feature branch does not exist.
+- The user message contained a PAT. It has not been copied to repository files, Git config, URLs, or command history. Treat it as disclosed and revoke/rotate it. A trusted runtime credential setup is required before push/PR; do not paste a replacement token into chat.
+- Next: after safe credentials are configured, push `feat/ark-etfs`, verify the remote SHA, then continue with the live endpoint checks and subsequent small checkpoint commits.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
