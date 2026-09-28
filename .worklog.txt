@@ -64,25 +64,25 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery publication and live verification of the official CSV endpoints are complete; implementation has not yet started. The complete original worklog was read. Local main and origin/main resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start; the starting tree was clean. No PR existed. The feature branch is published and tracking origin.
+- Status: Recovery publication and live source/sibling research are complete; implementation has not yet started. The original .worklog.txt was read in full before changes. At start, local main and origin/main agreed at 969a3a09d91cab15ab5f3c1f732180ccaa178862 and the tree was clean. The feature branch is published and tracking origin.
 - Repository: https://github.com/daggerok/ARK
-- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of the supplied credentials for the daggerok account; do not persist credential values.
+- Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: f15a092c68889f9114f195d1df5d491969b48a75 on origin/feat/ark-etfs (verified by `git ls-remote`).
+- Last confirmed pushed SHA: f6670fc6c3071ce83749bc03b2ea23ddd73664bb on origin/feat/ark-etfs.
 - Completed:
-  1. Read this full worklog and reconciled actual Git state with origin/main.
-  2. Confirmed starting main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862 and no open or closed PRs.
-  3. Created and published feat/ark-etfs; all recovery/workflow commits are on origin.
-  4. Validated runtime authentication as `daggerok` with `push: true` permission on `daggerok/ARK`; no credential value was recorded or persisted.
-  5. Live-checked all 14 listed official Azure Blob CSV endpoints on 2026-09-28: 14/14 HTTP 200. Thirteen CSVs use the expected holdings columns; ARKY has a distinct structured-note schema. ARKF's first-row date was 01/02/2026 while the other dated feeds reported 09/28/2026.
-  6. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
+  1. Reconciled the starting repository state and confirmed no existing PRs.
+  2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
+  3. Verified all 14 Azure Blob CSV URLs return HTTP 200; 13 use the standard columns, while ARKY has a distinct 5-column structured-note format.
+  4. Live-checked official fund pages, site metadata API, Yahoo chart API, and SEC registrants; found corrections to stale names and one incorrect CIK in the original plan (details in journal below).
+  5. Pinned the UI/updater/README reference revisions and verified shared dependency pins across the 20 sibling README repositories.
+  6. Preserved the original plan and made no request for 00-generic.txt.
 - Active / remaining:
-  1. Pin and inspect closest sibling references (UI source, updater structure, README, workflow, and exact dependency pins); record SHAs.
-  2. Implement the updater with standard and ARKY-specific parsing, offline fixture tests, generated data, strict sibling-parity UI, CI, Dependabot, and README.
-  3. Run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison; commit/push each checkpoint.
-  4. Open a PR against main (do not merge).
-- Exact next action: record the complete live endpoint/schema findings in this worklog, commit/push the audit checkpoint, then inspect/pin the specific sibling references before scaffolding.
-- Blockers / security: No current authentication blocker. Keep the credential ephemeral, do not echo it, and recommend revocation after remote work is complete. GitHub CLI is not installed; authenticated API/HTTPS Git operations are available at runtime.
+  1. Commit/push the current source/sibling research checkpoint and install/use Bun for local validation (Bun is not currently on PATH).
+  2. Scaffold from the pinned siblings; implement the static catalog app, updater, ARKY parser, tests, generated API, workflow, Dependabot, and README while keeping exact JPMorgan UI parity and all documented constraints.
+  3. Run offline tests/build, type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
+  4. Update target repository metadata as permitted by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
+- Exact next action: write the endpoint, site, Yahoo, SEC, sibling-reference, and dependency-pin findings below into the journal; commit and push that checkpoint, then scaffold from the pinned sources.
+- Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
 ==========================
@@ -90,6 +90,8 @@ AUTHORITY / USER AMENDMENTS
 - User selected the first-prompt / recovery protocol.
 - User explicitly required eliminating external dependencies on 00-generic.txt; this file is 100% self-contained.
 - Secrets and tokens must never be persisted to repository files or Git configuration.
+- 2026-09-28 live-source corrections supersede the outdated assertions in PART 2: ARKW is now listed as “ARK Next Generation Technology ETF”; ARKF as “ARK Blockchain & Fintech Innovation ETF”; and ARKX as “ARK Space & Defense Innovation ETF.”
+- 2026-09-28 SEC correction: CIK 0002012002 is Keystone Real Estate Lending Fund, LLC, not an ARK trust. ARKD/ARKI/ARKE/ARKT filings are under ARK ETF Trust CIK 0001579982. ARKB is Ark 21Shares Bitcoin ETF CIK 0001869699; current submissions showed no N-PORT-P filings. Use 0001579982 for ARK ETF Trust funds and 0001869699 for ARKB; do not use 0002012002 as an ARK CIK.
 
 CHRONOLOGICAL JOURNAL
 =====================
@@ -141,6 +143,32 @@ CHRONOLOGICAL JOURNAL
 - Representative data validated exact ticker mapping and numeric/currency formatting (e.g., ARKK row TSLA; ARKG TWST; ARKX SPCX; ARKB BTC). Buffer ETFs contain underlying ETF positions and >100% weights in some rows; preserve source values rather than forcing weights to 100.
 - This is a source audit only, not the required isolated updater acceptance run. No production API files were generated or changed.
 - Next: commit/push this source-audit log update, then pin/inspect sibling examples for exact UI parity and updater conventions.
+
+### 2026-09-28 — Official site, Yahoo, SEC, and sibling references (completed)
+
+**Official ARK site and current catalog**
+- `https://www.ark-funds.com/our-etfs/` returned HTTP 200 (129,233 bytes) and contains server-rendered fund cards. The page includes a U.S.-investor legal/region interstitial, but normal direct requests returned complete HTML without a WAF challenge.
+- The page lists the requested 14 ETFs plus ARKVX (ARK Venture Fund, not an ETF); keep the catalog to the 14 requested ETF tickers. Current card names differ from the earlier plan for ARKW, ARKF, and ARKX; corrections are recorded under AUTHORITY / USER AMENDMENTS above.
+- All 14 `/funds/<ticker-lowercase>` pages returned HTTP 200. Their current internal overview IDs are ARKK=1004, ARKQ=1001, ARKW=1002, ARKG=1003, ARKF=1007, ARKX=1008, PRNT=1005, IZRL=1006, ARKY=1015, ARKD=1012, ARKI=1013, ARKE=1014, ARKT=1011, ARKB=1010. These are site-internal identifiers; derive them from the page's `/api/fund/overview/<id>` URL at runtime rather than relying on a permanent ID map.
+- The pages expose `GET /api/fund/overview/<id>` (tested for ARKK, ARKY, ARKB, ARKD; HTTP 200 JSON keys `feesView`, `detailsView`, `formattedDate`). The returned details HTML includes ticker, net assets, type, CUSIP, ISIN, exchange, inception, and expense ratio; sample formatted date was “As of 08/31/2026.” Page source also references `nav-historical-change`, `performance`, `holdings`, and `premium-discount` endpoints. The CSV remains the primary holdings source; do not add fund-detail UI rows for extra issuer fields.
+
+**Yahoo Finance chart behavior**
+- `https://query1.finance.yahoo.com/v8/finance/chart/ARKK?range=max&interval=1d...` returned `dataGranularity=1mo` and only 144 observations, despite the requested daily interval. This is not suitable for daily history.
+- The explicit `period1=0&period2=<current epoch>&interval=1d&events=div%7Csplit&includeAdjustedClose=true` form returned daily data: ARKK 2,992 rows (2014-10-31–2026-09-25, 7 dividend events); ARKY 27 (2026-08-19–2026-09-25, no dividend events); ARKD 184 (2026-01-02–2026-09-25, none); ARKB 679 (2024-01-11–2026-09-25, none). Use explicit period bounds, round adjusted close to two decimals, and persist only the stable query-free chart URL in provenance.
+
+**SEC CIK verification/correction**
+- SEC `data.sec.gov/submissions/CIK0001579982.json` returned HTTP 200, registrant “ARK ETF Trust,” with recent N-PORT-P filings. SEC prospectus material also groups the ARK DIET Buffer ETFs under ARK ETF Trust (source: `https://www.sec.gov/Archives/edgar/data/1579982/000121390025093695/ea0258714-06_497.htm`).
+- SEC `data.sec.gov/submissions/CIK0002012002.json` returned HTTP 200 with name “Keystone Real Estate Lending Fund, LLC” and zero recent N-PORT-P filings. This disproves the original PART 2 claim that CIK 0002012002 is ARK Buffer ETF Trust; do not use it for ARK.
+- SEC `data.sec.gov/submissions/CIK0001869699.json` returned HTTP 200 with name “Ark 21Shares Bitcoin ETF”; no recent N-PORT-P filings were present. ARKB is a separate trust and its official CSV remains primary; if SEC N-PORT fallback yields none, retain previously published data.
+
+**Pinned sibling references and parity findings**
+- Primary reference `daggerok/JPMorgan` HEAD `128b02d334767b4b2ad9263ae2498881c9ff3165`: copy `app.tsx`, `index.html`, README, workflow, Dependabot and shared updater/output-helper patterns from this revision. At this revision `app.tsx` is 2,410 lines and `index.html` is 346 lines.
+- Daily CSV parser reference `daggerok/Global-X` HEAD `47aab7852a23d7dbf847160caff7c686f27bcc59`; NEOS HEAD `f11e1ba26070197319b65d45cfc05430ce9a2424` has the same RFC-4180-style parser (BOM, CRLF, quoted commas). ARK share/market-value cells contain comma separators, so keep a real CSV parser.
+- Required sibling parity cross-check `daggerok/Schwab` HEAD `c74a7ec57862c8e3861170d2de142b5942617d43`: header summary behavior is present in both references; current JPMorgan row selection is wired to `input[data-checkbox]` (no row-click handler), and its frequency formatter already maps empty/dash values to `00 - None` with regression coverage. The JPMorgan-vs-Schwab diff also contains non-parity schema differences (Schwab's extra `frequencyCode` field and missing Market Price/Premium-Discount tooltip keys). For ARK copy JPMorgan's exact key/row set and do not transfer those Schwab deviations.
+- The JPMorgan README has the required common structure (Using Bun; static data; data sources; update controls; examples; TypeScript; Brands table; Sibling applications; License). It is the pinned text template; add ARK only to this repository's tables. Cross-repository README changes are out of scope without separate authorization.
+- Audited `package.json` from all 20 sibling repositories listed in that README through GitHub API: every one has `dependencies: {}` and exactly `@types/bun` 1.4.2 plus `@types/node` 26.6.2. Use those exact versions. JPMorgan workflow uses `actions/checkout@v7`, `oven-sh/setup-bun@v2`, Sunday schedule, frozen install, offline test, updater, and conditional data commit. Dependabot is the shared Bun + GitHub Actions monthly config.
+- Local environment check: `bun` is not currently on PATH; install Bun before running project tests. No source or application code has been changed in this research checkpoint.
+- Next: commit/push these research findings. Then copy the pinned reference files and make only the enumerated app/index substitutions; implement the updater as an ARK CSV + official details + Yahoo/EDGAR adapter.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
