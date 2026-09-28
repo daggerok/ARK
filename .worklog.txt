@@ -64,24 +64,24 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Baseline reconciled; work is paused because the supplied GitHub credential is rejected. The complete original 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes a later .prompt.txt commit not recorded in the old CURRENT STATE. No pull requests exist. Local feat/ark-etfs was created from origin/main.
+- Status: Baseline reconciled; implementation is ready to resume after publishing the recovery checkpoints. The complete original 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes a later .prompt.txt commit not recorded in the old CURRENT STATE. No pull requests exist. Local feat/ark-etfs was created from origin/main.
 - Repository: https://github.com/daggerok/ARK
-- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of a PAT for the daggerok account; do not persist any credential.
-- Branch: feat/ark-etfs (local, based on origin/main 969a3a09); not published. No remote feat/ark-etfs ref and no PR.
-- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. Local feature HEAD is `adbd77e`; commits `3987eca`, `ebad96d`, and `adbd77e` contain only worklog checkpoints and are unpushed.
+- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of the supplied credentials for the daggerok account; do not persist credential values.
+- Branch: feat/ark-etfs (local, based on origin/main 969a3a09); not yet published. No PR.
+- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. Local feature HEAD is `e3004eb`; commits `3987eca`, `ebad96d`, `adbd77e`, and `e3004eb` contain only worklog checkpoints and remain unpushed.
 - Completed:
   1. Read this full worklog and reconciled actual Git state with origin/main.
   2. Confirmed clean starting tree, origin/main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862, and no open or closed PRs.
-  3. Created local branch feat/ark-etfs and made three local recovery/authentication worklog commits.
-  4. Used the provided credential only at runtime; GitHub rejected the push, and authenticated REST calls to `/user` and `/repos/daggerok/ARK` both returned HTTP 401. No credential value was recorded or persisted.
+  3. Created local branch feat/ark-etfs and made four local recovery/authentication worklog commits.
+  4. The first supplied credential was rejected; the user provided a replacement. Runtime-only GitHub API checks now succeed as `daggerok` and report `push: true` for `daggerok/ARK`. No credential value was recorded or persisted.
   5. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
 - Active / remaining:
-  1. Configure a valid authorized GitHub credential through a trusted runtime mechanism; push the three recovery checkpoints and verify the remote SHA.
+  1. Record the replacement-credential validation in this worklog, commit it, push the five recovery checkpoints using ephemeral authentication, and verify the remote SHA.
   2. Re-verify the 14 listed Azure Blob CSV endpoints and representative file schemas; pin/inspect sibling references.
   3. Implement the static app, updater, fixtures/tests, API seed, CI, Dependabot, and README; run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison.
   4. Commit/push each completed checkpoint, verify the remote branch, and open a PR against main (do not merge).
-- Exact next action: configure a valid credential with write access to daggerok/ARK (prefer an already-configured credential helper or approved runtime secret injection; do not paste another token into chat), then push `feat/ark-etfs` and verify the remote SHA before implementation.
-- Blockers / security: The user-authorized credential was rejected: Git push reported `Invalid username or token. Password authentication is not supported for Git operations.` and authenticated REST calls returned HTTP 401. The failed push created no remote feature ref; a fresh all-state PR query still returns zero PRs. No implementation has started. GitHub CLI is not installed; unauthenticated GitHub API queries work.
+- Exact next action: add a journal entry confirming the valid replacement credential has `daggerok/ARK` push access, commit that worklog update, then push `feat/ark-etfs` with runtime-only auth and verify the remote SHA before endpoint research.
+- Blockers / security: No current authentication blocker. The first credential returned HTTP 401 and was not persisted; the replacement is accepted for the user account and repository. Keep it ephemeral, do not echo it, and recommend revocation after completion. GitHub CLI is not installed; unauthenticated GitHub API queries work.
 
 AUTHORITY / USER AMENDMENTS
 ==========================
@@ -120,6 +120,11 @@ CHRONOLOGICAL JOURNAL
 - `git push -u origin feat/ark-etfs` failed with `Invalid username or token. Password authentication is not supported for Git operations.` Authenticated GitHub REST GETs to `/user` and `/repos/daggerok/ARK` returned HTTP 401, confirming the credential was rejected rather than merely lacking repository write scope.
 - Rechecked `git ls-remote --heads origin feat/ark-etfs`: no remote feature ref. Rechecked all PR states via the public GitHub API: zero PRs. Local commits `3987eca`, `ebad96d`, and `adbd77e` remain worklog-only and unpushed; implementation has not begun.
 - Next: user must configure a valid credential with repository write access through a trusted runtime mechanism. Then push `feat/ark-etfs`, verify the remote SHA, and continue with endpoint verification. Do not paste a replacement token into chat.
+
+### 2026-09-28 — Replacement credential validated (completed)
+- User supplied a replacement credential after the previous one returned 401. A runtime-only GitHub REST check returned HTTP 200 for `/user` (`login=daggerok`) and `/repos/daggerok/ARK`; repository permissions reported `push: true`.
+- The credential was not written to disk, Git config, URLs, worklog, or command output. It will be used only ephemerally to publish the authorized feature branch and PR.
+- Next: commit this worklog update, push the five local recovery checkpoints, and verify the remote ref before live endpoint research.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
