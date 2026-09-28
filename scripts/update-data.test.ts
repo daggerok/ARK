@@ -7,6 +7,13 @@ import { join } from 'node:path';
 import {
   ARK_FUNDS,
   ARKY_HOLDINGS_HEADERS,
+  ProviderHttpError,
+  arkApiUrls,
+  createPacedGate,
+  createRequestClients,
+  jinaReaderUrl,
+  parseProviderJson,
+  unwrapJinaReaderText,
   HOLDINGS_HEADERS,
   buildOfficialReturns,
   buildPageEnvelope,
@@ -402,5 +409,98 @@ describe('formatting helpers', () => {
     expect(displayDate('2026-09-28')).toBe('Sep 28 2026');
     expect(numberOrNull('($1,234.50)')).toBe(-1234.5);
     expect(numberOrNull('—')).toBeNull();
+  });
+});
+
+describe('paced provider request clients', () => {
+  test('independent lanes pace separately and remain usable after a rejected request', async () => {
+    let clock = 0;
+    const waits: number[] = [];
+    const starts: number[] = [];
+    const gate = createPacedGate(2, 100, {
+      now: () => clock,
+      sleep: async (milliseconds) => { waits.push(milliseconds); clock += milliseconds; },
+    });
+    const work = [
+      gate(() => { starts.push(clock); return 'first'; }),
+      gate(() => { starts.push(clock); return 'second'; }),
+      gate(() => { starts.push(clock); return 'third'; }),
+      gate(() => { starts.push(clock); throw new Error('expected rejection'); }),
+    ];
+    await expect(Promise.all(work)).rejects.toThrow('expected rejection');
+    expect(starts).toHaveLength(4);
+    expect(starts[0]).toBe(0);
+    expect(starts[1]).toBe(0);
+    expect(starts[2]).toBeGreaterThanOrEqual(100);
+    expect(starts[3]).toBeGreaterThanOrEqual(100);
+    expect(waits.length).toBeGreaterThanOrEqual(1);
+    expect(waits.every((milliseconds) => milliseconds === 100)).toBe(true);
+    await expect(gate(() => 'recovered')).resolves.toBe('recovered');
+  });
+
+  test('temporary HTTP errors retry through the same paced client', async () => {
+    const calls: string[] = [];
+    const retries: string[] = [];
+    const waits: number[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '1' }), {
+      fetchImpl: async (input) => {
+        calls.push(String(input));
+        return calls.length === 1
+          ? new Response('temporarily unavailable', { status: 503 })
+          : new Response('ready', { status: 200 });
+      },
+      sleep: async (milliseconds) => { waits.push(milliseconds); },
+      onRetry: (message) => retries.push(message),
+    });
+    await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toBe('ready');
+    expect(calls).toEqual(['https://assets.example.test/fund.csv', 'https://assets.example.test/fund.csv']);
+    expect(waits).toEqual([500]);
+    expect(retries[0]).toContain('[ retry    ] ARK holdings HTTP 503');
+  });
+
+  test('two consecutive ARK denials activate the proxy for the rest of the run', async () => {
+    const calls: string[] = [];
+    const notices: string[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+      fetchImpl: async (input) => {
+        const url = String(input);
+        calls.push(url);
+        if (url.startsWith('https://r.jina.ai/')) {
+          return new Response('Title: ARK\nURL Source: https://www.ark-funds.com/funds/arkb\nMarkdown Content:\n{"ok":true}', { status: 200 });
+        }
+        return new Response('blocked', { status: 403 });
+      },
+      onIssuerProxy: (message) => notices.push(message),
+    });
+    await expect(client.ark('https://www.ark-funds.com/funds/arkk')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    const secondUrl = 'https://www.ark-funds.com/funds/arkb';
+    await expect(client.ark(secondUrl)).resolves.toBe('{"ok":true}');
+    const thirdUrl = 'https://www.ark-funds.com/api/fund/overview/1010';
+    await expect(client.ark(thirdUrl)).resolves.toBe('{"ok":true}');
+    expect(client.isArkProxyActive()).toBe(true);
+    expect(calls).toEqual([
+      'https://www.ark-funds.com/funds/arkk',
+      secondUrl,
+      jinaReaderUrl(secondUrl),
+      jinaReaderUrl(thirdUrl),
+    ]);
+    expect(notices).toHaveLength(1);
+    expect(notices[0]).toContain('[ issuer   ]');
+  });
+
+  test('issuer API paths mirror the verified page parameters and proxy JSON is unwrapped', () => {
+    const urls = arkApiUrls('1004');
+    expect(urls.overview).toBe('https://www.ark-funds.com/api/fund/overview/1004');
+    const history = new URL(urls.history);
+    expect(history.pathname).toBe('/api/fund/nav-historical-change/1004');
+    expect(history.searchParams.get('headingText')).toBe('NAV Historical Change');
+    expect(history.searchParams.get('overviewText')).toBe('NAV and Market Price');
+    const monthEnd = new URL(urls.monthEnd);
+    expect(monthEnd.searchParams.get('Range')).toBe('month-end');
+    expect(monthEnd.searchParams.get('Tab')).toBe('tab-annualized');
+    expect(monthEnd.searchParams.get('ExcludeMarketPrice')).toBe('False');
+    expect(new URL(urls.quarterEnd).searchParams.get('Range')).toBe('quarter-end');
+    expect(unwrapJinaReaderText('Title: Example\nURL Source: https://example.test\nMarkdown Content:\n```json\n{"fund":1}\n```')).toBe('{"fund":1}');
+    expect(parseProviderJson('Title: Example\nMarkdown Content:\n{"fund":1}')).toEqual({ fund: 1 });
   });
 });

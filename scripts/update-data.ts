@@ -1360,3 +1360,241 @@ export async function prunePages(directory: string, count: number): Promise<void
     if (match && Number(match[1]) > count) await rm(path.join(directory, file));
   }
 }
+
+// ---------------------------------------------------------------------------
+// Paced network clients (kept injectable so all request behavior is testable offline)
+// ---------------------------------------------------------------------------
+
+export type PaceClock = {
+  now?: () => number;
+  sleep?: (milliseconds: number) => Promise<void>;
+};
+
+export type RequestRuntime = PaceClock & {
+  fetchImpl?: typeof fetch;
+  onRetry?: (message: string) => void;
+  onIssuerProxy?: (message: string) => void;
+};
+
+type RequestGate = <T>(task: () => T | Promise<T>) => Promise<T>;
+type Sleep = (milliseconds: number) => Promise<void>;
+
+const DEFAULT_APP_USER_AGENT = 'DaggerOk ARK Invest ETF data updater (+https://github.com/daggerok/ARK; admin@daggerok.example.com)';
+const ISSUER_DIRECT_DENIAL_LIMIT = 2;
+
+function defaultSleep(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+/**
+ * Independent paced lanes. Requests are assigned to the least-recently-used
+ * lane at enqueue time and continue on that exact lane after the prior task
+ * settles, even when the prior task rejects.
+ */
+export function createPacedGate(concurrency: number, intervalMs: number, clock: PaceClock = {}): RequestGate {
+  if (!Number.isInteger(concurrency) || concurrency < 1) throw new Error('request gate concurrency must be a positive integer');
+  if (!Number.isFinite(intervalMs) || intervalMs < 0) throw new Error('request gate interval must be a non-negative finite number');
+  const now = clock.now ?? Date.now;
+  const sleep = clock.sleep ?? defaultSleep;
+  const lanes: Array<{ lastUsed: number; nextAllowedAt: number; tail: Promise<void> }> = Array.from(
+    { length: concurrency },
+    () => ({ lastUsed: 0, nextAllowedAt: Number.NEGATIVE_INFINITY, tail: Promise.resolve() }),
+  );
+  let order = 0;
+  return <T>(task: () => T | Promise<T>): Promise<T> => {
+    let selected = lanes[0];
+    for (const lane of lanes.slice(1)) if (lane.lastUsed < selected.lastUsed) selected = lane;
+    selected.lastUsed = ++order;
+    const work = selected.tail.then(async () => {
+      const wait = selected.nextAllowedAt - now();
+      if (wait > 0) await sleep(wait);
+      const startedAt = now();
+      selected.nextAllowedAt = startedAt + intervalMs;
+      return task();
+    });
+    selected.tail = work.then(() => undefined, () => undefined);
+    return work;
+  };
+}
+
+export class ProviderHttpError extends Error {
+  readonly status: number;
+  readonly url: string;
+  readonly provider: string;
+  readonly responseText: string;
+
+  constructor(provider: string, url: string, status: number, statusText: string, responseText: string) {
+    const detail = cleanText(responseText).slice(0, 180);
+    super(`${provider} HTTP ${status}${statusText ? ` ${cleanText(statusText)}` : ''} for ${url}${detail ? `: ${detail}` : ''}`);
+    this.name = 'ProviderHttpError';
+    this.status = status;
+    this.url = url;
+    this.provider = provider;
+    this.responseText = responseText;
+  }
+}
+
+function retryableStatus(status: number): boolean {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
+
+function retryDelay(response: Response | null, retryIndex: number, now: () => number): number {
+  const backoff = Math.min(30_000, 500 * (2 ** retryIndex));
+  const raw = response?.headers.get('retry-after')?.trim() ?? '';
+  if (!raw) return backoff;
+  const seconds = Number(raw);
+  if (Number.isFinite(seconds) && seconds >= 0) return Math.max(backoff, Math.min(120_000, seconds * 1000));
+  const timestamp = Date.parse(raw);
+  return Number.isFinite(timestamp) ? Math.max(backoff, Math.min(120_000, timestamp - now())) : backoff;
+}
+
+async function requestTextWithRetry(
+  url: string,
+  provider: string,
+  gate: RequestGate,
+  headers: HeadersInit,
+  config: UpdaterConfig,
+  runtime: RequestRuntime,
+): Promise<string> {
+  const fetchImpl = runtime.fetchImpl ?? fetch;
+  const sleep = runtime.sleep ?? defaultSleep;
+  const now = runtime.now ?? Date.now;
+  for (let attempt = 0; attempt <= config.maxRetries; attempt += 1) {
+    let response: Response;
+    try {
+      response = await gate(() => fetchImpl(url, { headers, redirect: 'follow' }));
+    } catch (error) {
+      if (attempt >= config.maxRetries) {
+        const detail = error instanceof Error ? error.message : String(error);
+        throw new Error(`${provider} request failed for ${url} after ${attempt + 1} attempt(s): ${cleanText(detail)}`);
+      }
+      const wait = Math.min(30_000, 500 * (2 ** attempt));
+      const message = `[ ${'retry'.padEnd(9)}] ${provider} network error for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
+      (runtime.onRetry ?? outputNote)(message);
+      await sleep(wait);
+      continue;
+    }
+    const responseText = await response.text();
+    if (response.ok) return responseText;
+    const failure = new ProviderHttpError(provider, url, response.status, response.statusText, responseText);
+    if (!retryableStatus(response.status) || attempt >= config.maxRetries) throw failure;
+    const wait = retryDelay(response, attempt, now);
+    const message = `[ ${'retry'.padEnd(9)}] ${provider} HTTP ${response.status} for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
+    (runtime.onRetry ?? outputNote)(message);
+    await sleep(wait);
+  }
+  throw new Error(`${provider} request loop ended unexpectedly for ${url}`);
+}
+
+export function jinaReaderUrl(urlValue: string): string {
+  const url = new URL(urlValue);
+  return `https://r.jina.ai/${url.protocol}//${url.host}${url.pathname}${url.search}`;
+}
+
+export function unwrapJinaReaderText(value: string): string {
+  let text = String(value ?? '');
+  const marker = /(?:^|\n)Markdown Content:\s*/i.exec(text);
+  if (marker && marker.index !== undefined) text = text.slice(marker.index + marker[0].length);
+  text = text.trim();
+  const fenced = /^```(?:json|html|xml|text)?\s*([\s\S]*?)\s*```$/i.exec(text);
+  return (fenced ? fenced[1] : text).trim();
+}
+
+export function parseProviderJson(text: string): unknown {
+  const body = unwrapJinaReaderText(text);
+  try { return JSON.parse(body) as unknown; }
+  catch (firstError) {
+    const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(body);
+    if (fenced) {
+      try { return JSON.parse(fenced[1]) as unknown; }
+      catch { /* Report the original response body below. */ }
+    }
+    const detail = firstError instanceof Error ? firstError.message : String(firstError);
+    throw new Error(`provider response was not valid JSON: ${detail}`);
+  }
+}
+
+export type RequestClients = {
+  ark: (url: string) => Promise<string>;
+  azure: (url: string) => Promise<string>;
+  yahoo: (url: string) => Promise<string>;
+  sec: (url: string) => Promise<string>;
+  isArkProxyActive: () => boolean;
+};
+
+/** Creates separate host-specific gates; issuer HTML/API always uses one cautious lane. */
+export function createRequestClients(config: UpdaterConfig, runtime: RequestRuntime = {}): RequestClients {
+  const intervalMs = config.requestSleepSeconds * 1000;
+  const paceClock: PaceClock = { now: runtime.now, sleep: runtime.sleep };
+  const arkGate = createPacedGate(1, intervalMs, paceClock);
+  const azureGate = createPacedGate(config.concurrency, intervalMs, paceClock);
+  const yahooGate = createPacedGate(config.concurrency, intervalMs, paceClock);
+  const secGate = createPacedGate(config.concurrency, intervalMs, paceClock);
+  const arkHeaders = {
+    Accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
+    'User-Agent': DEFAULT_APP_USER_AGENT,
+    Referer: `${ARK_SITE}/our-etfs/`,
+  };
+  let consecutiveArkDenials = 0;
+  let arkProxyActive = false;
+
+  const request = (
+    url: string,
+    provider: string,
+    gate: RequestGate,
+    headers: HeadersInit,
+  ): Promise<string> => requestTextWithRetry(url, provider, gate, headers, config, runtime);
+
+  const ark = async (url: string): Promise<string> => {
+    if (arkProxyActive) return unwrapJinaReaderText(await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders));
+    try {
+      const body = await request(url, 'ARK issuer', arkGate, arkHeaders);
+      consecutiveArkDenials = 0;
+      return body;
+    } catch (error) {
+      if (!(error instanceof ProviderHttpError) || error.status !== 403) throw error;
+      consecutiveArkDenials += 1;
+      if (consecutiveArkDenials < ISSUER_DIRECT_DENIAL_LIMIT) throw error;
+      arkProxyActive = true;
+      const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests.`;
+      (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
+      return unwrapJinaReaderText(await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders));
+    }
+  };
+
+  const azure = (url: string): Promise<string> => request(url, 'ARK holdings', azureGate, {
+    Accept: 'text/csv,application/octet-stream;q=0.9,*/*;q=0.8',
+    'User-Agent': DEFAULT_APP_USER_AGENT,
+  });
+  const yahoo = (url: string): Promise<string> => request(url, 'Yahoo Finance', yahooGate, {
+    Accept: 'application/json,*/*;q=0.8',
+    'User-Agent': 'Mozilla/5.0 (compatible; DaggerOk-ARK-ETF-Updater/1.0)',
+  });
+  const sec = (url: string): Promise<string> => request(url, 'SEC EDGAR', secGate, {
+    Accept: 'application/json,application/atom+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
+    'User-Agent': config.secUa,
+  });
+
+  return { ark, azure, yahoo, sec, isArkProxyActive: () => arkProxyActive };
+}
+
+export function arkApiUrls(pageId: string): { overview: string; history: string; monthEnd: string; quarterEnd: string } {
+  const id = encodeURIComponent(cleanText(pageId));
+  const history = new URL(`/api/fund/nav-historical-change/${id}`, ARK_SITE);
+  history.searchParams.set('headingText', 'NAV Historical Change');
+  history.searchParams.set('overviewText', 'NAV and Market Price');
+  const performanceUrl = (range: 'month-end' | 'quarter-end'): string => {
+    const url = new URL(`/api/fund/performance/${id}`, ARK_SITE);
+    url.searchParams.set('Range', range);
+    url.searchParams.set('Tab', 'tab-annualized');
+    url.searchParams.set('ExcludeMarketPrice', 'False');
+    url.searchParams.set('DisplayReturnCharge', 'False');
+    return url.toString();
+  };
+  return {
+    overview: new URL(`/api/fund/overview/${id}`, ARK_SITE).toString(),
+    history: history.toString(),
+    monthEnd: performanceUrl('month-end'),
+    quarterEnd: performanceUrl('quarter-end'),
+  };
+}

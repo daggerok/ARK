@@ -64,11 +64,11 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery/research, Bun setup, sibling-parity UI shell, and pinned Bun manifests are pushed. The updater parser/config/fixture-test foundation is implemented locally; live fetch integration and generated API are not yet implemented. Browser interaction checks remain pending. The starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
+- Status: Recovery/research, Bun setup, sibling-parity UI shell, pinned Bun manifests, and the pure parser/config/fixture-test foundation are pushed. Paced, injectable provider request clients are implemented locally; fund orchestration, CLI main, and generated API are not yet implemented. Browser interaction checks remain pending. The starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: 785cc9e2d5aa2078c352f45a59140d973c06ff77 on origin/feat/ark-etfs.
+- Last confirmed pushed SHA: d86b94400143354a38d3a368fbdad19efd64d334 on origin/feat/ark-etfs.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -79,12 +79,12 @@ CURRENT STATE
   7. Committed and pushed the pinned JPMorgan UI shell as `2e5d515` with only brand/path/provenance substitutions; `bun build app.tsx --target=browser --outfile=/dev/null` passed, 56/56 tooltip keys/order and rich-header CSS/behavior blocks match the reference.
   8. Copied the pinned JPMorgan `package.json`, `bun.lock`, and `.gitignore`; verified zero runtime dependencies, exact `@types/bun` 1.4.2 / `@types/node` 26.6.2 pins, and scripts. `bun install --frozen-lockfile` succeeded; scaffold committed/pushed as `785cc9e`.
   9. Preserved the original plan and made no request for 00-generic.txt.
+  10. Added and published the ARK parser/config/fixture-test foundation as `d86b944`; offline suite passed 27 tests / 166 assertions, and the Bun updater bundle build succeeded.
 - Active / remaining:
-  1. Publish the pure updater/parser/fixtures/tests foundation and corresponding `.worklog.txt` checkpoint.
-  2. Integrate paced live issuer API/CSV, Yahoo and SEC fallbacks; generate and stabilize the 14-fund API with bounded ticker/cursor processing.
-  3. Run offline tests/build, manual type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
-  4. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: append parser/fixture design and successful validation results below, commit/push the foundation, then add the network-backed runner and filesystem integration.
+  1. Integrate paced live issuer API/CSV, Yahoo and SEC fallbacks; generate and stabilize the 14-fund API with bounded ticker/cursor processing.
+  2. Run offline tests/build, manual type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
+  3. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
+- Exact next action: implement the live updater runner around the published pure helpers, starting with dynamic ARK page-ID discovery and paced issuer requests; preserve SEC/Yahoo fallbacks and add offline request-orchestration tests.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -199,12 +199,18 @@ CHRONOLOGICAL JOURNAL
 - `.gitignore` ignores IDE/cache/build output and `node_modules`; generated `api/ark` data remains intentionally trackable.
 - Committed/pushed as `785cc9e` (`build(bun): add pinned zero-dependency toolchain`); local/origin/remote HEAD matched `785cc9e2d5aa2078c352f45a59140d973c06ff77`. The parser/test foundation was then started locally.
 
-### 2026-09-28 — ARK parser/config/fixture foundation (completed locally; checkpoint pending)
+### 2026-09-28 — ARK parser/config/fixture foundation (completed and published)
 - Added `scripts/update-data.ts` pure functions for the 14-fund catalog (ARKVX excluded), official page-ID discovery, ARK overview/fee facts, daily NAV/market-price history, month-end/quarter-end performance HTML, RFC-4180 CSV, ARKY structured notes, Yahoo chart fallback parsing/returns, frequency/yield math, strict updater controls/ranges/filters, N-PORT XML/SEC table parsing, deterministic pagination, and timestamp-insensitive content comparison. The live request runner, data writes, API generation, and SEC network lookup are intentionally the next bounded step; do not treat the CLI as complete yet.
 - ARK CSV parser uses the 8-column equity layout for 13 ETFs and a dedicated 5-column ARKY layout. ARKY's notional is preserved in `Notional per Note` rather than mislabeled as shares; provider market-weight strings are copied verbatim and never capped. The dated ARKK CSV has 47 records after the header, of which 46 are holdings plus a trailing one-column legal disclaimer; the parser skips that disclaimer. ARKY's HTTP `Last-Modified` is the date hint because its CSV has no date column.
 - Captured public dated fixtures under `scripts/fixtures/` (sources documented in `SOURCES.md`): ARKK/ARKY CSVs, ARKK overview, month/quarter official return HTML, and a four-point sample of the full official daily-history response. The synthetic ARKY test adds 101.25% solely to verify no weight clamping; that is not stated as a live holding.
 - Offline validation: `bun install --frozen-lockfile` succeeded; `bun test scripts/update-data.test.ts` passed 27 tests / 166 assertions with no live network requests; `bun build --target=bun scripts/update-data.ts --outfile=/dev/null` succeeded. This is transpilation, not semantic TypeScript proof; manual type review remains outstanding.
-- Local uncommitted code/tests/fixtures and `.worklog.txt` are pending this checkpoint. Next: commit/push the pure parser/test foundation, then add the actual paced fetch/update runner.
+- Published code/tests/fixtures and `.worklog.txt` as `d86b944` (`feat(data): add ARK parsing and fixture-test foundation`); verified `origin/feat/ark-etfs` points to `d86b94400143354a38d3a368fbdad19efd64d334`. Next: add the actual paced fetch/update runner.
+
+### 2026-09-28 — Paced provider request layer (completed locally; checkpoint pending)
+- Added `createPacedGate` with independent least-recently-used lanes, per-lane interval timing, lane-stable queueing, and rejection-safe queue recovery. Separate issuer, Azure holdings, Yahoo, and SEC gates are created; issuer traffic deliberately stays on one conservative lane because plain ARK HTML requests have returned 403.
+- Added retry-aware text requests (transient HTTP/network retries, `Retry-After`, verbose notices), injectable `fetch`/clock/sleep hooks, descriptive source headers, ARK direct-denial counter with one always-visible switch notice to `r.jina.ai`, proxy-response unwrapping/JSON parsing, and URL builders matching the observed official overview/history/performance endpoints.
+- Offline tests do not access the network. The test suite passed 31 tests / 196 assertions, including lane throttling/recovery, transient retry, two-403 proxy switching and URL/query parameter correctness. `bun build --target=bun scripts/update-data.ts --outfile=/dev/null` succeeded. This remains transpilation only; manual type review and live acceptance are outstanding.
+- New request-client code/tests and this log entry are local; checkpoint publication is pending. Next: connect these clients to the per-fund source/fallback workflow and CLI.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
