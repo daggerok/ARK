@@ -64,11 +64,11 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery/research, Bun setup, and sibling-parity UI shell are complete and pushed. The updater/API are not yet implemented; browser interaction checks remain pending. The starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
+- Status: Recovery/research, Bun setup, and sibling-parity UI shell are complete and pushed. Pinned Bun manifests and `.gitignore` are staged locally; updater/API are not yet implemented. Browser interaction checks remain pending. The starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: 2e5d515fb7abd9567b5fa9528e503b4937c6ec7a on origin/feat/ark-etfs.
+- Last confirmed pushed SHA: 54da565d26a1a9c96e3d003248a473edbc9afdbd on origin/feat/ark-etfs.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -77,13 +77,14 @@ CURRENT STATE
   5. Pinned the UI/updater/README reference revisions and verified shared dependency pins across the 20 sibling README repositories.
   6. Installed Bun 1.4.2 using the official installer at `/home/user/.bun/bin/bun`; the installer changed no project files.
   7. Committed and pushed the pinned JPMorgan UI shell as `2e5d515` with only brand/path/provenance substitutions; `bun build app.tsx --target=browser --outfile=/dev/null` passed, 56/56 tooltip keys/order and rich-header CSS/behavior blocks match the reference.
-  8. Preserved the original plan and made no request for 00-generic.txt.
+  8. Copied the pinned JPMorgan `package.json`, `bun.lock`, and `.gitignore`; verified zero runtime dependencies, exact `@types/bun` 1.4.2 / `@types/node` 26.6.2 pins, and `bun test` / `bun scripts/update-data.ts` scripts. Pending checkpoint.
+  9. Preserved the original plan and made no request for 00-generic.txt.
 - Active / remaining:
-  1. Commit/push the UI publication confirmation in this worklog.
-  2. Implement the updater with ARK official CSVs/API, Yahoo history, correct SEC trust fallback, ARKY parser, and offline fixtures/tests; then add manifests/workflow/README.
+  1. Record and publish the pinned Bun manifest scaffold with `.worklog.txt`.
+  2. Add the ARK updater foundation and offline fixture tests; then integrate issuer API/CSV, Yahoo and SEC fallbacks, generate the API for all 14 ETFs, and verify stability/retention.
   3. Run offline tests/build, type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
-  4. Update target repository metadata as authorized by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
-- Exact next action: append the verified UI checkpoint SHA and cleanliness to the journal, commit/push this log update, then begin updater implementation.
+  4. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
+- Exact next action: append the pinned Bun manifest record below, commit/push `.gitignore`, `bun.lock`, `package.json` and this log update, then implement parser/test functions.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -149,10 +150,14 @@ CHRONOLOGICAL JOURNAL
 ### 2026-09-28 — Official site, Yahoo, SEC, and sibling references (completed)
 
 **Official ARK site and current catalog**
-- `https://www.ark-funds.com/our-etfs/` returned HTTP 200 (129,233 bytes) and contains server-rendered fund cards. The page includes a U.S.-investor legal/region interstitial, but normal direct requests returned complete HTML without a WAF challenge.
+- `https://www.ark-funds.com/our-etfs/` returned HTTP 200 (129,233 bytes) and contains server-rendered fund cards. The page includes a U.S.-investor legal/region interstitial. Direct requests with a descriptive contact-bearing User-Agent returned complete HTML; a plain `Mozilla/5.0` request later received HTTP 403. Follow the planned single-gate conservative issuer pacing and direct-then-proxy fallback for issuer HTML.
 - The page lists the requested 14 ETFs plus ARKVX (ARK Venture Fund, not an ETF); keep the catalog to the 14 requested ETF tickers. Current card names differ from the earlier plan for ARKW, ARKF, and ARKX; corrections are recorded under AUTHORITY / USER AMENDMENTS above.
 - All 14 `/funds/<ticker-lowercase>` pages returned HTTP 200. Their current internal overview IDs are ARKK=1004, ARKQ=1001, ARKW=1002, ARKG=1003, ARKF=1007, ARKX=1008, PRNT=1005, IZRL=1006, ARKY=1015, ARKD=1012, ARKI=1013, ARKE=1014, ARKT=1011, ARKB=1010. These are site-internal identifiers; derive them from the page's `/api/fund/overview/<id>` URL at runtime rather than relying on a permanent ID map.
 - The pages expose `GET /api/fund/overview/<id>` (tested for ARKK, ARKY, ARKB, ARKD; HTTP 200 JSON keys `feesView`, `detailsView`, `formattedDate`). The returned details HTML includes ticker, net assets, type, CUSIP, ISIN, exchange, inception, and expense ratio; sample formatted date was “As of 08/31/2026.” Page source also references `nav-historical-change`, `performance`, `holdings`, and `premium-discount` endpoints. The CSV remains the primary holdings source; do not add fund-detail UI rows for extra issuer fields.
+- Additional live API verification on 2026-09-28: `/api/fund/nav-historical-change/<id>?headingText=...&overviewText=...` returns JSON `{view,chartData}`; the official `chartData` rows contain `nav`, `marketPrice`, and `epochDateMilliSeconds` for the full daily history (ARKK returned 2,992 points). Use this as the primary history feed; generate stable `Date/NAV/Market Price/Premium/Discount` pages.
+- `/api/fund/performance/<id>` returns `{view,ticker}`. Supply `Range=month-end` or `Range=quarter-end`, `Tab=tab-annualized`, `ExcludeMarketPrice=False`, and `DisplayReturnCharge=False`; the HTML includes NAV annualized and cumulative tables plus an as-of date. ARKK month-end returned 08/31/2026 and quarter-end 06/30/2026, with official NAV YTD/1Y/3Y/5Y/10Y and since-inception values. Parse the NAV row only; use these headline returns before any derived fallback.
+- `/api/fund/premium-discount/<id>` returns official recent premium/discount chart data and rendered values. The premium/discount in the full daily history can be computed from ARK's own NAV and marketPrice points when needed. No dividend-history API was found among the page's public fund API calls; use Yahoo chart dividend events as a fallback and label that provenance honestly.
+- Current source parser should derive each page's internal ID from its HTML `/api/fund/overview/<id>` reference, not hard-code the researched IDs. Keep issuer HTML/API traffic behind a single conservative gate; on repeated HTTP 403, use the read-only `r.jina.ai` fallback described in PART 1.
 
 **Yahoo Finance chart behavior**
 - `https://query1.finance.yahoo.com/v8/finance/chart/ARKK?range=max&interval=1d...` returned `dataGranularity=1mo` and only 144 observations, despite the requested daily interval. This is not suitable for daily history.
@@ -185,7 +190,14 @@ CHRONOLOGICAL JOURNAL
 - Frequency presentation already matches the mandatory shared rule in the pinned source: null/empty/dash displays `00 - None`, explicit Unknown stays `00 - Unknown`; we did not change the UI logic. Add target regression tests when the updater test suite is created.
 - Verified `app.tsx` and `index.html` line counts remain identical to reference (2,410 and 346); all 56 tooltip keys/order match; header blocks compare byte-for-byte; row selection remains checkbox-only in reference logic. `bun build app.tsx --target=browser --outfile=/dev/null` succeeded with Bun 1.4.2. Browser interaction checks remain pending until app/API is runnable.
 - Committed this UI stage as `2e5d515` (`feat(ui): add ARK Invest ETF watchlist interface`) and pushed it to origin. `git ls-remote --heads origin feat/ark-etfs` confirmed `2e5d515fb7abd9567b5fa9528e503b4937c6ec7a`; worktree was clean immediately after push. No updater, tests, or generated data have been added yet.
-- Next: commit/push this publication confirmation, then start the updater in separate bounded steps.
+- Publication confirmation was committed as `54da565` (`docs(worklog): confirm UI checkpoint publication`) and pushed; `git status` was clean, local/origin/remote HEAD all matched `54da565d26a1a9c96e3d003248a473edbc9afdbd`, and the public GitHub API showed no PR for `feat/ark-etfs`.
+- Next: implement the ARK updater in separate bounded steps.
+
+### 2026-09-28 — Bun-only manifest scaffold (completed locally; checkpoint pending)
+- Copied `package.json`, `bun.lock`, and `.gitignore` from pinned JPMorgan revision `128b02d334767b4b2ad9263ae2498881c9ff3165`. This is a build-tool scaffold only; the updater/test files are not written yet.
+- Verified `dependencies` is `{}` and `devDependencies` are exactly `@types/bun: 1.4.2` and `@types/node: 26.6.2`, with scripts `bun test scripts/update-data.test.ts` and `bun scripts/update-data.ts`. The lockfile is the matching sibling lock. No runtime packages added.
+- `.gitignore` ignores IDE/cache/build output and `node_modules`; generated `api/ark` data remains intentionally trackable.
+- Local uncommitted files now include `.worklog.txt`, `.gitignore`, `bun.lock`, and `package.json`. Next: commit/push the scaffold and log update, then implement the pure parser/test layer.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
