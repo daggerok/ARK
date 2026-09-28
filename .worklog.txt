@@ -64,11 +64,11 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery publication and live source/sibling research are complete; implementation has not yet started. The original .worklog.txt was read in full before changes. At start, local main and origin/main agreed at 969a3a09d91cab15ab5f3c1f732180ccaa178862 and the tree was clean. The feature branch is published and tracking origin.
+- Status: Baseline recovery and live source/sibling research are complete and published; implementation has not yet started. The original .worklog.txt was read in full before changes. At start, local main and origin/main agreed at 969a3a09d91cab15ab5f3c1f732180ccaa178862 and the tree was clean.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: f6670fc6c3071ce83749bc03b2ea23ddd73664bb on origin/feat/ark-etfs.
+- Last confirmed pushed SHA: a1bdd2e9c3351dffe401e490ff316e4fb5fb37fb on origin/feat/ark-etfs.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -77,11 +77,11 @@ CURRENT STATE
   5. Pinned the UI/updater/README reference revisions and verified shared dependency pins across the 20 sibling README repositories.
   6. Preserved the original plan and made no request for 00-generic.txt.
 - Active / remaining:
-  1. Commit/push the current source/sibling research checkpoint and install/use Bun for local validation (Bun is not currently on PATH).
-  2. Scaffold from the pinned siblings; implement the static catalog app, updater, ARKY parser, tests, generated API, workflow, Dependabot, and README while keeping exact JPMorgan UI parity and all documented constraints.
+  1. Install Bun locally; `bun` is not currently on PATH.
+  2. Scaffold from pinned siblings and implement the app, updater, ARKY parser, offline fixtures/tests, generated API, workflow, Dependabot, and README while preserving exact JPMorgan UI parity and toolchain constraints.
   3. Run offline tests/build, type-safety review, browser/header regression checks, and isolated three-ticker live acceptance with repeat-run hashes; commit/push each small step.
-  4. Update target repository metadata as permitted by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
-- Exact next action: write the endpoint, site, Yahoo, SEC, sibling-reference, and dependency-pin findings below into the journal; commit and push that checkpoint, then scaffold from the pinned sources.
+  4. Update target repository metadata as authorized by the plan and open a PR against main; do not merge. Do not modify other sibling repositories without explicit cross-repo authorization.
+- Exact next action: install Bun with the official installer, verify the installed Bun version, then scaffold from the pinned JPMorgan/Global-X references.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -168,7 +168,8 @@ CHRONOLOGICAL JOURNAL
 - The JPMorgan README has the required common structure (Using Bun; static data; data sources; update controls; examples; TypeScript; Brands table; Sibling applications; License). It is the pinned text template; add ARK only to this repository's tables. Cross-repository README changes are out of scope without separate authorization.
 - Audited `package.json` from all 20 sibling repositories listed in that README through GitHub API: every one has `dependencies: {}` and exactly `@types/bun` 1.4.2 plus `@types/node` 26.6.2. Use those exact versions. JPMorgan workflow uses `actions/checkout@v7`, `oven-sh/setup-bun@v2`, Sunday schedule, frozen install, offline test, updater, and conditional data commit. Dependabot is the shared Bun + GitHub Actions monthly config.
 - Local environment check: `bun` is not currently on PATH; install Bun before running project tests. No source or application code has been changed in this research checkpoint.
-- Next: commit/push these research findings. Then copy the pinned reference files and make only the enumerated app/index substitutions; implement the updater as an ARK CSV + official details + Yahoo/EDGAR adapter.
+- Research checkpoint committed as `a1bdd2e` (`docs(worklog): verify ARK sources and references`) and pushed; local HEAD matched `origin/feat/ark-etfs` at `a1bdd2e9c3351dffe401e490ff316e4fb5fb37fb`. No source/application code changed.
+- Next: install Bun using the official installer, verify its version, and scaffold from the pinned reference files; keep app/index changes limited to enumerated parity substitutions.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
