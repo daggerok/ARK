@@ -64,24 +64,24 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Baseline reconciled; the first worklog checkpoint is committed locally, but implementation is paused at an authentication blocker. The complete 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes a later .prompt.txt commit not recorded in the old CURRENT STATE. No pull requests exist. Local feat/ark-etfs was created from origin/main.
+- Status: Baseline reconciled; implementation is ready to resume after publishing the recovery checkpoints. The complete original 839-line .worklog.txt was read. Local main and origin/main both resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start of this run; the tree was clean. The remote main includes a later .prompt.txt commit not recorded in the old CURRENT STATE. No pull requests exist. Local feat/ark-etfs was created from origin/main.
 - Repository: https://github.com/daggerok/ARK
-- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given.
+- Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user explicitly authorized runtime-only use of the PAT they supplied for the daggerok GitHub account and said they intend to remove it after completion.
 - Branch: feat/ark-etfs (local, based on origin/main 969a3a09); not yet published. PR not opened.
-- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. Local feature HEAD is `3987eca` (`docs(worklog): reconcile baseline and branch state`), not pushed.
+- Last confirmed pushed SHA: 969a3a09d91cab15ab5f3c1f732180ccaa178862 on origin/main. Local feature HEAD is `ebad96d`, with `3987eca` and `ebad96d` recovery worklog commits not yet pushed.
 - Completed:
   1. Read this full worklog and reconciled actual Git state with origin/main.
   2. Confirmed clean starting tree, origin/main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862, and no open or closed PRs (GitHub public API returned an empty list).
   3. Created local branch feat/ark-etfs from origin/main.
-  4. Updated .worklog.txt with the reconciliation and committed it as 3987eca.
+  4. Updated .worklog.txt with the reconciliation and push failure in commits 3987eca and ebad96d.
   5. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
 - Active / remaining:
-  1. Publish the local checkpoint to origin/feat/ark-etfs after safe Git credentials are configured and verify the remote SHA.
+  1. Commit this runtime-authorization update, push all recovery checkpoints to origin/feat/ark-etfs using ephemeral authentication, and verify the remote SHA.
   2. Re-verify the 14 listed Azure Blob CSV endpoints and representative file schemas; pin/inspect sibling references.
   3. Implement the static app, updater, fixtures/tests, API seed, CI, Dependabot, and README; run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison.
   4. Commit/push each completed checkpoint, verify the remote branch, and open a PR against main (do not merge).
-- Exact next action: configure an authorized Git credential through the environment's trusted credential mechanism (do not paste a new token into chat), then run `git push -u origin feat/ark-etfs` and verify the pushed SHA. Resume endpoint verification only after the required checkpoint is published.
-- Blockers / security: `GIT_TERMINAL_PROMPT=0 git push -u origin feat/ark-etfs` failed with `fatal: could not read Username for 'https://github.com': terminal prompts disabled`; the feature branch is not pushed. The initial request included a GitHub PAT in chat. It was not copied into files, Git config, URLs, or commits; treat it as disclosed and revoke/rotate it. No secure token-entry tool is available in this session, so publishing requires an already-configured credential or trusted runtime setup. GitHub CLI is not installed; unauthenticated GitHub API queries work.
+- Exact next action: record this explicit runtime-only credential authorization in the journal, commit it, then push `feat/ark-etfs` and verify the pushed SHA. Never save the credential in files, Git config, command output, URLs, or worklog.
+- Blockers / security: The first push attempt failed with `fatal: could not read Username for 'https://github.com': terminal prompts disabled`. The user has now explicitly authorized using the supplied credential at runtime only. No credential has been written to disk or Git config; keep it ephemeral and do not echo it. Recommend revoking it immediately after the requested remote work. GitHub CLI is not installed; unauthenticated GitHub API queries work.
 
 AUTHORITY / USER AMENDMENTS
 ==========================
@@ -109,6 +109,11 @@ CHRONOLOGICAL JOURNAL
 - Attempted `GIT_TERMINAL_PROMPT=0 git push -u origin feat/ark-etfs`; it failed because no GitHub username/credential is configured (`fatal: could not read Username for 'https://github.com': terminal prompts disabled`). Local commit `3987eca` remains unpushed; the remote feature branch does not exist.
 - The user message contained a PAT. It has not been copied to repository files, Git config, URLs, or command history. Treat it as disclosed and revoke/rotate it. A trusted runtime credential setup is required before push/PR; do not paste a replacement token into chat.
 - Next: after safe credentials are configured, push `feat/ark-etfs`, verify the remote SHA, then continue with the live endpoint checks and subsequent small checkpoint commits.
+
+### 2026-09-28 — Runtime authentication authorization (completed)
+- User explicitly authorized runtime-only use of the GitHub PAT they supplied for the daggerok account and said they intend to remove it after the task. No credential value is recorded here.
+- Authentication blocker is resolved for the requested remote operations. Use only an ephemeral per-command credential helper; do not write the credential to Git config, repository files, URLs, logs, or stdout. Recommend revocation after completion.
+- Next: commit this worklog update, push the existing recovery commits plus this checkpoint to `origin/feat/ark-etfs`, and verify the remote SHA before endpoint research.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
