@@ -64,22 +64,24 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery is published; implementation has not yet started. The complete original 839-line .worklog.txt was read. Local main and origin/main resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start; the starting tree was clean. No pull requests existed. The feature branch has now been created and verified on origin.
+- Status: Recovery publication and live verification of the official CSV endpoints are complete; implementation has not yet started. The complete original worklog was read. Local main and origin/main resolved to 969a3a09d91cab15ab5f3c1f732180ccaa178862 at the start; the starting tree was clean. No PR existed. The feature branch is published and tracking origin.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit and push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of the supplied credentials for the daggerok account; do not persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: eb5cea03815bf88f9bffd7fe77bb635ca4af2233 on origin/feat/ark-etfs (verified by `git ls-remote`).
+- Last confirmed pushed SHA: f15a092c68889f9114f195d1df5d491969b48a75 on origin/feat/ark-etfs (verified by `git ls-remote`).
 - Completed:
   1. Read this full worklog and reconciled actual Git state with origin/main.
   2. Confirmed starting main SHA 969a3a09d91cab15ab5f3c1f732180ccaa178862 and no open or closed PRs.
-  3. Created and published feat/ark-etfs. Five worklog-only recovery checkpoints were pushed; local HEAD and remote feature SHA both equal eb5cea03815bf88f9bffd7fe77bb635ca4af2233.
+  3. Created and published feat/ark-etfs; all recovery/workflow commits are on origin.
   4. Validated runtime authentication as `daggerok` with `push: true` permission on `daggerok/ARK`; no credential value was recorded or persisted.
-  5. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
+  5. Live-checked all 14 listed official Azure Blob CSV endpoints on 2026-09-28: 14/14 HTTP 200. Thirteen CSVs use the expected holdings columns; ARKY has a distinct structured-note schema. ARKF's first-row date was 01/02/2026 while the other dated feeds reported 09/28/2026.
+  6. Preserved the original research, plan, and protocol; no external 00-generic.txt was requested.
 - Active / remaining:
-  1. Live-verify the 14 listed Azure Blob CSV endpoints and representative file schemas; pin/inspect sibling references.
-  2. Implement the static app, updater, fixtures/tests, API seed, CI, Dependabot, and README; run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison.
-  3. Commit/push each completed checkpoint, verify the remote branch, and open a PR against main (do not merge).
-- Exact next action: record the successful branch publication in this worklog, commit/push that log update, then re-verify the 14 official CSV endpoints and record response status/schema.
+  1. Pin and inspect closest sibling references (UI source, updater structure, README, workflow, and exact dependency pins); record SHAs.
+  2. Implement the updater with standard and ARKY-specific parsing, offline fixture tests, generated data, strict sibling-parity UI, CI, Dependabot, and README.
+  3. Run offline tests/build and three-ticker isolated live acceptance with repeat-run hash comparison; commit/push each checkpoint.
+  4. Open a PR against main (do not merge).
+- Exact next action: record the complete live endpoint/schema findings in this worklog, commit/push the audit checkpoint, then inspect/pin the specific sibling references before scaffolding.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, do not echo it, and recommend revocation after remote work is complete. GitHub CLI is not installed; authenticated API/HTTPS Git operations are available at runtime.
 
 AUTHORITY / USER AMENDMENTS
@@ -130,6 +132,15 @@ CHRONOLOGICAL JOURNAL
 - Published the five local recovery commits to `origin/feat/ark-etfs` using a per-command credential helper; no credential was stored in files or Git config.
 - Verified `git ls-remote --heads origin feat/ark-etfs` returned `eb5cea03815bf88f9bffd7fe77bb635ca4af2233`; the local branch tracks origin and the worktree is clean. No PR has been opened yet.
 - Next: commit/push this publication confirmation, then live-verify the 14 Azure Blob CSV URLs and representative headers.
+
+### 2026-09-28 — Live verification of ARK CSV endpoints (completed)
+- Used Python standard-library `urllib` + `csv` to issue sequential GET requests (one-second spacing, 30-second timeout) to all 14 Azure Blob URLs listed in PART 2; no WAF challenge was observed. Every response was HTTP 200 with `application/octet-stream`.
+- Endpoint/size/status results: ARKK 6,273 B; ARKQ 5,443 B; ARKW 5,909 B; ARKG 5,119 B; ARKF 5,999 B; ARKX 5,143 B; PRNT 5,636 B; IZRL 7,645 B; ARKY 6,228 B; ARKD 2,608 B; ARKI 2,689 B; ARKE 2,692 B; ARKT 2,695 B; ARKB 3,614 B. All 14 URLs returned HTTP 200.
+- Thirteen feeds use header `date,fund,company,ticker,cusip,shares,market value ($),weight (%)`. ARKY is structurally different: `position,cusip,$ notional per note,market value ($),market weight (%)`; its first row describes a Goldman Sachs Treasury collateral position. Updater must parse ARKY separately and tolerate the absence of equity ticker/share columns.
+- First-row dates observed: 09/28/2026 for ARKK, ARKQ, ARKW, ARKG, ARKX, PRNT, IZRL, ARKD, ARKI, ARKE, ARKT, ARKB; ARKF reported 01/02/2026 in this check. Record this as a source-freshness caveat and do not infer the feed is current solely from HTTP 200.
+- Representative data validated exact ticker mapping and numeric/currency formatting (e.g., ARKK row TSLA; ARKG TWST; ARKX SPCX; ARKB BTC). Buffer ETFs contain underlying ETF positions and >100% weights in some rows; preserve source values rather than forcing weights to 100.
+- This is a source audit only, not the required isolated updater acceptance run. No production API files were generated or changed.
+- Next: commit/push this source-audit log update, then pin/inspect sibling examples for exact UI parity and updater conventions.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
