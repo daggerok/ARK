@@ -1,0 +1,104 @@
+{
+  "headers": [
+    "Date",
+    "NAV",
+    "Market Price",
+    "Premium/Discount"
+  ],
+  "page": 4,
+  "pageSize": 1000,
+  "rows": [
+    {
+      "Date": "Sep 04 2026",
+      "Market Price": "158.91",
+      "NAV": "159.13",
+      "Premium/Discount": "-0.1383%"
+    },
+    {
+      "Date": "Sep 08 2026",
+      "Market Price": "158.06",
+      "NAV": "158.18",
+      "Premium/Discount": "-0.0759%"
+    },
+    {
+      "Date": "Sep 09 2026",
+      "Market Price": "156.11",
+      "NAV": "156.40",
+      "Premium/Discount": "-0.1854%"
+    },
+    {
+      "Date": "Sep 10 2026",
+      "Market Price": "154.72",
+      "NAV": "154.50",
+      "Premium/Discount": "0.1424%"
+    },
+    {
+      "Date": "Sep 11 2026",
+      "Market Price": "155.49",
+      "NAV": "155.78",
+      "Premium/Discount": "-0.1862%"
+    },
+    {
+      "Date": "Sep 14 2026",
+      "Market Price": "158.56",
+      "NAV": "158.28",
+      "Premium/Discount": "0.1769%"
+    },
+    {
+      "Date": "Sep 15 2026",
+      "Market Price": "154.63",
+      "NAV": "154.82",
+      "Premium/Discount": "-0.1227%"
+    },
+    {
+      "Date": "Sep 16 2026",
+      "Market Price": "153.37",
+      "NAV": "153.69",
+      "Premium/Discount": "-0.2082%"
+    },
+    {
+      "Date": "Sep 17 2026",
+      "Market Price": "157.01",
+      "NAV": "156.75",
+      "Premium/Discount": "0.1659%"
+    },
+    {
+      "Date": "Sep 18 2026",
+      "Market Price": "158.98",
+      "NAV": "159.06",
+      "Premium/Discount": "-0.0503%"
+    },
+    {
+      "Date": "Sep 21 2026",
+      "Market Price": "165.24",
+      "NAV": "165.41",
+      "Premium/Discount": "-0.1028%"
+    },
+    {
+      "Date": "Sep 22 2026",
+      "Market Price": "165.89",
+      "NAV": "166.17",
+      "Premium/Discount": "-0.1685%"
+    },
+    {
+      "Date": "Sep 23 2026",
+      "Market Price": "163.91",
+      "NAV": "164.16",
+      "Premium/Discount": "-0.1523%"
+    },
+    {
+      "Date": "Sep 24 2026",
+      "Market Price": "165.39",
+      "NAV": "165.38",
+      "Premium/Discount": "0.0060%"
+    },
+    {
+      "Date": "Sep 25 2026",
+      "Market Price": "163.88",
+      "NAV": "163.79",
+      "Premium/Discount": "0.0549%"
+    }
+  ],
+  "ticker": "ARKW",
+  "totalRows": 3015
+}

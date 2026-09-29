@@ -1,0 +1,136 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$759.5 Million",
+  "aumValue": 759500000,
+  "category": "Thematic Equity",
+  "closePrice": "$32.70",
+  "closePriceValue": 32.7,
+  "dataFile": "funds/ARKX/meta.json",
+  "distributions": {
+    "dividend": "—",
+    "exDate": "—",
+    "frequency": "—",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [],
+    "source": "Yahoo Finance chart response contained no distribution events"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/arkx",
+  "generatedAt": "2026-09-29T03:25:38.365Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 1380
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 35
+  },
+  "identifiers": {
+    "cusip": "00214Q807",
+    "indexTicker": null,
+    "isin": "US00214Q8078"
+  },
+  "inceptionDate": "Mar 30 2021",
+  "metrics": {
+    "cagr3y": 30.38,
+    "cagr5y": 9.01,
+    "dividendYield": null,
+    "dividendYieldText": null,
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 9.31,
+    "tr1y": 23.64,
+    "tr3y": 121.63,
+    "tr5y": 53.93,
+    "ytd": 11.96
+  },
+  "name": "ARK Space & Defense Innovation ETF",
+  "nav": "$32.70",
+  "navValue": 32.7,
+  "premiumDiscount": "0.0000%",
+  "premiumDiscountValue": 0,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 5.82,
+      "mo3": -13.32,
+      "sinceInception": 9.31,
+      "sinceInceptionCumulative": 62.03,
+      "yr1": 23.64,
+      "yr3": 30.38,
+      "yr5": 9.01,
+      "ytd": 11.96
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -8.69,
+      "mo3": 16.59,
+      "sinceInception": 10.72,
+      "sinceInceptionCumulative": 70.68,
+      "yr1": 41.52,
+      "yr3": 30.95,
+      "yr5": 10.21,
+      "ytd": 17.93
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart response contained no distribution events",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arkx",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1008?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_SPACE_%26_DEFENSE_INNOVATION_ETF_ARKX_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1008",
+    "pageId": "1008",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1008?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKX"
+  },
+  "ter": "0.75%",
+  "terValue": 0.75,
+  "ticker": "ARKX",
+  "yields": {
+    "dividendYield": null,
+    "dividendYieldKind": "not available from Yahoo Finance",
+    "dividendYieldText": null,
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}

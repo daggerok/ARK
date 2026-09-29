@@ -1,0 +1,158 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$136.9 Million",
+  "aumValue": 136900000,
+  "category": "Thematic Equity",
+  "closePrice": "$28.56",
+  "closePriceValue": 28.56,
+  "dataFile": "funds/IZRL/meta.json",
+  "distributions": {
+    "dividend": "$0.7750",
+    "exDate": "Dec 26 2025",
+    "frequency": "Unknown",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "Dec 26 2025",
+        "$0.7750"
+      ],
+      [
+        "Dec 27 2024",
+        "$0.1010"
+      ],
+      [
+        "Dec 29 2021",
+        "$0.0960"
+      ],
+      [
+        "Dec 27 2019",
+        "$0.4750"
+      ],
+      [
+        "Dec 27 2018",
+        "$0.5720"
+      ]
+    ],
+    "source": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/izrl",
+  "generatedAt": "2026-09-29T03:26:08.330Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json",
+      "history/003.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 2213
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 66
+  },
+  "identifiers": {
+    "cusip": "00214Q609",
+    "indexTicker": null,
+    "isin": "US00214Q6098"
+  },
+  "inceptionDate": "Dec 05 2017",
+  "metrics": {
+    "cagr3y": 15.72,
+    "cagr5y": -0.5,
+    "dividendYield": 2.71,
+    "dividendYieldText": "2.71%",
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 5.49,
+    "tr1y": 8.43,
+    "tr3y": 54.96,
+    "tr5y": -2.48,
+    "ytd": -1.41
+  },
+  "name": "ARK Israel Innovative Technology ETF",
+  "nav": "$28.67",
+  "navValue": 28.67,
+  "premiumDiscount": "-0.3837%",
+  "premiumDiscountValue": -0.3837,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": -0.56,
+      "mo3": -10.36,
+      "sinceInception": 5.49,
+      "sinceInceptionCumulative": 59.49,
+      "yr1": 8.43,
+      "yr3": 15.72,
+      "yr5": -0.5,
+      "ytd": -1.41
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -6.8,
+      "mo3": 13.3,
+      "sinceInception": 6.08,
+      "sinceInceptionCumulative": 65.82,
+      "yr1": 15.42,
+      "yr3": 18.38,
+      "yr5": -0.41,
+      "ytd": 2.5
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/izrl",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1006",
+    "pageId": "1006",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1006?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/IZRL"
+  },
+  "ter": "0.49%",
+  "terValue": 0.49,
+  "ticker": "IZRL",
+  "yields": {
+    "dividendYield": 2.71,
+    "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
+    "dividendYieldText": "2.71%",
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}

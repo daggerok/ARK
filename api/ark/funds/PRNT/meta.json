@@ -1,0 +1,169 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$58.7 Million",
+  "aumValue": 58700000,
+  "category": "Thematic Equity",
+  "closePrice": "$25.16",
+  "closePriceValue": 25.16,
+  "dataFile": "funds/PRNT/meta.json",
+  "distributions": {
+    "dividend": "$0.1750",
+    "exDate": "Dec 26 2025",
+    "frequency": "Unknown",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "Dec 26 2025",
+        "$0.1750"
+      ],
+      [
+        "Dec 27 2024",
+        "$0.1070"
+      ],
+      [
+        "Dec 29 2021",
+        "$0.0010"
+      ],
+      [
+        "Dec 27 2019",
+        "$0.0150"
+      ],
+      [
+        "Dec 27 2018",
+        "$0.1580"
+      ],
+      [
+        "Dec 27 2017",
+        "$0.5270"
+      ],
+      [
+        "Dec 28 2016",
+        "$0.0010"
+      ]
+    ],
+    "source": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/prnt",
+  "generatedAt": "2026-09-29T03:26:20.406Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json",
+      "history/003.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 2562
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 44
+  },
+  "identifiers": {
+    "cusip": "00214Q500",
+    "indexTicker": null,
+    "isin": "US00214Q5009"
+  },
+  "inceptionDate": "Jul 19 2016",
+  "metrics": {
+    "cagr10y": 2.57,
+    "cagr3y": 5.61,
+    "cagr5y": -7.96,
+    "dividendYield": 0.7,
+    "dividendYieldText": "0.70%",
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 2.94,
+    "tr10y": 28.89,
+    "tr1y": 14.05,
+    "tr3y": 17.79,
+    "tr5y": -33.95,
+    "ytd": 14.78
+  },
+  "name": "The 3D Printing ETF",
+  "nav": "$25.17",
+  "navValue": 25.17,
+  "premiumDiscount": "-0.0397%",
+  "premiumDiscountValue": -0.0397,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 7.29,
+      "mo3": -1.34,
+      "sinceInception": 2.94,
+      "sinceInceptionCumulative": 34.12,
+      "yr1": 14.05,
+      "yr10": 2.57,
+      "yr3": 5.61,
+      "yr5": -7.96,
+      "ytd": 14.78
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -5.22,
+      "mo3": 20.81,
+      "sinceInception": 2.58,
+      "sinceInceptionCumulative": 28.85,
+      "yr1": 13.42,
+      "yr3": 2.04,
+      "yr5": -8.86,
+      "ytd": 10.27
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/prnt",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1005?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/THE_3D_PRINTING_ETF_PRNT_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1005",
+    "pageId": "1005",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1005?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/PRNT"
+  },
+  "ter": "0.66%",
+  "terValue": 0.66,
+  "ticker": "PRNT",
+  "yields": {
+    "dividendYield": 0.7,
+    "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
+    "dividendYieldText": "0.70%",
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}
