@@ -10,6 +10,7 @@ import {
   ProviderHttpError,
   arkApiUrls,
   ISSUER_PROXY_MIN_INTERVAL_MS,
+  USAGE,
   createPacedGate,
   createRequestClients,
   createSecFallbackResolver,
@@ -722,5 +723,84 @@ describe('bounded updater orchestration', () => {
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
+  });
+});
+
+describe('README parity guard', () => {
+  const readmePath = join(import.meta.dir, '..', 'README.md');
+  const readmeText = readFile(readmePath, 'utf8');
+
+  const headingsOutsideCode = (markdown: string): string[] => {
+    const headings: string[] = [];
+    let inFence = false;
+    for (const line of markdown.split('\n')) {
+      if (line.startsWith('```')) { inFence = !inFence; continue; }
+      if (!inFence && /^#{1,6} /.test(line)) headings.push(line.trimEnd());
+    }
+    return headings;
+  };
+
+  const tableRows = (markdown: string, heading: string): string[] => {
+    const start = markdown.indexOf(`\n${heading}\n`);
+    expect(start).toBeGreaterThan(-1);
+    const section = markdown.slice(start + heading.length + 2);
+    const end = section.search(/\n## /);
+    return (end === -1 ? section : section.slice(0, end))
+      .split('\n')
+      .filter((line) => line.startsWith('| ') && !line.startsWith('| ---'))
+      .slice(1);
+  };
+
+  test('keeps the pinned sibling heading structure with only brand substitutions', async () => {
+    expect(headingsOutsideCode(await readmeText)).toEqual([
+      '# ARK Invest',
+      '## Using Bun',
+      '## Updating the static ARK Invest data',
+      '### Data sources',
+      '### Update controls',
+      '### Examples',
+      '## TypeScript',
+      '## Brands table',
+      '## Sibling applications',
+      '## License',
+    ]);
+  });
+
+  test('documents only controls the updater implements and every implemented control', async () => {
+    const markdown = await readmeText;
+    const documented = new Set<string>();
+    for (const row of tableRows(markdown, '### Update controls')) {
+      const cell = row.split('|')[1] ?? '';
+      const codes = [...cell.matchAll(/`([A-Z_0-9]+)`/g)].map((match) => match[1]);
+      if (codes.length === 0) continue;
+      documented.add(codes[0]);
+      for (const suffix of codes.slice(1)) documented.add(`${codes[0].replace(/_YTD$/, '')}${suffix}`);
+    }
+    const implemented = new Set<string>();
+    for (const match of USAGE.matchAll(/^  ([A-Z_]+(?:\|[A-Z0-9|]+)?)\s{2,}/gm)) {
+      const name = match[1];
+      if (!name.includes('|')) { implemented.add(name); continue; }
+      const prefix = name.startsWith('TOTAL_RETURN_') ? 'TOTAL_RETURN_' : 'PERFORMANCE_';
+      for (const tenor of name.slice(prefix.length).split('|')) implemented.add(`${prefix}${tenor}`);
+    }
+    expect([...documented].sort()).toEqual([...implemented].sort());
+    for (const example of markdown.match(/^[A-Z_]+="?[^\s"]*"? \.\/scripts\/update-data\.ts$/gm) ?? []) {
+      expect(implemented.has(example.split('=')[0])).toBe(true);
+    }
+  });
+
+  test('brand and sibling tables include ARK and stay alphabetically ordered', async () => {
+    const markdown = await readmeText;
+    const brandNames = tableRows(markdown, '## Brands table').map((row) => row.split('|')[1].trim().replace(/\*\*/g, ''));
+    const siblingNames = tableRows(markdown, '## Sibling applications').map((row) => row.split('|')[1].trim());
+    const sorted = (values: string[]): string[] => [...values].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+    expect(brandNames).toHaveLength(21);
+    expect(siblingNames).toHaveLength(21);
+    expect(brandNames).toEqual(sorted(brandNames));
+    expect(siblingNames).toEqual(sorted(siblingNames));
+    expect(brandNames).toContain('ARK Invest');
+    expect(siblingNames).toEqual(brandNames);
+    expect(markdown).toContain('https://daggerok.github.io/ARK/');
+    expect(markdown).toContain('https://github.com/daggerok/ARK');
   });
 });
