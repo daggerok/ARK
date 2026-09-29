@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. PR #1: https://github.com/daggerok/ARK/pull/1 (open, head 38224dd at creation; not merged).
-- Last confirmed pushed SHA: a2b3ac6 on origin/feat/ark-etfs (PR #1 head). The item-27 commit (direct issuer access, JINA_API_KEY removed) is prepared locally and pending push confirmation.
+- Last confirmed pushed SHA: 953c0a5 on origin/feat/ark-etfs (PR #1 head; `git ls-remote` returned 953c0a57959a507a575e50c7be2ffb372b4779e4). This log-only commit follows it.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -352,7 +352,7 @@ CHRONOLOGICAL JOURNAL
 - Code: `ISSUER_USER_AGENT` = `DaggerOk ARK static feed updater (admin@daggerok.example.com)` with a comment forbidding URLs; unit test asserts the UA has a contact and no `http(s)://`. `JINA_API_KEY` removed from `UpdaterConfig`, `readConfig`, `createRequestClients`, the banner masking, USAGE, `runtimeControls`, README, workflow `env`, `config-docs.test.ts` and the JINA unit test. The proxy path is unchanged otherwise (two consecutive 403s → r.jina.ai with the shared 3 s gate) and its notice now reads "(shared limit of about 20 requests per minute)" with no setup suggestion. Workflow again equals the aberdeen reference plus brand/api/description/`bun test`/`category` substitutions only.
 - Tests: `bun test` → 48 pass, 0 fail (2 files). `git diff --check` clean.
 - Live (`/tmp/ark-c15d`, copy of production `api/ark`, VERBOSE=1): `CONCURRENCY=15` exit 0 in 9,337 ms — 0 `[ issuer ]`, 0 `[ retry ]`, 14 × `unchanged`, `14 funds updated, 0 failures`; `CONCURRENCY=2` exit 0 in 62,379 ms, same result. Production `api/ark` untouched.
-- Next: commit `fix(data): use a URL-free issuer User-Agent so ark-funds.com serves Bun directly; drop JINA_API_KEY`, push, `git ls-remote`, update the pushed-SHA line.
+- Published as `953c0a5` (`fix(data): use a URL-free issuer User-Agent so ark-funds.com serves Bun directly; drop JINA_API_KEY`); `git ls-remote` = `953c0a57959a507a575e50c7be2ffb372b4779e4`.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
