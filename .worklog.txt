@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: 2bc7b7e667a25986f0cbb928621b426adc27b29d on origin/feat/ark-etfs (UI-route worklog push succeeded and `git ls-remote` returned the same SHA).
+- Last confirmed pushed SHA: 2ff1bcb581a38fe5add5ae80245eac7edc7be997 on origin/feat/ark-etfs (worklog push succeeded and `git ls-remote` returned the same SHA).
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -89,7 +89,7 @@ CURRENT STATE
 - Active / remaining:
   1. Generate and validate the full 14-fund production API dataset in an isolated copy with conservative defaults and repeat-run hashes; publish it under `api/ark` only after reviewing provider provenance, source dates, and retained failures. Complete manual type-safety review and any feasible browser/header regression checks.
   2. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: verify `origin/feat/ark-etfs` at `2bc7b7e`, run the unfiltered updater in a new temporary worktree (separate from the accepted evidence and UI preview) with default 1.5-second pacing, capture/inspect all 14 fund outputs and source dates, repeat it to compare full-catalog SHA-256 manifests, and then review before populating production `api/ark`.
+- Exact next action: verify `origin/feat/ark-etfs` at `2ff1bcb`, run the unfiltered updater in a new temporary worktree (separate from the accepted evidence and UI preview) with default 1.5-second pacing, capture/inspect all 14 fund outputs and source dates, repeat it to compare full-catalog SHA-256 manifests, and then review before populating production `api/ark`.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
