@@ -23,7 +23,7 @@ bun test
 
 Run `./scripts/update-data.ts -h` (or `--help`) to print every configuration variable with its default and usage examples.
 
-Defaults live in `scripts/update-data.config.json` (every control as a string). Explicit environment variables override the file; an `ARK_<KEY>` alias (for example `ARK_CONCURRENCY`) wins over the plain `<KEY>` when both are set. The **Update ARK Invest ETF data** GitHub Actions workflow uses the same resolver: individual `workflow_dispatch` inputs are blank by default and inherit the file, the `advanced` input accepts a JSON object with any control, and the precedence is *file < advanced JSON < nonblank individual inputs*. GitHub allows at most 25 inputs, so `SEC_UA`, `SKIP_ARK` and `VERBOSE` are set through `advanced` (for example `{"VERBOSE":"true"}`). The optional `JINA_API_KEY` is a repository **secret**, never a file control or input. All supplied filters use **AND** logic.
+Defaults live in `scripts/update-data.config.json` (every control as a string). Explicit environment variables override the file; an `ARK_<KEY>` alias (for example `ARK_CONCURRENCY`) wins over the plain `<KEY>` when both are set. The **Update ARK Invest ETF data** GitHub Actions workflow uses the same resolver: individual `workflow_dispatch` inputs are blank by default and inherit the file, the `advanced` input accepts a JSON object with any control, and the precedence is *file < advanced JSON < nonblank individual inputs*. GitHub allows at most 25 inputs, so `SEC_UA`, `SKIP_ARK` and `VERBOSE` are set through `advanced` (for example `{"VERBOSE":"true"}`). All supplied filters use **AND** logic.
 
 ### Data sources
 
@@ -37,7 +37,7 @@ Defaults live in `scripts/update-data.config.json` (every control as a string). 
 | Distributions | Yahoo Finance chart API dividend events (ARK publishes no dividend-history endpoint) |
 | Fallback | SEC EDGAR N-PORT-P (ARK ETF Trust, CIK 0001579982; Ark 21Shares Bitcoin ETF, CIK 0001869699) + Yahoo Finance chart API as fallbacks |
 
-ark-funds.com sits behind a Cloudflare managed challenge that is keyed on the TLS fingerprint, so Bun's `fetch` receives HTTP 403 there regardless of the User-Agent (verified 2026-09-28; a browser or `curl` passes, Bun does not). After two consecutive denials the updater routes the remaining issuer page/API requests through the read-only `r.jina.ai` reader and prints one `[ issuer   ]` notice. Without a key that reader is limited to roughly 20 requests per minute per IP, so proxied issuer requests are additionally spaced 3 seconds apart across the whole run; with `JINA_API_KEY` set (free tier, 500 requests per minute) the global gate is lifted and every worker paces itself by `REQUEST_SLEEP` alone. A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page render on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund whose sources fail keeps its previously published data.
+All issuer requests go directly to ark-funds.com with a short contact-bearing User-Agent (`DaggerOk ARK static feed updater (admin@…)`). The site's Cloudflare WAF answers HTTP 403 to any User-Agent that contains a URL (the crawler-style `(+https://github.com/…)`) and challenges browser User-Agents sent from a non-browser TLS stack, so the updater deliberately uses neither. Only if two consecutive direct requests are still denied does it fall back to the read-only `r.jina.ai` reader for the remaining issuer requests (one `[ issuer   ]` notice; that reader is limited to roughly 20 requests per minute, so proxied requests are spaced 3 seconds apart across the whole run). A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page download on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund whose sources fail keeps its previously published data.
 
 Each fund carries a derived `metrics` object that powers the catalog columns shared with the sibling sites:
 
@@ -53,8 +53,8 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | Environment variable | Default | Meaning |
 | --- | --: | --- |
 | `MAX_FETCHES` | all | Batch size: with a positive value the updater continues after the committed cursor in `api/ark/update-state.json`; empty or `0` is a full pass — every fund is refreshed in one run. |
-| `REQUEST_SLEEP` | `1.5` | Minimum delay in seconds between request starts **within one worker**, including retries, for every provider (ark-funds.com, `r.jina.ai`, Azure holdings, Yahoo Finance, SEC EDGAR). Keyless `r.jina.ai` traffic is additionally limited to one request every 3 seconds across all workers. |
-| `CONCURRENCY` | `2` | Number of independent fund workers. Each worker owns its request lane, so `CONCURRENCY=15` starts 15 funds at once and total throughput scales with the value until a provider limit applies (the keyless `r.jina.ai` gate; set `JINA_API_KEY` to remove it). |
+| `REQUEST_SLEEP` | `1.5` | Minimum delay in seconds between request starts **within one worker**, including retries, for every provider (ark-funds.com, Azure holdings, Yahoo Finance, SEC EDGAR). Only the last-resort `r.jina.ai` fallback is additionally limited to one request every 3 seconds across all workers. |
+| `CONCURRENCY` | `2` | Number of independent fund workers. Each worker owns its request lane, so `CONCURRENCY=15` starts 15 funds at once and total run time shrinks roughly in proportion. |
 | `AUM` | `:` | Net Assets range. Each bound may be a USD amount or `K`/`M`/`B`/`T`, or one of `nano`, `micro`, `small`, `mid`, `large`. |
 | `TER` | `:` | Expense ratio range in % (strict `min:max`). |
 | `DIVIDEND_YIELD` | `:` | Dividend-yield percentage range. |
@@ -71,7 +71,6 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | `SKIP_ARK` | off | Do not request ark-funds.com; keep the fixed catalog and previously published official data and only run the fallbacks. |
 | `SKIP_YAHOO` | off | Skip Yahoo Finance history and distribution updates. |
 | `VERBOSE` | off | Print per-request retry and fallback notices. |
-| `JINA_API_KEY` | unset | Optional `r.jina.ai` API key (environment or repository secret only; rejected in the config file and `advanced` JSON). Authenticates proxied issuer requests and lifts the keyless 3-second global gate. The effective-configuration banner prints only `(set)`. |
 
 `TICKERS` combines with AUM, TER, yield and return filters using AND logic; it does not override them. Funds not selected for a successful update keep their prior published metadata and data files.
 
@@ -80,7 +79,6 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 ```bash
 MAX_FETCHES=3 ./scripts/update-data.ts
 CONCURRENCY=15 ./scripts/update-data.ts
-JINA_API_KEY=... CONCURRENCY=15 REQUEST_SLEEP=1 ./scripts/update-data.ts
 TICKERS="ARKK ARKW ARKG ARKB" ./scripts/update-data.ts
 AUM="1B:" TER=":0.75" ./scripts/update-data.ts
 PERFORMANCE_1Y="15:" ./scripts/update-data.ts

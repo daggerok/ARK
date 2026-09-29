@@ -14,13 +14,12 @@ test('configuration precedence: file < advanced < nonblank input < environment/A
   expect(readConfig(resolveControls({ CATEGORY: 'Thematic' })).category).toBe('Thematic');
 });
 
-test('safe resolver rejects unknown, invalid, secret and environment-file injection values', () => {
-  for (const value of [{ UNKNOWN: 1 }, { JINA_API_KEY: 'never-a-file-control' }, { SEC_UA: 'x\nEVIL=yes' }, { CONCURRENCY: 0 }, { MAX_RETRIES: -1 }, { MAX_FETCHES: 1.5 }, { REQUEST_SLEEP: '-1' }, { VERBOSE: 'maybe' }, { AUM: '1:2:3' }, { TICKERS: ['ARKK'] }, null, []]) {
+test('safe resolver rejects unknown, invalid and environment-file injection values', () => {
+  for (const value of [{ UNKNOWN: 1 }, { SEC_UA: 'x\nEVIL=yes' }, { CONCURRENCY: 0 }, { MAX_RETRIES: -1 }, { MAX_FETCHES: 1.5 }, { REQUEST_SLEEP: '-1' }, { VERBOSE: 'maybe' }, { AUM: '1:2:3' }, { TICKERS: ['ARKK'] }, null, []]) {
     expect(() => resolveControls(value)).toThrow();
   }
   expect(() => resolveControls({}, { SEC_UA: 'x\rfoo' })).toThrow();
   expect(() => resolveControls({}, {}, {}, { ARK_SEC_UA: 'x\0bad' })).toThrow();
-  expect(resolveControls({}, {}, {}, { JINA_API_KEY: 'ignored-by-resolver' })).toEqual({});
 });
 
 test('all canonical controls defaulted in tracked JSON; controls, README and USAGE in sync', () => {
@@ -36,7 +35,6 @@ test('all canonical controls defaulted in tracked JSON; controls, README and USA
     if (tenor) expect(doc).toContain('`' + tenor[1] + '_YTD`');
   }
   expect(doc).toContain('scripts/update-data.config.json');
-  expect(doc).toContain('`JINA_API_KEY`');
 });
 
 test('CI is the pinned aberdeen/Capital-Group mechanism with exactly the permitted ARK adaptations', () => {
@@ -51,10 +49,7 @@ test('CI is the pinned aberdeen/Capital-Group mechanism with exactly the permitt
     .replaceAll('Parallel fund workers; request starts remain conservatively paced', 'Independent parallel fund workers, each with its own request pacing')
     // ARK keeps full official history (no HISTORY_RANGE); CATEGORY takes that input slot.
     .replace('      history_range:\n        description: "Yahoo daily history range: max or Ny (e.g. 5y); preserves prior history; blank inherits scripts/update-data.config.json"',
-      '      category:\n        description: "Keep funds whose category contains this text (case-insensitive); blank inherits scripts/update-data.config.json"')
-    // Optional r.jina.ai key is a repository secret, never a workflow input or file control.
-    .replace('      - name: Generate api/ark static data\n        run: bun ./scripts/update-data.ts',
-      '      - name: Generate api/ark static data\n        env:\n          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}\n        run: bun ./scripts/update-data.ts');
+      '      category:\n        description: "Keep funds whose category contains this text (case-insensitive); blank inherits scripts/update-data.config.json"');
   const actual = read('.github/workflows/update-data.yml');
   expect(actual).toBe(expected);
   const names = [...actual.slice(actual.indexOf('    inputs:'), actual.indexOf('\npermissions:')).matchAll(/^      (\w+):$/gm)].map((m) => m[1]);
@@ -65,5 +60,4 @@ test('CI is the pinned aberdeen/Capital-Group mechanism with exactly the permitt
   expect(actual).not.toMatch(/inputs\.\w+ \|\| '/); // no per-input shell/env interpolation of defaults
   expect(actual).toContain('git add api/ark\n          if git diff --cached --quiet -- api/ark');
   expect(actual).toContain('if: ${{ !cancelled() }}');
-  expect(actual).not.toMatch(/JINA_API_KEY: *["']?[A-Za-z0-9_]{20,}/); // secret comes from secrets.*, never a literal
 });

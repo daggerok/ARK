@@ -612,35 +612,10 @@ describe('paced provider request clients', () => {
     await client.ark('https://www.ark-funds.com/funds/arkk');
     expect(seen).toEqual([ISSUER_USER_AGENT]);
     expect(ISSUER_USER_AGENT).toContain('DaggerOk');
-    expect(ISSUER_USER_AGENT).toContain('https://github.com/daggerok/ARK');
+    expect(ISSUER_USER_AGENT).toContain('@'); // contact
+    expect(ISSUER_USER_AGENT).not.toMatch(/https?:\/\//); // any URL in the UA is answered with HTTP 403 by ark-funds.com
     expect(ISSUER_USER_AGENT.startsWith('Mozilla/5.0')).toBe(false);
     expect(client.isArkProxyActive()).toBe(false);
-  });
-
-  test('JINA_API_KEY authenticates the proxy and lifts the process-wide keyless gate (workers pace themselves)', async () => {
-    let clock = 0;
-    const proxyStarts: number[] = [];
-    const authHeaders: string[] = [];
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', JINA_API_KEY: 'jina_test_key' }), {
-      now: () => clock,
-      sleep: async (milliseconds) => { clock += milliseconds; },
-      fetchImpl: async (input, init) => {
-        const url = String(input);
-        if (url.startsWith('https://r.jina.ai/')) {
-          proxyStarts.push(clock);
-          authHeaders.push(new Headers(init?.headers).get('authorization') ?? '');
-          return new Response('{"ok":true}', { status: 200 });
-        }
-        expect(new Headers(init?.headers).get('authorization')).toBeNull();
-        return new Response('blocked', { status: 403 });
-      },
-      onIssuerProxy: (message) => expect(message).toContain('JINA_API_KEY set'),
-    });
-    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
-    await Promise.all(['1004', '1001', '1002', '1003'].map((id) => client.ark(`https://www.ark-funds.com/api/fund/overview/${id}`)));
-    expect(client.isArkProxyActive()).toBe(true);
-    expect(authHeaders).toEqual(Array(4).fill('Bearer jina_test_key'));
-    expect(Math.max(...proxyStarts) - Math.min(...proxyStarts)).toBeLessThan(ISSUER_PROXY_MIN_INTERVAL_MS);
   });
 
   test('real HTTP: 1, 3 and 15 worker lanes overlap requests, keep per-lane spacing and improve throughput', async () => {

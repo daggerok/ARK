@@ -170,8 +170,6 @@ jobs:
               Object.entries(controls).map(([key,value]) => `${key}=${value}\n`).join(""));
           '
       - name: Generate api/ark static data
-        env:
-          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
         run: bun ./scripts/update-data.ts
       - name: Commit updated data
         if: ${{ !cancelled() }}

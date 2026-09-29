@@ -34,8 +34,6 @@ function outputConfigEntries(config: Record<string, any>): [string, string][] {
       for (const period of ['YTD', '1Y', '3Y', '5Y', '10Y']) values.set(`${name}_${period}`, range(value?.[period]));
     } else if (['AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD'].includes(name)) {
       values.set(name, range(value));
-    } else if (name === 'JINA_API_KEY') {
-      values.set(name, value ? '(set)' : ''); // never echo secrets
     } else {
       values.set(name, value instanceof Set ? [...value].join(',') || 'all' : Array.isArray(value) ? value.join(',') || 'all' : outputClean(value));
     }
@@ -933,7 +931,6 @@ export type UpdaterConfig = {
   tickers: string[];
   category: string;
   secUa: string;
-  jinaApiKey: string;
   skipArk: boolean;
   skipYahoo: boolean;
   edgarFallback: boolean;
@@ -1037,7 +1034,6 @@ export function readConfig(env: Record<string, string | undefined> = process.env
     tickers,
     category: cleanText(envValue(env, 'CATEGORY')),
     secUa: envValue(env, 'SEC_UA') || 'DaggerOk ARK static feed updater admin@daggerok.example.com',
-    jinaApiKey: envValue(env, 'JINA_API_KEY'),
     skipArk: parseBoolean(envValue(env, 'SKIP_ARK')),
     skipYahoo: parseBoolean(envValue(env, 'SKIP_YAHOO')),
     edgarFallback: parseBoolean(envValue(env, 'EDGAR_FALLBACK'), true),
@@ -1120,10 +1116,6 @@ Environment controls:
   SKIP_ARK             Do not request ark-funds.com (requires prior static data for source fallbacks).
   SKIP_YAHOO           Disable Yahoo history/distribution fallback.
   VERBOSE              Show per-request retries and fallback notices.
-  JINA_API_KEY         Optional r.jina.ai key (environment/secret only, never a file control). ark-funds.com
-                       rejects Bun's TLS fingerprint, so issuer data flows through the read-only r.jina.ai
-                       proxy; keyless it is limited to about 20 requests/minute for the whole run, with a
-                       key every worker paces itself by REQUEST_SLEEP only.
 
 Defaults: scripts/update-data.config.json; explicit environment overrides the file (ARK_<KEY> wins over <KEY>).
 Actions: file < advanced JSON < individual nonblank inputs. Range syntax is strict min:max with one colon;
@@ -1398,13 +1390,14 @@ type RequestGate = <T>(task: () => T | Promise<T>) => Promise<T>;
 type Sleep = (milliseconds: number) => Promise<void>;
 
 /**
- * Honest, contact-bearing User-Agent. Verified live 2026-09-28: ark-funds.com
- * sits behind a Cloudflare managed challenge that keys on the TLS fingerprint,
- * so Bun's fetch receives HTTP 403 with ANY User-Agent (curl passes, Bun does
- * not); spoofing a browser UA does not help there and makes r.jina.ai (also on
- * Cloudflare) challenge the request instead. Keep the tool UA everywhere.
+ * Honest, contact-bearing User-Agent WITHOUT a URL. Verified live 2026-09-29:
+ * ark-funds.com (Cloudflare WAF) answers HTTP 403 to any User-Agent that
+ * contains a `https://github.com/...` link (the classic crawler signature
+ * `(+https://...)`), and challenges browser UAs sent from a non-browser TLS
+ * stack; a plain tool name with a contact e-mail is accepted, also for 16
+ * parallel requests. Never put a URL back into this string.
  */
-export const ISSUER_USER_AGENT = 'DaggerOk ARK Invest ETF data updater (+https://github.com/daggerok/ARK; admin@daggerok.example.com)';
+export const ISSUER_USER_AGENT = 'DaggerOk ARK static feed updater (admin@daggerok.example.com)';
 const ISSUER_DIRECT_DENIAL_LIMIT = 2;
 /**
  * r.jina.ai throttles keyless read requests to about 20 per minute per IP
@@ -1596,13 +1589,11 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
   const intervalMs = config.requestSleepSeconds * 1000;
   const paceClock: PaceClock = { now: runtime.now, sleep: runtime.sleep };
   const discoveryGate = createRequestGate(intervalMs, paceClock);
-  const jinaApiKey = cleanText(config.jinaApiKey);
-  // Keyless r.jina.ai is limited per IP (~20/min): one process-wide gate on top
-  // of the worker lanes. With an API key the documented limit is 500/min, so
-  // only the per-worker REQUEST_SLEEP pacing applies.
-  const proxyLimitGate = jinaApiKey ? null : createRequestGate(ISSUER_PROXY_MIN_INTERVAL_MS, paceClock);
+  // Last-resort proxy only: keyless r.jina.ai is limited per IP (~20/min), so
+  // proxied requests share one process-wide gate on top of the worker lanes.
+  const proxyLimitGate = createRequestGate(ISSUER_PROXY_MIN_INTERVAL_MS, paceClock);
   const laneGate: RequestGate = (task) => (currentRequestLane() ?? discoveryGate)(task);
-  const proxyGate: RequestGate = (task) => laneGate(() => (proxyLimitGate ? proxyLimitGate(task) : task()));
+  const proxyGate: RequestGate = (task) => laneGate(() => proxyLimitGate(task));
   const arkHeaders = {
     Accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
     'User-Agent': ISSUER_USER_AGENT,
@@ -1623,7 +1614,6 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     const response = await request(jinaReaderUrl(url), 'ARK proxy', proxyGate, {
       ...arkHeaders,
       'X-Respond-With': responseFormat,
-      ...(jinaApiKey ? { Authorization: `Bearer ${jinaApiKey}` } : {}),
     });
     return { ...response, text: unwrapJinaReaderText(response.text) };
   };
@@ -1641,10 +1631,7 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
       const firstSwitch = !arkProxyActive;
       arkProxyActive = true;
       if (firstSwitch) {
-        const pacing = jinaApiKey
-          ? 'authenticated (JINA_API_KEY set), paced per worker by REQUEST_SLEEP'
-          : `keyless (about 20 requests per minute; set JINA_API_KEY for parallel issuer fetches)`;
-        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests — ${pacing}.`;
+        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests (shared limit of about 20 requests per minute).`;
         (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
       }
       return arkProxy(url);
@@ -2650,8 +2637,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
 // daggerok/aberdeen and daggerok/Capital-Group updaters: allowlisted scalar
 // controls only, so GitHub Actions can resolve them without interpolating user
 // input into bash. Precedence: config file < advanced JSON < nonblank inputs <
-// environment (`ARK_<KEY>` alias wins over `<KEY>`). JINA_API_KEY is a secret
-// and is deliberately NOT a control: it is read from the environment only.
+// environment (`ARK_<KEY>` alias wins over `<KEY>`).
 export const CONTROL_NAMES = [
   'MAX_FETCHES', 'REQUEST_SLEEP', 'CONCURRENCY', 'AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD', 'TICKERS',
   'CATEGORY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES', 'SEC_UA',
@@ -2705,10 +2691,7 @@ export async function runtimeControls(env: Record<string, string | undefined> = 
   let file: unknown = {};
   try { file = JSON.parse(await readFile(CONFIG_FILE_URL, 'utf8')); }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
-  const controls = resolveControls(file, {}, {}, env);
-  // Secrets and non-control passthroughs stay environment-only.
-  if (env.JINA_API_KEY !== undefined) controls.JINA_API_KEY = env.JINA_API_KEY;
-  return controls;
+  return resolveControls(file, {}, {}, env);
 }
 
 export async function main(argv: string[] = process.argv.slice(2), env: Record<string, string | undefined> = process.env): Promise<void> {
