@@ -1,0 +1,170 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$5,562 Million",
+  "aumValue": 5562000000,
+  "category": "Thematic Equity",
+  "closePrice": "$90.77",
+  "closePriceValue": 90.77,
+  "dataFile": "funds/ARKK/meta.json",
+  "distributions": {
+    "dividend": "$0.3640",
+    "exDate": "Sep 08 2023",
+    "frequency": "Unknown",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "Sep 08 2023",
+        "$0.3640"
+      ],
+      [
+        "Dec 29 2021",
+        "$0.7830"
+      ],
+      [
+        "Dec 29 2020",
+        "$2.0440"
+      ],
+      [
+        "Dec 27 2019",
+        "$0.1910"
+      ],
+      [
+        "Dec 27 2018",
+        "$1.1680"
+      ],
+      [
+        "Dec 27 2017",
+        "$0.4880"
+      ],
+      [
+        "Dec 24 2015",
+        "$0.4650"
+      ]
+    ],
+    "source": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/arkk",
+  "generatedAt": "2026-09-29T01:06:49.043Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json",
+      "history/003.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 2992
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 46
+  },
+  "identifiers": {
+    "cusip": "00214Q104",
+    "indexTicker": null,
+    "isin": "US00214Q1040"
+  },
+  "inceptionDate": "Oct 31 2014",
+  "metrics": {
+    "cagr10y": 16.15,
+    "cagr3y": 25.02,
+    "cagr5y": -6.7,
+    "dividendYield": null,
+    "dividendYieldText": null,
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 13.98,
+    "tr10y": 346.88,
+    "tr1y": 14.07,
+    "tr3y": 95.41,
+    "tr5y": -29.3,
+    "ytd": 11.13
+  },
+  "name": "ARK Innovation ETF",
+  "nav": "$90.78",
+  "navValue": 90.78,
+  "premiumDiscount": "-0.0110%",
+  "premiumDiscountValue": -0.011,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 20.2,
+      "mo3": 4.37,
+      "sinceInception": 13.98,
+      "sinceInceptionCumulative": 370.38,
+      "yr1": 14.07,
+      "yr10": 16.15,
+      "yr3": 25.02,
+      "yr5": -6.7,
+      "ytd": 11.13
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -1.53,
+      "mo3": 19.45,
+      "sinceInception": 13.63,
+      "sinceInceptionCumulative": 343.82,
+      "yr1": 14.82,
+      "yr10": 16.16,
+      "yr3": 22.29,
+      "yr5": -9.05,
+      "ytd": 4.85
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arkk",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1004?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_INNOVATION_ETF_ARKK_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1004",
+    "pageId": "1004",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1004?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKK"
+  },
+  "ter": "0.75%",
+  "terValue": 0.75,
+  "ticker": "ARKK",
+  "yields": {
+    "dividendYield": null,
+    "dividendYieldKind": "not available from Yahoo Finance",
+    "dividendYieldText": null,
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}
