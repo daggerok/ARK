@@ -1,0 +1,118 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$1 Million",
+  "aumValue": 1000000,
+  "category": "Defined Outcome",
+  "closePrice": "$23.89",
+  "closePriceValue": 23.89,
+  "dataFile": "funds/ARKI/meta.json",
+  "distributions": {
+    "dividend": "—",
+    "exDate": "—",
+    "frequency": "—",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [],
+    "source": "Yahoo Finance chart response contained no distribution events"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/arki",
+  "generatedAt": "2026-09-29T03:24:20.312Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 123
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 5
+  },
+  "identifiers": {
+    "cusip": "00214Q856",
+    "indexTicker": null,
+    "isin": "US00214Q8565"
+  },
+  "inceptionDate": "Apr 01 2026",
+  "metrics": {
+    "dividendYield": null,
+    "dividendYieldText": null,
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null
+  },
+  "name": "ARK DIET Q2 Buffer ETF",
+  "nav": "$23.87",
+  "navValue": 23.87,
+  "premiumDiscount": "0.0838%",
+  "premiumDiscountValue": 0.0838,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 12,
+      "mo3": 2.4,
+      "sinceInceptionCumulative": 15.35
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -1.07,
+      "mo3": 11.45,
+      "sinceInceptionCumulative": 11.45
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart response contained no distribution events",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arki",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1013?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q2_BUFFER_ETF_ARKI_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1013",
+    "pageId": "1013",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1013?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKI"
+  },
+  "ter": "0.89%",
+  "terValue": 0.89,
+  "ticker": "ARKI",
+  "yields": {
+    "dividendYield": null,
+    "dividendYieldKind": "not available from Yahoo Finance",
+    "dividendYieldText": null,
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}

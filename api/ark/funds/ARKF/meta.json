@@ -1,0 +1,149 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "$700.8 Million",
+  "aumValue": 700800000,
+  "category": "Thematic Equity",
+  "closePrice": "$46.88",
+  "closePriceValue": 46.88,
+  "dataFile": "funds/ARKF/meta.json",
+  "distributions": {
+    "dividend": "$0.0430",
+    "exDate": "Dec 26 2025",
+    "frequency": "Unknown",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "Dec 26 2025",
+        "$0.0430"
+      ],
+      [
+        "Dec 29 2020",
+        "$0.1850"
+      ],
+      [
+        "Dec 27 2019",
+        "$0.3010"
+      ]
+    ],
+    "source": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)"
+  },
+  "exchange": "Cboe BZX",
+  "fundPage": "https://www.ark-funds.com/funds/arkf",
+  "generatedAt": "2026-09-29T03:23:50.389Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "NAV",
+      "Market Price",
+      "Premium/Discount"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json"
+    ],
+    "source": "official ARK Invest daily NAV and market-price history API",
+    "totalRows": 1922
+  },
+  "holdings": {
+    "asOfDate": "Jan 02 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 44
+  },
+  "identifiers": {
+    "cusip": "00214Q708",
+    "indexTicker": null,
+    "isin": "US00214Q7088"
+  },
+  "inceptionDate": "Feb 04 2019",
+  "metrics": {
+    "cagr3y": 30.09,
+    "cagr5y": -2.94,
+    "dividendYield": 0.09,
+    "dividendYieldText": "0.09%",
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 11.99,
+    "tr1y": -13.28,
+    "tr3y": 120.16,
+    "tr5y": -13.86,
+    "ytd": -2.91
+  },
+  "name": "ARK Blockchain & Fintech Innovation ETF",
+  "nav": "$46.86",
+  "navValue": 46.86,
+  "premiumDiscount": "0.0427%",
+  "premiumDiscountValue": 0.0427,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 16.83,
+      "mo3": 7.51,
+      "sinceInception": 11.99,
+      "sinceInceptionCumulative": 135.91,
+      "yr1": -13.28,
+      "yr3": 30.09,
+      "yr5": -2.94,
+      "ytd": -2.91
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -8.55,
+      "mo3": 3.77,
+      "sinceInception": 9.86,
+      "sinceInceptionCumulative": 100.68,
+      "yr1": -21.32,
+      "yr3": 23.64,
+      "yr5": -6.11,
+      "ytd": -17.41
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arkf",
+    "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1007?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
+    "historySource": "official ARK Invest daily NAV and market-price history API",
+    "holdingsAsOfDate": "2026-01-02",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_FINTECH_INNOVATION_ETF_ARKF_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": "https://www.ark-funds.com/api/fund/overview/1007",
+    "pageId": "1007",
+    "performanceApi": "https://www.ark-funds.com/api/fund/performance/1007?Range=month-end&Tab=tab-annualized&ExcludeMarketPrice=False&DisplayReturnCharge=False",
+    "provider": "ARK Invest official fund API + ARK Invest Azure holdings CSV + ARK Invest official NAV history + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKF"
+  },
+  "ter": "0.75%",
+  "terValue": 0.75,
+  "ticker": "ARKF",
+  "yields": {
+    "dividendYield": 0.09,
+    "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
+    "dividendYieldText": "0.09%",
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}

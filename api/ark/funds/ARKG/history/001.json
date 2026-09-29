@@ -1,0 +1,6014 @@
+{
+  "headers": [
+    "Date",
+    "NAV",
+    "Market Price",
+    "Premium/Discount"
+  ],
+  "page": 1,
+  "pageSize": 1000,
+  "rows": [
+    {
+      "Date": "Oct 31 2014",
+      "Market Price": "20.10",
+      "NAV": "20.37",
+      "Premium/Discount": "-1.3255%"
+    },
+    {
+      "Date": "Nov 03 2014",
+      "Market Price": "20.07",
+      "NAV": "20.36",
+      "Premium/Discount": "-1.4244%"
+    },
+    {
+      "Date": "Nov 04 2014",
+      "Market Price": "20.05",
+      "NAV": "20.28",
+      "Premium/Discount": "-1.1341%"
+    },
+    {
+      "Date": "Nov 05 2014",
+      "Market Price": "20.03",
+      "NAV": "20.01",
+      "Premium/Discount": "0.1000%"
+    },
+    {
+      "Date": "Nov 06 2014",
+      "Market Price": "19.75",
+      "NAV": "20.15",
+      "Premium/Discount": "-1.9851%"
+    },
+    {
+      "Date": "Nov 07 2014",
+      "Market Price": "19.65",
+      "NAV": "20.09",
+      "Premium/Discount": "-2.1901%"
+    },
+    {
+      "Date": "Nov 10 2014",
+      "Market Price": "19.90",
+      "NAV": "20.28",
+      "Premium/Discount": "-1.8738%"
+    },
+    {
+      "Date": "Nov 11 2014",
+      "Market Price": "19.92",
+      "NAV": "20.31",
+      "Premium/Discount": "-1.9202%"
+    },
+    {
+      "Date": "Nov 12 2014",
+      "Market Price": "19.98",
+      "NAV": "20.37",
+      "Premium/Discount": "-1.9146%"
+    },
+    {
+      "Date": "Nov 13 2014",
+      "Market Price": "19.99",
+      "NAV": "20.33",
+      "Premium/Discount": "-1.6724%"
+    },
+    {
+      "Date": "Nov 14 2014",
+      "Market Price": "19.78",
+      "NAV": "20.54",
+      "Premium/Discount": "-3.7001%"
+    },
+    {
+      "Date": "Nov 17 2014",
+      "Market Price": "19.76",
+      "NAV": "20.38",
+      "Premium/Discount": "-3.0422%"
+    },
+    {
+      "Date": "Nov 18 2014",
+      "Market Price": "20.06",
+      "NAV": "20.49",
+      "Premium/Discount": "-2.0986%"
+    },
+    {
+      "Date": "Nov 19 2014",
+      "Market Price": "19.92",
+      "NAV": "20.21",
+      "Premium/Discount": "-1.4349%"
+    },
+    {
+      "Date": "Nov 20 2014",
+      "Market Price": "19.88",
+      "NAV": "20.22",
+      "Premium/Discount": "-1.6815%"
+    },
+    {
+      "Date": "Nov 21 2014",
+      "Market Price": "20.03",
+      "NAV": "20.27",
+      "Premium/Discount": "-1.1840%"
+    },
+    {
+      "Date": "Nov 24 2014",
+      "Market Price": "20.19",
+      "NAV": "20.51",
+      "Premium/Discount": "-1.5602%"
+    },
+    {
+      "Date": "Nov 25 2014",
+      "Market Price": "20.22",
+      "NAV": "20.51",
+      "Premium/Discount": "-1.4139%"
+    },
+    {
+      "Date": "Nov 26 2014",
+      "Market Price": "20.21",
+      "NAV": "20.38",
+      "Premium/Discount": "-0.8342%"
+    },
+    {
+      "Date": "Nov 28 2014",
+      "Market Price": "20.51",
+      "NAV": "20.39",
+      "Premium/Discount": "0.5885%"
+    },
+    {
+      "Date": "Dec 01 2014",
+      "Market Price": "20.17",
+      "NAV": "20.07",
+      "Premium/Discount": "0.4983%"
+    },
+    {
+      "Date": "Dec 02 2014",
+      "Market Price": "20.23",
+      "NAV": "20.21",
+      "Premium/Discount": "0.0990%"
+    },
+    {
+      "Date": "Dec 03 2014",
+      "Market Price": "20.33",
+      "NAV": "20.33",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Dec 04 2014",
+      "Market Price": "20.35",
+      "NAV": "20.28",
+      "Premium/Discount": "0.3452%"
+    },
+    {
+      "Date": "Dec 05 2014",
+      "Market Price": "20.51",
+      "NAV": "20.47",
+      "Premium/Discount": "0.1954%"
+    },
+    {
+      "Date": "Dec 08 2014",
+      "Market Price": "20.50",
+      "NAV": "20.48",
+      "Premium/Discount": "0.0977%"
+    },
+    {
+      "Date": "Dec 09 2014",
+      "Market Price": "20.86",
+      "NAV": "20.83",
+      "Premium/Discount": "0.1440%"
+    },
+    {
+      "Date": "Dec 10 2014",
+      "Market Price": "20.68",
+      "NAV": "20.51",
+      "Premium/Discount": "0.8289%"
+    },
+    {
+      "Date": "Dec 11 2014",
+      "Market Price": "20.66",
+      "NAV": "20.62",
+      "Premium/Discount": "0.1940%"
+    },
+    {
+      "Date": "Dec 12 2014",
+      "Market Price": "20.67",
+      "NAV": "20.50",
+      "Premium/Discount": "0.8293%"
+    },
+    {
+      "Date": "Dec 15 2014",
+      "Market Price": "20.28",
+      "NAV": "20.03",
+      "Premium/Discount": "1.2481%"
+    },
+    {
+      "Date": "Dec 16 2014",
+      "Market Price": "20.06",
+      "NAV": "19.85",
+      "Premium/Discount": "1.0579%"
+    },
+    {
+      "Date": "Dec 17 2014",
+      "Market Price": "20.23",
+      "NAV": "20.54",
+      "Premium/Discount": "-1.5093%"
+    },
+    {
+      "Date": "Dec 18 2014",
+      "Market Price": "21.14",
+      "NAV": "21.19",
+      "Premium/Discount": "-0.2360%"
+    },
+    {
+      "Date": "Dec 19 2014",
+      "Market Price": "21.37",
+      "NAV": "21.51",
+      "Premium/Discount": "-0.6509%"
+    },
+    {
+      "Date": "Dec 22 2014",
+      "Market Price": "21.57",
+      "NAV": "21.55",
+      "Premium/Discount": "0.0928%"
+    },
+    {
+      "Date": "Dec 23 2014",
+      "Market Price": "21.08",
+      "NAV": "21.06",
+      "Premium/Discount": "0.0950%"
+    },
+    {
+      "Date": "Dec 24 2014",
+      "Market Price": "21.21",
+      "NAV": "21.18",
+      "Premium/Discount": "0.1416%"
+    },
+    {
+      "Date": "Dec 26 2014",
+      "Market Price": "21.46",
+      "NAV": "21.47",
+      "Premium/Discount": "-0.0466%"
+    },
+    {
+      "Date": "Dec 29 2014",
+      "Market Price": "21.47",
+      "NAV": "21.43",
+      "Premium/Discount": "0.1867%"
+    },
+    {
+      "Date": "Dec 30 2014",
+      "Market Price": "21.26",
+      "NAV": "21.22",
+      "Premium/Discount": "0.1885%"
+    },
+    {
+      "Date": "Dec 31 2014",
+      "Market Price": "21.23",
+      "NAV": "21.13",
+      "Premium/Discount": "0.4733%"
+    },
+    {
+      "Date": "Jan 02 2015",
+      "Market Price": "21.30",
+      "NAV": "21.25",
+      "Premium/Discount": "0.2353%"
+    },
+    {
+      "Date": "Jan 05 2015",
+      "Market Price": "21.23",
+      "NAV": "21.20",
+      "Premium/Discount": "0.1415%"
+    },
+    {
+      "Date": "Jan 06 2015",
+      "Market Price": "20.98",
+      "NAV": "20.83",
+      "Premium/Discount": "0.7201%"
+    },
+    {
+      "Date": "Jan 07 2015",
+      "Market Price": "21.28",
+      "NAV": "21.28",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 08 2015",
+      "Market Price": "21.60",
+      "NAV": "21.73",
+      "Premium/Discount": "-0.5983%"
+    },
+    {
+      "Date": "Jan 09 2015",
+      "Market Price": "21.73",
+      "NAV": "21.69",
+      "Premium/Discount": "0.1844%"
+    },
+    {
+      "Date": "Jan 12 2015",
+      "Market Price": "22.59",
+      "NAV": "22.53",
+      "Premium/Discount": "0.2663%"
+    },
+    {
+      "Date": "Jan 13 2015",
+      "Market Price": "22.36",
+      "NAV": "22.51",
+      "Premium/Discount": "-0.6664%"
+    },
+    {
+      "Date": "Jan 14 2015",
+      "Market Price": "22.57",
+      "NAV": "22.55",
+      "Premium/Discount": "0.0887%"
+    },
+    {
+      "Date": "Jan 15 2015",
+      "Market Price": "22.03",
+      "NAV": "21.96",
+      "Premium/Discount": "0.3188%"
+    },
+    {
+      "Date": "Jan 16 2015",
+      "Market Price": "22.27",
+      "NAV": "22.39",
+      "Premium/Discount": "-0.5360%"
+    },
+    {
+      "Date": "Jan 20 2015",
+      "Market Price": "22.71",
+      "NAV": "22.62",
+      "Premium/Discount": "0.3979%"
+    },
+    {
+      "Date": "Jan 21 2015",
+      "Market Price": "22.22",
+      "NAV": "22.25",
+      "Premium/Discount": "-0.1348%"
+    },
+    {
+      "Date": "Jan 22 2015",
+      "Market Price": "22.40",
+      "NAV": "22.42",
+      "Premium/Discount": "-0.0892%"
+    },
+    {
+      "Date": "Jan 23 2015",
+      "Market Price": "22.50",
+      "NAV": "22.47",
+      "Premium/Discount": "0.1335%"
+    },
+    {
+      "Date": "Jan 26 2015",
+      "Market Price": "22.65",
+      "NAV": "22.72",
+      "Premium/Discount": "-0.3081%"
+    },
+    {
+      "Date": "Jan 27 2015",
+      "Market Price": "22.66",
+      "NAV": "22.61",
+      "Premium/Discount": "0.2211%"
+    },
+    {
+      "Date": "Jan 28 2015",
+      "Market Price": "22.27",
+      "NAV": "22.21",
+      "Premium/Discount": "0.2701%"
+    },
+    {
+      "Date": "Jan 29 2015",
+      "Market Price": "22.53",
+      "NAV": "22.52",
+      "Premium/Discount": "0.0444%"
+    },
+    {
+      "Date": "Jan 30 2015",
+      "Market Price": "22.52",
+      "NAV": "22.24",
+      "Premium/Discount": "1.2590%"
+    },
+    {
+      "Date": "Feb 02 2015",
+      "Market Price": "22.12",
+      "NAV": "22.25",
+      "Premium/Discount": "-0.5843%"
+    },
+    {
+      "Date": "Feb 03 2015",
+      "Market Price": "22.40",
+      "NAV": "22.36",
+      "Premium/Discount": "0.1789%"
+    },
+    {
+      "Date": "Feb 04 2015",
+      "Market Price": "22.14",
+      "NAV": "22.07",
+      "Premium/Discount": "0.3172%"
+    },
+    {
+      "Date": "Feb 05 2015",
+      "Market Price": "22.54",
+      "NAV": "22.59",
+      "Premium/Discount": "-0.2213%"
+    },
+    {
+      "Date": "Feb 06 2015",
+      "Market Price": "22.48",
+      "NAV": "22.35",
+      "Premium/Discount": "0.5817%"
+    },
+    {
+      "Date": "Feb 09 2015",
+      "Market Price": "22.20",
+      "NAV": "22.20",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Feb 10 2015",
+      "Market Price": "22.49",
+      "NAV": "22.46",
+      "Premium/Discount": "0.1336%"
+    },
+    {
+      "Date": "Feb 11 2015",
+      "Market Price": "22.59",
+      "NAV": "22.48",
+      "Premium/Discount": "0.4893%"
+    },
+    {
+      "Date": "Feb 12 2015",
+      "Market Price": "22.73",
+      "NAV": "22.72",
+      "Premium/Discount": "0.0440%"
+    },
+    {
+      "Date": "Feb 13 2015",
+      "Market Price": "22.80",
+      "NAV": "22.91",
+      "Premium/Discount": "-0.4801%"
+    },
+    {
+      "Date": "Feb 17 2015",
+      "Market Price": "23.18",
+      "NAV": "23.08",
+      "Premium/Discount": "0.4333%"
+    },
+    {
+      "Date": "Feb 18 2015",
+      "Market Price": "23.11",
+      "NAV": "23.12",
+      "Premium/Discount": "-0.0433%"
+    },
+    {
+      "Date": "Feb 19 2015",
+      "Market Price": "23.26",
+      "NAV": "23.22",
+      "Premium/Discount": "0.1723%"
+    },
+    {
+      "Date": "Feb 20 2015",
+      "Market Price": "23.39",
+      "NAV": "23.35",
+      "Premium/Discount": "0.1713%"
+    },
+    {
+      "Date": "Feb 23 2015",
+      "Market Price": "23.41",
+      "NAV": "23.33",
+      "Premium/Discount": "0.3429%"
+    },
+    {
+      "Date": "Feb 24 2015",
+      "Market Price": "23.15",
+      "NAV": "23.20",
+      "Premium/Discount": "-0.2155%"
+    },
+    {
+      "Date": "Feb 25 2015",
+      "Market Price": "23.36",
+      "NAV": "23.39",
+      "Premium/Discount": "-0.1283%"
+    },
+    {
+      "Date": "Feb 26 2015",
+      "Market Price": "23.45",
+      "NAV": "23.43",
+      "Premium/Discount": "0.0854%"
+    },
+    {
+      "Date": "Feb 27 2015",
+      "Market Price": "23.25",
+      "NAV": "23.28",
+      "Premium/Discount": "-0.1289%"
+    },
+    {
+      "Date": "Mar 02 2015",
+      "Market Price": "23.39",
+      "NAV": "23.33",
+      "Premium/Discount": "0.2572%"
+    },
+    {
+      "Date": "Mar 03 2015",
+      "Market Price": "23.09",
+      "NAV": "23.04",
+      "Premium/Discount": "0.2170%"
+    },
+    {
+      "Date": "Mar 04 2015",
+      "Market Price": "23.05",
+      "NAV": "23.04",
+      "Premium/Discount": "0.0434%"
+    },
+    {
+      "Date": "Mar 05 2015",
+      "Market Price": "23.36",
+      "NAV": "23.34",
+      "Premium/Discount": "0.0857%"
+    },
+    {
+      "Date": "Mar 06 2015",
+      "Market Price": "23.04",
+      "NAV": "22.96",
+      "Premium/Discount": "0.3484%"
+    },
+    {
+      "Date": "Mar 09 2015",
+      "Market Price": "22.99",
+      "NAV": "22.96",
+      "Premium/Discount": "0.1307%"
+    },
+    {
+      "Date": "Mar 10 2015",
+      "Market Price": "22.88",
+      "NAV": "22.75",
+      "Premium/Discount": "0.5714%"
+    },
+    {
+      "Date": "Mar 11 2015",
+      "Market Price": "22.87",
+      "NAV": "22.81",
+      "Premium/Discount": "0.2630%"
+    },
+    {
+      "Date": "Mar 12 2015",
+      "Market Price": "23.02",
+      "NAV": "22.97",
+      "Premium/Discount": "0.2177%"
+    },
+    {
+      "Date": "Mar 13 2015",
+      "Market Price": "22.86",
+      "NAV": "22.89",
+      "Premium/Discount": "-0.1311%"
+    },
+    {
+      "Date": "Mar 16 2015",
+      "Market Price": "23.29",
+      "NAV": "23.34",
+      "Premium/Discount": "-0.2142%"
+    },
+    {
+      "Date": "Mar 17 2015",
+      "Market Price": "23.32",
+      "NAV": "23.39",
+      "Premium/Discount": "-0.2993%"
+    },
+    {
+      "Date": "Mar 18 2015",
+      "Market Price": "23.50",
+      "NAV": "23.50",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 19 2015",
+      "Market Price": "23.98",
+      "NAV": "23.93",
+      "Premium/Discount": "0.2089%"
+    },
+    {
+      "Date": "Mar 20 2015",
+      "Market Price": "23.88",
+      "NAV": "23.84",
+      "Premium/Discount": "0.1678%"
+    },
+    {
+      "Date": "Mar 23 2015",
+      "Market Price": "23.51",
+      "NAV": "23.43",
+      "Premium/Discount": "0.3414%"
+    },
+    {
+      "Date": "Mar 24 2015",
+      "Market Price": "23.34",
+      "NAV": "23.28",
+      "Premium/Discount": "0.2577%"
+    },
+    {
+      "Date": "Mar 25 2015",
+      "Market Price": "22.55",
+      "NAV": "22.48",
+      "Premium/Discount": "0.3114%"
+    },
+    {
+      "Date": "Mar 26 2015",
+      "Market Price": "22.44",
+      "NAV": "22.42",
+      "Premium/Discount": "0.0892%"
+    },
+    {
+      "Date": "Mar 27 2015",
+      "Market Price": "22.63",
+      "NAV": "22.69",
+      "Premium/Discount": "-0.2644%"
+    },
+    {
+      "Date": "Mar 30 2015",
+      "Market Price": "22.97",
+      "NAV": "22.96",
+      "Premium/Discount": "0.0436%"
+    },
+    {
+      "Date": "Mar 31 2015",
+      "Market Price": "22.76",
+      "NAV": "22.64",
+      "Premium/Discount": "0.5300%"
+    },
+    {
+      "Date": "Apr 01 2015",
+      "Market Price": "22.42",
+      "NAV": "22.48",
+      "Premium/Discount": "-0.2669%"
+    },
+    {
+      "Date": "Apr 02 2015",
+      "Market Price": "22.36",
+      "NAV": "22.35",
+      "Premium/Discount": "0.0447%"
+    },
+    {
+      "Date": "Apr 06 2015",
+      "Market Price": "22.69",
+      "NAV": "22.64",
+      "Premium/Discount": "0.2208%"
+    },
+    {
+      "Date": "Apr 07 2015",
+      "Market Price": "22.92",
+      "NAV": "22.67",
+      "Premium/Discount": "1.1028%"
+    },
+    {
+      "Date": "Apr 08 2015",
+      "Market Price": "23.00",
+      "NAV": "23.02",
+      "Premium/Discount": "-0.0869%"
+    },
+    {
+      "Date": "Apr 09 2015",
+      "Market Price": "23.06",
+      "NAV": "23.08",
+      "Premium/Discount": "-0.0867%"
+    },
+    {
+      "Date": "Apr 10 2015",
+      "Market Price": "23.31",
+      "NAV": "23.21",
+      "Premium/Discount": "0.4308%"
+    },
+    {
+      "Date": "Apr 13 2015",
+      "Market Price": "23.41",
+      "NAV": "23.36",
+      "Premium/Discount": "0.2140%"
+    },
+    {
+      "Date": "Apr 14 2015",
+      "Market Price": "23.42",
+      "NAV": "23.38",
+      "Premium/Discount": "0.1711%"
+    },
+    {
+      "Date": "Apr 15 2015",
+      "Market Price": "23.64",
+      "NAV": "23.64",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 16 2015",
+      "Market Price": "23.79",
+      "NAV": "23.74",
+      "Premium/Discount": "0.2106%"
+    },
+    {
+      "Date": "Apr 17 2015",
+      "Market Price": "23.37",
+      "NAV": "23.31",
+      "Premium/Discount": "0.2574%"
+    },
+    {
+      "Date": "Apr 20 2015",
+      "Market Price": "23.47",
+      "NAV": "23.41",
+      "Premium/Discount": "0.2563%"
+    },
+    {
+      "Date": "Apr 21 2015",
+      "Market Price": "23.59",
+      "NAV": "23.54",
+      "Premium/Discount": "0.2124%"
+    },
+    {
+      "Date": "Apr 22 2015",
+      "Market Price": "23.47",
+      "NAV": "23.38",
+      "Premium/Discount": "0.3849%"
+    },
+    {
+      "Date": "Apr 23 2015",
+      "Market Price": "23.89",
+      "NAV": "23.83",
+      "Premium/Discount": "0.2518%"
+    },
+    {
+      "Date": "Apr 24 2015",
+      "Market Price": "23.95",
+      "NAV": "23.85",
+      "Premium/Discount": "0.4193%"
+    },
+    {
+      "Date": "Apr 27 2015",
+      "Market Price": "23.25",
+      "NAV": "23.23",
+      "Premium/Discount": "0.0861%"
+    },
+    {
+      "Date": "Apr 28 2015",
+      "Market Price": "23.04",
+      "NAV": "22.98",
+      "Premium/Discount": "0.2611%"
+    },
+    {
+      "Date": "Apr 29 2015",
+      "Market Price": "22.96",
+      "NAV": "22.91",
+      "Premium/Discount": "0.2182%"
+    },
+    {
+      "Date": "Apr 30 2015",
+      "Market Price": "22.48",
+      "NAV": "22.47",
+      "Premium/Discount": "0.0445%"
+    },
+    {
+      "Date": "May 01 2015",
+      "Market Price": "22.81",
+      "NAV": "22.80",
+      "Premium/Discount": "0.0439%"
+    },
+    {
+      "Date": "May 04 2015",
+      "Market Price": "22.92",
+      "NAV": "22.85",
+      "Premium/Discount": "0.3063%"
+    },
+    {
+      "Date": "May 05 2015",
+      "Market Price": "22.49",
+      "NAV": "22.45",
+      "Premium/Discount": "0.1782%"
+    },
+    {
+      "Date": "May 06 2015",
+      "Market Price": "22.67",
+      "NAV": "22.67",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 07 2015",
+      "Market Price": "22.74",
+      "NAV": "22.77",
+      "Premium/Discount": "-0.1318%"
+    },
+    {
+      "Date": "May 08 2015",
+      "Market Price": "22.95",
+      "NAV": "23.00",
+      "Premium/Discount": "-0.2174%"
+    },
+    {
+      "Date": "May 11 2015",
+      "Market Price": "23.08",
+      "NAV": "23.02",
+      "Premium/Discount": "0.2606%"
+    },
+    {
+      "Date": "May 12 2015",
+      "Market Price": "22.81",
+      "NAV": "22.79",
+      "Premium/Discount": "0.0878%"
+    },
+    {
+      "Date": "May 13 2015",
+      "Market Price": "22.73",
+      "NAV": "22.71",
+      "Premium/Discount": "0.0881%"
+    },
+    {
+      "Date": "May 14 2015",
+      "Market Price": "22.84",
+      "NAV": "22.96",
+      "Premium/Discount": "-0.5226%"
+    },
+    {
+      "Date": "May 15 2015",
+      "Market Price": "22.90",
+      "NAV": "22.88",
+      "Premium/Discount": "0.0874%"
+    },
+    {
+      "Date": "May 18 2015",
+      "Market Price": "23.15",
+      "NAV": "23.13",
+      "Premium/Discount": "0.0865%"
+    },
+    {
+      "Date": "May 19 2015",
+      "Market Price": "23.11",
+      "NAV": "23.02",
+      "Premium/Discount": "0.3910%"
+    },
+    {
+      "Date": "May 20 2015",
+      "Market Price": "23.21",
+      "NAV": "23.18",
+      "Premium/Discount": "0.1294%"
+    },
+    {
+      "Date": "May 21 2015",
+      "Market Price": "23.18",
+      "NAV": "23.20",
+      "Premium/Discount": "-0.0862%"
+    },
+    {
+      "Date": "May 22 2015",
+      "Market Price": "23.20",
+      "NAV": "23.12",
+      "Premium/Discount": "0.3460%"
+    },
+    {
+      "Date": "May 26 2015",
+      "Market Price": "22.89",
+      "NAV": "22.90",
+      "Premium/Discount": "-0.0437%"
+    },
+    {
+      "Date": "May 27 2015",
+      "Market Price": "23.26",
+      "NAV": "23.34",
+      "Premium/Discount": "-0.3428%"
+    },
+    {
+      "Date": "May 28 2015",
+      "Market Price": "23.22",
+      "NAV": "23.38",
+      "Premium/Discount": "-0.6843%"
+    },
+    {
+      "Date": "May 29 2015",
+      "Market Price": "23.50",
+      "NAV": "23.33",
+      "Premium/Discount": "0.7287%"
+    },
+    {
+      "Date": "Jun 01 2015",
+      "Market Price": "23.31",
+      "NAV": "23.25",
+      "Premium/Discount": "0.2581%"
+    },
+    {
+      "Date": "Jun 02 2015",
+      "Market Price": "23.24",
+      "NAV": "23.22",
+      "Premium/Discount": "0.0861%"
+    },
+    {
+      "Date": "Jun 03 2015",
+      "Market Price": "23.45",
+      "NAV": "23.49",
+      "Premium/Discount": "-0.1703%"
+    },
+    {
+      "Date": "Jun 04 2015",
+      "Market Price": "23.33",
+      "NAV": "23.28",
+      "Premium/Discount": "0.2148%"
+    },
+    {
+      "Date": "Jun 05 2015",
+      "Market Price": "23.51",
+      "NAV": "23.57",
+      "Premium/Discount": "-0.2546%"
+    },
+    {
+      "Date": "Jun 08 2015",
+      "Market Price": "23.54",
+      "NAV": "23.49",
+      "Premium/Discount": "0.2129%"
+    },
+    {
+      "Date": "Jun 09 2015",
+      "Market Price": "23.13",
+      "NAV": "23.36",
+      "Premium/Discount": "-0.9846%"
+    },
+    {
+      "Date": "Jun 10 2015",
+      "Market Price": "23.60",
+      "NAV": "23.56",
+      "Premium/Discount": "0.1698%"
+    },
+    {
+      "Date": "Jun 11 2015",
+      "Market Price": "23.67",
+      "NAV": "23.67",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jun 12 2015",
+      "Market Price": "23.34",
+      "NAV": "23.27",
+      "Premium/Discount": "0.3008%"
+    },
+    {
+      "Date": "Jun 15 2015",
+      "Market Price": "23.20",
+      "NAV": "23.16",
+      "Premium/Discount": "0.1727%"
+    },
+    {
+      "Date": "Jun 16 2015",
+      "Market Price": "23.24",
+      "NAV": "23.20",
+      "Premium/Discount": "0.1724%"
+    },
+    {
+      "Date": "Jun 17 2015",
+      "Market Price": "23.27",
+      "NAV": "23.31",
+      "Premium/Discount": "-0.1716%"
+    },
+    {
+      "Date": "Jun 18 2015",
+      "Market Price": "23.75",
+      "NAV": "23.72",
+      "Premium/Discount": "0.1265%"
+    },
+    {
+      "Date": "Jun 19 2015",
+      "Market Price": "23.68",
+      "NAV": "23.68",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jun 22 2015",
+      "Market Price": "24.01",
+      "NAV": "24.04",
+      "Premium/Discount": "-0.1248%"
+    },
+    {
+      "Date": "Jun 23 2015",
+      "Market Price": "23.92",
+      "NAV": "23.94",
+      "Premium/Discount": "-0.0835%"
+    },
+    {
+      "Date": "Jun 24 2015",
+      "Market Price": "23.70",
+      "NAV": "23.51",
+      "Premium/Discount": "0.8082%"
+    },
+    {
+      "Date": "Jun 25 2015",
+      "Market Price": "23.56",
+      "NAV": "23.55",
+      "Premium/Discount": "0.0425%"
+    },
+    {
+      "Date": "Jun 26 2015",
+      "Market Price": "23.43",
+      "NAV": "23.38",
+      "Premium/Discount": "0.2139%"
+    },
+    {
+      "Date": "Jun 29 2015",
+      "Market Price": "22.69",
+      "NAV": "22.64",
+      "Premium/Discount": "0.2208%"
+    },
+    {
+      "Date": "Jun 30 2015",
+      "Market Price": "23.06",
+      "NAV": "23.05",
+      "Premium/Discount": "0.0434%"
+    },
+    {
+      "Date": "Jul 01 2015",
+      "Market Price": "22.87",
+      "NAV": "22.93",
+      "Premium/Discount": "-0.2617%"
+    },
+    {
+      "Date": "Jul 02 2015",
+      "Market Price": "22.74",
+      "NAV": "22.76",
+      "Premium/Discount": "-0.0879%"
+    },
+    {
+      "Date": "Jul 06 2015",
+      "Market Price": "22.82",
+      "NAV": "22.78",
+      "Premium/Discount": "0.1756%"
+    },
+    {
+      "Date": "Jul 07 2015",
+      "Market Price": "22.82",
+      "NAV": "22.80",
+      "Premium/Discount": "0.0877%"
+    },
+    {
+      "Date": "Jul 08 2015",
+      "Market Price": "22.37",
+      "NAV": "22.21",
+      "Premium/Discount": "0.7204%"
+    },
+    {
+      "Date": "Jul 09 2015",
+      "Market Price": "22.50",
+      "NAV": "22.40",
+      "Premium/Discount": "0.4464%"
+    },
+    {
+      "Date": "Jul 10 2015",
+      "Market Price": "22.85",
+      "NAV": "22.86",
+      "Premium/Discount": "-0.0437%"
+    },
+    {
+      "Date": "Jul 13 2015",
+      "Market Price": "23.22",
+      "NAV": "23.24",
+      "Premium/Discount": "-0.0861%"
+    },
+    {
+      "Date": "Jul 14 2015",
+      "Market Price": "23.23",
+      "NAV": "23.62",
+      "Premium/Discount": "-1.6511%"
+    },
+    {
+      "Date": "Jul 15 2015",
+      "Market Price": "23.48",
+      "NAV": "23.53",
+      "Premium/Discount": "-0.2125%"
+    },
+    {
+      "Date": "Jul 16 2015",
+      "Market Price": "23.86",
+      "NAV": "23.90",
+      "Premium/Discount": "-0.1674%"
+    },
+    {
+      "Date": "Jul 17 2015",
+      "Market Price": "24.00",
+      "NAV": "23.96",
+      "Premium/Discount": "0.1669%"
+    },
+    {
+      "Date": "Jul 20 2015",
+      "Market Price": "23.92",
+      "NAV": "23.93",
+      "Premium/Discount": "-0.0418%"
+    },
+    {
+      "Date": "Jul 21 2015",
+      "Market Price": "23.61",
+      "NAV": "23.66",
+      "Premium/Discount": "-0.2113%"
+    },
+    {
+      "Date": "Jul 22 2015",
+      "Market Price": "23.53",
+      "NAV": "23.55",
+      "Premium/Discount": "-0.0849%"
+    },
+    {
+      "Date": "Jul 23 2015",
+      "Market Price": "23.44",
+      "NAV": "23.51",
+      "Premium/Discount": "-0.2977%"
+    },
+    {
+      "Date": "Jul 24 2015",
+      "Market Price": "22.89",
+      "NAV": "22.86",
+      "Premium/Discount": "0.1312%"
+    },
+    {
+      "Date": "Jul 27 2015",
+      "Market Price": "22.55",
+      "NAV": "22.62",
+      "Premium/Discount": "-0.3095%"
+    },
+    {
+      "Date": "Jul 28 2015",
+      "Market Price": "22.74",
+      "NAV": "22.99",
+      "Premium/Discount": "-1.0874%"
+    },
+    {
+      "Date": "Jul 29 2015",
+      "Market Price": "22.90",
+      "NAV": "22.86",
+      "Premium/Discount": "0.1750%"
+    },
+    {
+      "Date": "Jul 30 2015",
+      "Market Price": "22.66",
+      "NAV": "22.60",
+      "Premium/Discount": "0.2655%"
+    },
+    {
+      "Date": "Jul 31 2015",
+      "Market Price": "22.79",
+      "NAV": "22.68",
+      "Premium/Discount": "0.4850%"
+    },
+    {
+      "Date": "Aug 03 2015",
+      "Market Price": "22.64",
+      "NAV": "22.67",
+      "Premium/Discount": "-0.1323%"
+    },
+    {
+      "Date": "Aug 04 2015",
+      "Market Price": "22.67",
+      "NAV": "22.62",
+      "Premium/Discount": "0.2210%"
+    },
+    {
+      "Date": "Aug 05 2015",
+      "Market Price": "22.83",
+      "NAV": "22.71",
+      "Premium/Discount": "0.5284%"
+    },
+    {
+      "Date": "Aug 06 2015",
+      "Market Price": "21.94",
+      "NAV": "21.97",
+      "Premium/Discount": "-0.1365%"
+    },
+    {
+      "Date": "Aug 07 2015",
+      "Market Price": "21.76",
+      "NAV": "21.78",
+      "Premium/Discount": "-0.0918%"
+    },
+    {
+      "Date": "Aug 10 2015",
+      "Market Price": "21.89",
+      "NAV": "21.90",
+      "Premium/Discount": "-0.0457%"
+    },
+    {
+      "Date": "Aug 11 2015",
+      "Market Price": "21.69",
+      "NAV": "21.65",
+      "Premium/Discount": "0.1848%"
+    },
+    {
+      "Date": "Aug 12 2015",
+      "Market Price": "21.67",
+      "NAV": "21.77",
+      "Premium/Discount": "-0.4593%"
+    },
+    {
+      "Date": "Aug 13 2015",
+      "Market Price": "21.75",
+      "NAV": "21.56",
+      "Premium/Discount": "0.8813%"
+    },
+    {
+      "Date": "Aug 14 2015",
+      "Market Price": "21.44",
+      "NAV": "21.46",
+      "Premium/Discount": "-0.0932%"
+    },
+    {
+      "Date": "Aug 17 2015",
+      "Market Price": "21.73",
+      "NAV": "21.83",
+      "Premium/Discount": "-0.4581%"
+    },
+    {
+      "Date": "Aug 18 2015",
+      "Market Price": "21.72",
+      "NAV": "21.68",
+      "Premium/Discount": "0.1845%"
+    },
+    {
+      "Date": "Aug 19 2015",
+      "Market Price": "21.49",
+      "NAV": "21.52",
+      "Premium/Discount": "-0.1394%"
+    },
+    {
+      "Date": "Aug 20 2015",
+      "Market Price": "20.89",
+      "NAV": "20.71",
+      "Premium/Discount": "0.8691%"
+    },
+    {
+      "Date": "Aug 21 2015",
+      "Market Price": "20.51",
+      "NAV": "20.44",
+      "Premium/Discount": "0.3425%"
+    },
+    {
+      "Date": "Aug 24 2015",
+      "Market Price": "19.51",
+      "NAV": "19.60",
+      "Premium/Discount": "-0.4592%"
+    },
+    {
+      "Date": "Aug 25 2015",
+      "Market Price": "19.93",
+      "NAV": "19.65",
+      "Premium/Discount": "1.4249%"
+    },
+    {
+      "Date": "Aug 26 2015",
+      "Market Price": "20.38",
+      "NAV": "20.45",
+      "Premium/Discount": "-0.3423%"
+    },
+    {
+      "Date": "Aug 27 2015",
+      "Market Price": "20.77",
+      "NAV": "20.91",
+      "Premium/Discount": "-0.6695%"
+    },
+    {
+      "Date": "Aug 28 2015",
+      "Market Price": "21.10",
+      "NAV": "21.23",
+      "Premium/Discount": "-0.6123%"
+    },
+    {
+      "Date": "Aug 31 2015",
+      "Market Price": "21.13",
+      "NAV": "20.85",
+      "Premium/Discount": "1.3429%"
+    },
+    {
+      "Date": "Sep 01 2015",
+      "Market Price": "20.50",
+      "NAV": "20.24",
+      "Premium/Discount": "1.2846%"
+    },
+    {
+      "Date": "Sep 02 2015",
+      "Market Price": "20.53",
+      "NAV": "20.81",
+      "Premium/Discount": "-1.3455%"
+    },
+    {
+      "Date": "Sep 03 2015",
+      "Market Price": "20.78",
+      "NAV": "20.62",
+      "Premium/Discount": "0.7759%"
+    },
+    {
+      "Date": "Sep 04 2015",
+      "Market Price": "20.61",
+      "NAV": "20.64",
+      "Premium/Discount": "-0.1453%"
+    },
+    {
+      "Date": "Sep 08 2015",
+      "Market Price": "21.29",
+      "NAV": "21.32",
+      "Premium/Discount": "-0.1407%"
+    },
+    {
+      "Date": "Sep 09 2015",
+      "Market Price": "21.33",
+      "NAV": "21.12",
+      "Premium/Discount": "0.9943%"
+    },
+    {
+      "Date": "Sep 10 2015",
+      "Market Price": "21.39",
+      "NAV": "21.48",
+      "Premium/Discount": "-0.4190%"
+    },
+    {
+      "Date": "Sep 11 2015",
+      "Market Price": "21.65",
+      "NAV": "21.73",
+      "Premium/Discount": "-0.3682%"
+    },
+    {
+      "Date": "Sep 14 2015",
+      "Market Price": "21.65",
+      "NAV": "21.70",
+      "Premium/Discount": "-0.2304%"
+    },
+    {
+      "Date": "Sep 15 2015",
+      "Market Price": "21.88",
+      "NAV": "21.86",
+      "Premium/Discount": "0.0915%"
+    },
+    {
+      "Date": "Sep 16 2015",
+      "Market Price": "21.71",
+      "NAV": "21.76",
+      "Premium/Discount": "-0.2298%"
+    },
+    {
+      "Date": "Sep 17 2015",
+      "Market Price": "22.23",
+      "NAV": "22.14",
+      "Premium/Discount": "0.4065%"
+    },
+    {
+      "Date": "Sep 18 2015",
+      "Market Price": "21.90",
+      "NAV": "21.93",
+      "Premium/Discount": "-0.1368%"
+    },
+    {
+      "Date": "Sep 21 2015",
+      "Market Price": "21.80",
+      "NAV": "21.32",
+      "Premium/Discount": "2.2514%"
+    },
+    {
+      "Date": "Sep 22 2015",
+      "Market Price": "20.74",
+      "NAV": "20.88",
+      "Premium/Discount": "-0.6705%"
+    },
+    {
+      "Date": "Sep 23 2015",
+      "Market Price": "20.81",
+      "NAV": "20.71",
+      "Premium/Discount": "0.4829%"
+    },
+    {
+      "Date": "Sep 24 2015",
+      "Market Price": "20.51",
+      "NAV": "20.50",
+      "Premium/Discount": "0.0488%"
+    },
+    {
+      "Date": "Sep 25 2015",
+      "Market Price": "20.00",
+      "NAV": "19.61",
+      "Premium/Discount": "1.9888%"
+    },
+    {
+      "Date": "Sep 28 2015",
+      "Market Price": "18.58",
+      "NAV": "18.49",
+      "Premium/Discount": "0.4867%"
+    },
+    {
+      "Date": "Sep 29 2015",
+      "Market Price": "18.20",
+      "NAV": "18.23",
+      "Premium/Discount": "-0.1646%"
+    },
+    {
+      "Date": "Sep 30 2015",
+      "Market Price": "18.75",
+      "NAV": "18.80",
+      "Premium/Discount": "-0.2660%"
+    },
+    {
+      "Date": "Oct 01 2015",
+      "Market Price": "18.41",
+      "NAV": "18.65",
+      "Premium/Discount": "-1.2869%"
+    },
+    {
+      "Date": "Oct 02 2015",
+      "Market Price": "19.04",
+      "NAV": "19.27",
+      "Premium/Discount": "-1.1936%"
+    },
+    {
+      "Date": "Oct 05 2015",
+      "Market Price": "19.36",
+      "NAV": "19.30",
+      "Premium/Discount": "0.3109%"
+    },
+    {
+      "Date": "Oct 06 2015",
+      "Market Price": "18.82",
+      "NAV": "18.69",
+      "Premium/Discount": "0.6956%"
+    },
+    {
+      "Date": "Oct 07 2015",
+      "Market Price": "19.00",
+      "NAV": "19.12",
+      "Premium/Discount": "-0.6276%"
+    },
+    {
+      "Date": "Oct 08 2015",
+      "Market Price": "18.68",
+      "NAV": "18.94",
+      "Premium/Discount": "-1.3728%"
+    },
+    {
+      "Date": "Oct 09 2015",
+      "Market Price": "19.15",
+      "NAV": "19.15",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Oct 12 2015",
+      "Market Price": "19.21",
+      "NAV": "19.09",
+      "Premium/Discount": "0.6286%"
+    },
+    {
+      "Date": "Oct 13 2015",
+      "Market Price": "18.80",
+      "NAV": "18.63",
+      "Premium/Discount": "0.9125%"
+    },
+    {
+      "Date": "Oct 14 2015",
+      "Market Price": "18.55",
+      "NAV": "18.51",
+      "Premium/Discount": "0.2161%"
+    },
+    {
+      "Date": "Oct 15 2015",
+      "Market Price": "19.31",
+      "NAV": "19.50",
+      "Premium/Discount": "-0.9744%"
+    },
+    {
+      "Date": "Oct 16 2015",
+      "Market Price": "19.34",
+      "NAV": "19.39",
+      "Premium/Discount": "-0.2579%"
+    },
+    {
+      "Date": "Oct 19 2015",
+      "Market Price": "19.36",
+      "NAV": "19.44",
+      "Premium/Discount": "-0.4115%"
+    },
+    {
+      "Date": "Oct 20 2015",
+      "Market Price": "19.05",
+      "NAV": "19.10",
+      "Premium/Discount": "-0.2618%"
+    },
+    {
+      "Date": "Oct 21 2015",
+      "Market Price": "18.99",
+      "NAV": "18.85",
+      "Premium/Discount": "0.7427%"
+    },
+    {
+      "Date": "Oct 22 2015",
+      "Market Price": "18.84",
+      "NAV": "18.86",
+      "Premium/Discount": "-0.1060%"
+    },
+    {
+      "Date": "Oct 23 2015",
+      "Market Price": "19.48",
+      "NAV": "19.47",
+      "Premium/Discount": "0.0514%"
+    },
+    {
+      "Date": "Oct 26 2015",
+      "Market Price": "19.64",
+      "NAV": "19.49",
+      "Premium/Discount": "0.7696%"
+    },
+    {
+      "Date": "Oct 27 2015",
+      "Market Price": "19.50",
+      "NAV": "19.80",
+      "Premium/Discount": "-1.5152%"
+    },
+    {
+      "Date": "Oct 28 2015",
+      "Market Price": "19.97",
+      "NAV": "20.05",
+      "Premium/Discount": "-0.3990%"
+    },
+    {
+      "Date": "Oct 29 2015",
+      "Market Price": "19.83",
+      "NAV": "19.77",
+      "Premium/Discount": "0.3035%"
+    },
+    {
+      "Date": "Oct 30 2015",
+      "Market Price": "19.83",
+      "NAV": "19.69",
+      "Premium/Discount": "0.7110%"
+    },
+    {
+      "Date": "Nov 02 2015",
+      "Market Price": "20.33",
+      "NAV": "20.34",
+      "Premium/Discount": "-0.0492%"
+    },
+    {
+      "Date": "Nov 03 2015",
+      "Market Price": "20.49",
+      "NAV": "20.50",
+      "Premium/Discount": "-0.0488%"
+    },
+    {
+      "Date": "Nov 04 2015",
+      "Market Price": "20.60",
+      "NAV": "20.47",
+      "Premium/Discount": "0.6351%"
+    },
+    {
+      "Date": "Nov 05 2015",
+      "Market Price": "20.22",
+      "NAV": "20.21",
+      "Premium/Discount": "0.0495%"
+    },
+    {
+      "Date": "Nov 06 2015",
+      "Market Price": "20.00",
+      "NAV": "20.29",
+      "Premium/Discount": "-1.4293%"
+    },
+    {
+      "Date": "Nov 09 2015",
+      "Market Price": "20.15",
+      "NAV": "20.25",
+      "Premium/Discount": "-0.4938%"
+    },
+    {
+      "Date": "Nov 10 2015",
+      "Market Price": "20.13",
+      "NAV": "20.15",
+      "Premium/Discount": "-0.0993%"
+    },
+    {
+      "Date": "Nov 11 2015",
+      "Market Price": "20.00",
+      "NAV": "19.94",
+      "Premium/Discount": "0.3009%"
+    },
+    {
+      "Date": "Nov 12 2015",
+      "Market Price": "19.77",
+      "NAV": "19.59",
+      "Premium/Discount": "0.9188%"
+    },
+    {
+      "Date": "Nov 13 2015",
+      "Market Price": "19.80",
+      "NAV": "19.78",
+      "Premium/Discount": "0.1011%"
+    },
+    {
+      "Date": "Nov 16 2015",
+      "Market Price": "19.52",
+      "NAV": "19.62",
+      "Premium/Discount": "-0.5097%"
+    },
+    {
+      "Date": "Nov 17 2015",
+      "Market Price": "19.72",
+      "NAV": "19.71",
+      "Premium/Discount": "0.0507%"
+    },
+    {
+      "Date": "Nov 18 2015",
+      "Market Price": "20.36",
+      "NAV": "20.36",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 19 2015",
+      "Market Price": "20.17",
+      "NAV": "20.08",
+      "Premium/Discount": "0.4482%"
+    },
+    {
+      "Date": "Nov 20 2015",
+      "Market Price": "20.14",
+      "NAV": "20.12",
+      "Premium/Discount": "0.0994%"
+    },
+    {
+      "Date": "Nov 23 2015",
+      "Market Price": "20.25",
+      "NAV": "20.27",
+      "Premium/Discount": "-0.0987%"
+    },
+    {
+      "Date": "Nov 24 2015",
+      "Market Price": "20.30",
+      "NAV": "20.33",
+      "Premium/Discount": "-0.1476%"
+    },
+    {
+      "Date": "Nov 25 2015",
+      "Market Price": "20.37",
+      "NAV": "20.67",
+      "Premium/Discount": "-1.4514%"
+    },
+    {
+      "Date": "Nov 27 2015",
+      "Market Price": "20.87",
+      "NAV": "20.93",
+      "Premium/Discount": "-0.2867%"
+    },
+    {
+      "Date": "Nov 30 2015",
+      "Market Price": "20.67",
+      "NAV": "20.54",
+      "Premium/Discount": "0.6329%"
+    },
+    {
+      "Date": "Dec 01 2015",
+      "Market Price": "20.58",
+      "NAV": "20.63",
+      "Premium/Discount": "-0.2424%"
+    },
+    {
+      "Date": "Dec 02 2015",
+      "Market Price": "20.21",
+      "NAV": "20.29",
+      "Premium/Discount": "-0.3943%"
+    },
+    {
+      "Date": "Dec 03 2015",
+      "Market Price": "19.81",
+      "NAV": "19.81",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Dec 04 2015",
+      "Market Price": "20.18",
+      "NAV": "20.23",
+      "Premium/Discount": "-0.2472%"
+    },
+    {
+      "Date": "Dec 07 2015",
+      "Market Price": "19.69",
+      "NAV": "19.68",
+      "Premium/Discount": "0.0508%"
+    },
+    {
+      "Date": "Dec 08 2015",
+      "Market Price": "19.98",
+      "NAV": "19.96",
+      "Premium/Discount": "0.1002%"
+    },
+    {
+      "Date": "Dec 09 2015",
+      "Market Price": "19.70",
+      "NAV": "19.71",
+      "Premium/Discount": "-0.0507%"
+    },
+    {
+      "Date": "Dec 10 2015",
+      "Market Price": "19.99",
+      "NAV": "19.98",
+      "Premium/Discount": "0.0501%"
+    },
+    {
+      "Date": "Dec 11 2015",
+      "Market Price": "19.50",
+      "NAV": "19.53",
+      "Premium/Discount": "-0.1536%"
+    },
+    {
+      "Date": "Dec 14 2015",
+      "Market Price": "19.25",
+      "NAV": "19.42",
+      "Premium/Discount": "-0.8754%"
+    },
+    {
+      "Date": "Dec 15 2015",
+      "Market Price": "19.89",
+      "NAV": "19.94",
+      "Premium/Discount": "-0.2508%"
+    },
+    {
+      "Date": "Dec 16 2015",
+      "Market Price": "20.06",
+      "NAV": "20.46",
+      "Premium/Discount": "-1.9550%"
+    },
+    {
+      "Date": "Dec 17 2015",
+      "Market Price": "20.47",
+      "NAV": "20.24",
+      "Premium/Discount": "1.1364%"
+    },
+    {
+      "Date": "Dec 18 2015",
+      "Market Price": "20.29",
+      "NAV": "20.18",
+      "Premium/Discount": "0.5451%"
+    },
+    {
+      "Date": "Dec 21 2015",
+      "Market Price": "20.42",
+      "NAV": "20.47",
+      "Premium/Discount": "-0.2443%"
+    },
+    {
+      "Date": "Dec 22 2015",
+      "Market Price": "20.50",
+      "NAV": "20.44",
+      "Premium/Discount": "0.2935%"
+    },
+    {
+      "Date": "Dec 23 2015",
+      "Market Price": "20.73",
+      "NAV": "20.72",
+      "Premium/Discount": "0.0483%"
+    },
+    {
+      "Date": "Dec 24 2015",
+      "Market Price": "20.91",
+      "NAV": "20.89",
+      "Premium/Discount": "0.0957%"
+    },
+    {
+      "Date": "Dec 28 2015",
+      "Market Price": "20.82",
+      "NAV": "20.88",
+      "Premium/Discount": "-0.2874%"
+    },
+    {
+      "Date": "Dec 29 2015",
+      "Market Price": "21.02",
+      "NAV": "21.13",
+      "Premium/Discount": "-0.5206%"
+    },
+    {
+      "Date": "Dec 30 2015",
+      "Market Price": "21.00",
+      "NAV": "20.98",
+      "Premium/Discount": "0.0953%"
+    },
+    {
+      "Date": "Dec 31 2015",
+      "Market Price": "20.96",
+      "NAV": "20.81",
+      "Premium/Discount": "0.7208%"
+    },
+    {
+      "Date": "Jan 04 2016",
+      "Market Price": "20.13",
+      "NAV": "20.14",
+      "Premium/Discount": "-0.0497%"
+    },
+    {
+      "Date": "Jan 05 2016",
+      "Market Price": "20.36",
+      "NAV": "20.30",
+      "Premium/Discount": "0.2956%"
+    },
+    {
+      "Date": "Jan 06 2016",
+      "Market Price": "19.61",
+      "NAV": "19.76",
+      "Premium/Discount": "-0.7591%"
+    },
+    {
+      "Date": "Jan 07 2016",
+      "Market Price": "19.05",
+      "NAV": "19.02",
+      "Premium/Discount": "0.1577%"
+    },
+    {
+      "Date": "Jan 08 2016",
+      "Market Price": "18.90",
+      "NAV": "18.75",
+      "Premium/Discount": "0.8000%"
+    },
+    {
+      "Date": "Jan 11 2016",
+      "Market Price": "17.93",
+      "NAV": "18.16",
+      "Premium/Discount": "-1.2665%"
+    },
+    {
+      "Date": "Jan 12 2016",
+      "Market Price": "18.64",
+      "NAV": "18.41",
+      "Premium/Discount": "1.2493%"
+    },
+    {
+      "Date": "Jan 13 2016",
+      "Market Price": "17.53",
+      "NAV": "17.53",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 14 2016",
+      "Market Price": "17.68",
+      "NAV": "18.14",
+      "Premium/Discount": "-2.5358%"
+    },
+    {
+      "Date": "Jan 15 2016",
+      "Market Price": "17.49",
+      "NAV": "17.75",
+      "Premium/Discount": "-1.4648%"
+    },
+    {
+      "Date": "Jan 19 2016",
+      "Market Price": "17.61",
+      "NAV": "17.23",
+      "Premium/Discount": "2.2055%"
+    },
+    {
+      "Date": "Jan 20 2016",
+      "Market Price": "17.46",
+      "NAV": "17.57",
+      "Premium/Discount": "-0.6261%"
+    },
+    {
+      "Date": "Jan 21 2016",
+      "Market Price": "17.56",
+      "NAV": "17.47",
+      "Premium/Discount": "0.5152%"
+    },
+    {
+      "Date": "Jan 22 2016",
+      "Market Price": "17.91",
+      "NAV": "17.95",
+      "Premium/Discount": "-0.2228%"
+    },
+    {
+      "Date": "Jan 25 2016",
+      "Market Price": "17.95",
+      "NAV": "17.66",
+      "Premium/Discount": "1.6421%"
+    },
+    {
+      "Date": "Jan 26 2016",
+      "Market Price": "17.60",
+      "NAV": "17.59",
+      "Premium/Discount": "0.0569%"
+    },
+    {
+      "Date": "Jan 27 2016",
+      "Market Price": "17.56",
+      "NAV": "16.90",
+      "Premium/Discount": "3.9053%"
+    },
+    {
+      "Date": "Jan 28 2016",
+      "Market Price": "16.52",
+      "NAV": "16.49",
+      "Premium/Discount": "0.1819%"
+    },
+    {
+      "Date": "Jan 29 2016",
+      "Market Price": "16.60",
+      "NAV": "16.88",
+      "Premium/Discount": "-1.6588%"
+    },
+    {
+      "Date": "Feb 01 2016",
+      "Market Price": "16.79",
+      "NAV": "16.93",
+      "Premium/Discount": "-0.8269%"
+    },
+    {
+      "Date": "Feb 02 2016",
+      "Market Price": "16.53",
+      "NAV": "16.47",
+      "Premium/Discount": "0.3643%"
+    },
+    {
+      "Date": "Feb 03 2016",
+      "Market Price": "16.29",
+      "NAV": "16.56",
+      "Premium/Discount": "-1.6304%"
+    },
+    {
+      "Date": "Feb 04 2016",
+      "Market Price": "16.53",
+      "NAV": "16.70",
+      "Premium/Discount": "-1.0180%"
+    },
+    {
+      "Date": "Feb 05 2016",
+      "Market Price": "16.02",
+      "NAV": "16.06",
+      "Premium/Discount": "-0.2491%"
+    },
+    {
+      "Date": "Feb 08 2016",
+      "Market Price": "15.42",
+      "NAV": "15.57",
+      "Premium/Discount": "-0.9634%"
+    },
+    {
+      "Date": "Feb 09 2016",
+      "Market Price": "15.64",
+      "NAV": "15.61",
+      "Premium/Discount": "0.1922%"
+    },
+    {
+      "Date": "Feb 10 2016",
+      "Market Price": "15.77",
+      "NAV": "15.38",
+      "Premium/Discount": "2.5358%"
+    },
+    {
+      "Date": "Feb 11 2016",
+      "Market Price": "15.02",
+      "NAV": "15.22",
+      "Premium/Discount": "-1.3141%"
+    },
+    {
+      "Date": "Feb 12 2016",
+      "Market Price": "15.10",
+      "NAV": "15.47",
+      "Premium/Discount": "-2.3917%"
+    },
+    {
+      "Date": "Feb 16 2016",
+      "Market Price": "15.92",
+      "NAV": "15.92",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Feb 17 2016",
+      "Market Price": "16.37",
+      "NAV": "16.59",
+      "Premium/Discount": "-1.3261%"
+    },
+    {
+      "Date": "Feb 18 2016",
+      "Market Price": "16.38",
+      "NAV": "16.21",
+      "Premium/Discount": "1.0487%"
+    },
+    {
+      "Date": "Feb 19 2016",
+      "Market Price": "16.45",
+      "NAV": "16.43",
+      "Premium/Discount": "0.1217%"
+    },
+    {
+      "Date": "Feb 22 2016",
+      "Market Price": "16.74",
+      "NAV": "16.62",
+      "Premium/Discount": "0.7220%"
+    },
+    {
+      "Date": "Feb 23 2016",
+      "Market Price": "16.38",
+      "NAV": "16.22",
+      "Premium/Discount": "0.9864%"
+    },
+    {
+      "Date": "Feb 24 2016",
+      "Market Price": "16.33",
+      "NAV": "16.35",
+      "Premium/Discount": "-0.1223%"
+    },
+    {
+      "Date": "Feb 25 2016",
+      "Market Price": "16.26",
+      "NAV": "16.29",
+      "Premium/Discount": "-0.1842%"
+    },
+    {
+      "Date": "Feb 26 2016",
+      "Market Price": "16.66",
+      "NAV": "16.59",
+      "Premium/Discount": "0.4219%"
+    },
+    {
+      "Date": "Feb 29 2016",
+      "Market Price": "16.35",
+      "NAV": "16.26",
+      "Premium/Discount": "0.5535%"
+    },
+    {
+      "Date": "Mar 01 2016",
+      "Market Price": "16.96",
+      "NAV": "17.05",
+      "Premium/Discount": "-0.5279%"
+    },
+    {
+      "Date": "Mar 02 2016",
+      "Market Price": "17.28",
+      "NAV": "17.36",
+      "Premium/Discount": "-0.4608%"
+    },
+    {
+      "Date": "Mar 03 2016",
+      "Market Price": "17.38",
+      "NAV": "17.40",
+      "Premium/Discount": "-0.1149%"
+    },
+    {
+      "Date": "Mar 04 2016",
+      "Market Price": "17.59",
+      "NAV": "17.54",
+      "Premium/Discount": "0.2851%"
+    },
+    {
+      "Date": "Mar 07 2016",
+      "Market Price": "17.89",
+      "NAV": "17.95",
+      "Premium/Discount": "-0.3343%"
+    },
+    {
+      "Date": "Mar 08 2016",
+      "Market Price": "17.48",
+      "NAV": "17.18",
+      "Premium/Discount": "1.7462%"
+    },
+    {
+      "Date": "Mar 09 2016",
+      "Market Price": "17.06",
+      "NAV": "17.05",
+      "Premium/Discount": "0.0587%"
+    },
+    {
+      "Date": "Mar 10 2016",
+      "Market Price": "17.34",
+      "NAV": "16.80",
+      "Premium/Discount": "3.2143%"
+    },
+    {
+      "Date": "Mar 11 2016",
+      "Market Price": "17.10",
+      "NAV": "17.30",
+      "Premium/Discount": "-1.1561%"
+    },
+    {
+      "Date": "Mar 14 2016",
+      "Market Price": "17.15",
+      "NAV": "17.28",
+      "Premium/Discount": "-0.7523%"
+    },
+    {
+      "Date": "Mar 15 2016",
+      "Market Price": "16.62",
+      "NAV": "16.64",
+      "Premium/Discount": "-0.1202%"
+    },
+    {
+      "Date": "Mar 16 2016",
+      "Market Price": "16.49",
+      "NAV": "16.56",
+      "Premium/Discount": "-0.4227%"
+    },
+    {
+      "Date": "Mar 17 2016",
+      "Market Price": "16.14",
+      "NAV": "16.52",
+      "Premium/Discount": "-2.3002%"
+    },
+    {
+      "Date": "Mar 18 2016",
+      "Market Price": "16.95",
+      "NAV": "16.91",
+      "Premium/Discount": "0.2365%"
+    },
+    {
+      "Date": "Mar 21 2016",
+      "Market Price": "17.19",
+      "NAV": "17.16",
+      "Premium/Discount": "0.1748%"
+    },
+    {
+      "Date": "Mar 22 2016",
+      "Market Price": "17.40",
+      "NAV": "17.33",
+      "Premium/Discount": "0.4039%"
+    },
+    {
+      "Date": "Mar 23 2016",
+      "Market Price": "17.05",
+      "NAV": "16.75",
+      "Premium/Discount": "1.7910%"
+    },
+    {
+      "Date": "Mar 24 2016",
+      "Market Price": "17.05",
+      "NAV": "16.95",
+      "Premium/Discount": "0.5900%"
+    },
+    {
+      "Date": "Mar 28 2016",
+      "Market Price": "16.77",
+      "NAV": "16.79",
+      "Premium/Discount": "-0.1191%"
+    },
+    {
+      "Date": "Mar 29 2016",
+      "Market Price": "17.00",
+      "NAV": "17.21",
+      "Premium/Discount": "-1.2202%"
+    },
+    {
+      "Date": "Mar 30 2016",
+      "Market Price": "17.50",
+      "NAV": "17.16",
+      "Premium/Discount": "1.9814%"
+    },
+    {
+      "Date": "Mar 31 2016",
+      "Market Price": "17.55",
+      "NAV": "17.51",
+      "Premium/Discount": "0.2284%"
+    },
+    {
+      "Date": "Apr 01 2016",
+      "Market Price": "17.84",
+      "NAV": "17.92",
+      "Premium/Discount": "-0.4464%"
+    },
+    {
+      "Date": "Apr 04 2016",
+      "Market Price": "18.38",
+      "NAV": "18.12",
+      "Premium/Discount": "1.4349%"
+    },
+    {
+      "Date": "Apr 05 2016",
+      "Market Price": "18.12",
+      "NAV": "17.99",
+      "Premium/Discount": "0.7226%"
+    },
+    {
+      "Date": "Apr 06 2016",
+      "Market Price": "18.38",
+      "NAV": "18.82",
+      "Premium/Discount": "-2.3379%"
+    },
+    {
+      "Date": "Apr 07 2016",
+      "Market Price": "18.53",
+      "NAV": "18.51",
+      "Premium/Discount": "0.1080%"
+    },
+    {
+      "Date": "Apr 08 2016",
+      "Market Price": "18.37",
+      "NAV": "18.34",
+      "Premium/Discount": "0.1636%"
+    },
+    {
+      "Date": "Apr 11 2016",
+      "Market Price": "18.07",
+      "NAV": "18.07",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 12 2016",
+      "Market Price": "18.19",
+      "NAV": "18.29",
+      "Premium/Discount": "-0.5467%"
+    },
+    {
+      "Date": "Apr 13 2016",
+      "Market Price": "18.63",
+      "NAV": "18.63",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 14 2016",
+      "Market Price": "18.68",
+      "NAV": "18.64",
+      "Premium/Discount": "0.2146%"
+    },
+    {
+      "Date": "Apr 15 2016",
+      "Market Price": "18.62",
+      "NAV": "18.71",
+      "Premium/Discount": "-0.4810%"
+    },
+    {
+      "Date": "Apr 18 2016",
+      "Market Price": "18.86",
+      "NAV": "18.81",
+      "Premium/Discount": "0.2658%"
+    },
+    {
+      "Date": "Apr 19 2016",
+      "Market Price": "18.16",
+      "NAV": "18.21",
+      "Premium/Discount": "-0.2746%"
+    },
+    {
+      "Date": "Apr 20 2016",
+      "Market Price": "18.33",
+      "NAV": "18.25",
+      "Premium/Discount": "0.4384%"
+    },
+    {
+      "Date": "Apr 21 2016",
+      "Market Price": "18.50",
+      "NAV": "18.61",
+      "Premium/Discount": "-0.5911%"
+    },
+    {
+      "Date": "Apr 22 2016",
+      "Market Price": "18.54",
+      "NAV": "18.74",
+      "Premium/Discount": "-1.0672%"
+    },
+    {
+      "Date": "Apr 25 2016",
+      "Market Price": "18.61",
+      "NAV": "18.61",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 26 2016",
+      "Market Price": "18.59",
+      "NAV": "18.34",
+      "Premium/Discount": "1.3631%"
+    },
+    {
+      "Date": "Apr 27 2016",
+      "Market Price": "18.21",
+      "NAV": "18.23",
+      "Premium/Discount": "-0.1097%"
+    },
+    {
+      "Date": "Apr 28 2016",
+      "Market Price": "18.02",
+      "NAV": "18.04",
+      "Premium/Discount": "-0.1109%"
+    },
+    {
+      "Date": "Apr 29 2016",
+      "Market Price": "17.46",
+      "NAV": "17.50",
+      "Premium/Discount": "-0.2286%"
+    },
+    {
+      "Date": "May 02 2016",
+      "Market Price": "17.68",
+      "NAV": "17.71",
+      "Premium/Discount": "-0.1694%"
+    },
+    {
+      "Date": "May 03 2016",
+      "Market Price": "17.68",
+      "NAV": "17.14",
+      "Premium/Discount": "3.1505%"
+    },
+    {
+      "Date": "May 04 2016",
+      "Market Price": "16.73",
+      "NAV": "16.74",
+      "Premium/Discount": "-0.0597%"
+    },
+    {
+      "Date": "May 05 2016",
+      "Market Price": "16.76",
+      "NAV": "16.75",
+      "Premium/Discount": "0.0597%"
+    },
+    {
+      "Date": "May 06 2016",
+      "Market Price": "16.70",
+      "NAV": "16.60",
+      "Premium/Discount": "0.6024%"
+    },
+    {
+      "Date": "May 09 2016",
+      "Market Price": "17.16",
+      "NAV": "17.05",
+      "Premium/Discount": "0.6452%"
+    },
+    {
+      "Date": "May 10 2016",
+      "Market Price": "17.01",
+      "NAV": "17.00",
+      "Premium/Discount": "0.0588%"
+    },
+    {
+      "Date": "May 11 2016",
+      "Market Price": "16.83",
+      "NAV": "16.52",
+      "Premium/Discount": "1.8765%"
+    },
+    {
+      "Date": "May 12 2016",
+      "Market Price": "16.25",
+      "NAV": "16.23",
+      "Premium/Discount": "0.1232%"
+    },
+    {
+      "Date": "May 13 2016",
+      "Market Price": "16.57",
+      "NAV": "16.50",
+      "Premium/Discount": "0.4242%"
+    },
+    {
+      "Date": "May 16 2016",
+      "Market Price": "16.61",
+      "NAV": "16.84",
+      "Premium/Discount": "-1.3658%"
+    },
+    {
+      "Date": "May 17 2016",
+      "Market Price": "16.68",
+      "NAV": "16.64",
+      "Premium/Discount": "0.2404%"
+    },
+    {
+      "Date": "May 18 2016",
+      "Market Price": "16.82",
+      "NAV": "16.79",
+      "Premium/Discount": "0.1787%"
+    },
+    {
+      "Date": "May 19 2016",
+      "Market Price": "16.56",
+      "NAV": "16.58",
+      "Premium/Discount": "-0.1206%"
+    },
+    {
+      "Date": "May 20 2016",
+      "Market Price": "16.78",
+      "NAV": "16.82",
+      "Premium/Discount": "-0.2378%"
+    },
+    {
+      "Date": "May 23 2016",
+      "Market Price": "17.06",
+      "NAV": "17.08",
+      "Premium/Discount": "-0.1171%"
+    },
+    {
+      "Date": "May 24 2016",
+      "Market Price": "17.50",
+      "NAV": "17.52",
+      "Premium/Discount": "-0.1142%"
+    },
+    {
+      "Date": "May 25 2016",
+      "Market Price": "17.78",
+      "NAV": "17.73",
+      "Premium/Discount": "0.2820%"
+    },
+    {
+      "Date": "May 26 2016",
+      "Market Price": "17.61",
+      "NAV": "17.57",
+      "Premium/Discount": "0.2277%"
+    },
+    {
+      "Date": "May 27 2016",
+      "Market Price": "17.52",
+      "NAV": "17.62",
+      "Premium/Discount": "-0.5675%"
+    },
+    {
+      "Date": "May 31 2016",
+      "Market Price": "17.93",
+      "NAV": "17.90",
+      "Premium/Discount": "0.1676%"
+    },
+    {
+      "Date": "Jun 01 2016",
+      "Market Price": "17.93",
+      "NAV": "17.96",
+      "Premium/Discount": "-0.1670%"
+    },
+    {
+      "Date": "Jun 02 2016",
+      "Market Price": "18.37",
+      "NAV": "18.42",
+      "Premium/Discount": "-0.2714%"
+    },
+    {
+      "Date": "Jun 03 2016",
+      "Market Price": "18.04",
+      "NAV": "17.97",
+      "Premium/Discount": "0.3895%"
+    },
+    {
+      "Date": "Jun 06 2016",
+      "Market Price": "18.38",
+      "NAV": "18.36",
+      "Premium/Discount": "0.1089%"
+    },
+    {
+      "Date": "Jun 07 2016",
+      "Market Price": "18.26",
+      "NAV": "18.11",
+      "Premium/Discount": "0.8283%"
+    },
+    {
+      "Date": "Jun 08 2016",
+      "Market Price": "18.18",
+      "NAV": "18.19",
+      "Premium/Discount": "-0.0550%"
+    },
+    {
+      "Date": "Jun 09 2016",
+      "Market Price": "17.74",
+      "NAV": "17.73",
+      "Premium/Discount": "0.0564%"
+    },
+    {
+      "Date": "Jun 10 2016",
+      "Market Price": "17.34",
+      "NAV": "17.31",
+      "Premium/Discount": "0.1733%"
+    },
+    {
+      "Date": "Jun 13 2016",
+      "Market Price": "17.13",
+      "NAV": "17.07",
+      "Premium/Discount": "0.3515%"
+    },
+    {
+      "Date": "Jun 14 2016",
+      "Market Price": "16.82",
+      "NAV": "16.92",
+      "Premium/Discount": "-0.5910%"
+    },
+    {
+      "Date": "Jun 15 2016",
+      "Market Price": "17.10",
+      "NAV": "17.00",
+      "Premium/Discount": "0.5882%"
+    },
+    {
+      "Date": "Jun 16 2016",
+      "Market Price": "16.90",
+      "NAV": "17.10",
+      "Premium/Discount": "-1.1696%"
+    },
+    {
+      "Date": "Jun 17 2016",
+      "Market Price": "16.87",
+      "NAV": "16.76",
+      "Premium/Discount": "0.6563%"
+    },
+    {
+      "Date": "Jun 20 2016",
+      "Market Price": "17.30",
+      "NAV": "17.11",
+      "Premium/Discount": "1.1105%"
+    },
+    {
+      "Date": "Jun 21 2016",
+      "Market Price": "16.94",
+      "NAV": "16.95",
+      "Premium/Discount": "-0.0590%"
+    },
+    {
+      "Date": "Jun 22 2016",
+      "Market Price": "17.31",
+      "NAV": "17.04",
+      "Premium/Discount": "1.5845%"
+    },
+    {
+      "Date": "Jun 23 2016",
+      "Market Price": "17.27",
+      "NAV": "17.48",
+      "Premium/Discount": "-1.2014%"
+    },
+    {
+      "Date": "Jun 24 2016",
+      "Market Price": "16.74",
+      "NAV": "16.69",
+      "Premium/Discount": "0.2996%"
+    },
+    {
+      "Date": "Jun 27 2016",
+      "Market Price": "16.16",
+      "NAV": "16.01",
+      "Premium/Discount": "0.9369%"
+    },
+    {
+      "Date": "Jun 28 2016",
+      "Market Price": "16.39",
+      "NAV": "16.47",
+      "Premium/Discount": "-0.4857%"
+    },
+    {
+      "Date": "Jun 29 2016",
+      "Market Price": "16.79",
+      "NAV": "16.79",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jun 30 2016",
+      "Market Price": "16.85",
+      "NAV": "16.90",
+      "Premium/Discount": "-0.2959%"
+    },
+    {
+      "Date": "Jul 01 2016",
+      "Market Price": "17.07",
+      "NAV": "17.27",
+      "Premium/Discount": "-1.1581%"
+    },
+    {
+      "Date": "Jul 05 2016",
+      "Market Price": "17.08",
+      "NAV": "17.21",
+      "Premium/Discount": "-0.7554%"
+    },
+    {
+      "Date": "Jul 06 2016",
+      "Market Price": "17.04",
+      "NAV": "17.53",
+      "Premium/Discount": "-2.7952%"
+    },
+    {
+      "Date": "Jul 07 2016",
+      "Market Price": "17.47",
+      "NAV": "17.63",
+      "Premium/Discount": "-0.9075%"
+    },
+    {
+      "Date": "Jul 08 2016",
+      "Market Price": "17.76",
+      "NAV": "17.82",
+      "Premium/Discount": "-0.3367%"
+    },
+    {
+      "Date": "Jul 11 2016",
+      "Market Price": "17.93",
+      "NAV": "17.79",
+      "Premium/Discount": "0.7870%"
+    },
+    {
+      "Date": "Jul 12 2016",
+      "Market Price": "18.14",
+      "NAV": "18.05",
+      "Premium/Discount": "0.4986%"
+    },
+    {
+      "Date": "Jul 13 2016",
+      "Market Price": "17.75",
+      "NAV": "17.74",
+      "Premium/Discount": "0.0564%"
+    },
+    {
+      "Date": "Jul 14 2016",
+      "Market Price": "17.74",
+      "NAV": "17.71",
+      "Premium/Discount": "0.1694%"
+    },
+    {
+      "Date": "Jul 15 2016",
+      "Market Price": "17.94",
+      "NAV": "17.98",
+      "Premium/Discount": "-0.2225%"
+    },
+    {
+      "Date": "Jul 18 2016",
+      "Market Price": "18.05",
+      "NAV": "18.04",
+      "Premium/Discount": "0.0554%"
+    },
+    {
+      "Date": "Jul 19 2016",
+      "Market Price": "17.82",
+      "NAV": "17.81",
+      "Premium/Discount": "0.0561%"
+    },
+    {
+      "Date": "Jul 20 2016",
+      "Market Price": "18.19",
+      "NAV": "18.21",
+      "Premium/Discount": "-0.1098%"
+    },
+    {
+      "Date": "Jul 21 2016",
+      "Market Price": "18.18",
+      "NAV": "18.15",
+      "Premium/Discount": "0.1653%"
+    },
+    {
+      "Date": "Jul 22 2016",
+      "Market Price": "18.21",
+      "NAV": "18.16",
+      "Premium/Discount": "0.2753%"
+    },
+    {
+      "Date": "Jul 25 2016",
+      "Market Price": "18.00",
+      "NAV": "18.13",
+      "Premium/Discount": "-0.7170%"
+    },
+    {
+      "Date": "Jul 26 2016",
+      "Market Price": "18.40",
+      "NAV": "18.37",
+      "Premium/Discount": "0.1633%"
+    },
+    {
+      "Date": "Jul 27 2016",
+      "Market Price": "18.72",
+      "NAV": "18.90",
+      "Premium/Discount": "-0.9524%"
+    },
+    {
+      "Date": "Jul 28 2016",
+      "Market Price": "18.95",
+      "NAV": "18.94",
+      "Premium/Discount": "0.0528%"
+    },
+    {
+      "Date": "Jul 29 2016",
+      "Market Price": "18.73",
+      "NAV": "18.74",
+      "Premium/Discount": "-0.0534%"
+    },
+    {
+      "Date": "Aug 01 2016",
+      "Market Price": "19.03",
+      "NAV": "19.05",
+      "Premium/Discount": "-0.1050%"
+    },
+    {
+      "Date": "Aug 02 2016",
+      "Market Price": "18.63",
+      "NAV": "18.78",
+      "Premium/Discount": "-0.7987%"
+    },
+    {
+      "Date": "Aug 03 2016",
+      "Market Price": "18.97",
+      "NAV": "19.01",
+      "Premium/Discount": "-0.2104%"
+    },
+    {
+      "Date": "Aug 04 2016",
+      "Market Price": "19.08",
+      "NAV": "18.98",
+      "Premium/Discount": "0.5269%"
+    },
+    {
+      "Date": "Aug 05 2016",
+      "Market Price": "19.22",
+      "NAV": "19.23",
+      "Premium/Discount": "-0.0520%"
+    },
+    {
+      "Date": "Aug 08 2016",
+      "Market Price": "19.06",
+      "NAV": "19.07",
+      "Premium/Discount": "-0.0524%"
+    },
+    {
+      "Date": "Aug 09 2016",
+      "Market Price": "19.08",
+      "NAV": "19.10",
+      "Premium/Discount": "-0.1047%"
+    },
+    {
+      "Date": "Aug 10 2016",
+      "Market Price": "18.72",
+      "NAV": "18.70",
+      "Premium/Discount": "0.1070%"
+    },
+    {
+      "Date": "Aug 11 2016",
+      "Market Price": "18.91",
+      "NAV": "18.91",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Aug 12 2016",
+      "Market Price": "19.03",
+      "NAV": "19.01",
+      "Premium/Discount": "0.1052%"
+    },
+    {
+      "Date": "Aug 15 2016",
+      "Market Price": "19.28",
+      "NAV": "19.26",
+      "Premium/Discount": "0.1038%"
+    },
+    {
+      "Date": "Aug 16 2016",
+      "Market Price": "19.09",
+      "NAV": "18.97",
+      "Premium/Discount": "0.6326%"
+    },
+    {
+      "Date": "Aug 17 2016",
+      "Market Price": "18.99",
+      "NAV": "18.79",
+      "Premium/Discount": "1.0644%"
+    },
+    {
+      "Date": "Aug 18 2016",
+      "Market Price": "18.97",
+      "NAV": "18.93",
+      "Premium/Discount": "0.2113%"
+    },
+    {
+      "Date": "Aug 19 2016",
+      "Market Price": "18.73",
+      "NAV": "18.75",
+      "Premium/Discount": "-0.1067%"
+    },
+    {
+      "Date": "Aug 22 2016",
+      "Market Price": "18.96",
+      "NAV": "18.99",
+      "Premium/Discount": "-0.1580%"
+    },
+    {
+      "Date": "Aug 23 2016",
+      "Market Price": "19.13",
+      "NAV": "19.09",
+      "Premium/Discount": "0.2095%"
+    },
+    {
+      "Date": "Aug 24 2016",
+      "Market Price": "18.28",
+      "NAV": "18.31",
+      "Premium/Discount": "-0.1638%"
+    },
+    {
+      "Date": "Aug 25 2016",
+      "Market Price": "17.93",
+      "NAV": "18.15",
+      "Premium/Discount": "-1.2121%"
+    },
+    {
+      "Date": "Aug 26 2016",
+      "Market Price": "18.13",
+      "NAV": "18.28",
+      "Premium/Discount": "-0.8206%"
+    },
+    {
+      "Date": "Aug 29 2016",
+      "Market Price": "18.44",
+      "NAV": "18.41",
+      "Premium/Discount": "0.1630%"
+    },
+    {
+      "Date": "Aug 30 2016",
+      "Market Price": "18.26",
+      "NAV": "18.24",
+      "Premium/Discount": "0.1096%"
+    },
+    {
+      "Date": "Aug 31 2016",
+      "Market Price": "18.01",
+      "NAV": "18.03",
+      "Premium/Discount": "-0.1109%"
+    },
+    {
+      "Date": "Sep 01 2016",
+      "Market Price": "18.00",
+      "NAV": "18.11",
+      "Premium/Discount": "-0.6074%"
+    },
+    {
+      "Date": "Sep 02 2016",
+      "Market Price": "18.21",
+      "NAV": "18.19",
+      "Premium/Discount": "0.1100%"
+    },
+    {
+      "Date": "Sep 06 2016",
+      "Market Price": "18.70",
+      "NAV": "18.73",
+      "Premium/Discount": "-0.1602%"
+    },
+    {
+      "Date": "Sep 07 2016",
+      "Market Price": "18.97",
+      "NAV": "18.98",
+      "Premium/Discount": "-0.0527%"
+    },
+    {
+      "Date": "Sep 08 2016",
+      "Market Price": "18.93",
+      "NAV": "19.25",
+      "Premium/Discount": "-1.6623%"
+    },
+    {
+      "Date": "Sep 09 2016",
+      "Market Price": "18.68",
+      "NAV": "18.44",
+      "Premium/Discount": "1.3015%"
+    },
+    {
+      "Date": "Sep 12 2016",
+      "Market Price": "18.77",
+      "NAV": "18.97",
+      "Premium/Discount": "-1.0543%"
+    },
+    {
+      "Date": "Sep 13 2016",
+      "Market Price": "18.70",
+      "NAV": "18.69",
+      "Premium/Discount": "0.0535%"
+    },
+    {
+      "Date": "Sep 14 2016",
+      "Market Price": "18.70",
+      "NAV": "18.92",
+      "Premium/Discount": "-1.1628%"
+    },
+    {
+      "Date": "Sep 15 2016",
+      "Market Price": "19.25",
+      "NAV": "19.27",
+      "Premium/Discount": "-0.1038%"
+    },
+    {
+      "Date": "Sep 16 2016",
+      "Market Price": "19.49",
+      "NAV": "19.51",
+      "Premium/Discount": "-0.1025%"
+    },
+    {
+      "Date": "Sep 19 2016",
+      "Market Price": "19.72",
+      "NAV": "19.50",
+      "Premium/Discount": "1.1282%"
+    },
+    {
+      "Date": "Sep 20 2016",
+      "Market Price": "19.78",
+      "NAV": "19.77",
+      "Premium/Discount": "0.0506%"
+    },
+    {
+      "Date": "Sep 21 2016",
+      "Market Price": "20.02",
+      "NAV": "20.03",
+      "Premium/Discount": "-0.0499%"
+    },
+    {
+      "Date": "Sep 22 2016",
+      "Market Price": "19.95",
+      "NAV": "20.28",
+      "Premium/Discount": "-1.6272%"
+    },
+    {
+      "Date": "Sep 23 2016",
+      "Market Price": "20.14",
+      "NAV": "20.10",
+      "Premium/Discount": "0.1990%"
+    },
+    {
+      "Date": "Sep 26 2016",
+      "Market Price": "20.05",
+      "NAV": "19.93",
+      "Premium/Discount": "0.6021%"
+    },
+    {
+      "Date": "Sep 27 2016",
+      "Market Price": "20.36",
+      "NAV": "20.37",
+      "Premium/Discount": "-0.0491%"
+    },
+    {
+      "Date": "Sep 28 2016",
+      "Market Price": "20.21",
+      "NAV": "20.20",
+      "Premium/Discount": "0.0495%"
+    },
+    {
+      "Date": "Sep 29 2016",
+      "Market Price": "19.63",
+      "NAV": "19.60",
+      "Premium/Discount": "0.1531%"
+    },
+    {
+      "Date": "Sep 30 2016",
+      "Market Price": "19.92",
+      "NAV": "19.89",
+      "Premium/Discount": "0.1508%"
+    },
+    {
+      "Date": "Oct 03 2016",
+      "Market Price": "19.74",
+      "NAV": "19.84",
+      "Premium/Discount": "-0.5040%"
+    },
+    {
+      "Date": "Oct 04 2016",
+      "Market Price": "19.77",
+      "NAV": "19.75",
+      "Premium/Discount": "0.1013%"
+    },
+    {
+      "Date": "Oct 05 2016",
+      "Market Price": "20.09",
+      "NAV": "20.09",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Oct 06 2016",
+      "Market Price": "19.25",
+      "NAV": "19.29",
+      "Premium/Discount": "-0.2074%"
+    },
+    {
+      "Date": "Oct 07 2016",
+      "Market Price": "19.19",
+      "NAV": "19.21",
+      "Premium/Discount": "-0.1041%"
+    },
+    {
+      "Date": "Oct 10 2016",
+      "Market Price": "19.52",
+      "NAV": "19.50",
+      "Premium/Discount": "0.1026%"
+    },
+    {
+      "Date": "Oct 11 2016",
+      "Market Price": "18.38",
+      "NAV": "18.43",
+      "Premium/Discount": "-0.2713%"
+    },
+    {
+      "Date": "Oct 12 2016",
+      "Market Price": "18.00",
+      "NAV": "17.99",
+      "Premium/Discount": "0.0556%"
+    },
+    {
+      "Date": "Oct 13 2016",
+      "Market Price": "18.01",
+      "NAV": "17.88",
+      "Premium/Discount": "0.7271%"
+    },
+    {
+      "Date": "Oct 14 2016",
+      "Market Price": "17.66",
+      "NAV": "17.62",
+      "Premium/Discount": "0.2270%"
+    },
+    {
+      "Date": "Oct 17 2016",
+      "Market Price": "17.58",
+      "NAV": "17.54",
+      "Premium/Discount": "0.2281%"
+    },
+    {
+      "Date": "Oct 18 2016",
+      "Market Price": "17.74",
+      "NAV": "17.81",
+      "Premium/Discount": "-0.3930%"
+    },
+    {
+      "Date": "Oct 19 2016",
+      "Market Price": "17.79",
+      "NAV": "17.69",
+      "Premium/Discount": "0.5653%"
+    },
+    {
+      "Date": "Oct 20 2016",
+      "Market Price": "17.80",
+      "NAV": "17.83",
+      "Premium/Discount": "-0.1683%"
+    },
+    {
+      "Date": "Oct 21 2016",
+      "Market Price": "17.67",
+      "NAV": "17.69",
+      "Premium/Discount": "-0.1131%"
+    },
+    {
+      "Date": "Oct 24 2016",
+      "Market Price": "17.85",
+      "NAV": "17.65",
+      "Premium/Discount": "1.1331%"
+    },
+    {
+      "Date": "Oct 25 2016",
+      "Market Price": "17.42",
+      "NAV": "17.35",
+      "Premium/Discount": "0.4035%"
+    },
+    {
+      "Date": "Oct 26 2016",
+      "Market Price": "17.25",
+      "NAV": "17.27",
+      "Premium/Discount": "-0.1158%"
+    },
+    {
+      "Date": "Oct 27 2016",
+      "Market Price": "17.00",
+      "NAV": "16.91",
+      "Premium/Discount": "0.5322%"
+    },
+    {
+      "Date": "Oct 28 2016",
+      "Market Price": "16.95",
+      "NAV": "16.84",
+      "Premium/Discount": "0.6532%"
+    },
+    {
+      "Date": "Oct 31 2016",
+      "Market Price": "16.72",
+      "NAV": "16.69",
+      "Premium/Discount": "0.1797%"
+    },
+    {
+      "Date": "Nov 01 2016",
+      "Market Price": "16.54",
+      "NAV": "16.75",
+      "Premium/Discount": "-1.2537%"
+    },
+    {
+      "Date": "Nov 02 2016",
+      "Market Price": "16.34",
+      "NAV": "16.19",
+      "Premium/Discount": "0.9265%"
+    },
+    {
+      "Date": "Nov 03 2016",
+      "Market Price": "15.85",
+      "NAV": "15.74",
+      "Premium/Discount": "0.6989%"
+    },
+    {
+      "Date": "Nov 04 2016",
+      "Market Price": "15.86",
+      "NAV": "16.14",
+      "Premium/Discount": "-1.7348%"
+    },
+    {
+      "Date": "Nov 07 2016",
+      "Market Price": "16.86",
+      "NAV": "16.87",
+      "Premium/Discount": "-0.0593%"
+    },
+    {
+      "Date": "Nov 08 2016",
+      "Market Price": "16.86",
+      "NAV": "17.09",
+      "Premium/Discount": "-1.3458%"
+    },
+    {
+      "Date": "Nov 09 2016",
+      "Market Price": "18.20",
+      "NAV": "18.20",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 10 2016",
+      "Market Price": "18.85",
+      "NAV": "18.81",
+      "Premium/Discount": "0.2127%"
+    },
+    {
+      "Date": "Nov 11 2016",
+      "Market Price": "18.79",
+      "NAV": "18.98",
+      "Premium/Discount": "-1.0011%"
+    },
+    {
+      "Date": "Nov 14 2016",
+      "Market Price": "19.41",
+      "NAV": "19.37",
+      "Premium/Discount": "0.2065%"
+    },
+    {
+      "Date": "Nov 15 2016",
+      "Market Price": "19.42",
+      "NAV": "19.36",
+      "Premium/Discount": "0.3099%"
+    },
+    {
+      "Date": "Nov 16 2016",
+      "Market Price": "18.94",
+      "NAV": "18.77",
+      "Premium/Discount": "0.9057%"
+    },
+    {
+      "Date": "Nov 17 2016",
+      "Market Price": "18.78",
+      "NAV": "18.71",
+      "Premium/Discount": "0.3741%"
+    },
+    {
+      "Date": "Nov 18 2016",
+      "Market Price": "18.68",
+      "NAV": "18.62",
+      "Premium/Discount": "0.3222%"
+    },
+    {
+      "Date": "Nov 21 2016",
+      "Market Price": "18.97",
+      "NAV": "18.95",
+      "Premium/Discount": "0.1055%"
+    },
+    {
+      "Date": "Nov 22 2016",
+      "Market Price": "18.66",
+      "NAV": "18.67",
+      "Premium/Discount": "-0.0536%"
+    },
+    {
+      "Date": "Nov 23 2016",
+      "Market Price": "18.52",
+      "NAV": "18.72",
+      "Premium/Discount": "-1.0684%"
+    },
+    {
+      "Date": "Nov 25 2016",
+      "Market Price": "18.76",
+      "NAV": "18.82",
+      "Premium/Discount": "-0.3188%"
+    },
+    {
+      "Date": "Nov 28 2016",
+      "Market Price": "18.26",
+      "NAV": "18.21",
+      "Premium/Discount": "0.2746%"
+    },
+    {
+      "Date": "Nov 29 2016",
+      "Market Price": "18.30",
+      "NAV": "18.13",
+      "Premium/Discount": "0.9377%"
+    },
+    {
+      "Date": "Nov 30 2016",
+      "Market Price": "17.86",
+      "NAV": "17.65",
+      "Premium/Discount": "1.1898%"
+    },
+    {
+      "Date": "Dec 01 2016",
+      "Market Price": "17.32",
+      "NAV": "17.35",
+      "Premium/Discount": "-0.1729%"
+    },
+    {
+      "Date": "Dec 02 2016",
+      "Market Price": "17.59",
+      "NAV": "17.55",
+      "Premium/Discount": "0.2279%"
+    },
+    {
+      "Date": "Dec 05 2016",
+      "Market Price": "17.84",
+      "NAV": "17.71",
+      "Premium/Discount": "0.7340%"
+    },
+    {
+      "Date": "Dec 06 2016",
+      "Market Price": "17.72",
+      "NAV": "17.73",
+      "Premium/Discount": "-0.0564%"
+    },
+    {
+      "Date": "Dec 07 2016",
+      "Market Price": "17.09",
+      "NAV": "17.16",
+      "Premium/Discount": "-0.4079%"
+    },
+    {
+      "Date": "Dec 08 2016",
+      "Market Price": "17.17",
+      "NAV": "17.37",
+      "Premium/Discount": "-1.1514%"
+    },
+    {
+      "Date": "Dec 09 2016",
+      "Market Price": "17.48",
+      "NAV": "17.51",
+      "Premium/Discount": "-0.1713%"
+    },
+    {
+      "Date": "Dec 12 2016",
+      "Market Price": "17.42",
+      "NAV": "17.48",
+      "Premium/Discount": "-0.3432%"
+    },
+    {
+      "Date": "Dec 13 2016",
+      "Market Price": "17.67",
+      "NAV": "17.60",
+      "Premium/Discount": "0.3977%"
+    },
+    {
+      "Date": "Dec 14 2016",
+      "Market Price": "17.37",
+      "NAV": "17.48",
+      "Premium/Discount": "-0.6293%"
+    },
+    {
+      "Date": "Dec 15 2016",
+      "Market Price": "18.00",
+      "NAV": "18.06",
+      "Premium/Discount": "-0.3322%"
+    },
+    {
+      "Date": "Dec 16 2016",
+      "Market Price": "18.05",
+      "NAV": "18.01",
+      "Premium/Discount": "0.2221%"
+    },
+    {
+      "Date": "Dec 19 2016",
+      "Market Price": "17.78",
+      "NAV": "17.80",
+      "Premium/Discount": "-0.1124%"
+    },
+    {
+      "Date": "Dec 20 2016",
+      "Market Price": "17.78",
+      "NAV": "17.81",
+      "Premium/Discount": "-0.1684%"
+    },
+    {
+      "Date": "Dec 21 2016",
+      "Market Price": "17.46",
+      "NAV": "17.41",
+      "Premium/Discount": "0.2872%"
+    },
+    {
+      "Date": "Dec 22 2016",
+      "Market Price": "17.09",
+      "NAV": "17.11",
+      "Premium/Discount": "-0.1169%"
+    },
+    {
+      "Date": "Dec 23 2016",
+      "Market Price": "17.53",
+      "NAV": "17.58",
+      "Premium/Discount": "-0.2844%"
+    },
+    {
+      "Date": "Dec 27 2016",
+      "Market Price": "17.60",
+      "NAV": "17.61",
+      "Premium/Discount": "-0.0568%"
+    },
+    {
+      "Date": "Dec 28 2016",
+      "Market Price": "17.34",
+      "NAV": "17.25",
+      "Premium/Discount": "0.5217%"
+    },
+    {
+      "Date": "Dec 29 2016",
+      "Market Price": "17.14",
+      "NAV": "17.16",
+      "Premium/Discount": "-0.1166%"
+    },
+    {
+      "Date": "Dec 30 2016",
+      "Market Price": "16.93",
+      "NAV": "16.99",
+      "Premium/Discount": "-0.3531%"
+    },
+    {
+      "Date": "Jan 03 2017",
+      "Market Price": "17.19",
+      "NAV": "17.40",
+      "Premium/Discount": "-1.2069%"
+    },
+    {
+      "Date": "Jan 04 2017",
+      "Market Price": "18.15",
+      "NAV": "18.15",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 05 2017",
+      "Market Price": "17.93",
+      "NAV": "17.91",
+      "Premium/Discount": "0.1117%"
+    },
+    {
+      "Date": "Jan 06 2017",
+      "Market Price": "18.23",
+      "NAV": "18.21",
+      "Premium/Discount": "0.1098%"
+    },
+    {
+      "Date": "Jan 09 2017",
+      "Market Price": "18.38",
+      "NAV": "18.34",
+      "Premium/Discount": "0.2181%"
+    },
+    {
+      "Date": "Jan 10 2017",
+      "Market Price": "18.62",
+      "NAV": "18.68",
+      "Premium/Discount": "-0.3212%"
+    },
+    {
+      "Date": "Jan 11 2017",
+      "Market Price": "18.15",
+      "NAV": "18.16",
+      "Premium/Discount": "-0.0551%"
+    },
+    {
+      "Date": "Jan 12 2017",
+      "Market Price": "18.32",
+      "NAV": "18.32",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 13 2017",
+      "Market Price": "18.33",
+      "NAV": "18.31",
+      "Premium/Discount": "0.1092%"
+    },
+    {
+      "Date": "Jan 17 2017",
+      "Market Price": "17.82",
+      "NAV": "17.80",
+      "Premium/Discount": "0.1124%"
+    },
+    {
+      "Date": "Jan 18 2017",
+      "Market Price": "17.81",
+      "NAV": "17.89",
+      "Premium/Discount": "-0.4472%"
+    },
+    {
+      "Date": "Jan 19 2017",
+      "Market Price": "17.71",
+      "NAV": "17.70",
+      "Premium/Discount": "0.0565%"
+    },
+    {
+      "Date": "Jan 20 2017",
+      "Market Price": "17.72",
+      "NAV": "17.71",
+      "Premium/Discount": "0.0565%"
+    },
+    {
+      "Date": "Jan 23 2017",
+      "Market Price": "17.59",
+      "NAV": "17.59",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 24 2017",
+      "Market Price": "17.56",
+      "NAV": "17.63",
+      "Premium/Discount": "-0.3971%"
+    },
+    {
+      "Date": "Jan 25 2017",
+      "Market Price": "17.75",
+      "NAV": "17.83",
+      "Premium/Discount": "-0.4487%"
+    },
+    {
+      "Date": "Jan 26 2017",
+      "Market Price": "17.74",
+      "NAV": "17.61",
+      "Premium/Discount": "0.7382%"
+    },
+    {
+      "Date": "Jan 27 2017",
+      "Market Price": "17.91",
+      "NAV": "17.90",
+      "Premium/Discount": "0.0559%"
+    },
+    {
+      "Date": "Jan 30 2017",
+      "Market Price": "17.53",
+      "NAV": "17.58",
+      "Premium/Discount": "-0.2844%"
+    },
+    {
+      "Date": "Jan 31 2017",
+      "Market Price": "18.19",
+      "NAV": "18.16",
+      "Premium/Discount": "0.1652%"
+    },
+    {
+      "Date": "Feb 01 2017",
+      "Market Price": "18.25",
+      "NAV": "18.28",
+      "Premium/Discount": "-0.1641%"
+    },
+    {
+      "Date": "Feb 02 2017",
+      "Market Price": "18.29",
+      "NAV": "18.36",
+      "Premium/Discount": "-0.3813%"
+    },
+    {
+      "Date": "Feb 03 2017",
+      "Market Price": "18.15",
+      "NAV": "18.36",
+      "Premium/Discount": "-1.1438%"
+    },
+    {
+      "Date": "Feb 06 2017",
+      "Market Price": "18.34",
+      "NAV": "18.34",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Feb 07 2017",
+      "Market Price": "18.27",
+      "NAV": "18.25",
+      "Premium/Discount": "0.1096%"
+    },
+    {
+      "Date": "Feb 08 2017",
+      "Market Price": "18.45",
+      "NAV": "18.42",
+      "Premium/Discount": "0.1629%"
+    },
+    {
+      "Date": "Feb 09 2017",
+      "Market Price": "18.86",
+      "NAV": "18.86",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Feb 10 2017",
+      "Market Price": "18.99",
+      "NAV": "18.79",
+      "Premium/Discount": "1.0644%"
+    },
+    {
+      "Date": "Feb 13 2017",
+      "Market Price": "18.83",
+      "NAV": "18.80",
+      "Premium/Discount": "0.1596%"
+    },
+    {
+      "Date": "Feb 14 2017",
+      "Market Price": "19.08",
+      "NAV": "19.05",
+      "Premium/Discount": "0.1575%"
+    },
+    {
+      "Date": "Feb 15 2017",
+      "Market Price": "19.10",
+      "NAV": "19.22",
+      "Premium/Discount": "-0.6243%"
+    },
+    {
+      "Date": "Feb 16 2017",
+      "Market Price": "19.07",
+      "NAV": "19.08",
+      "Premium/Discount": "-0.0524%"
+    },
+    {
+      "Date": "Feb 17 2017",
+      "Market Price": "19.20",
+      "NAV": "19.28",
+      "Premium/Discount": "-0.4149%"
+    },
+    {
+      "Date": "Feb 21 2017",
+      "Market Price": "19.23",
+      "NAV": "19.25",
+      "Premium/Discount": "-0.1039%"
+    },
+    {
+      "Date": "Feb 22 2017",
+      "Market Price": "19.06",
+      "NAV": "18.97",
+      "Premium/Discount": "0.4744%"
+    },
+    {
+      "Date": "Feb 23 2017",
+      "Market Price": "18.90",
+      "NAV": "18.85",
+      "Premium/Discount": "0.2653%"
+    },
+    {
+      "Date": "Feb 24 2017",
+      "Market Price": "18.80",
+      "NAV": "18.81",
+      "Premium/Discount": "-0.0532%"
+    },
+    {
+      "Date": "Feb 27 2017",
+      "Market Price": "19.69",
+      "NAV": "19.66",
+      "Premium/Discount": "0.1526%"
+    },
+    {
+      "Date": "Feb 28 2017",
+      "Market Price": "19.84",
+      "NAV": "19.81",
+      "Premium/Discount": "0.1514%"
+    },
+    {
+      "Date": "Mar 01 2017",
+      "Market Price": "20.31",
+      "NAV": "20.28",
+      "Premium/Discount": "0.1479%"
+    },
+    {
+      "Date": "Mar 02 2017",
+      "Market Price": "20.09",
+      "NAV": "20.09",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 03 2017",
+      "Market Price": "20.03",
+      "NAV": "20.14",
+      "Premium/Discount": "-0.5462%"
+    },
+    {
+      "Date": "Mar 06 2017",
+      "Market Price": "20.09",
+      "NAV": "20.08",
+      "Premium/Discount": "0.0498%"
+    },
+    {
+      "Date": "Mar 07 2017",
+      "Market Price": "20.21",
+      "NAV": "20.05",
+      "Premium/Discount": "0.7980%"
+    },
+    {
+      "Date": "Mar 08 2017",
+      "Market Price": "20.30",
+      "NAV": "20.29",
+      "Premium/Discount": "0.0493%"
+    },
+    {
+      "Date": "Mar 09 2017",
+      "Market Price": "20.39",
+      "NAV": "20.40",
+      "Premium/Discount": "-0.0490%"
+    },
+    {
+      "Date": "Mar 10 2017",
+      "Market Price": "20.33",
+      "NAV": "20.58",
+      "Premium/Discount": "-1.2148%"
+    },
+    {
+      "Date": "Mar 13 2017",
+      "Market Price": "20.54",
+      "NAV": "20.52",
+      "Premium/Discount": "0.0975%"
+    },
+    {
+      "Date": "Mar 14 2017",
+      "Market Price": "20.48",
+      "NAV": "20.38",
+      "Premium/Discount": "0.4907%"
+    },
+    {
+      "Date": "Mar 15 2017",
+      "Market Price": "20.79",
+      "NAV": "20.74",
+      "Premium/Discount": "0.2411%"
+    },
+    {
+      "Date": "Mar 16 2017",
+      "Market Price": "20.64",
+      "NAV": "20.66",
+      "Premium/Discount": "-0.0968%"
+    },
+    {
+      "Date": "Mar 17 2017",
+      "Market Price": "20.62",
+      "NAV": "20.60",
+      "Premium/Discount": "0.0971%"
+    },
+    {
+      "Date": "Mar 20 2017",
+      "Market Price": "20.68",
+      "NAV": "20.68",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 21 2017",
+      "Market Price": "19.89",
+      "NAV": "19.84",
+      "Premium/Discount": "0.2520%"
+    },
+    {
+      "Date": "Mar 22 2017",
+      "Market Price": "19.83",
+      "NAV": "19.88",
+      "Premium/Discount": "-0.2515%"
+    },
+    {
+      "Date": "Mar 23 2017",
+      "Market Price": "19.87",
+      "NAV": "19.88",
+      "Premium/Discount": "-0.0503%"
+    },
+    {
+      "Date": "Mar 24 2017",
+      "Market Price": "20.07",
+      "NAV": "20.07",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 27 2017",
+      "Market Price": "20.50",
+      "NAV": "20.47",
+      "Premium/Discount": "0.1466%"
+    },
+    {
+      "Date": "Mar 28 2017",
+      "Market Price": "20.44",
+      "NAV": "20.42",
+      "Premium/Discount": "0.0979%"
+    },
+    {
+      "Date": "Mar 29 2017",
+      "Market Price": "20.65",
+      "NAV": "20.58",
+      "Premium/Discount": "0.3401%"
+    },
+    {
+      "Date": "Mar 30 2017",
+      "Market Price": "20.60",
+      "NAV": "20.58",
+      "Premium/Discount": "0.0972%"
+    },
+    {
+      "Date": "Mar 31 2017",
+      "Market Price": "20.68",
+      "NAV": "20.62",
+      "Premium/Discount": "0.2910%"
+    },
+    {
+      "Date": "Apr 03 2017",
+      "Market Price": "20.49",
+      "NAV": "20.52",
+      "Premium/Discount": "-0.1462%"
+    },
+    {
+      "Date": "Apr 04 2017",
+      "Market Price": "20.41",
+      "NAV": "20.40",
+      "Premium/Discount": "0.0490%"
+    },
+    {
+      "Date": "Apr 05 2017",
+      "Market Price": "20.00",
+      "NAV": "19.88",
+      "Premium/Discount": "0.6036%"
+    },
+    {
+      "Date": "Apr 06 2017",
+      "Market Price": "20.00",
+      "NAV": "20.08",
+      "Premium/Discount": "-0.3984%"
+    },
+    {
+      "Date": "Apr 07 2017",
+      "Market Price": "20.20",
+      "NAV": "20.23",
+      "Premium/Discount": "-0.1483%"
+    },
+    {
+      "Date": "Apr 10 2017",
+      "Market Price": "20.36",
+      "NAV": "20.22",
+      "Premium/Discount": "0.6924%"
+    },
+    {
+      "Date": "Apr 11 2017",
+      "Market Price": "20.03",
+      "NAV": "20.12",
+      "Premium/Discount": "-0.4473%"
+    },
+    {
+      "Date": "Apr 12 2017",
+      "Market Price": "20.06",
+      "NAV": "19.88",
+      "Premium/Discount": "0.9054%"
+    },
+    {
+      "Date": "Apr 13 2017",
+      "Market Price": "20.13",
+      "NAV": "20.14",
+      "Premium/Discount": "-0.0497%"
+    },
+    {
+      "Date": "Apr 17 2017",
+      "Market Price": "20.29",
+      "NAV": "20.31",
+      "Premium/Discount": "-0.0985%"
+    },
+    {
+      "Date": "Apr 18 2017",
+      "Market Price": "19.96",
+      "NAV": "19.92",
+      "Premium/Discount": "0.2008%"
+    },
+    {
+      "Date": "Apr 19 2017",
+      "Market Price": "19.97",
+      "NAV": "19.89",
+      "Premium/Discount": "0.4022%"
+    },
+    {
+      "Date": "Apr 20 2017",
+      "Market Price": "20.03",
+      "NAV": "20.05",
+      "Premium/Discount": "-0.0998%"
+    },
+    {
+      "Date": "Apr 21 2017",
+      "Market Price": "19.85",
+      "NAV": "19.84",
+      "Premium/Discount": "0.0504%"
+    },
+    {
+      "Date": "Apr 24 2017",
+      "Market Price": "20.23",
+      "NAV": "20.22",
+      "Premium/Discount": "0.0495%"
+    },
+    {
+      "Date": "Apr 25 2017",
+      "Market Price": "20.57",
+      "NAV": "20.58",
+      "Premium/Discount": "-0.0486%"
+    },
+    {
+      "Date": "Apr 26 2017",
+      "Market Price": "20.87",
+      "NAV": "20.83",
+      "Premium/Discount": "0.1920%"
+    },
+    {
+      "Date": "Apr 27 2017",
+      "Market Price": "20.84",
+      "NAV": "20.79",
+      "Premium/Discount": "0.2405%"
+    },
+    {
+      "Date": "Apr 28 2017",
+      "Market Price": "20.49",
+      "NAV": "20.48",
+      "Premium/Discount": "0.0488%"
+    },
+    {
+      "Date": "May 01 2017",
+      "Market Price": "20.74",
+      "NAV": "20.74",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 02 2017",
+      "Market Price": "20.53",
+      "NAV": "20.49",
+      "Premium/Discount": "0.1952%"
+    },
+    {
+      "Date": "May 03 2017",
+      "Market Price": "20.34",
+      "NAV": "20.33",
+      "Premium/Discount": "0.0492%"
+    },
+    {
+      "Date": "May 04 2017",
+      "Market Price": "20.49",
+      "NAV": "20.46",
+      "Premium/Discount": "0.1466%"
+    },
+    {
+      "Date": "May 05 2017",
+      "Market Price": "20.19",
+      "NAV": "20.28",
+      "Premium/Discount": "-0.4438%"
+    },
+    {
+      "Date": "May 08 2017",
+      "Market Price": "19.83",
+      "NAV": "19.83",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 09 2017",
+      "Market Price": "20.08",
+      "NAV": "20.04",
+      "Premium/Discount": "0.1996%"
+    },
+    {
+      "Date": "May 10 2017",
+      "Market Price": "20.02",
+      "NAV": "20.06",
+      "Premium/Discount": "-0.1994%"
+    },
+    {
+      "Date": "May 11 2017",
+      "Market Price": "20.01",
+      "NAV": "20.00",
+      "Premium/Discount": "0.0500%"
+    },
+    {
+      "Date": "May 12 2017",
+      "Market Price": "20.38",
+      "NAV": "20.34",
+      "Premium/Discount": "0.1967%"
+    },
+    {
+      "Date": "May 15 2017",
+      "Market Price": "20.65",
+      "NAV": "20.67",
+      "Premium/Discount": "-0.0968%"
+    },
+    {
+      "Date": "May 16 2017",
+      "Market Price": "20.74",
+      "NAV": "20.71",
+      "Premium/Discount": "0.1449%"
+    },
+    {
+      "Date": "May 17 2017",
+      "Market Price": "20.06",
+      "NAV": "20.01",
+      "Premium/Discount": "0.2499%"
+    },
+    {
+      "Date": "May 18 2017",
+      "Market Price": "20.73",
+      "NAV": "20.71",
+      "Premium/Discount": "0.0966%"
+    },
+    {
+      "Date": "May 19 2017",
+      "Market Price": "20.66",
+      "NAV": "20.62",
+      "Premium/Discount": "0.1940%"
+    },
+    {
+      "Date": "May 22 2017",
+      "Market Price": "20.66",
+      "NAV": "20.77",
+      "Premium/Discount": "-0.5296%"
+    },
+    {
+      "Date": "May 23 2017",
+      "Market Price": "20.81",
+      "NAV": "20.76",
+      "Premium/Discount": "0.2408%"
+    },
+    {
+      "Date": "May 24 2017",
+      "Market Price": "20.99",
+      "NAV": "20.96",
+      "Premium/Discount": "0.1431%"
+    },
+    {
+      "Date": "May 25 2017",
+      "Market Price": "20.76",
+      "NAV": "20.73",
+      "Premium/Discount": "0.1447%"
+    },
+    {
+      "Date": "May 26 2017",
+      "Market Price": "20.57",
+      "NAV": "20.57",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 30 2017",
+      "Market Price": "20.20",
+      "NAV": "20.16",
+      "Premium/Discount": "0.1984%"
+    },
+    {
+      "Date": "May 31 2017",
+      "Market Price": "20.16",
+      "NAV": "20.17",
+      "Premium/Discount": "-0.0496%"
+    },
+    {
+      "Date": "Jun 01 2017",
+      "Market Price": "20.74",
+      "NAV": "20.73",
+      "Premium/Discount": "0.0482%"
+    },
+    {
+      "Date": "Jun 02 2017",
+      "Market Price": "21.14",
+      "NAV": "21.13",
+      "Premium/Discount": "0.0473%"
+    },
+    {
+      "Date": "Jun 05 2017",
+      "Market Price": "20.79",
+      "NAV": "20.78",
+      "Premium/Discount": "0.0481%"
+    },
+    {
+      "Date": "Jun 06 2017",
+      "Market Price": "20.92",
+      "NAV": "20.88",
+      "Premium/Discount": "0.1916%"
+    },
+    {
+      "Date": "Jun 07 2017",
+      "Market Price": "21.13",
+      "NAV": "21.12",
+      "Premium/Discount": "0.0473%"
+    },
+    {
+      "Date": "Jun 08 2017",
+      "Market Price": "21.42",
+      "NAV": "21.46",
+      "Premium/Discount": "-0.1864%"
+    },
+    {
+      "Date": "Jun 09 2017",
+      "Market Price": "21.14",
+      "NAV": "21.24",
+      "Premium/Discount": "-0.4708%"
+    },
+    {
+      "Date": "Jun 12 2017",
+      "Market Price": "21.13",
+      "NAV": "21.11",
+      "Premium/Discount": "0.0947%"
+    },
+    {
+      "Date": "Jun 13 2017",
+      "Market Price": "21.37",
+      "NAV": "21.34",
+      "Premium/Discount": "0.1406%"
+    },
+    {
+      "Date": "Jun 14 2017",
+      "Market Price": "21.30",
+      "NAV": "21.33",
+      "Premium/Discount": "-0.1406%"
+    },
+    {
+      "Date": "Jun 15 2017",
+      "Market Price": "21.09",
+      "NAV": "21.06",
+      "Premium/Discount": "0.1425%"
+    },
+    {
+      "Date": "Jun 16 2017",
+      "Market Price": "21.12",
+      "NAV": "21.08",
+      "Premium/Discount": "0.1898%"
+    },
+    {
+      "Date": "Jun 19 2017",
+      "Market Price": "21.79",
+      "NAV": "21.76",
+      "Premium/Discount": "0.1379%"
+    },
+    {
+      "Date": "Jun 20 2017",
+      "Market Price": "21.86",
+      "NAV": "21.81",
+      "Premium/Discount": "0.2293%"
+    },
+    {
+      "Date": "Jun 21 2017",
+      "Market Price": "22.54",
+      "NAV": "22.51",
+      "Premium/Discount": "0.1333%"
+    },
+    {
+      "Date": "Jun 22 2017",
+      "Market Price": "22.89",
+      "NAV": "22.85",
+      "Premium/Discount": "0.1751%"
+    },
+    {
+      "Date": "Jun 23 2017",
+      "Market Price": "23.10",
+      "NAV": "23.05",
+      "Premium/Discount": "0.2169%"
+    },
+    {
+      "Date": "Jun 26 2017",
+      "Market Price": "23.20",
+      "NAV": "23.13",
+      "Premium/Discount": "0.3026%"
+    },
+    {
+      "Date": "Jun 27 2017",
+      "Market Price": "22.46",
+      "NAV": "22.45",
+      "Premium/Discount": "0.0445%"
+    },
+    {
+      "Date": "Jun 28 2017",
+      "Market Price": "23.06",
+      "NAV": "23.05",
+      "Premium/Discount": "0.0434%"
+    },
+    {
+      "Date": "Jun 29 2017",
+      "Market Price": "22.55",
+      "NAV": "22.60",
+      "Premium/Discount": "-0.2212%"
+    },
+    {
+      "Date": "Jun 30 2017",
+      "Market Price": "22.38",
+      "NAV": "22.27",
+      "Premium/Discount": "0.4939%"
+    },
+    {
+      "Date": "Jul 03 2017",
+      "Market Price": "22.44",
+      "NAV": "22.39",
+      "Premium/Discount": "0.2233%"
+    },
+    {
+      "Date": "Jul 05 2017",
+      "Market Price": "22.70",
+      "NAV": "22.68",
+      "Premium/Discount": "0.0882%"
+    },
+    {
+      "Date": "Jul 06 2017",
+      "Market Price": "22.09",
+      "NAV": "22.10",
+      "Premium/Discount": "-0.0452%"
+    },
+    {
+      "Date": "Jul 07 2017",
+      "Market Price": "22.20",
+      "NAV": "22.24",
+      "Premium/Discount": "-0.1799%"
+    },
+    {
+      "Date": "Jul 10 2017",
+      "Market Price": "21.89",
+      "NAV": "21.87",
+      "Premium/Discount": "0.0914%"
+    },
+    {
+      "Date": "Jul 11 2017",
+      "Market Price": "22.20",
+      "NAV": "22.13",
+      "Premium/Discount": "0.3163%"
+    },
+    {
+      "Date": "Jul 12 2017",
+      "Market Price": "22.33",
+      "NAV": "22.31",
+      "Premium/Discount": "0.0896%"
+    },
+    {
+      "Date": "Jul 13 2017",
+      "Market Price": "22.45",
+      "NAV": "22.38",
+      "Premium/Discount": "0.3128%"
+    },
+    {
+      "Date": "Jul 14 2017",
+      "Market Price": "22.43",
+      "NAV": "22.38",
+      "Premium/Discount": "0.2234%"
+    },
+    {
+      "Date": "Jul 17 2017",
+      "Market Price": "22.31",
+      "NAV": "22.30",
+      "Premium/Discount": "0.0448%"
+    },
+    {
+      "Date": "Jul 18 2017",
+      "Market Price": "22.11",
+      "NAV": "22.06",
+      "Premium/Discount": "0.2267%"
+    },
+    {
+      "Date": "Jul 19 2017",
+      "Market Price": "22.20",
+      "NAV": "22.19",
+      "Premium/Discount": "0.0451%"
+    },
+    {
+      "Date": "Jul 20 2017",
+      "Market Price": "22.38",
+      "NAV": "22.35",
+      "Premium/Discount": "0.1342%"
+    },
+    {
+      "Date": "Jul 21 2017",
+      "Market Price": "22.50",
+      "NAV": "22.51",
+      "Premium/Discount": "-0.0444%"
+    },
+    {
+      "Date": "Jul 24 2017",
+      "Market Price": "22.86",
+      "NAV": "22.93",
+      "Premium/Discount": "-0.3053%"
+    },
+    {
+      "Date": "Jul 25 2017",
+      "Market Price": "22.84",
+      "NAV": "22.77",
+      "Premium/Discount": "0.3074%"
+    },
+    {
+      "Date": "Jul 26 2017",
+      "Market Price": "22.89",
+      "NAV": "22.82",
+      "Premium/Discount": "0.3067%"
+    },
+    {
+      "Date": "Jul 27 2017",
+      "Market Price": "22.36",
+      "NAV": "22.33",
+      "Premium/Discount": "0.1343%"
+    },
+    {
+      "Date": "Jul 28 2017",
+      "Market Price": "22.57",
+      "NAV": "22.52",
+      "Premium/Discount": "0.2220%"
+    },
+    {
+      "Date": "Jul 31 2017",
+      "Market Price": "22.29",
+      "NAV": "22.24",
+      "Premium/Discount": "0.2248%"
+    },
+    {
+      "Date": "Aug 01 2017",
+      "Market Price": "22.15",
+      "NAV": "22.06",
+      "Premium/Discount": "0.4080%"
+    },
+    {
+      "Date": "Aug 02 2017",
+      "Market Price": "22.22",
+      "NAV": "22.18",
+      "Premium/Discount": "0.1803%"
+    },
+    {
+      "Date": "Aug 03 2017",
+      "Market Price": "22.42",
+      "NAV": "22.43",
+      "Premium/Discount": "-0.0446%"
+    },
+    {
+      "Date": "Aug 04 2017",
+      "Market Price": "22.76",
+      "NAV": "22.75",
+      "Premium/Discount": "0.0440%"
+    },
+    {
+      "Date": "Aug 07 2017",
+      "Market Price": "22.98",
+      "NAV": "23.03",
+      "Premium/Discount": "-0.2171%"
+    },
+    {
+      "Date": "Aug 08 2017",
+      "Market Price": "22.72",
+      "NAV": "22.66",
+      "Premium/Discount": "0.2648%"
+    },
+    {
+      "Date": "Aug 09 2017",
+      "Market Price": "22.51",
+      "NAV": "22.52",
+      "Premium/Discount": "-0.0444%"
+    },
+    {
+      "Date": "Aug 10 2017",
+      "Market Price": "21.98",
+      "NAV": "21.94",
+      "Premium/Discount": "0.1823%"
+    },
+    {
+      "Date": "Aug 11 2017",
+      "Market Price": "22.38",
+      "NAV": "22.39",
+      "Premium/Discount": "-0.0447%"
+    },
+    {
+      "Date": "Aug 14 2017",
+      "Market Price": "22.82",
+      "NAV": "22.82",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Aug 15 2017",
+      "Market Price": "22.60",
+      "NAV": "22.55",
+      "Premium/Discount": "0.2217%"
+    },
+    {
+      "Date": "Aug 16 2017",
+      "Market Price": "22.50",
+      "NAV": "22.53",
+      "Premium/Discount": "-0.1332%"
+    },
+    {
+      "Date": "Aug 17 2017",
+      "Market Price": "21.95",
+      "NAV": "21.99",
+      "Premium/Discount": "-0.1819%"
+    },
+    {
+      "Date": "Aug 18 2017",
+      "Market Price": "21.86",
+      "NAV": "21.87",
+      "Premium/Discount": "-0.0457%"
+    },
+    {
+      "Date": "Aug 21 2017",
+      "Market Price": "21.96",
+      "NAV": "21.97",
+      "Premium/Discount": "-0.0455%"
+    },
+    {
+      "Date": "Aug 22 2017",
+      "Market Price": "22.49",
+      "NAV": "22.48",
+      "Premium/Discount": "0.0445%"
+    },
+    {
+      "Date": "Aug 23 2017",
+      "Market Price": "22.49",
+      "NAV": "22.45",
+      "Premium/Discount": "0.1782%"
+    },
+    {
+      "Date": "Aug 24 2017",
+      "Market Price": "22.73",
+      "NAV": "22.89",
+      "Premium/Discount": "-0.6990%"
+    },
+    {
+      "Date": "Aug 25 2017",
+      "Market Price": "22.75",
+      "NAV": "22.71",
+      "Premium/Discount": "0.1761%"
+    },
+    {
+      "Date": "Aug 28 2017",
+      "Market Price": "23.96",
+      "NAV": "23.96",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Aug 29 2017",
+      "Market Price": "24.20",
+      "NAV": "24.16",
+      "Premium/Discount": "0.1656%"
+    },
+    {
+      "Date": "Aug 30 2017",
+      "Market Price": "24.40",
+      "NAV": "24.39",
+      "Premium/Discount": "0.0410%"
+    },
+    {
+      "Date": "Aug 31 2017",
+      "Market Price": "25.15",
+      "NAV": "25.12",
+      "Premium/Discount": "0.1194%"
+    },
+    {
+      "Date": "Sep 01 2017",
+      "Market Price": "25.36",
+      "NAV": "25.32",
+      "Premium/Discount": "0.1580%"
+    },
+    {
+      "Date": "Sep 05 2017",
+      "Market Price": "25.16",
+      "NAV": "25.10",
+      "Premium/Discount": "0.2390%"
+    },
+    {
+      "Date": "Sep 06 2017",
+      "Market Price": "25.06",
+      "NAV": "25.03",
+      "Premium/Discount": "0.1199%"
+    },
+    {
+      "Date": "Sep 07 2017",
+      "Market Price": "25.30",
+      "NAV": "25.25",
+      "Premium/Discount": "0.1980%"
+    },
+    {
+      "Date": "Sep 08 2017",
+      "Market Price": "25.12",
+      "NAV": "25.12",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Sep 11 2017",
+      "Market Price": "25.33",
+      "NAV": "25.29",
+      "Premium/Discount": "0.1582%"
+    },
+    {
+      "Date": "Sep 12 2017",
+      "Market Price": "25.28",
+      "NAV": "25.28",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Sep 13 2017",
+      "Market Price": "25.50",
+      "NAV": "25.46",
+      "Premium/Discount": "0.1571%"
+    },
+    {
+      "Date": "Sep 14 2017",
+      "Market Price": "25.49",
+      "NAV": "25.40",
+      "Premium/Discount": "0.3543%"
+    },
+    {
+      "Date": "Sep 15 2017",
+      "Market Price": "25.45",
+      "NAV": "25.40",
+      "Premium/Discount": "0.1969%"
+    },
+    {
+      "Date": "Sep 18 2017",
+      "Market Price": "25.57",
+      "NAV": "25.50",
+      "Premium/Discount": "0.2745%"
+    },
+    {
+      "Date": "Sep 19 2017",
+      "Market Price": "25.41",
+      "NAV": "25.34",
+      "Premium/Discount": "0.2762%"
+    },
+    {
+      "Date": "Sep 20 2017",
+      "Market Price": "25.69",
+      "NAV": "25.75",
+      "Premium/Discount": "-0.2330%"
+    },
+    {
+      "Date": "Sep 21 2017",
+      "Market Price": "25.75",
+      "NAV": "25.61",
+      "Premium/Discount": "0.5467%"
+    },
+    {
+      "Date": "Sep 22 2017",
+      "Market Price": "25.76",
+      "NAV": "25.69",
+      "Premium/Discount": "0.2725%"
+    },
+    {
+      "Date": "Sep 25 2017",
+      "Market Price": "25.58",
+      "NAV": "25.57",
+      "Premium/Discount": "0.0391%"
+    },
+    {
+      "Date": "Sep 26 2017",
+      "Market Price": "25.35",
+      "NAV": "25.27",
+      "Premium/Discount": "0.3166%"
+    },
+    {
+      "Date": "Sep 27 2017",
+      "Market Price": "25.54",
+      "NAV": "25.47",
+      "Premium/Discount": "0.2748%"
+    },
+    {
+      "Date": "Sep 28 2017",
+      "Market Price": "26.04",
+      "NAV": "25.99",
+      "Premium/Discount": "0.1924%"
+    },
+    {
+      "Date": "Sep 29 2017",
+      "Market Price": "26.24",
+      "NAV": "26.17",
+      "Premium/Discount": "0.2675%"
+    },
+    {
+      "Date": "Oct 02 2017",
+      "Market Price": "26.40",
+      "NAV": "26.36",
+      "Premium/Discount": "0.1517%"
+    },
+    {
+      "Date": "Oct 03 2017",
+      "Market Price": "26.69",
+      "NAV": "26.61",
+      "Premium/Discount": "0.3006%"
+    },
+    {
+      "Date": "Oct 04 2017",
+      "Market Price": "26.49",
+      "NAV": "26.48",
+      "Premium/Discount": "0.0378%"
+    },
+    {
+      "Date": "Oct 05 2017",
+      "Market Price": "26.81",
+      "NAV": "26.81",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Oct 06 2017",
+      "Market Price": "26.89",
+      "NAV": "26.88",
+      "Premium/Discount": "0.0372%"
+    },
+    {
+      "Date": "Oct 09 2017",
+      "Market Price": "26.75",
+      "NAV": "26.70",
+      "Premium/Discount": "0.1873%"
+    },
+    {
+      "Date": "Oct 10 2017",
+      "Market Price": "26.74",
+      "NAV": "26.66",
+      "Premium/Discount": "0.3001%"
+    },
+    {
+      "Date": "Oct 11 2017",
+      "Market Price": "26.65",
+      "NAV": "26.62",
+      "Premium/Discount": "0.1127%"
+    },
+    {
+      "Date": "Oct 12 2017",
+      "Market Price": "26.52",
+      "NAV": "26.52",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Oct 13 2017",
+      "Market Price": "26.39",
+      "NAV": "26.36",
+      "Premium/Discount": "0.1138%"
+    },
+    {
+      "Date": "Oct 16 2017",
+      "Market Price": "26.44",
+      "NAV": "26.38",
+      "Premium/Discount": "0.2274%"
+    },
+    {
+      "Date": "Oct 17 2017",
+      "Market Price": "26.47",
+      "NAV": "26.42",
+      "Premium/Discount": "0.1893%"
+    },
+    {
+      "Date": "Oct 18 2017",
+      "Market Price": "26.38",
+      "NAV": "26.32",
+      "Premium/Discount": "0.2280%"
+    },
+    {
+      "Date": "Oct 19 2017",
+      "Market Price": "26.30",
+      "NAV": "26.31",
+      "Premium/Discount": "-0.0380%"
+    },
+    {
+      "Date": "Oct 20 2017",
+      "Market Price": "26.51",
+      "NAV": "26.46",
+      "Premium/Discount": "0.1890%"
+    },
+    {
+      "Date": "Oct 23 2017",
+      "Market Price": "26.37",
+      "NAV": "26.35",
+      "Premium/Discount": "0.0759%"
+    },
+    {
+      "Date": "Oct 24 2017",
+      "Market Price": "25.82",
+      "NAV": "25.78",
+      "Premium/Discount": "0.1552%"
+    },
+    {
+      "Date": "Oct 25 2017",
+      "Market Price": "25.33",
+      "NAV": "25.30",
+      "Premium/Discount": "0.1186%"
+    },
+    {
+      "Date": "Oct 26 2017",
+      "Market Price": "25.00",
+      "NAV": "25.01",
+      "Premium/Discount": "-0.0400%"
+    },
+    {
+      "Date": "Oct 27 2017",
+      "Market Price": "25.63",
+      "NAV": "25.56",
+      "Premium/Discount": "0.2739%"
+    },
+    {
+      "Date": "Oct 30 2017",
+      "Market Price": "25.82",
+      "NAV": "25.72",
+      "Premium/Discount": "0.3888%"
+    },
+    {
+      "Date": "Oct 31 2017",
+      "Market Price": "25.96",
+      "NAV": "25.86",
+      "Premium/Discount": "0.3867%"
+    },
+    {
+      "Date": "Nov 01 2017",
+      "Market Price": "25.21",
+      "NAV": "25.13",
+      "Premium/Discount": "0.3183%"
+    },
+    {
+      "Date": "Nov 02 2017",
+      "Market Price": "25.23",
+      "NAV": "25.20",
+      "Premium/Discount": "0.1190%"
+    },
+    {
+      "Date": "Nov 03 2017",
+      "Market Price": "25.58",
+      "NAV": "25.49",
+      "Premium/Discount": "0.3531%"
+    },
+    {
+      "Date": "Nov 06 2017",
+      "Market Price": "25.34",
+      "NAV": "25.24",
+      "Premium/Discount": "0.3962%"
+    },
+    {
+      "Date": "Nov 07 2017",
+      "Market Price": "24.63",
+      "NAV": "24.61",
+      "Premium/Discount": "0.0813%"
+    },
+    {
+      "Date": "Nov 08 2017",
+      "Market Price": "24.67",
+      "NAV": "24.63",
+      "Premium/Discount": "0.1624%"
+    },
+    {
+      "Date": "Nov 09 2017",
+      "Market Price": "24.29",
+      "NAV": "24.33",
+      "Premium/Discount": "-0.1644%"
+    },
+    {
+      "Date": "Nov 10 2017",
+      "Market Price": "24.58",
+      "NAV": "24.60",
+      "Premium/Discount": "-0.0813%"
+    },
+    {
+      "Date": "Nov 13 2017",
+      "Market Price": "24.36",
+      "NAV": "24.36",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 14 2017",
+      "Market Price": "23.87",
+      "NAV": "23.83",
+      "Premium/Discount": "0.1679%"
+    },
+    {
+      "Date": "Nov 15 2017",
+      "Market Price": "24.13",
+      "NAV": "24.09",
+      "Premium/Discount": "0.1660%"
+    },
+    {
+      "Date": "Nov 16 2017",
+      "Market Price": "24.49",
+      "NAV": "24.49",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 17 2017",
+      "Market Price": "24.65",
+      "NAV": "24.61",
+      "Premium/Discount": "0.1625%"
+    },
+    {
+      "Date": "Nov 20 2017",
+      "Market Price": "24.69",
+      "NAV": "24.67",
+      "Premium/Discount": "0.0811%"
+    },
+    {
+      "Date": "Nov 21 2017",
+      "Market Price": "24.99",
+      "NAV": "24.96",
+      "Premium/Discount": "0.1202%"
+    },
+    {
+      "Date": "Nov 22 2017",
+      "Market Price": "25.44",
+      "NAV": "25.37",
+      "Premium/Discount": "0.2759%"
+    },
+    {
+      "Date": "Nov 24 2017",
+      "Market Price": "25.22",
+      "NAV": "25.22",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 27 2017",
+      "Market Price": "25.26",
+      "NAV": "25.17",
+      "Premium/Discount": "0.3576%"
+    },
+    {
+      "Date": "Nov 28 2017",
+      "Market Price": "25.27",
+      "NAV": "25.24",
+      "Premium/Discount": "0.1189%"
+    },
+    {
+      "Date": "Nov 29 2017",
+      "Market Price": "25.00",
+      "NAV": "24.97",
+      "Premium/Discount": "0.1201%"
+    },
+    {
+      "Date": "Nov 30 2017",
+      "Market Price": "25.68",
+      "NAV": "25.61",
+      "Premium/Discount": "0.2733%"
+    },
+    {
+      "Date": "Dec 01 2017",
+      "Market Price": "25.98",
+      "NAV": "25.93",
+      "Premium/Discount": "0.1928%"
+    },
+    {
+      "Date": "Dec 04 2017",
+      "Market Price": "24.99",
+      "NAV": "25.00",
+      "Premium/Discount": "-0.0400%"
+    },
+    {
+      "Date": "Dec 05 2017",
+      "Market Price": "24.69",
+      "NAV": "24.69",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Dec 06 2017",
+      "Market Price": "24.42",
+      "NAV": "24.41",
+      "Premium/Discount": "0.0410%"
+    },
+    {
+      "Date": "Dec 07 2017",
+      "Market Price": "24.90",
+      "NAV": "24.90",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Dec 08 2017",
+      "Market Price": "25.16",
+      "NAV": "25.10",
+      "Premium/Discount": "0.2390%"
+    },
+    {
+      "Date": "Dec 11 2017",
+      "Market Price": "24.72",
+      "NAV": "24.62",
+      "Premium/Discount": "0.4062%"
+    },
+    {
+      "Date": "Dec 12 2017",
+      "Market Price": "24.26",
+      "NAV": "24.17",
+      "Premium/Discount": "0.3724%"
+    },
+    {
+      "Date": "Dec 13 2017",
+      "Market Price": "24.36",
+      "NAV": "24.35",
+      "Premium/Discount": "0.0411%"
+    },
+    {
+      "Date": "Dec 14 2017",
+      "Market Price": "23.96",
+      "NAV": "23.93",
+      "Premium/Discount": "0.1254%"
+    },
+    {
+      "Date": "Dec 15 2017",
+      "Market Price": "24.41",
+      "NAV": "24.32",
+      "Premium/Discount": "0.3701%"
+    },
+    {
+      "Date": "Dec 18 2017",
+      "Market Price": "24.57",
+      "NAV": "24.53",
+      "Premium/Discount": "0.1631%"
+    },
+    {
+      "Date": "Dec 19 2017",
+      "Market Price": "24.36",
+      "NAV": "24.31",
+      "Premium/Discount": "0.2057%"
+    },
+    {
+      "Date": "Dec 20 2017",
+      "Market Price": "24.61",
+      "NAV": "24.56",
+      "Premium/Discount": "0.2036%"
+    },
+    {
+      "Date": "Dec 21 2017",
+      "Market Price": "24.78",
+      "NAV": "24.68",
+      "Premium/Discount": "0.4052%"
+    },
+    {
+      "Date": "Dec 22 2017",
+      "Market Price": "24.84",
+      "NAV": "24.84",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Dec 26 2017",
+      "Market Price": "24.93",
+      "NAV": "24.89",
+      "Premium/Discount": "0.1607%"
+    },
+    {
+      "Date": "Dec 27 2017",
+      "Market Price": "24.73",
+      "NAV": "24.63",
+      "Premium/Discount": "0.4060%"
+    },
+    {
+      "Date": "Dec 28 2017",
+      "Market Price": "24.85",
+      "NAV": "24.80",
+      "Premium/Discount": "0.2016%"
+    },
+    {
+      "Date": "Dec 29 2017",
+      "Market Price": "24.49",
+      "NAV": "24.38",
+      "Premium/Discount": "0.4512%"
+    },
+    {
+      "Date": "Jan 02 2018",
+      "Market Price": "25.37",
+      "NAV": "25.40",
+      "Premium/Discount": "-0.1181%"
+    },
+    {
+      "Date": "Jan 03 2018",
+      "Market Price": "25.55",
+      "NAV": "25.55",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jan 04 2018",
+      "Market Price": "25.76",
+      "NAV": "25.70",
+      "Premium/Discount": "0.2335%"
+    },
+    {
+      "Date": "Jan 05 2018",
+      "Market Price": "25.85",
+      "NAV": "25.80",
+      "Premium/Discount": "0.1938%"
+    },
+    {
+      "Date": "Jan 08 2018",
+      "Market Price": "25.19",
+      "NAV": "25.11",
+      "Premium/Discount": "0.3186%"
+    },
+    {
+      "Date": "Jan 09 2018",
+      "Market Price": "25.59",
+      "NAV": "25.54",
+      "Premium/Discount": "0.1958%"
+    },
+    {
+      "Date": "Jan 10 2018",
+      "Market Price": "25.75",
+      "NAV": "25.77",
+      "Premium/Discount": "-0.0776%"
+    },
+    {
+      "Date": "Jan 11 2018",
+      "Market Price": "25.82",
+      "NAV": "25.80",
+      "Premium/Discount": "0.0775%"
+    },
+    {
+      "Date": "Jan 12 2018",
+      "Market Price": "25.70",
+      "NAV": "25.64",
+      "Premium/Discount": "0.2340%"
+    },
+    {
+      "Date": "Jan 16 2018",
+      "Market Price": "24.95",
+      "NAV": "24.82",
+      "Premium/Discount": "0.5238%"
+    },
+    {
+      "Date": "Jan 17 2018",
+      "Market Price": "25.84",
+      "NAV": "25.86",
+      "Premium/Discount": "-0.0773%"
+    },
+    {
+      "Date": "Jan 18 2018",
+      "Market Price": "26.02",
+      "NAV": "26.01",
+      "Premium/Discount": "0.0384%"
+    },
+    {
+      "Date": "Jan 19 2018",
+      "Market Price": "26.07",
+      "NAV": "26.01",
+      "Premium/Discount": "0.2307%"
+    },
+    {
+      "Date": "Jan 22 2018",
+      "Market Price": "27.56",
+      "NAV": "27.48",
+      "Premium/Discount": "0.2911%"
+    },
+    {
+      "Date": "Jan 23 2018",
+      "Market Price": "28.22",
+      "NAV": "28.12",
+      "Premium/Discount": "0.3556%"
+    },
+    {
+      "Date": "Jan 24 2018",
+      "Market Price": "27.94",
+      "NAV": "27.85",
+      "Premium/Discount": "0.3232%"
+    },
+    {
+      "Date": "Jan 25 2018",
+      "Market Price": "28.30",
+      "NAV": "28.18",
+      "Premium/Discount": "0.4258%"
+    },
+    {
+      "Date": "Jan 26 2018",
+      "Market Price": "28.62",
+      "NAV": "28.58",
+      "Premium/Discount": "0.1400%"
+    },
+    {
+      "Date": "Jan 29 2018",
+      "Market Price": "29.27",
+      "NAV": "29.17",
+      "Premium/Discount": "0.3428%"
+    },
+    {
+      "Date": "Jan 30 2018",
+      "Market Price": "28.55",
+      "NAV": "28.45",
+      "Premium/Discount": "0.3515%"
+    },
+    {
+      "Date": "Jan 31 2018",
+      "Market Price": "27.69",
+      "NAV": "27.67",
+      "Premium/Discount": "0.0723%"
+    },
+    {
+      "Date": "Feb 01 2018",
+      "Market Price": "27.40",
+      "NAV": "27.38",
+      "Premium/Discount": "0.0730%"
+    },
+    {
+      "Date": "Feb 02 2018",
+      "Market Price": "26.53",
+      "NAV": "26.57",
+      "Premium/Discount": "-0.1505%"
+    },
+    {
+      "Date": "Feb 05 2018",
+      "Market Price": "25.68",
+      "NAV": "25.67",
+      "Premium/Discount": "0.0390%"
+    },
+    {
+      "Date": "Feb 06 2018",
+      "Market Price": "26.27",
+      "NAV": "26.28",
+      "Premium/Discount": "-0.0381%"
+    },
+    {
+      "Date": "Feb 07 2018",
+      "Market Price": "26.83",
+      "NAV": "26.72",
+      "Premium/Discount": "0.4117%"
+    },
+    {
+      "Date": "Feb 08 2018",
+      "Market Price": "25.43",
+      "NAV": "25.31",
+      "Premium/Discount": "0.4741%"
+    },
+    {
+      "Date": "Feb 09 2018",
+      "Market Price": "25.34",
+      "NAV": "25.44",
+      "Premium/Discount": "-0.3931%"
+    },
+    {
+      "Date": "Feb 12 2018",
+      "Market Price": "25.74",
+      "NAV": "25.70",
+      "Premium/Discount": "0.1556%"
+    },
+    {
+      "Date": "Feb 13 2018",
+      "Market Price": "25.78",
+      "NAV": "25.78",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Feb 14 2018",
+      "Market Price": "26.41",
+      "NAV": "26.34",
+      "Premium/Discount": "0.2658%"
+    },
+    {
+      "Date": "Feb 15 2018",
+      "Market Price": "26.70",
+      "NAV": "26.60",
+      "Premium/Discount": "0.3759%"
+    },
+    {
+      "Date": "Feb 16 2018",
+      "Market Price": "26.75",
+      "NAV": "26.67",
+      "Premium/Discount": "0.3000%"
+    },
+    {
+      "Date": "Feb 20 2018",
+      "Market Price": "26.40",
+      "NAV": "26.36",
+      "Premium/Discount": "0.1517%"
+    },
+    {
+      "Date": "Feb 21 2018",
+      "Market Price": "26.71",
+      "NAV": "26.60",
+      "Premium/Discount": "0.4135%"
+    },
+    {
+      "Date": "Feb 22 2018",
+      "Market Price": "26.62",
+      "NAV": "26.58",
+      "Premium/Discount": "0.1505%"
+    },
+    {
+      "Date": "Feb 23 2018",
+      "Market Price": "27.08",
+      "NAV": "27.05",
+      "Premium/Discount": "0.1109%"
+    },
+    {
+      "Date": "Feb 26 2018",
+      "Market Price": "27.93",
+      "NAV": "27.83",
+      "Premium/Discount": "0.3593%"
+    },
+    {
+      "Date": "Feb 27 2018",
+      "Market Price": "27.48",
+      "NAV": "27.36",
+      "Premium/Discount": "0.4386%"
+    },
+    {
+      "Date": "Feb 28 2018",
+      "Market Price": "27.17",
+      "NAV": "27.09",
+      "Premium/Discount": "0.2953%"
+    },
+    {
+      "Date": "Mar 01 2018",
+      "Market Price": "26.77",
+      "NAV": "26.69",
+      "Premium/Discount": "0.2997%"
+    },
+    {
+      "Date": "Mar 02 2018",
+      "Market Price": "27.51",
+      "NAV": "27.45",
+      "Premium/Discount": "0.2186%"
+    },
+    {
+      "Date": "Mar 05 2018",
+      "Market Price": "27.86",
+      "NAV": "27.80",
+      "Premium/Discount": "0.2158%"
+    },
+    {
+      "Date": "Mar 06 2018",
+      "Market Price": "28.07",
+      "NAV": "27.97",
+      "Premium/Discount": "0.3575%"
+    },
+    {
+      "Date": "Mar 07 2018",
+      "Market Price": "28.71",
+      "NAV": "28.64",
+      "Premium/Discount": "0.2444%"
+    },
+    {
+      "Date": "Mar 08 2018",
+      "Market Price": "29.27",
+      "NAV": "29.19",
+      "Premium/Discount": "0.2741%"
+    },
+    {
+      "Date": "Mar 09 2018",
+      "Market Price": "30.10",
+      "NAV": "30.02",
+      "Premium/Discount": "0.2665%"
+    },
+    {
+      "Date": "Mar 12 2018",
+      "Market Price": "30.09",
+      "NAV": "30.00",
+      "Premium/Discount": "0.3000%"
+    },
+    {
+      "Date": "Mar 13 2018",
+      "Market Price": "29.87",
+      "NAV": "29.77",
+      "Premium/Discount": "0.3359%"
+    },
+    {
+      "Date": "Mar 14 2018",
+      "Market Price": "29.42",
+      "NAV": "29.32",
+      "Premium/Discount": "0.3411%"
+    },
+    {
+      "Date": "Mar 15 2018",
+      "Market Price": "28.73",
+      "NAV": "28.71",
+      "Premium/Discount": "0.0697%"
+    },
+    {
+      "Date": "Mar 16 2018",
+      "Market Price": "28.55",
+      "NAV": "28.47",
+      "Premium/Discount": "0.2810%"
+    },
+    {
+      "Date": "Mar 19 2018",
+      "Market Price": "28.07",
+      "NAV": "28.00",
+      "Premium/Discount": "0.2500%"
+    },
+    {
+      "Date": "Mar 20 2018",
+      "Market Price": "28.03",
+      "NAV": "27.95",
+      "Premium/Discount": "0.2862%"
+    },
+    {
+      "Date": "Mar 21 2018",
+      "Market Price": "28.09",
+      "NAV": "28.02",
+      "Premium/Discount": "0.2498%"
+    },
+    {
+      "Date": "Mar 22 2018",
+      "Market Price": "27.54",
+      "NAV": "27.46",
+      "Premium/Discount": "0.2913%"
+    },
+    {
+      "Date": "Mar 23 2018",
+      "Market Price": "26.98",
+      "NAV": "26.98",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 26 2018",
+      "Market Price": "27.36",
+      "NAV": "27.27",
+      "Premium/Discount": "0.3300%"
+    },
+    {
+      "Date": "Mar 27 2018",
+      "Market Price": "25.87",
+      "NAV": "25.87",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Mar 28 2018",
+      "Market Price": "25.64",
+      "NAV": "25.56",
+      "Premium/Discount": "0.3130%"
+    },
+    {
+      "Date": "Mar 29 2018",
+      "Market Price": "25.75",
+      "NAV": "25.72",
+      "Premium/Discount": "0.1166%"
+    },
+    {
+      "Date": "Apr 02 2018",
+      "Market Price": "24.86",
+      "NAV": "24.90",
+      "Premium/Discount": "-0.1606%"
+    },
+    {
+      "Date": "Apr 03 2018",
+      "Market Price": "25.38",
+      "NAV": "25.35",
+      "Premium/Discount": "0.1183%"
+    },
+    {
+      "Date": "Apr 04 2018",
+      "Market Price": "25.95",
+      "NAV": "25.97",
+      "Premium/Discount": "-0.0770%"
+    },
+    {
+      "Date": "Apr 05 2018",
+      "Market Price": "25.65",
+      "NAV": "25.68",
+      "Premium/Discount": "-0.1168%"
+    },
+    {
+      "Date": "Apr 06 2018",
+      "Market Price": "24.81",
+      "NAV": "24.78",
+      "Premium/Discount": "0.1211%"
+    },
+    {
+      "Date": "Apr 09 2018",
+      "Market Price": "25.25",
+      "NAV": "25.19",
+      "Premium/Discount": "0.2382%"
+    },
+    {
+      "Date": "Apr 10 2018",
+      "Market Price": "26.05",
+      "NAV": "26.03",
+      "Premium/Discount": "0.0768%"
+    },
+    {
+      "Date": "Apr 11 2018",
+      "Market Price": "26.37",
+      "NAV": "26.30",
+      "Premium/Discount": "0.2662%"
+    },
+    {
+      "Date": "Apr 12 2018",
+      "Market Price": "26.80",
+      "NAV": "26.72",
+      "Premium/Discount": "0.2994%"
+    },
+    {
+      "Date": "Apr 13 2018",
+      "Market Price": "26.46",
+      "NAV": "26.44",
+      "Premium/Discount": "0.0756%"
+    },
+    {
+      "Date": "Apr 16 2018",
+      "Market Price": "26.37",
+      "NAV": "26.29",
+      "Premium/Discount": "0.3043%"
+    },
+    {
+      "Date": "Apr 17 2018",
+      "Market Price": "27.05",
+      "NAV": "26.99",
+      "Premium/Discount": "0.2223%"
+    },
+    {
+      "Date": "Apr 18 2018",
+      "Market Price": "27.14",
+      "NAV": "27.03",
+      "Premium/Discount": "0.4070%"
+    },
+    {
+      "Date": "Apr 19 2018",
+      "Market Price": "26.73",
+      "NAV": "26.66",
+      "Premium/Discount": "0.2626%"
+    },
+    {
+      "Date": "Apr 20 2018",
+      "Market Price": "26.46",
+      "NAV": "26.40",
+      "Premium/Discount": "0.2273%"
+    },
+    {
+      "Date": "Apr 23 2018",
+      "Market Price": "26.06",
+      "NAV": "25.99",
+      "Premium/Discount": "0.2693%"
+    },
+    {
+      "Date": "Apr 24 2018",
+      "Market Price": "25.74",
+      "NAV": "25.65",
+      "Premium/Discount": "0.3509%"
+    },
+    {
+      "Date": "Apr 25 2018",
+      "Market Price": "25.46",
+      "NAV": "25.43",
+      "Premium/Discount": "0.1180%"
+    },
+    {
+      "Date": "Apr 26 2018",
+      "Market Price": "26.00",
+      "NAV": "25.91",
+      "Premium/Discount": "0.3474%"
+    },
+    {
+      "Date": "Apr 27 2018",
+      "Market Price": "25.93",
+      "NAV": "25.82",
+      "Premium/Discount": "0.4260%"
+    },
+    {
+      "Date": "Apr 30 2018",
+      "Market Price": "25.41",
+      "NAV": "25.36",
+      "Premium/Discount": "0.1972%"
+    },
+    {
+      "Date": "May 01 2018",
+      "Market Price": "25.61",
+      "NAV": "25.59",
+      "Premium/Discount": "0.0782%"
+    },
+    {
+      "Date": "May 02 2018",
+      "Market Price": "25.78",
+      "NAV": "25.78",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 03 2018",
+      "Market Price": "25.54",
+      "NAV": "25.46",
+      "Premium/Discount": "0.3142%"
+    },
+    {
+      "Date": "May 04 2018",
+      "Market Price": "25.77",
+      "NAV": "25.78",
+      "Premium/Discount": "-0.0388%"
+    },
+    {
+      "Date": "May 07 2018",
+      "Market Price": "26.42",
+      "NAV": "26.40",
+      "Premium/Discount": "0.0758%"
+    },
+    {
+      "Date": "May 08 2018",
+      "Market Price": "26.25",
+      "NAV": "26.25",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 09 2018",
+      "Market Price": "26.99",
+      "NAV": "26.89",
+      "Premium/Discount": "0.3719%"
+    },
+    {
+      "Date": "May 10 2018",
+      "Market Price": "26.90",
+      "NAV": "26.90",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "May 11 2018",
+      "Market Price": "27.75",
+      "NAV": "27.68",
+      "Premium/Discount": "0.2529%"
+    },
+    {
+      "Date": "May 14 2018",
+      "Market Price": "28.11",
+      "NAV": "28.02",
+      "Premium/Discount": "0.3212%"
+    },
+    {
+      "Date": "May 15 2018",
+      "Market Price": "28.07",
+      "NAV": "27.97",
+      "Premium/Discount": "0.3575%"
+    },
+    {
+      "Date": "May 16 2018",
+      "Market Price": "28.23",
+      "NAV": "28.14",
+      "Premium/Discount": "0.3198%"
+    },
+    {
+      "Date": "May 17 2018",
+      "Market Price": "28.47",
+      "NAV": "28.37",
+      "Premium/Discount": "0.3525%"
+    },
+    {
+      "Date": "May 18 2018",
+      "Market Price": "28.13",
+      "NAV": "28.05",
+      "Premium/Discount": "0.2852%"
+    },
+    {
+      "Date": "May 21 2018",
+      "Market Price": "27.86",
+      "NAV": "27.77",
+      "Premium/Discount": "0.3241%"
+    },
+    {
+      "Date": "May 22 2018",
+      "Market Price": "28.45",
+      "NAV": "28.39",
+      "Premium/Discount": "0.2113%"
+    },
+    {
+      "Date": "May 23 2018",
+      "Market Price": "28.96",
+      "NAV": "28.89",
+      "Premium/Discount": "0.2423%"
+    },
+    {
+      "Date": "May 24 2018",
+      "Market Price": "28.99",
+      "NAV": "28.94",
+      "Premium/Discount": "0.1728%"
+    },
+    {
+      "Date": "May 25 2018",
+      "Market Price": "28.89",
+      "NAV": "28.83",
+      "Premium/Discount": "0.2081%"
+    },
+    {
+      "Date": "May 29 2018",
+      "Market Price": "28.61",
+      "NAV": "28.63",
+      "Premium/Discount": "-0.0699%"
+    },
+    {
+      "Date": "May 30 2018",
+      "Market Price": "29.29",
+      "NAV": "29.23",
+      "Premium/Discount": "0.2053%"
+    },
+    {
+      "Date": "May 31 2018",
+      "Market Price": "29.23",
+      "NAV": "29.16",
+      "Premium/Discount": "0.2401%"
+    },
+    {
+      "Date": "Jun 01 2018",
+      "Market Price": "28.95",
+      "NAV": "28.90",
+      "Premium/Discount": "0.1730%"
+    },
+    {
+      "Date": "Jun 04 2018",
+      "Market Price": "29.12",
+      "NAV": "29.04",
+      "Premium/Discount": "0.2755%"
+    },
+    {
+      "Date": "Jun 05 2018",
+      "Market Price": "29.59",
+      "NAV": "29.51",
+      "Premium/Discount": "0.2711%"
+    },
+    {
+      "Date": "Jun 06 2018",
+      "Market Price": "29.91",
+      "NAV": "29.83",
+      "Premium/Discount": "0.2682%"
+    },
+    {
+      "Date": "Jun 07 2018",
+      "Market Price": "29.66",
+      "NAV": "29.58",
+      "Premium/Discount": "0.2705%"
+    },
+    {
+      "Date": "Jun 08 2018",
+      "Market Price": "29.72",
+      "NAV": "29.64",
+      "Premium/Discount": "0.2699%"
+    },
+    {
+      "Date": "Jun 11 2018",
+      "Market Price": "29.33",
+      "NAV": "29.33",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jun 12 2018",
+      "Market Price": "29.64",
+      "NAV": "29.56",
+      "Premium/Discount": "0.2706%"
+    },
+    {
+      "Date": "Jun 13 2018",
+      "Market Price": "29.77",
+      "NAV": "29.67",
+      "Premium/Discount": "0.3370%"
+    },
+    {
+      "Date": "Jun 14 2018",
+      "Market Price": "30.16",
+      "NAV": "30.13",
+      "Premium/Discount": "0.0996%"
+    },
+    {
+      "Date": "Jun 15 2018",
+      "Market Price": "30.24",
+      "NAV": "30.21",
+      "Premium/Discount": "0.0993%"
+    },
+    {
+      "Date": "Jun 18 2018",
+      "Market Price": "30.50",
+      "NAV": "30.45",
+      "Premium/Discount": "0.1642%"
+    },
+    {
+      "Date": "Jun 19 2018",
+      "Market Price": "30.75",
+      "NAV": "30.71",
+      "Premium/Discount": "0.1303%"
+    },
+    {
+      "Date": "Jun 20 2018",
+      "Market Price": "31.58",
+      "NAV": "31.53",
+      "Premium/Discount": "0.1586%"
+    },
+    {
+      "Date": "Jun 21 2018",
+      "Market Price": "30.92",
+      "NAV": "30.83",
+      "Premium/Discount": "0.2919%"
+    },
+    {
+      "Date": "Jun 22 2018",
+      "Market Price": "30.69",
+      "NAV": "30.62",
+      "Premium/Discount": "0.2286%"
+    },
+    {
+      "Date": "Jun 25 2018",
+      "Market Price": "29.72",
+      "NAV": "29.73",
+      "Premium/Discount": "-0.0336%"
+    },
+    {
+      "Date": "Jun 26 2018",
+      "Market Price": "29.85",
+      "NAV": "29.88",
+      "Premium/Discount": "-0.1004%"
+    },
+    {
+      "Date": "Jun 27 2018",
+      "Market Price": "28.90",
+      "NAV": "28.84",
+      "Premium/Discount": "0.2080%"
+    },
+    {
+      "Date": "Jun 28 2018",
+      "Market Price": "28.98",
+      "NAV": "28.91",
+      "Premium/Discount": "0.2421%"
+    },
+    {
+      "Date": "Jun 29 2018",
+      "Market Price": "29.06",
+      "NAV": "29.06",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jul 02 2018",
+      "Market Price": "29.70",
+      "NAV": "29.64",
+      "Premium/Discount": "0.2024%"
+    },
+    {
+      "Date": "Jul 03 2018",
+      "Market Price": "29.95",
+      "NAV": "29.83",
+      "Premium/Discount": "0.4023%"
+    },
+    {
+      "Date": "Jul 05 2018",
+      "Market Price": "30.15",
+      "NAV": "30.09",
+      "Premium/Discount": "0.1994%"
+    },
+    {
+      "Date": "Jul 06 2018",
+      "Market Price": "31.08",
+      "NAV": "31.01",
+      "Premium/Discount": "0.2257%"
+    },
+    {
+      "Date": "Jul 09 2018",
+      "Market Price": "31.16",
+      "NAV": "31.07",
+      "Premium/Discount": "0.2897%"
+    },
+    {
+      "Date": "Jul 10 2018",
+      "Market Price": "31.04",
+      "NAV": "30.95",
+      "Premium/Discount": "0.2908%"
+    },
+    {
+      "Date": "Jul 11 2018",
+      "Market Price": "31.14",
+      "NAV": "31.06",
+      "Premium/Discount": "0.2576%"
+    },
+    {
+      "Date": "Jul 12 2018",
+      "Market Price": "31.60",
+      "NAV": "31.55",
+      "Premium/Discount": "0.1585%"
+    },
+    {
+      "Date": "Jul 13 2018",
+      "Market Price": "31.69",
+      "NAV": "31.62",
+      "Premium/Discount": "0.2214%"
+    },
+    {
+      "Date": "Jul 16 2018",
+      "Market Price": "30.84",
+      "NAV": "30.77",
+      "Premium/Discount": "0.2275%"
+    },
+    {
+      "Date": "Jul 17 2018",
+      "Market Price": "31.19",
+      "NAV": "31.13",
+      "Premium/Discount": "0.1927%"
+    },
+    {
+      "Date": "Jul 18 2018",
+      "Market Price": "30.99",
+      "NAV": "30.90",
+      "Premium/Discount": "0.2913%"
+    },
+    {
+      "Date": "Jul 19 2018",
+      "Market Price": "31.39",
+      "NAV": "31.31",
+      "Premium/Discount": "0.2555%"
+    },
+    {
+      "Date": "Jul 20 2018",
+      "Market Price": "31.24",
+      "NAV": "31.15",
+      "Premium/Discount": "0.2889%"
+    },
+    {
+      "Date": "Jul 23 2018",
+      "Market Price": "30.95",
+      "NAV": "30.90",
+      "Premium/Discount": "0.1618%"
+    },
+    {
+      "Date": "Jul 24 2018",
+      "Market Price": "30.19",
+      "NAV": "30.15",
+      "Premium/Discount": "0.1327%"
+    },
+    {
+      "Date": "Jul 25 2018",
+      "Market Price": "30.55",
+      "NAV": "30.48",
+      "Premium/Discount": "0.2297%"
+    },
+    {
+      "Date": "Jul 26 2018",
+      "Market Price": "30.12",
+      "NAV": "30.10",
+      "Premium/Discount": "0.0664%"
+    },
+    {
+      "Date": "Jul 27 2018",
+      "Market Price": "29.01",
+      "NAV": "28.98",
+      "Premium/Discount": "0.1035%"
+    },
+    {
+      "Date": "Jul 30 2018",
+      "Market Price": "28.65",
+      "NAV": "28.64",
+      "Premium/Discount": "0.0349%"
+    },
+    {
+      "Date": "Jul 31 2018",
+      "Market Price": "29.40",
+      "NAV": "29.36",
+      "Premium/Discount": "0.1362%"
+    },
+    {
+      "Date": "Aug 01 2018",
+      "Market Price": "29.35",
+      "NAV": "29.27",
+      "Premium/Discount": "0.2733%"
+    },
+    {
+      "Date": "Aug 02 2018",
+      "Market Price": "29.65",
+      "NAV": "29.67",
+      "Premium/Discount": "-0.0674%"
+    },
+    {
+      "Date": "Aug 03 2018",
+      "Market Price": "29.32",
+      "NAV": "29.24",
+      "Premium/Discount": "0.2736%"
+    },
+    {
+      "Date": "Aug 06 2018",
+      "Market Price": "29.50",
+      "NAV": "29.46",
+      "Premium/Discount": "0.1358%"
+    },
+    {
+      "Date": "Aug 07 2018",
+      "Market Price": "29.89",
+      "NAV": "29.83",
+      "Premium/Discount": "0.2011%"
+    },
+    {
+      "Date": "Aug 08 2018",
+      "Market Price": "30.15",
+      "NAV": "30.11",
+      "Premium/Discount": "0.1328%"
+    },
+    {
+      "Date": "Aug 09 2018",
+      "Market Price": "30.58",
+      "NAV": "30.50",
+      "Premium/Discount": "0.2623%"
+    },
+    {
+      "Date": "Aug 10 2018",
+      "Market Price": "30.76",
+      "NAV": "30.69",
+      "Premium/Discount": "0.2281%"
+    },
+    {
+      "Date": "Aug 13 2018",
+      "Market Price": "30.71",
+      "NAV": "30.64",
+      "Premium/Discount": "0.2285%"
+    },
+    {
+      "Date": "Aug 14 2018",
+      "Market Price": "30.97",
+      "NAV": "30.90",
+      "Premium/Discount": "0.2265%"
+    },
+    {
+      "Date": "Aug 15 2018",
+      "Market Price": "30.60",
+      "NAV": "30.50",
+      "Premium/Discount": "0.3279%"
+    },
+    {
+      "Date": "Aug 16 2018",
+      "Market Price": "31.00",
+      "NAV": "30.96",
+      "Premium/Discount": "0.1292%"
+    },
+    {
+      "Date": "Aug 17 2018",
+      "Market Price": "30.88",
+      "NAV": "30.83",
+      "Premium/Discount": "0.1622%"
+    },
+    {
+      "Date": "Aug 20 2018",
+      "Market Price": "31.08",
+      "NAV": "31.00",
+      "Premium/Discount": "0.2581%"
+    },
+    {
+      "Date": "Aug 21 2018",
+      "Market Price": "31.69",
+      "NAV": "31.62",
+      "Premium/Discount": "0.2214%"
+    },
+    {
+      "Date": "Aug 22 2018",
+      "Market Price": "31.88",
+      "NAV": "31.85",
+      "Premium/Discount": "0.0942%"
+    },
+    {
+      "Date": "Aug 23 2018",
+      "Market Price": "32.00",
+      "NAV": "31.93",
+      "Premium/Discount": "0.2192%"
+    },
+    {
+      "Date": "Aug 24 2018",
+      "Market Price": "32.36",
+      "NAV": "32.25",
+      "Premium/Discount": "0.3411%"
+    },
+    {
+      "Date": "Aug 27 2018",
+      "Market Price": "32.95",
+      "NAV": "32.85",
+      "Premium/Discount": "0.3044%"
+    },
+    {
+      "Date": "Aug 28 2018",
+      "Market Price": "32.99",
+      "NAV": "32.90",
+      "Premium/Discount": "0.2736%"
+    },
+    {
+      "Date": "Aug 29 2018",
+      "Market Price": "33.70",
+      "NAV": "33.64",
+      "Premium/Discount": "0.1784%"
+    },
+    {
+      "Date": "Aug 30 2018",
+      "Market Price": "34.12",
+      "NAV": "34.05",
+      "Premium/Discount": "0.2056%"
+    },
+    {
+      "Date": "Aug 31 2018",
+      "Market Price": "34.45",
+      "NAV": "34.44",
+      "Premium/Discount": "0.0290%"
+    },
+    {
+      "Date": "Sep 04 2018",
+      "Market Price": "34.15",
+      "NAV": "34.10",
+      "Premium/Discount": "0.1466%"
+    },
+    {
+      "Date": "Sep 05 2018",
+      "Market Price": "33.76",
+      "NAV": "33.69",
+      "Premium/Discount": "0.2078%"
+    },
+    {
+      "Date": "Sep 06 2018",
+      "Market Price": "32.57",
+      "NAV": "32.52",
+      "Premium/Discount": "0.1538%"
+    },
+    {
+      "Date": "Sep 07 2018",
+      "Market Price": "32.47",
+      "NAV": "32.40",
+      "Premium/Discount": "0.2160%"
+    },
+    {
+      "Date": "Sep 10 2018",
+      "Market Price": "32.30",
+      "NAV": "32.31",
+      "Premium/Discount": "-0.0310%"
+    },
+    {
+      "Date": "Sep 11 2018",
+      "Market Price": "32.84",
+      "NAV": "32.80",
+      "Premium/Discount": "0.1220%"
+    },
+    {
+      "Date": "Sep 12 2018",
+      "Market Price": "32.91",
+      "NAV": "32.85",
+      "Premium/Discount": "0.1826%"
+    },
+    {
+      "Date": "Sep 13 2018",
+      "Market Price": "33.32",
+      "NAV": "33.24",
+      "Premium/Discount": "0.2407%"
+    },
+    {
+      "Date": "Sep 14 2018",
+      "Market Price": "33.67",
+      "NAV": "33.59",
+      "Premium/Discount": "0.2382%"
+    },
+    {
+      "Date": "Sep 17 2018",
+      "Market Price": "33.15",
+      "NAV": "33.07",
+      "Premium/Discount": "0.2419%"
+    },
+    {
+      "Date": "Sep 18 2018",
+      "Market Price": "34.04",
+      "NAV": "33.96",
+      "Premium/Discount": "0.2356%"
+    },
+    {
+      "Date": "Sep 19 2018",
+      "Market Price": "33.49",
+      "NAV": "33.42",
+      "Premium/Discount": "0.2095%"
+    },
+    {
+      "Date": "Sep 20 2018",
+      "Market Price": "33.66",
+      "NAV": "33.63",
+      "Premium/Discount": "0.0892%"
+    },
+    {
+      "Date": "Sep 21 2018",
+      "Market Price": "32.71",
+      "NAV": "32.62",
+      "Premium/Discount": "0.2759%"
+    },
+    {
+      "Date": "Sep 24 2018",
+      "Market Price": "32.92",
+      "NAV": "32.90",
+      "Premium/Discount": "0.0608%"
+    },
+    {
+      "Date": "Sep 25 2018",
+      "Market Price": "33.28",
+      "NAV": "33.19",
+      "Premium/Discount": "0.2712%"
+    },
+    {
+      "Date": "Sep 26 2018",
+      "Market Price": "33.11",
+      "NAV": "33.06",
+      "Premium/Discount": "0.1512%"
+    },
+    {
+      "Date": "Sep 27 2018",
+      "Market Price": "33.59",
+      "NAV": "33.53",
+      "Premium/Discount": "0.1789%"
+    },
+    {
+      "Date": "Sep 28 2018",
+      "Market Price": "33.43",
+      "NAV": "33.37",
+      "Premium/Discount": "0.1798%"
+    },
+    {
+      "Date": "Oct 01 2018",
+      "Market Price": "32.61",
+      "NAV": "32.58",
+      "Premium/Discount": "0.0921%"
+    },
+    {
+      "Date": "Oct 02 2018",
+      "Market Price": "31.76",
+      "NAV": "31.84",
+      "Premium/Discount": "-0.2513%"
+    },
+    {
+      "Date": "Oct 03 2018",
+      "Market Price": "31.96",
+      "NAV": "31.97",
+      "Premium/Discount": "-0.0313%"
+    },
+    {
+      "Date": "Oct 04 2018",
+      "Market Price": "30.76",
+      "NAV": "30.71",
+      "Premium/Discount": "0.1628%"
+    },
+    {
+      "Date": "Oct 05 2018",
+      "Market Price": "30.30",
+      "NAV": "30.35",
+      "Premium/Discount": "-0.1647%"
+    },
+    {
+      "Date": "Oct 08 2018",
+      "Market Price": "29.74",
+      "NAV": "29.81",
+      "Premium/Discount": "-0.2348%"
+    },
+    {
+      "Date": "Oct 09 2018",
+      "Market Price": "29.94",
+      "NAV": "29.87",
+      "Premium/Discount": "0.2343%"
+    },
+    {
+      "Date": "Oct 10 2018",
+      "Market Price": "28.48",
+      "NAV": "28.54",
+      "Premium/Discount": "-0.2102%"
+    },
+    {
+      "Date": "Oct 11 2018",
+      "Market Price": "28.42",
+      "NAV": "28.37",
+      "Premium/Discount": "0.1762%"
+    },
+    {
+      "Date": "Oct 12 2018",
+      "Market Price": "29.10",
+      "NAV": "29.07",
+      "Premium/Discount": "0.1032%"
+    },
+    {
+      "Date": "Oct 15 2018",
+      "Market Price": "28.78",
+      "NAV": "28.74",
+      "Premium/Discount": "0.1392%"
+    },
+    {
+      "Date": "Oct 16 2018",
+      "Market Price": "30.15",
+      "NAV": "30.12",
+      "Premium/Discount": "0.0996%"
+    },
+    {
+      "Date": "Oct 17 2018",
+      "Market Price": "30.14",
+      "NAV": "30.06",
+      "Premium/Discount": "0.2661%"
+    },
+    {
+      "Date": "Oct 18 2018",
+      "Market Price": "29.37",
+      "NAV": "29.32",
+      "Premium/Discount": "0.1705%"
+    },
+    {
+      "Date": "Oct 19 2018",
+      "Market Price": "28.64",
+      "NAV": "28.61",
+      "Premium/Discount": "0.1049%"
+    }
+  ],
+  "ticker": "ARKG",
+  "totalRows": 2992
+}

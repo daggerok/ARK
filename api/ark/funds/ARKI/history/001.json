@@ -1,0 +1,752 @@
+{
+  "headers": [
+    "Date",
+    "NAV",
+    "Market Price",
+    "Premium/Discount"
+  ],
+  "page": 1,
+  "pageSize": 1000,
+  "rows": [
+    {
+      "Date": "Apr 01 2026",
+      "Market Price": "20.23",
+      "NAV": "20.19",
+      "Premium/Discount": "0.1981%"
+    },
+    {
+      "Date": "Apr 02 2026",
+      "Market Price": "20.25",
+      "NAV": "20.27",
+      "Premium/Discount": "-0.0987%"
+    },
+    {
+      "Date": "Apr 06 2026",
+      "Market Price": "20.28",
+      "NAV": "20.29",
+      "Premium/Discount": "-0.0493%"
+    },
+    {
+      "Date": "Apr 07 2026",
+      "Market Price": "20.27",
+      "NAV": "20.31",
+      "Premium/Discount": "-0.1969%"
+    },
+    {
+      "Date": "Apr 08 2026",
+      "Market Price": "20.51",
+      "NAV": "20.46",
+      "Premium/Discount": "0.2444%"
+    },
+    {
+      "Date": "Apr 09 2026",
+      "Market Price": "20.29",
+      "NAV": "20.24",
+      "Premium/Discount": "0.2470%"
+    },
+    {
+      "Date": "Apr 10 2026",
+      "Market Price": "20.33",
+      "NAV": "20.33",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 13 2026",
+      "Market Price": "20.79",
+      "NAV": "20.86",
+      "Premium/Discount": "-0.3356%"
+    },
+    {
+      "Date": "Apr 14 2026",
+      "Market Price": "21.29",
+      "NAV": "21.32",
+      "Premium/Discount": "-0.1407%"
+    },
+    {
+      "Date": "Apr 15 2026",
+      "Market Price": "21.79",
+      "NAV": "21.86",
+      "Premium/Discount": "-0.3202%"
+    },
+    {
+      "Date": "Apr 16 2026",
+      "Market Price": "21.74",
+      "NAV": "21.74",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Apr 17 2026",
+      "Market Price": "22.10",
+      "NAV": "22.05",
+      "Premium/Discount": "0.2268%"
+    },
+    {
+      "Date": "Apr 20 2026",
+      "Market Price": "22.10",
+      "NAV": "22.13",
+      "Premium/Discount": "-0.1356%"
+    },
+    {
+      "Date": "Apr 21 2026",
+      "Market Price": "21.73",
+      "NAV": "21.70",
+      "Premium/Discount": "0.1382%"
+    },
+    {
+      "Date": "Apr 22 2026",
+      "Market Price": "22.07",
+      "NAV": "22.09",
+      "Premium/Discount": "-0.0905%"
+    },
+    {
+      "Date": "Apr 23 2026",
+      "Market Price": "21.56",
+      "NAV": "21.58",
+      "Premium/Discount": "-0.0927%"
+    },
+    {
+      "Date": "Apr 24 2026",
+      "Market Price": "21.57",
+      "NAV": "21.53",
+      "Premium/Discount": "0.1858%"
+    },
+    {
+      "Date": "Apr 27 2026",
+      "Market Price": "21.57",
+      "NAV": "21.55",
+      "Premium/Discount": "0.0928%"
+    },
+    {
+      "Date": "Apr 28 2026",
+      "Market Price": "21.36",
+      "NAV": "21.37",
+      "Premium/Discount": "-0.0468%"
+    },
+    {
+      "Date": "Apr 29 2026",
+      "Market Price": "21.03",
+      "NAV": "20.96",
+      "Premium/Discount": "0.3340%"
+    },
+    {
+      "Date": "Apr 30 2026",
+      "Market Price": "21.44",
+      "NAV": "21.48",
+      "Premium/Discount": "-0.1862%"
+    },
+    {
+      "Date": "May 01 2026",
+      "Market Price": "21.61",
+      "NAV": "21.72",
+      "Premium/Discount": "-0.5064%"
+    },
+    {
+      "Date": "May 04 2026",
+      "Market Price": "21.87",
+      "NAV": "21.95",
+      "Premium/Discount": "-0.3645%"
+    },
+    {
+      "Date": "May 05 2026",
+      "Market Price": "21.55",
+      "NAV": "21.52",
+      "Premium/Discount": "0.1394%"
+    },
+    {
+      "Date": "May 06 2026",
+      "Market Price": "22.00",
+      "NAV": "22.27",
+      "Premium/Discount": "-1.2124%"
+    },
+    {
+      "Date": "May 07 2026",
+      "Market Price": "21.73",
+      "NAV": "21.74",
+      "Premium/Discount": "-0.0460%"
+    },
+    {
+      "Date": "May 08 2026",
+      "Market Price": "21.90",
+      "NAV": "22.09",
+      "Premium/Discount": "-0.8601%"
+    },
+    {
+      "Date": "May 11 2026",
+      "Market Price": "22.13",
+      "NAV": "22.29",
+      "Premium/Discount": "-0.7178%"
+    },
+    {
+      "Date": "May 12 2026",
+      "Market Price": "21.77",
+      "NAV": "21.81",
+      "Premium/Discount": "-0.1834%"
+    },
+    {
+      "Date": "May 13 2026",
+      "Market Price": "21.83",
+      "NAV": "21.87",
+      "Premium/Discount": "-0.1829%"
+    },
+    {
+      "Date": "May 14 2026",
+      "Market Price": "21.78",
+      "NAV": "21.85",
+      "Premium/Discount": "-0.3204%"
+    },
+    {
+      "Date": "May 15 2026",
+      "Market Price": "21.26",
+      "NAV": "21.15",
+      "Premium/Discount": "0.5201%"
+    },
+    {
+      "Date": "May 18 2026",
+      "Market Price": "21.11",
+      "NAV": "21.07",
+      "Premium/Discount": "0.1898%"
+    },
+    {
+      "Date": "May 19 2026",
+      "Market Price": "21.06",
+      "NAV": "21.07",
+      "Premium/Discount": "-0.0475%"
+    },
+    {
+      "Date": "May 20 2026",
+      "Market Price": "21.39",
+      "NAV": "21.53",
+      "Premium/Discount": "-0.6503%"
+    },
+    {
+      "Date": "May 21 2026",
+      "Market Price": "21.51",
+      "NAV": "21.65",
+      "Premium/Discount": "-0.6467%"
+    },
+    {
+      "Date": "May 22 2026",
+      "Market Price": "21.51",
+      "NAV": "21.47",
+      "Premium/Discount": "0.1863%"
+    },
+    {
+      "Date": "May 26 2026",
+      "Market Price": "21.62",
+      "NAV": "21.66",
+      "Premium/Discount": "-0.1847%"
+    },
+    {
+      "Date": "May 27 2026",
+      "Market Price": "21.77",
+      "NAV": "21.83",
+      "Premium/Discount": "-0.2749%"
+    },
+    {
+      "Date": "May 28 2026",
+      "Market Price": "22.33",
+      "NAV": "22.46",
+      "Premium/Discount": "-0.5788%"
+    },
+    {
+      "Date": "May 29 2026",
+      "Market Price": "22.47",
+      "NAV": "22.53",
+      "Premium/Discount": "-0.2663%"
+    },
+    {
+      "Date": "Jun 01 2026",
+      "Market Price": "22.36",
+      "NAV": "22.44",
+      "Premium/Discount": "-0.3565%"
+    },
+    {
+      "Date": "Jun 02 2026",
+      "Market Price": "22.12",
+      "NAV": "22.09",
+      "Premium/Discount": "0.1358%"
+    },
+    {
+      "Date": "Jun 03 2026",
+      "Market Price": "21.85",
+      "NAV": "21.79",
+      "Premium/Discount": "0.2754%"
+    },
+    {
+      "Date": "Jun 04 2026",
+      "Market Price": "22.19",
+      "NAV": "22.23",
+      "Premium/Discount": "-0.1799%"
+    },
+    {
+      "Date": "Jun 05 2026",
+      "Market Price": "21.24",
+      "NAV": "21.06",
+      "Premium/Discount": "0.8547%"
+    },
+    {
+      "Date": "Jun 08 2026",
+      "Market Price": "21.42",
+      "NAV": "21.41",
+      "Premium/Discount": "0.0467%"
+    },
+    {
+      "Date": "Jun 09 2026",
+      "Market Price": "21.28",
+      "NAV": "21.25",
+      "Premium/Discount": "0.1412%"
+    },
+    {
+      "Date": "Jun 10 2026",
+      "Market Price": "20.99",
+      "NAV": "20.82",
+      "Premium/Discount": "0.8165%"
+    },
+    {
+      "Date": "Jun 11 2026",
+      "Market Price": "21.34",
+      "NAV": "21.38",
+      "Premium/Discount": "-0.1871%"
+    },
+    {
+      "Date": "Jun 12 2026",
+      "Market Price": "21.41",
+      "NAV": "21.38",
+      "Premium/Discount": "0.1403%"
+    },
+    {
+      "Date": "Jun 15 2026",
+      "Market Price": "22.07",
+      "NAV": "22.14",
+      "Premium/Discount": "-0.3162%"
+    },
+    {
+      "Date": "Jun 16 2026",
+      "Market Price": "21.98",
+      "NAV": "21.95",
+      "Premium/Discount": "0.1367%"
+    },
+    {
+      "Date": "Jun 17 2026",
+      "Market Price": "21.88",
+      "NAV": "21.87",
+      "Premium/Discount": "0.0457%"
+    },
+    {
+      "Date": "Jun 18 2026",
+      "Market Price": "22.18",
+      "NAV": "22.12",
+      "Premium/Discount": "0.2712%"
+    },
+    {
+      "Date": "Jun 22 2026",
+      "Market Price": "21.85",
+      "NAV": "21.73",
+      "Premium/Discount": "0.5522%"
+    },
+    {
+      "Date": "Jun 23 2026",
+      "Market Price": "21.59",
+      "NAV": "21.51",
+      "Premium/Discount": "0.3719%"
+    },
+    {
+      "Date": "Jun 24 2026",
+      "Market Price": "21.56",
+      "NAV": "21.51",
+      "Premium/Discount": "0.2325%"
+    },
+    {
+      "Date": "Jun 25 2026",
+      "Market Price": "21.50",
+      "NAV": "21.46",
+      "Premium/Discount": "0.1864%"
+    },
+    {
+      "Date": "Jun 26 2026",
+      "Market Price": "21.79",
+      "NAV": "21.83",
+      "Premium/Discount": "-0.1832%"
+    },
+    {
+      "Date": "Jun 29 2026",
+      "Market Price": "22.20",
+      "NAV": "22.33",
+      "Premium/Discount": "-0.5822%"
+    },
+    {
+      "Date": "Jun 30 2026",
+      "Market Price": "22.16",
+      "NAV": "22.29",
+      "Premium/Discount": "-0.5832%"
+    },
+    {
+      "Date": "Jul 01 2026",
+      "Market Price": "22.45",
+      "NAV": "22.46",
+      "Premium/Discount": "-0.0445%"
+    },
+    {
+      "Date": "Jul 02 2026",
+      "Market Price": "22.25",
+      "NAV": "22.25",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jul 06 2026",
+      "Market Price": "22.71",
+      "NAV": "22.77",
+      "Premium/Discount": "-0.2635%"
+    },
+    {
+      "Date": "Jul 07 2026",
+      "Market Price": "22.32",
+      "NAV": "22.27",
+      "Premium/Discount": "0.2245%"
+    },
+    {
+      "Date": "Jul 08 2026",
+      "Market Price": "22.07",
+      "NAV": "22.10",
+      "Premium/Discount": "-0.1357%"
+    },
+    {
+      "Date": "Jul 09 2026",
+      "Market Price": "22.36",
+      "NAV": "22.43",
+      "Premium/Discount": "-0.3121%"
+    },
+    {
+      "Date": "Jul 10 2026",
+      "Market Price": "22.16",
+      "NAV": "22.14",
+      "Premium/Discount": "0.0903%"
+    },
+    {
+      "Date": "Jul 13 2026",
+      "Market Price": "21.76",
+      "NAV": "21.70",
+      "Premium/Discount": "0.2765%"
+    },
+    {
+      "Date": "Jul 14 2026",
+      "Market Price": "21.97",
+      "NAV": "22.06",
+      "Premium/Discount": "-0.4080%"
+    },
+    {
+      "Date": "Jul 15 2026",
+      "Market Price": "21.97",
+      "NAV": "21.97",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Jul 16 2026",
+      "Market Price": "21.49",
+      "NAV": "21.40",
+      "Premium/Discount": "0.4206%"
+    },
+    {
+      "Date": "Jul 17 2026",
+      "Market Price": "21.27",
+      "NAV": "21.28",
+      "Premium/Discount": "-0.0470%"
+    },
+    {
+      "Date": "Jul 20 2026",
+      "Market Price": "21.23",
+      "NAV": "21.21",
+      "Premium/Discount": "0.0943%"
+    },
+    {
+      "Date": "Jul 21 2026",
+      "Market Price": "21.61",
+      "NAV": "21.75",
+      "Premium/Discount": "-0.6437%"
+    },
+    {
+      "Date": "Jul 22 2026",
+      "Market Price": "21.38",
+      "NAV": "21.34",
+      "Premium/Discount": "0.1874%"
+    },
+    {
+      "Date": "Jul 23 2026",
+      "Market Price": "21.03",
+      "NAV": "21.00",
+      "Premium/Discount": "0.1429%"
+    },
+    {
+      "Date": "Jul 24 2026",
+      "Market Price": "20.70",
+      "NAV": "20.63",
+      "Premium/Discount": "0.3393%"
+    },
+    {
+      "Date": "Jul 27 2026",
+      "Market Price": "20.77",
+      "NAV": "20.76",
+      "Premium/Discount": "0.0482%"
+    },
+    {
+      "Date": "Jul 28 2026",
+      "Market Price": "20.74",
+      "NAV": "20.81",
+      "Premium/Discount": "-0.3364%"
+    },
+    {
+      "Date": "Jul 29 2026",
+      "Market Price": "20.50",
+      "NAV": "20.43",
+      "Premium/Discount": "0.3426%"
+    },
+    {
+      "Date": "Jul 30 2026",
+      "Market Price": "20.81",
+      "NAV": "20.92",
+      "Premium/Discount": "-0.5258%"
+    },
+    {
+      "Date": "Jul 31 2026",
+      "Market Price": "20.59",
+      "NAV": "20.60",
+      "Premium/Discount": "-0.0485%"
+    },
+    {
+      "Date": "Aug 03 2026",
+      "Market Price": "20.91",
+      "NAV": "21.08",
+      "Premium/Discount": "-0.8065%"
+    },
+    {
+      "Date": "Aug 04 2026",
+      "Market Price": "21.51",
+      "NAV": "21.62",
+      "Premium/Discount": "-0.5088%"
+    },
+    {
+      "Date": "Aug 05 2026",
+      "Market Price": "21.44",
+      "NAV": "21.40",
+      "Premium/Discount": "0.1869%"
+    },
+    {
+      "Date": "Aug 06 2026",
+      "Market Price": "21.34",
+      "NAV": "21.36",
+      "Premium/Discount": "-0.0936%"
+    },
+    {
+      "Date": "Aug 07 2026",
+      "Market Price": "21.97",
+      "NAV": "22.07",
+      "Premium/Discount": "-0.4531%"
+    },
+    {
+      "Date": "Aug 10 2026",
+      "Market Price": "22.14",
+      "NAV": "22.21",
+      "Premium/Discount": "-0.3152%"
+    },
+    {
+      "Date": "Aug 11 2026",
+      "Market Price": "22.28",
+      "NAV": "22.16",
+      "Premium/Discount": "0.5415%"
+    },
+    {
+      "Date": "Aug 12 2026",
+      "Market Price": "22.27",
+      "NAV": "22.27",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Aug 13 2026",
+      "Market Price": "22.49",
+      "NAV": "22.54",
+      "Premium/Discount": "-0.2218%"
+    },
+    {
+      "Date": "Aug 14 2026",
+      "Market Price": "22.23",
+      "NAV": "22.19",
+      "Premium/Discount": "0.1803%"
+    },
+    {
+      "Date": "Aug 17 2026",
+      "Market Price": "22.34",
+      "NAV": "22.41",
+      "Premium/Discount": "-0.3124%"
+    },
+    {
+      "Date": "Aug 18 2026",
+      "Market Price": "21.89",
+      "NAV": "21.85",
+      "Premium/Discount": "0.1831%"
+    },
+    {
+      "Date": "Aug 19 2026",
+      "Market Price": "22.57",
+      "NAV": "22.66",
+      "Premium/Discount": "-0.3972%"
+    },
+    {
+      "Date": "Aug 20 2026",
+      "Market Price": "22.60",
+      "NAV": "22.60",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Aug 21 2026",
+      "Market Price": "23.13",
+      "NAV": "23.17",
+      "Premium/Discount": "-0.1726%"
+    },
+    {
+      "Date": "Aug 24 2026",
+      "Market Price": "22.71",
+      "NAV": "22.69",
+      "Premium/Discount": "0.0881%"
+    },
+    {
+      "Date": "Aug 25 2026",
+      "Market Price": "23.14",
+      "NAV": "23.21",
+      "Premium/Discount": "-0.3016%"
+    },
+    {
+      "Date": "Aug 26 2026",
+      "Market Price": "23.03",
+      "NAV": "23.07",
+      "Premium/Discount": "-0.1734%"
+    },
+    {
+      "Date": "Aug 27 2026",
+      "Market Price": "23.32",
+      "NAV": "23.36",
+      "Premium/Discount": "-0.1712%"
+    },
+    {
+      "Date": "Aug 28 2026",
+      "Market Price": "22.82",
+      "NAV": "22.79",
+      "Premium/Discount": "0.1316%"
+    },
+    {
+      "Date": "Aug 31 2026",
+      "Market Price": "23.00",
+      "NAV": "23.07",
+      "Premium/Discount": "-0.3034%"
+    },
+    {
+      "Date": "Sep 01 2026",
+      "Market Price": "22.58",
+      "NAV": "22.54",
+      "Premium/Discount": "0.1775%"
+    },
+    {
+      "Date": "Sep 02 2026",
+      "Market Price": "22.61",
+      "NAV": "22.60",
+      "Premium/Discount": "0.0442%"
+    },
+    {
+      "Date": "Sep 03 2026",
+      "Market Price": "23.25",
+      "NAV": "23.35",
+      "Premium/Discount": "-0.4283%"
+    },
+    {
+      "Date": "Sep 04 2026",
+      "Market Price": "23.11",
+      "NAV": "23.13",
+      "Premium/Discount": "-0.0865%"
+    },
+    {
+      "Date": "Sep 08 2026",
+      "Market Price": "23.06",
+      "NAV": "23.12",
+      "Premium/Discount": "-0.2595%"
+    },
+    {
+      "Date": "Sep 09 2026",
+      "Market Price": "22.81",
+      "NAV": "22.77",
+      "Premium/Discount": "0.1757%"
+    },
+    {
+      "Date": "Sep 10 2026",
+      "Market Price": "22.55",
+      "NAV": "22.56",
+      "Premium/Discount": "-0.0443%"
+    },
+    {
+      "Date": "Sep 11 2026",
+      "Market Price": "22.63",
+      "NAV": "22.62",
+      "Premium/Discount": "0.0442%"
+    },
+    {
+      "Date": "Sep 14 2026",
+      "Market Price": "22.83",
+      "NAV": "22.92",
+      "Premium/Discount": "-0.3927%"
+    },
+    {
+      "Date": "Sep 15 2026",
+      "Market Price": "22.60",
+      "NAV": "22.60",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Sep 16 2026",
+      "Market Price": "22.53",
+      "NAV": "22.54",
+      "Premium/Discount": "-0.0444%"
+    },
+    {
+      "Date": "Sep 17 2026",
+      "Market Price": "23.23",
+      "NAV": "23.24",
+      "Premium/Discount": "-0.0430%"
+    },
+    {
+      "Date": "Sep 18 2026",
+      "Market Price": "23.43",
+      "NAV": "23.43",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Sep 21 2026",
+      "Market Price": "23.87",
+      "NAV": "23.87",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Sep 22 2026",
+      "Market Price": "24.04",
+      "NAV": "24.05",
+      "Premium/Discount": "-0.0416%"
+    },
+    {
+      "Date": "Sep 23 2026",
+      "Market Price": "23.69",
+      "NAV": "23.65",
+      "Premium/Discount": "0.1691%"
+    },
+    {
+      "Date": "Sep 24 2026",
+      "Market Price": "24.04",
+      "NAV": "24.11",
+      "Premium/Discount": "-0.2903%"
+    },
+    {
+      "Date": "Sep 25 2026",
+      "Market Price": "23.89",
+      "NAV": "23.87",
+      "Premium/Discount": "0.0838%"
+    }
+  ],
+  "ticker": "ARKI",
+  "totalRows": 123
+}

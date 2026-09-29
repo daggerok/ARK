@@ -1,0 +1,127 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "—",
+  "aumValue": null,
+  "category": "Digital Assets",
+  "closePrice": "$27.63",
+  "closePriceValue": 27.63,
+  "dataFile": "funds/ARKB/meta.json",
+  "distributions": {
+    "dividend": "—",
+    "exDate": "—",
+    "frequency": "—",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [],
+    "source": "Yahoo Finance chart response contained no distribution events"
+  },
+  "exchange": "",
+  "fundPage": "https://www.ark-funds.com/funds/arkb",
+  "generatedAt": "2026-09-29T00:59:20.115Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "Close",
+      "Adj Close",
+      "Volume"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json"
+    ],
+    "source": "Yahoo Finance daily adjusted-close fallback",
+    "totalRows": 679
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 1
+  },
+  "identifiers": {
+    "cusip": null,
+    "indexTicker": null,
+    "isin": null
+  },
+  "inceptionDate": "—",
+  "metrics": {
+    "dividendYield": null,
+    "dividendYieldText": null,
+    "returnsBasis": "Yahoo Finance adjusted close total-return proxy (official ARK performance unavailable)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 21.71,
+    "tr1y": -27.22,
+    "ytd": -9.88
+  },
+  "name": "ARK 21Shares Bitcoin ETF",
+  "nav": "—",
+  "navValue": null,
+  "premiumDiscount": "—",
+  "premiumDiscountValue": null,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 25.52,
+      "mo3": 7.47,
+      "sinceInception": 21.71,
+      "sinceInceptionCumulative": 67.86,
+      "yr1": -27.22,
+      "ytd": -9.88
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -20.08,
+      "mo3": -11.79,
+      "sinceInception": 9.4,
+      "sinceInceptionCumulative": 24.82,
+      "yr1": -45.63,
+      "ytd": -32.99
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart response contained no distribution events",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arkb",
+    "historyApi": null,
+    "historySource": "Yahoo Finance daily adjusted-close fallback",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_21SHARES_BITCOIN_ETF_ARKB_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": null,
+    "pageId": null,
+    "performanceApi": null,
+    "provider": "ARK Invest Azure holdings CSV + Yahoo Finance chart",
+    "trustCik": "0001869699",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKB"
+  },
+  "ter": "—",
+  "terValue": null,
+  "ticker": "ARKB",
+  "yields": {
+    "dividendYield": null,
+    "dividendYieldKind": "not available from Yahoo Finance",
+    "dividendYieldText": null,
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}

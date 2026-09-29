@@ -1,0 +1,170 @@
+{
+  "asOfDate": "Sep 25 2026",
+  "aum": "—",
+  "aumValue": null,
+  "category": "Thematic Equity",
+  "closePrice": "$89.25",
+  "closePriceValue": 89.25,
+  "dataFile": "funds/ARKK/meta.json",
+  "distributions": {
+    "dividend": "$0.3640",
+    "exDate": "Sep 08 2023",
+    "frequency": "Unknown",
+    "headers": [
+      "Ex-Date",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "Sep 08 2023",
+        "$0.3640"
+      ],
+      [
+        "Dec 29 2021",
+        "$0.7830"
+      ],
+      [
+        "Dec 29 2020",
+        "$2.0440"
+      ],
+      [
+        "Dec 27 2019",
+        "$0.1910"
+      ],
+      [
+        "Dec 27 2018",
+        "$1.1680"
+      ],
+      [
+        "Dec 27 2017",
+        "$0.4880"
+      ],
+      [
+        "Dec 24 2015",
+        "$0.4650"
+      ]
+    ],
+    "source": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)"
+  },
+  "exchange": "",
+  "fundPage": "https://www.ark-funds.com/funds/arkk",
+  "generatedAt": "2026-09-29T00:59:30.701Z",
+  "history": {
+    "asOfDate": "Sep 25 2026",
+    "headers": [
+      "Date",
+      "Close",
+      "Adj Close",
+      "Volume"
+    ],
+    "pageSize": 1000,
+    "pages": [
+      "history/001.json",
+      "history/002.json",
+      "history/003.json"
+    ],
+    "source": "Yahoo Finance daily adjusted-close fallback",
+    "totalRows": 2992
+  },
+  "holdings": {
+    "asOfDate": "Sep 28 2026",
+    "headers": [
+      "Name",
+      "Ticker",
+      "Identifier",
+      "Weight",
+      "Market Value",
+      "Shares Held",
+      "Asset Category"
+    ],
+    "pageSize": 250,
+    "pages": [
+      "holdings/001.json"
+    ],
+    "source": "official ARK daily holdings CSV",
+    "totalRows": 46
+  },
+  "identifiers": {
+    "cusip": null,
+    "indexTicker": null,
+    "isin": null
+  },
+  "inceptionDate": "—",
+  "metrics": {
+    "cagr10y": 16.23,
+    "cagr3y": 25.4,
+    "cagr5y": -6.54,
+    "dividendYield": null,
+    "dividendYieldText": null,
+    "returnsBasis": "Yahoo Finance adjusted close total-return proxy (official ARK performance unavailable)",
+    "secYield": null,
+    "secYieldText": null,
+    "siAnn": 13.88,
+    "tr10y": 349.97,
+    "tr1y": 14.15,
+    "tr3y": 97.19,
+    "tr5y": -28.69,
+    "ytd": 11.25
+  },
+  "name": "ARK Innovation ETF",
+  "nav": "—",
+  "navValue": null,
+  "premiumDiscount": "—",
+  "premiumDiscountValue": null,
+  "returns": {
+    "monthEnd": {
+      "asOfDate": "Aug 31 2026",
+      "mo1": 20.12,
+      "mo3": 4.42,
+      "sinceInception": 13.88,
+      "sinceInceptionCumulative": 365.31,
+      "yr1": 14.15,
+      "yr10": 16.23,
+      "yr3": 25.4,
+      "yr5": -6.54,
+      "ytd": 11.25
+    },
+    "quarterEnd": {
+      "asOfDate": "Jun 30 2026",
+      "mo1": -1.38,
+      "mo3": 27.24,
+      "sinceInception": 13.53,
+      "sinceInceptionCumulative": 339.48,
+      "yr1": 14.98,
+      "yr10": 16.34,
+      "yr3": 22.68,
+      "yr5": -8.88,
+      "ytd": 5.07
+    }
+  },
+  "source": {
+    "catalogUrl": "https://www.ark-funds.com/our-etfs/",
+    "distributionsSource": "Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)",
+    "edgarFiling": {},
+    "fundPage": "https://www.ark-funds.com/funds/arkk",
+    "historyApi": null,
+    "historySource": "Yahoo Finance daily adjusted-close fallback",
+    "holdingsAsOfDate": "2026-09-28",
+    "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_INNOVATION_ETF_ARKK_HOLDINGS.csv",
+    "holdingsDateBasis": "official holdings CSV date column",
+    "holdingsSource": "official ARK daily holdings CSV",
+    "nportDoc": null,
+    "overviewApi": null,
+    "pageId": null,
+    "performanceApi": null,
+    "provider": "ARK Invest Azure holdings CSV + Yahoo Finance chart",
+    "trustCik": "0001579982",
+    "yahooChart": "https://query1.finance.yahoo.com/v8/finance/chart/ARKK"
+  },
+  "ter": "—",
+  "terValue": null,
+  "ticker": "ARKK",
+  "yields": {
+    "dividendYield": null,
+    "dividendYieldKind": "not available from Yahoo Finance",
+    "dividendYieldText": null,
+    "secYield": null,
+    "secYieldKind": "not published by ARK for this fund",
+    "secYieldText": null
+  }
+}
