@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: fae8065ef53bc1f91d247ad2de2e265ea2fb16c3 on origin/feat/ark-etfs (verified before isolated UI/API preview; remote still matched at the start of that check).
+- Last confirmed pushed SHA: 2bc7b7e667a25986f0cbb928621b426adc27b29d on origin/feat/ark-etfs (UI-route worklog push succeeded and `git ls-remote` returned the same SHA).
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -89,7 +89,7 @@ CURRENT STATE
 - Active / remaining:
   1. Generate and validate the full 14-fund production API dataset in an isolated copy with conservative defaults and repeat-run hashes; publish it under `api/ark` only after reviewing provider provenance, source dates, and retained failures. Complete manual type-safety review and any feasible browser/header regression checks.
   2. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: verify `origin/feat/ark-etfs` at `fae8065`, run the unfiltered updater in a new temporary worktree (separate from the accepted evidence and UI preview) with default 1.5-second pacing, capture/inspect all 14 fund outputs and source dates, repeat it to compare full-catalog SHA-256 manifests, and then review before populating production `api/ark`.
+- Exact next action: verify `origin/feat/ark-etfs` at `2bc7b7e`, run the unfiltered updater in a new temporary worktree (separate from the accepted evidence and UI preview) with default 1.5-second pacing, capture/inspect all 14 fund outputs and source dates, repeat it to compare full-catalog SHA-256 manifests, and then review before populating production `api/ark`.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -255,7 +255,7 @@ CHRONOLOGICAL JOURNAL
 - `bun build app.tsx --target=browser --outfile=/dev/null` succeeded (89.37 KB); `git diff --exit-code -- app.tsx index.html` confirmed neither UI file changed. SHA-256: `app.tsx` `c5ed121a4ef453b9df374d448a8f968e0ae454629ebb6aa17725c231d718e373`; `index.html` `516acdff813d518985a1753db726107ca2ac2f109eb6c87715ad6c64ff90b83c`.
 - Served the isolated copy at port 8765 (`python3 -m http.server`, bound to `0.0.0.0`). An HTTP traversal matching the app's relative paths fetched index, all three selected metas, every selected holdings/history page, all status 200 `application/json`; totals and manifest page counts matched (ARKK 46/2,992; ARKY 47/27; ARKB 1/679). No cross-origin/API routing issue was found.
 - The preview copy temporarily references local copies of the same Babel 7.24 and Tailwind CDN files because the sandboxed preview cannot fetch external resources; no repository UI files or dependencies were changed. The preview's server log only showed `GET /`, not `/app.tsx`, Babel, Tailwind, or API requests. No browser binary (Chromium/Firefox) or browser automation package is installed, so visual rendering and interactions were not actually exercised. `app.tsx` is served as `application/octet-stream` by Python's simple static server; the reference UI uses Babel/XHR for `.tsx`, but browser behavior/content-type compatibility remains unverified. Keep browser interaction checks marked pending; the live preview is available on port 8765 while its temp root exists.
-- Next: unfiltered full-catalog updater run in a fresh isolated root with default pacing, capture provenance/freshness and repeat-run hashes; do not alter the accepted three-ticker fixture.
+- Published this partial route-check/worklog checkpoint as `2bc7b7e`; push succeeded and `origin/feat/ark-etfs` matched `2bc7b7e667a25986f0cbb928621b426adc27b29d`. Next: unfiltered full-catalog updater run in a fresh isolated root with default pacing, capture provenance/freshness and repeat-run hashes; do not alter the accepted three-ticker fixture.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
