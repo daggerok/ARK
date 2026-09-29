@@ -54,7 +54,7 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | --- | --: | --- |
 | `MAX_FETCHES` | all | Batch size: with a positive value the updater continues after the committed cursor in `api/ark/update-state.json`; empty or `0` is a full pass — every fund is refreshed in one run. |
 | `REQUEST_SLEEP` | `1.5` | Minimum delay in seconds between outgoing request starts, including retries. Issuer requests use one conservative lane; the `r.jina.ai` fallback never starts requests closer than 3 seconds apart. |
-| `CONCURRENCY` | `2` | Number of independent paced request lanes for Azure holdings, Yahoo Finance and SEC EDGAR, and the number of parallel fund workers. |
+| `CONCURRENCY` | `2` | Number of parallel fund workers and of independent paced request lanes for Azure holdings, Yahoo Finance and SEC EDGAR. Official ark-funds.com data is always fetched through one paced lane, one fund at a time (about 15 seconds per fund through the proxy), so higher values do not shorten the issuer phase; they only parallelize the other providers. |
 | `AUM` | `:` | Net Assets range. Each bound may be a USD amount or `K`/`M`/`B`/`T`, or one of `nano`, `micro`, `small`, `mid`, `large`. |
 | `TER` | `:` | Expense ratio range in % (strict `min:max`). |
 | `DIVIDEND_YIELD` | `:` | Dividend-yield percentage range. |
@@ -65,7 +65,7 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | `TOTAL_RETURN_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Cumulative NAV total-return ranges in %. |
 | `HOLDINGS_PAGE_SIZE` | `250` | Rows in each generated current-holdings JSON page. |
 | `HISTORY_PAGE_SIZE` | `1000` | Rows in each generated daily-history JSON page. |
-| `MAX_RETRIES` | `2` | Retries after the initial request. Only network errors and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
+| `MAX_RETRIES` | `2` | Retries after the initial request. Only network errors (including the 90-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
 | `SEC_UA` | declared UA | Override the SEC User-Agent. SEC policy requires automated tools to declare a contact. |
 | `EDGAR_FALLBACK` | on | Set to `0`/`false` to disable the SEC EDGAR N-PORT-P holdings fallback. |
 | `SKIP_ARK` | off | Do not request ark-funds.com; keep the fixed catalog and previously published official data and only run the fallbacks. |

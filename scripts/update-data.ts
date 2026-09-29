@@ -1099,7 +1099,9 @@ Environment controls:
   TICKERS              Space/comma separated ETF tickers. ANDed with other filters.
   MAX_FETCHES          0 means all selected funds; positive values resume at the saved cursor.
   REQUEST_SLEEP        Seconds between request starts (default 1.5; issuer site uses one conservative gate).
-  CONCURRENCY          Independent paced lanes for Azure, Yahoo, and SEC requests (default 2).
+  CONCURRENCY          Parallel fund workers and paced lanes for Azure, Yahoo, and SEC requests (default 2).
+                       ark-funds.com data always flows through one paced lane, one fund at a time,
+                       so higher values do not speed up issuer requests.
   MAX_RETRIES          Retry count for network/temporary HTTP errors (default 2).
   HOLDINGS_PAGE_SIZE   Holdings rows per static JSON page (default 250).
   HISTORY_PAGE_SIZE    History rows per static JSON page (default 1000).
@@ -1379,6 +1381,8 @@ export type RequestRuntime = PaceClock & {
   fetchImpl?: typeof fetch;
   onRetry?: (message: string) => void;
   onIssuerProxy?: (message: string) => void;
+  /** Per-request wall-clock limit (headers + body); tests override it. */
+  requestTimeoutMs?: number;
 };
 
 type RequestGate = <T>(task: () => T | Promise<T>) => Promise<T>;
@@ -1393,6 +1397,13 @@ const ISSUER_DIRECT_DENIAL_LIMIT = 2;
  * regardless of a shorter REQUEST_SLEEP.
  */
 export const ISSUER_PROXY_MIN_INTERVAL_MS = 3000;
+/**
+ * Every provider request (including the r.jina.ai proxy, which renders pages
+ * in a headless browser) is aborted after this long so one stalled connection
+ * cannot block a paced lane for the rest of the run; the abort is retried as
+ * a network error.
+ */
+export const REQUEST_TIMEOUT_MS = 90_000;
 
 function defaultSleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -1473,10 +1484,14 @@ async function requestTextWithRetry(
   const fetchImpl = runtime.fetchImpl ?? fetch;
   const sleep = runtime.sleep ?? defaultSleep;
   const now = runtime.now ?? Date.now;
+  const timeoutMs = runtime.requestTimeoutMs ?? REQUEST_TIMEOUT_MS;
   for (let attempt = 0; attempt <= config.maxRetries; attempt += 1) {
     let response: Response;
+    let responseText: string;
     try {
-      response = await gate(() => fetchImpl(url, { headers, redirect: 'follow' }));
+      const signal = AbortSignal.timeout(timeoutMs);
+      response = await gate(() => fetchImpl(url, { headers, redirect: 'follow', signal }));
+      responseText = await response.text();
     } catch (error) {
       if (attempt >= config.maxRetries) {
         const detail = error instanceof Error ? error.message : String(error);
@@ -1488,7 +1503,6 @@ async function requestTextWithRetry(
       await sleep(wait);
       continue;
     }
-    const responseText = await response.text();
     if (response.ok) return { text: responseText, headers: response.headers, url };
     const failure = new ProviderHttpError(provider, url, response.status, response.statusText, responseText);
     if (!retryableStatus(response.status) || attempt >= config.maxRetries) throw failure;
@@ -1530,6 +1544,12 @@ export function parseProviderJson(text: string): unknown {
 
 export type RequestClients = {
   ark: (url: string) => Promise<ProviderResponse>;
+  /**
+   * Runs one fund's sequence of issuer requests without interleaving other
+   * funds on the single issuer lane, so funds finish one after another and
+   * report progress instead of all completing together at the end of the run.
+   */
+  arkSession: <T>(work: () => Promise<T>) => Promise<T>;
   azure: (url: string) => Promise<ProviderResponse>;
   yahoo: (url: string) => Promise<ProviderResponse>;
   sec: (url: string) => Promise<ProviderResponse>;
@@ -1602,7 +1622,14 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     'User-Agent': config.secUa,
   });
 
-  return { ark, azure, yahoo, sec, isArkProxyActive: () => arkProxyActive };
+  let arkSessionTail: Promise<void> = Promise.resolve();
+  const arkSession = <T>(work: () => Promise<T>): Promise<T> => {
+    const turn = arkSessionTail.then(work);
+    arkSessionTail = turn.then(() => undefined, () => undefined);
+    return turn;
+  };
+
+  return { ark, arkSession, azure, yahoo, sec, isArkProxyActive: () => arkProxyActive };
 }
 
 export function arkApiUrls(pageId: string): { overview: string; history: string; monthEnd: string; quarterEnd: string } {
@@ -1928,26 +1955,32 @@ async function fetchOfficialFundData(
 ): Promise<OfficialFundData> {
   const empty: OfficialFundData = { pageId: null, overview: null, history: [], monthEnd: null, quarterEnd: null, urls: null };
   if (config.skipArk) return empty;
-  let pageId: string | null = null;
-  try {
-    const page = await clients.ark(fund.fundPage);
-    pageId = extractFundPageId(page.text);
-    if (!pageId) throw new Error('official fund page did not expose /api/fund/overview/<id>');
-  } catch (error) {
-    noteSourceFailure(onNote, 'issuer', fund.ticker, error);
-    return empty;
-  }
-  const urls = arkApiUrls(pageId);
   const requestJson = async (url: string, label: string): Promise<unknown | null> => {
     try { return parseProviderJson((await clients.ark(url)).text); }
     catch (error) { noteSourceFailure(onNote, label, fund.ticker, error); return null; }
   };
-  const [overviewPayload, historyPayload, monthPayload, quarterPayload] = await Promise.all([
-    requestJson(urls.overview, 'overview'),
-    requestJson(urls.history, 'history'),
-    requestJson(urls.monthEnd, 'performance'),
-    requestJson(urls.quarterEnd, 'performance'),
-  ]);
+  const session = await clients.arkSession(async () => {
+    let pageId: string | null = null;
+    try {
+      const page = await clients.ark(fund.fundPage);
+      pageId = extractFundPageId(page.text);
+      if (!pageId) throw new Error('official fund page did not expose /api/fund/overview/<id>');
+    } catch (error) {
+      noteSourceFailure(onNote, 'issuer', fund.ticker, error);
+      return null;
+    }
+    const urls = arkApiUrls(pageId);
+    const payloads = await Promise.all([
+      requestJson(urls.overview, 'overview'),
+      requestJson(urls.history, 'history'),
+      requestJson(urls.monthEnd, 'performance'),
+      requestJson(urls.quarterEnd, 'performance'),
+    ]);
+    return { pageId, urls, payloads };
+  });
+  if (!session) return empty;
+  const { pageId, urls } = session;
+  const [overviewPayload, historyPayload, monthPayload, quarterPayload] = session.payloads;
   let overview: ArkOverview | null = null;
   if (overviewPayload !== null) {
     try {

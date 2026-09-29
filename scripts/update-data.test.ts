@@ -10,6 +10,7 @@ import {
   ProviderHttpError,
   arkApiUrls,
   ISSUER_PROXY_MIN_INTERVAL_MS,
+  REQUEST_TIMEOUT_MS,
   USAGE,
   createPacedGate,
   createRequestClients,
@@ -405,6 +406,7 @@ describe('SEC fallback parsing and static output helpers', () => {
         if (url.includes('browse-edgar')) return { text: '<feed><entry><category term="NPORT-P"/><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/"/></entry></feed>', url, headers: new Headers() };
         return { text: '<edgarSubmission><genInfo><regName>ARK ETF Trust</regName><regCik>0001579982</regCik><seriesName>ARK Innovation ETF</seriesName><seriesId>S000012345</seriesId><repPdDate>2026-06-30</repPdDate></genInfo><fundInfo><netAssets>1000000</netAssets></fundInfo><invstOrSec><name>EXAMPLE CORP</name><ticker>EXM</ticker><cusip>123456789</cusip><balance>25</balance><valUSD>1000</valUSD><pctVal>0.1</pctVal><assetCat>EC</assetCat></invstOrSec></edgarSubmission>', url, headers: new Headers() };
       },
+      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const fund = ARK_FUNDS.find((item) => item.ticker === 'ARKK')!;
@@ -559,6 +561,48 @@ describe('paced provider request clients', () => {
     }
   });
 
+  test('a stalled provider connection is aborted by the request timeout and retried', async () => {
+    const retries: string[] = [];
+    let calls = 0;
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '1' }), {
+      requestTimeoutMs: 20,
+      sleep: async () => undefined,
+      onRetry: (message) => retries.push(message),
+      fetchImpl: (input, init) => {
+        calls += 1;
+        if (calls === 1) {
+          return new Promise<Response>((_, reject) => {
+            init?.signal?.addEventListener('abort', () => reject(init.signal?.reason ?? new Error('aborted')));
+          });
+        }
+        return Promise.resolve(new Response('recovered', { status: 200 }));
+      },
+    });
+    expect(REQUEST_TIMEOUT_MS).toBe(90_000);
+    await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toMatchObject({ text: 'recovered' });
+    expect(calls).toBe(2);
+    expect(retries).toHaveLength(1);
+    expect(retries[0]).toContain('[ retry    ] ARK holdings network error');
+  });
+
+  test('issuer sessions run one fund at a time so funds complete progressively under high concurrency', async () => {
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', CONCURRENCY: '15' }), {
+      fetchImpl: async () => new Response('ok', { status: 200 }),
+    });
+    const events: string[] = [];
+    const fundWork = (ticker: string) => client.arkSession(async () => {
+      events.push(`${ticker}:start`);
+      await client.ark(`https://www.ark-funds.com/funds/${ticker.toLowerCase()}`);
+      await Promise.all([1, 2, 3, 4].map((n) => client.ark(`https://www.ark-funds.com/api/fund/x/${ticker}/${n}`)));
+      events.push(`${ticker}:end`);
+      return ticker;
+    });
+    const rejected = client.arkSession(async () => { throw new Error('one fund failing must not block the lane'); });
+    const results = await Promise.all([fundWork('ARKK'), fundWork('ARKW'), fundWork('ARKG'), rejected.catch(() => 'rejected')]);
+    expect(results).toEqual(['ARKK', 'ARKW', 'ARKG', 'rejected']);
+    expect(events).toEqual(['ARKK:start', 'ARKK:end', 'ARKW:start', 'ARKW:end', 'ARKG:start', 'ARKG:end']);
+  });
+
   test('issuer API paths mirror the verified page parameters and proxy JSON is unwrapped', () => {
     const urls = arkApiUrls('1004');
     expect(urls.overview).toBe('https://www.ark-funds.com/api/fund/overview/1004');
@@ -609,6 +653,7 @@ describe('per-fund filesystem integration', () => {
       azure: async (url: string) => respond(arkkCsv, url, { 'last-modified': 'Mon, 28 Sep 2026 06:05:47 GMT' }),
       yahoo: async (url: string) => respond(JSON.stringify(yahooPayload), url),
       sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
+      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const config = readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
@@ -657,6 +702,7 @@ describe('bounded updater orchestration', () => {
       azure: async (url: string) => { requests.push(url); throw new Error('SKIP_ARK should prevent this request'); },
       yahoo: async (url: string) => { requests.push(url); throw new Error('SKIP_YAHOO should prevent this request'); },
       sec: async (url: string) => { requests.push(url); throw new Error('EDGAR_FALLBACK=0 should prevent this request'); },
+      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const config = readConfig({
