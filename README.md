@@ -23,7 +23,7 @@ bun test scripts/update-data.test.ts
 
 Run `./scripts/update-data.ts -h` (or `--help`) to print every configuration variable with its default and usage examples.
 
-The **Update ARK Invest ETF data** GitHub Actions workflow exposes the same settings as manual inputs. All supplied filters use **AND** logic.
+The **Update ARK Invest ETF data** GitHub Actions workflow exposes the same settings as manual inputs (GitHub allows at most 25 `workflow_dispatch` inputs, so `SEC_UA` is read from the optional `SEC_UA` repository variable and `VERBOSE` stays off in CI). All supplied filters use **AND** logic.
 
 ### Data sources
 

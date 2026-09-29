@@ -66,11 +66,6 @@ on:
         required: false
         default: ":"
         type: string
-      sec_ua:
-        description: "Contact-bearing User-Agent for SEC EDGAR requests (empty keeps the repository placeholder)"
-        required: false
-        default: ""
-        type: string
       edgar_fallback:
         description: "SEC EDGAR Form N-PORT-P fallback for funds whose official holdings CSV is unavailable (default on)"
         required: false
@@ -83,11 +78,6 @@ on:
         type: string
       skip_ark:
         description: "Do not request ark-funds.com; keep the fixed catalog and previously published official data, only run the fallbacks (true/1)"
-        required: false
-        default: ""
-        type: string
-      verbose:
-        description: "Print per-request retry and fallback notices (true/1)"
         required: false
         default: ""
         type: string
@@ -165,11 +155,10 @@ jobs:
       CATEGORY: ${{ inputs.category || '' }}
       DIVIDEND_YIELD: ${{ inputs.dividend_yield || ':' }}
       SEC_YIELD: ${{ inputs.sec_yield || ':' }}
-      SEC_UA: ${{ inputs.sec_ua || '' }}
+      SEC_UA: ${{ vars.SEC_UA || '' }}
       EDGAR_FALLBACK: ${{ inputs.edgar_fallback || '1' }}
       SKIP_YAHOO: ${{ inputs.skip_yahoo || '' }}
       SKIP_ARK: ${{ inputs.skip_ark || '' }}
-      VERBOSE: ${{ inputs.verbose || '' }}
       PERFORMANCE_YTD: ${{ inputs.performance_ytd || '' }}
       PERFORMANCE_1Y: ${{ inputs.performance_1y || '' }}
       PERFORMANCE_3Y: ${{ inputs.performance_3y || '' }}
