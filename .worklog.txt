@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. PR #1: https://github.com/daggerok/ARK/pull/1 (open, head 38224dd at creation; not merged).
-- Last confirmed pushed SHA: 90c2373 on origin/feat/ark-etfs (PR #1). The progress/timeout fix commit below is pending push confirmation.
+- Last confirmed pushed SHA: 7e5f1e5 on origin/feat/ark-etfs (PR #1 head; rebased onto the owner's `e7c6f01` chmod commit, no force-push). This log-only commit is pending push confirmation.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -328,6 +328,7 @@ CHRONOLOGICAL JOURNAL
 - Tests: mocks gained `arkSession`; new tests "a stalled provider connection is aborted by the request timeout and retried" (20 ms timeout, second attempt succeeds, one `[ retry ]` notice) and "issuer sessions run one fund at a time so funds complete progressively under high concurrency" (strict start/end ordering across three funds; a rejecting session does not block the lane). Suite: 42 pass / 262 assertions; Bun build, `--help`, `git diff --check` OK.
 - Live verification (`/tmp/ark-c15`, copy of production `api/ark`, `CONCURRENCY=15 VERBOSE=1`): +1.5 s proxy switch, +17.7 s `[ 1/14 ] ARKB unchanged`, subsequent funds every 14–15 s, `[ done ] 14 funds updated, 0 failures` at +212.4 s, no timeouts or 429s, output unchanged (idempotent). Total duration equals the CONCURRENCY=2 acceptance runs because the issuer lane (≈5 requests × 3 s per fund) is the bound; the fix restores progress visibility and removes the hang risk, it does not make issuer fetching faster — that would require an authenticated Jina key or a working direct route.
 - README: CONCURRENCY and MAX_RETRIES rows document the single issuer lane and the 90-second timeout.
+- Publication: first push was rejected (non-fast-forward) because the owner had pushed `e7c6f01` ("data update", mode change 100644→100755 on `scripts/update-data.ts`, no content). Rebased the fix onto it (exec bit preserved, tests still 42 pass) and pushed as `7e5f1e5`; `git ls-remote` matched. No force-push, no overwritten changes.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
