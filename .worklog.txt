@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. PR #1: https://github.com/daggerok/ARK/pull/1 (open, head 38224dd at creation; not merged).
-- Last confirmed pushed SHA: 5831969 on origin/feat/ark-etfs (PR #1 head). The concurrency/sibling-parity commit described in item 26 is prepared locally and is pending push confirmation (update this line after `git ls-remote` agrees).
+- Last confirmed pushed SHA: 3562cba on origin/feat/ark-etfs (PR #1 head; `git ls-remote` returned 3562cba1862c027375f7475b9f462b49ae0ba46b). This log-only commit follows it.
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -343,7 +343,7 @@ CHRONOLOGICAL JOURNAL
 - Tests: `scripts/update-data.test.ts` 45 (browser-UA test replaced by honest-UA test; JINA key test; pageId reuse assertions in the end-to-end test; queue-timeout test; lanes test), `scripts/config-docs.test.ts` 4 (precedence, rejection incl. JINA_API_KEY/injection, config keys == CONTROL_NAMES + README mentions, workflow == reference + substitutions/25 inputs/no `inputs.x || 'default'` interpolation). `bun test`: 49 pass, 0 fail.
 - Live runs on `/tmp/ark-c15c` (copy of production `api/ark`, keyless, VERBOSE=1): before the timeout fix 3 m 34 s with 14 retries; after: `CONCURRENCY=15` → 2 m 51.5 s, 0 retries, 14 × `unchanged`, `[ done ] 14 funds updated, 0 failures`, dataset byte-identical (56 proxied requests × 3 s ≈ 168 s is the keyless floor). `SKIP_ARK=1`: CONCURRENCY=1 78.3 s vs CONCURRENCY=15 19.6 s. Production `api/ark` untouched. Throwaway copies only under /tmp.
 - Honest limits: keyless r.jina.ai cannot exceed ~20 requests/minute, so the issuer phase for 14 funds stays ≈ 3 minutes regardless of CONCURRENCY unless `JINA_API_KEY` is provided (free key, 500 RPM — not available in this sandbox, so the authenticated path is verified by tests only). Direct ark-funds.com access from Bun is blocked by Cloudflare's TLS fingerprinting; no header change fixes it.
-- Next: commit (`feat(data): per-worker request lanes, config-file controls and sibling-parity workflow`), push, `git ls-remote` verification, update the pushed-SHA line.
+- Published as `3562cba` (`feat(data): per-worker request lanes, config-file controls and sibling-parity workflow`). The first push attempt failed only because the fresh sandbox had no GitHub credential (none is ever stored); the user re-supplied the PAT and the push succeeded, `git ls-remote` = `3562cba1862c027375f7475b9f462b49ae0ba46b`. Credential used at runtime only; recommend revoking it after the session.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
