@@ -64,11 +64,11 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery/research, Bun setup, sibling-parity UI shell, pinned Bun manifests, parser/fixture tests, and the injectable paced provider clients are pushed. The end-to-end updater, per-fund/API writer, cursor CLI, SEC fallback integration, and offline orchestration tests are implemented locally; generated API and isolated live acceptance are not yet complete. Browser interaction checks remain pending. The starting main/origin SHA was 969a3a09d91cab15ab5f3c1f732180ccaa178862.
+- Status: Recovery/research, Bun setup, sibling-parity UI shell, pinned Bun manifests, parser/fixture tests, paced provider clients, and the end-to-end updater/CLI/API writer with SEC fallback are pushed. Offline coverage passes 35 tests / 225 assertions. No production API data, isolated live acceptance, or browser interaction checks have been completed; workflow, Dependabot, README, and PR remain.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: 804917b0b5a609b97c293a08ef93b1c904880e7a on origin/feat/ark-etfs (verified with `git ls-remote` and GitHub branch API).
+- Last confirmed pushed SHA: da761f915fbbe8ce74f3cbd7066323531f0804ac on origin/feat/ark-etfs (push succeeded and `git ls-remote` returned the same SHA).
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -81,11 +81,12 @@ CURRENT STATE
   9. Preserved the original plan and made no request for 00-generic.txt.
   10. Added and published the ARK parser/config/fixture-test foundation as `d86b944`; offline suite passed 27 tests / 166 assertions, and the Bun updater bundle build succeeded.
   11. Added and published the paced, injectable request-client layer as `804917b`; offline suite passed 31 tests / 196 assertions and the Bun updater bundle build succeeded.
+  12. Implemented and published the per-fund runner, API writer, SEC fallback integration, bounded cursor/CLI, source-age warning, and orchestration tests as `da761f9`; final offline suite passed 35 tests / 225 assertions, frozen install, Bun build, `--help`, and `git diff --check` all succeeded.
 - Active / remaining:
-  1. Publish the locally implemented fund/API writer and bounded CLI; then run isolated live acceptance on ARKK, ARKY, and ARKB, compare same-command repeat hashes, and commit/push evidence.
+  1. Run isolated live acceptance on ARKK, ARKY, and ARKB with conservative default pacing, compare repeat-run output hashes, validate source dates/fallbacks and preserve a generated three-ticker fixture; commit/push evidence.
   2. Complete manual type-safety review, browser/header regression checks, and full-catalog data generation/stability validation; commit/push each small step.
   3. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: finish review of the runner diff, rerun offline tests/build/help, commit and push `feat(data): implement ARK static-feed runner`; then perform the isolated three-ticker live acceptance with conservative default pacing.
+- Exact next action: prepare a separate temporary API root so no production/static UI data is touched, run bounded live acceptance for ARKK/ARKY/ARKB with default pacing, inspect generated pages and provenance, rerun the exact command to compare normalized byte hashes, and record all results before publication.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -213,14 +214,15 @@ CHRONOLOGICAL JOURNAL
 - Offline tests do not access the network. The test suite passed 31 tests / 196 assertions, including lane throttling/recovery, transient retry, two-403 proxy switching and URL/query parameter correctness. `bun build --target=bun scripts/update-data.ts --outfile=/dev/null` succeeded. This remains transpilation only; manual type review and live acceptance are outstanding.
 - Published the request clients/tests and log checkpoint as `804917b` (`feat(data): add paced provider request clients`); `origin/feat/ark-etfs` and the GitHub branch API both confirmed SHA `804917b0b5a609b97c293a08ef93b1c904880e7a`. The CLI and filesystem integration are the next step.
 
-### 2026-09-28 — ARK fund/API runner (implemented locally; checkpoint pending)
+### 2026-09-28 — ARK fund/API runner (completed and published as `da761f9`)
 - Added per-fund official page-ID discovery and isolated overview/history/month-end/quarter-end requests; Azure CSV parsing with `Last-Modified` metadata; Yahoo daily chart fallback; SEC ticker/series/filing resolution and N-PORT holding conversion; previous page/meta retention when fresh sources fail.
 - Added UI-compatible `meta.json`, index rows, paginated holdings/history envelopes, distributions worksheet, provenance and metric fields. Output pages are written to `funds/<TICKER>/{holdings,history}/NNN.json`; recursive timestamp-insensitive JSON writes preserve byte-stability, and stale numeric pages are pruned only after replacing a sheet.
 - Added the fixed 14-ETF catalog guard (excludes ARKVX), static filters plus post-fetch metric filters, bounded `MAX_FETCHES` cursor state, concurrent fund workers with continue-on-error, sibling-format reporting, and `--help` CLI handling. Partial `TICKERS` runs retain other catalog/index entries; cursor state is written only after the index write succeeds. No production API data has been generated yet.
 - Preserved holdings as-of dates and date basis (CSV date column, Azure `Last-Modified` for ARKY, or SEC report period); verbose runs warn when a CSV snapshot is more than seven days old instead of treating HTTP 200 as proof of freshness.
 - Extended Atom parsing to handle SEC category/link attributes. Offline coverage now passes 35 tests / 225 assertions, including mocked SEC resolution, filesystem/pagination output, repeat-run byte equality, cached-data retention, cursor resumption and preservation of unrequested catalog entries. `bun install --frozen-lockfile` reports no changes; Bun updater bundle build and `bun scripts/update-data.ts --help` both succeed; `git diff --check` passes. All tests use mocks/fixtures and make no network requests.
-- On restart the sandbox lacked an `origin` remote; restored the credential-free `https://github.com/daggerok/ARK.git` URL and verified local/origin/API branch SHA `804917b0b5a609b97c293a08ef93b1c904880e7a` and zero PRs. The Bun 1.4.2 binary had mode `0644`; restored its executable bit locally with `chmod +x` (no project file change).
-- The updater/API writer and tests are local and not yet published. Manual type review is not a semantic TypeScript check; no `tsc` was used. Next: finish static safety review and publish this coherent runner checkpoint before the required real-network smoke.
+- On continuation restart the sandbox lacked an `origin` remote; restored the credential-free `https://github.com/daggerok/ARK.git` URL and verified pre-runner local/origin/API branch SHA `804917b0b5a609b97c293a08ef93b1c904880e7a` and zero PRs. The Bun 1.4.2 binary had mode `0644`; restored its executable bit locally with `chmod +x` (no project file change).
+- Published the runner, tests, and worklog checkpoint as `da761f9` (`feat(data): implement ARK static-feed runner`). Push output and subsequent `git ls-remote --heads origin feat/ark-etfs` confirmed SHA `da761f915fbbe8ce74f3cbd7066323531f0804ac`; no force-push or merge. No API data has been generated yet.
+- Manual review plus Bun transpilation/build is not a semantic TypeScript check; no `tsc` was used. Next: isolated three-ticker live acceptance with repeat-run byte/hash comparison.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
