@@ -64,7 +64,7 @@ GitHub Personal Access Token: <PASTE_YOUR_TOKEN_HERE>
 CURRENT STATE
 =============
 - Goal: Implement the ARK Invest holdings-to-watchlist web application in daggerok/ARK with sibling-parity UI, Bun-only tooling, zero runtime dependencies, offline fixture tests, and isolated live acceptance.
-- Status: Recovery/research, Bun setup, sibling-parity UI shell, pinned Bun manifests, parser/fixture tests, paced provider clients, and the end-to-end updater/CLI/API writer with SEC fallback are pushed. Offline coverage passes 35 tests / 225 assertions. No production API data, isolated live acceptance, or browser interaction checks have been completed; workflow, Dependabot, README, and PR remain.
+- Status: Recovery/research, Bun setup, sibling-parity UI shell, pinned Bun manifests, parser/fixture tests, paced provider clients, and the end-to-end updater/CLI/API writer with SEC fallback are pushed. Offline coverage passes 35 tests / 225 assertions. One isolated live exploration ran successfully but exposed an issuer-page ID discovery gap through the Jina fallback; isolated scratch output/log are untracked under `evidence/live-acceptance-2026-09-28/`. No live acceptance is complete, no production API data was touched, and browser checks, workflow, Dependabot, README, and PR remain.
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
@@ -82,11 +82,12 @@ CURRENT STATE
   10. Added and published the ARK parser/config/fixture-test foundation as `d86b944`; offline suite passed 27 tests / 166 assertions, and the Bun updater bundle build succeeded.
   11. Added and published the paced, injectable request-client layer as `804917b`; offline suite passed 31 tests / 196 assertions and the Bun updater bundle build succeeded.
   12. Implemented and published the per-fund runner, API writer, SEC fallback integration, bounded cursor/CLI, source-age warning, and orchestration tests as `da761f9`; final offline suite passed 35 tests / 225 assertions, frozen install, Bun build, `--help`, and `git diff --check` all succeeded.
+  13. Ran one exploratory live CLI pass in an isolated fresh worktree (exit 0, three funds processed); it validated Azure CSV/Yahoo fallback paths but found that the Jina proxy response does not expose each issuer page's dynamic API ID. This is a diagnostic attempt, not acceptance.
 - Active / remaining:
-  1. Run isolated live acceptance on ARKK, ARKY, and ARKB with conservative default pacing, compare repeat-run output hashes, validate source dates/fallbacks and preserve a generated three-ticker fixture; commit/push evidence.
+  1. Diagnose/fix proxy-backed issuer page-ID discovery and once-only 403 switch reporting; add offline regression tests, commit/push the correction, then rerun isolated live acceptance on ARKK/ARKY/ARKB and compare repeat-run output hashes.
   2. Complete manual type-safety review, browser/header regression checks, and full-catalog data generation/stability validation; commit/push each small step.
   3. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: prepare a separate temporary API root so no production/static UI data is touched, run bounded live acceptance for ARKK/ARKY/ARKB with default pacing, inspect generated pages and provenance, rerun the exact command to compare normalized byte hashes, and record all results before publication.
+- Exact next action: inspect the actual Jina response and `extractFundPageId`/request headers to determine why the API-ID link is missing, then implement a dynamic safe retrieval path (no permanent ID map) and a single once-only issuer-switch notice; cover both behaviors with offline tests before another live run.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
@@ -223,6 +224,14 @@ CHRONOLOGICAL JOURNAL
 - On continuation restart the sandbox lacked an `origin` remote; restored the credential-free `https://github.com/daggerok/ARK.git` URL and verified pre-runner local/origin/API branch SHA `804917b0b5a609b97c293a08ef93b1c904880e7a` and zero PRs. The Bun 1.4.2 binary had mode `0644`; restored its executable bit locally with `chmod +x` (no project file change).
 - Published the runner, tests, and worklog checkpoint as `da761f9` (`feat(data): implement ARK static-feed runner`). Push output and subsequent `git ls-remote --heads origin feat/ark-etfs` confirmed SHA `da761f915fbbe8ce74f3cbd7066323531f0804ac`; no force-push or merge. No API data has been generated yet.
 - Manual review plus Bun transpilation/build is not a semantic TypeScript check; no `tsc` was used. Next: isolated three-ticker live acceptance with repeat-run byte/hash comparison.
+
+### 2026-09-28 — Isolated live exploration (diagnostic; acceptance not passed)
+- Verified branch and PR state before the run: local and `origin/feat/ark-etfs` both at `0160a7dacf812e14beb944a7588ab2821947cf2e`; public GitHub API returned zero PRs.
+- No published/production API seed existed. Extracted the pushed code to `evidence/live-acceptance-2026-09-28/worktree` and ran against its fresh isolated API root; `api/ark` in the repository was not created or modified. The raw console log is `evidence/live-acceptance-2026-09-28/run-1.log`; generated diagnostic JSON is under the isolated `worktree/api/ark` tree pending correction/re-run.
+- Executed `env -i HOME=/home/user PATH=/home/user/.bun/bin:/usr/local/bin:/usr/bin:/bin TICKERS='ARKK ARKY ARKB' VERBOSE=1 MAX_FETCHES=0 REQUEST_SLEEP=1.5 CONCURRENCY=2 MAX_RETRIES=2 /home/user/.bun/bin/bun scripts/update-data.ts` from the isolated copy. Effective output confirmed all providers enabled, default retry/pacing, three selected funds, and exit code 0.
+- Direct official catalog/fund-page requests received HTTP 403. The fixed supported 14-fund catalog was retained, and requests switched to `r.jina.ai`. Azure CSV holdings and Yahoo chart fallbacks succeeded: ARKK 46 holdings / 2,992 history rows / 7 distributions; ARKY 47 / 27 / 0; ARKB 1 / 679 / 0. All three index entries were processed; overall index retained 14 catalog funds, 94 holdings rows and 3,698 history rows.
+- The Jina-backed page text did not expose `/api/fund/overview/<id>` for any of the three tickers, leaving `pageId`, overview and history API provenance null; performance fell back to Yahoo-derived values. The 403 switch message printed twice (at consecutive denial counts 2 and 3), contrary to the once-only requirement. Therefore the exit-0 run is diagnostic only, not accepted live acceptance and not evidence of successful official API history/performance retrieval. The unchanged catalog fallback itself worked.
+- Do not use this output as production data. Before repeating acceptance, inspect Jina's actual response and outgoing headers; implement a robust dynamic page-ID retrieval path without a permanent ID list, make the proxy switch notice once-only, add offline regressions, and publish the correction. Then run the exact acceptance command twice, compare hashes, verify provenance/pages, and commit/push the accepted fixture and logs.
 
 =============================================================================
 FULL SELF-CONTAINED IMPLEMENTATION PLAN
