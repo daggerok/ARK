@@ -9,6 +9,7 @@ import {
   ARKY_HOLDINGS_HEADERS,
   ProviderHttpError,
   arkApiUrls,
+  ISSUER_PROXY_MIN_INTERVAL_MS,
   createPacedGate,
   createRequestClients,
   createSecFallbackResolver,
@@ -495,7 +496,10 @@ describe('paced provider request clients', () => {
   test('two consecutive ARK denials switch once; proxy returns raw page HTML and plain API text', async () => {
     const calls: Array<{ url: string; respondWith: string | null }> = [];
     const notices: string[] = [];
+    let clock = 0;
     const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+      now: () => clock,
+      sleep: async (milliseconds) => { clock += milliseconds; },
       fetchImpl: async (input, init) => {
         const url = String(input);
         const respondWith = new Headers(init?.headers).get('x-respond-with');
@@ -522,6 +526,36 @@ describe('paced provider request clients', () => {
     expect(calls.find((call) => call.url.includes('/api/fund/overview/1004'))?.respondWith).toBe('text');
     expect(notices).toHaveLength(1);
     expect(notices[0]).toContain('[ issuer   ]');
+  });
+
+  test('proxied issuer requests never start closer than the r.jina.ai keyless limit allows', async () => {
+    let clock = 0;
+    const proxyStarts: number[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+      now: () => clock,
+      sleep: async (milliseconds) => { clock += milliseconds; },
+      fetchImpl: async (input) => {
+        const url = String(input);
+        if (url.startsWith('https://r.jina.ai/')) {
+          proxyStarts.push(clock);
+          return new Response('{"ok":true}', { status: 200 });
+        }
+        return new Response('blocked', { status: 403 });
+      },
+      onIssuerProxy: () => undefined,
+    });
+    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    await Promise.all([
+      client.ark('https://www.ark-funds.com/api/fund/overview/1004'),
+      client.ark('https://www.ark-funds.com/api/fund/overview/1001'),
+      client.ark('https://www.ark-funds.com/api/fund/overview/1002'),
+    ]);
+    expect(client.isArkProxyActive()).toBe(true);
+    expect(proxyStarts).toHaveLength(3);
+    expect(ISSUER_PROXY_MIN_INTERVAL_MS).toBe(3000);
+    for (let index = 1; index < proxyStarts.length; index += 1) {
+      expect(proxyStarts[index] - proxyStarts[index - 1]).toBeGreaterThanOrEqual(ISSUER_PROXY_MIN_INTERVAL_MS);
+    }
   });
 
   test('issuer API paths mirror the verified page parameters and proxy JSON is unwrapped', () => {

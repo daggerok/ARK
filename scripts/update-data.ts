@@ -1386,6 +1386,13 @@ type Sleep = (milliseconds: number) => Promise<void>;
 
 const DEFAULT_APP_USER_AGENT = 'DaggerOk ARK Invest ETF data updater (+https://github.com/daggerok/ARK; admin@daggerok.example.com)';
 const ISSUER_DIRECT_DENIAL_LIMIT = 2;
+/**
+ * r.jina.ai throttles keyless read requests to about 20 per minute per IP
+ * (observed live as HTTP 429 "Per IP rate limit exceeded" at 1.5-second pacing).
+ * Proxied issuer requests therefore never start closer than 3 seconds apart,
+ * regardless of a shorter REQUEST_SLEEP.
+ */
+export const ISSUER_PROXY_MIN_INTERVAL_MS = 3000;
 
 function defaultSleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -1534,6 +1541,7 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
   const intervalMs = config.requestSleepSeconds * 1000;
   const paceClock: PaceClock = { now: runtime.now, sleep: runtime.sleep };
   const arkGate = createPacedGate(1, intervalMs, paceClock);
+  const arkProxyGate = createPacedGate(1, Math.max(intervalMs, ISSUER_PROXY_MIN_INTERVAL_MS), paceClock);
   const azureGate = createPacedGate(config.concurrency, intervalMs, paceClock);
   const yahooGate = createPacedGate(config.concurrency, intervalMs, paceClock);
   const secGate = createPacedGate(config.concurrency, intervalMs, paceClock);
@@ -1554,7 +1562,7 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
 
   const arkProxy = async (url: string): Promise<ProviderResponse> => {
     const responseFormat = new URL(url).pathname.startsWith('/api/') ? 'text' : 'html';
-    const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, {
+    const response = await request(jinaReaderUrl(url), 'ARK proxy', arkProxyGate, {
       ...arkHeaders,
       'X-Respond-With': responseFormat,
     });
