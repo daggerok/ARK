@@ -1248,13 +1248,18 @@ export function parseEdgarAtomFilings(xml: string): NportAccession[] {
   const result: NportAccession[] = [];
   for (const entry of String(xml).matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/gi)) {
     const body = entry[1];
-    const form = xmlTagText(body, 'filing-type') || xmlTagText(body, 'type');
+    const categoryForm = /<category\b[^>]*\bterm=["']([^"']+)["']/i.exec(body)?.[1] ?? '';
+    const form = xmlTagText(body, 'filing-type') || xmlTagText(body, 'type') || categoryForm;
     if (form && form.toUpperCase() !== 'NPORT-P') continue;
-    const accession = xmlTagText(body, 'accession-number') || xmlTagText(body, 'accession-nunber');
-    const filingHref = xmlTagText(body, 'filing-href');
-    const cik = /\/edgar\/data\/(\d+)\//i.exec(filingHref)?.[1] || accession.slice(0, 10);
+    const filingHref = xmlTagText(body, 'filing-href') || /<link\b[^>]*\bhref=["']([^"']+)["']/i.exec(body)?.[1] || '';
+    const rawAccession = xmlTagText(body, 'accession-number') || xmlTagText(body, 'accession-nunber') || /\/(\d{18})(?:\/|$)/.exec(filingHref)?.[1] || '';
+    const accessionDigits = rawAccession.replace(/\D/g, '');
+    const accession = /^\d{18}$/.test(accessionDigits)
+      ? `${accessionDigits.slice(0, 10)}-${accessionDigits.slice(10, 12)}-${accessionDigits.slice(12)}`
+      : rawAccession;
+    const cik = /\/Archives\/edgar\/data\/(\d+)\//i.exec(filingHref)?.[1] || /\/edgar\/data\/(\d+)\//i.exec(filingHref)?.[1] || accession.slice(0, 10);
     if (!accession) continue;
-    result.push({ accession, filed: xmlTagText(body, 'filing-date'), reportDate: xmlTagText(body, 'period'), url: nportUrlFor(cik, accession) });
+    result.push({ accession, filed: xmlTagText(body, 'filing-date') || xmlTagText(body, 'updated'), reportDate: xmlTagText(body, 'period') || xmlTagText(body, 'reportDate'), url: nportUrlFor(cik, accession) });
   }
   return result;
 }
@@ -1448,6 +1453,8 @@ function retryDelay(response: Response | null, retryIndex: number, now: () => nu
   return Number.isFinite(timestamp) ? Math.max(backoff, Math.min(120_000, timestamp - now())) : backoff;
 }
 
+export type ProviderResponse = { text: string; headers: Headers; url: string };
+
 async function requestTextWithRetry(
   url: string,
   provider: string,
@@ -1455,7 +1462,7 @@ async function requestTextWithRetry(
   headers: HeadersInit,
   config: UpdaterConfig,
   runtime: RequestRuntime,
-): Promise<string> {
+): Promise<ProviderResponse> {
   const fetchImpl = runtime.fetchImpl ?? fetch;
   const sleep = runtime.sleep ?? defaultSleep;
   const now = runtime.now ?? Date.now;
@@ -1475,7 +1482,7 @@ async function requestTextWithRetry(
       continue;
     }
     const responseText = await response.text();
-    if (response.ok) return responseText;
+    if (response.ok) return { text: responseText, headers: response.headers, url };
     const failure = new ProviderHttpError(provider, url, response.status, response.statusText, responseText);
     if (!retryableStatus(response.status) || attempt >= config.maxRetries) throw failure;
     const wait = retryDelay(response, attempt, now);
@@ -1515,10 +1522,10 @@ export function parseProviderJson(text: string): unknown {
 }
 
 export type RequestClients = {
-  ark: (url: string) => Promise<string>;
-  azure: (url: string) => Promise<string>;
-  yahoo: (url: string) => Promise<string>;
-  sec: (url: string) => Promise<string>;
+  ark: (url: string) => Promise<ProviderResponse>;
+  azure: (url: string) => Promise<ProviderResponse>;
+  yahoo: (url: string) => Promise<ProviderResponse>;
+  sec: (url: string) => Promise<ProviderResponse>;
   isArkProxyActive: () => boolean;
 };
 
@@ -1543,14 +1550,17 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     provider: string,
     gate: RequestGate,
     headers: HeadersInit,
-  ): Promise<string> => requestTextWithRetry(url, provider, gate, headers, config, runtime);
+  ): Promise<ProviderResponse> => requestTextWithRetry(url, provider, gate, headers, config, runtime);
 
-  const ark = async (url: string): Promise<string> => {
-    if (arkProxyActive) return unwrapJinaReaderText(await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders));
+  const ark = async (url: string): Promise<ProviderResponse> => {
+    if (arkProxyActive) {
+      const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders);
+      return { ...response, text: unwrapJinaReaderText(response.text) };
+    }
     try {
-      const body = await request(url, 'ARK issuer', arkGate, arkHeaders);
+      const response = await request(url, 'ARK issuer', arkGate, arkHeaders);
       consecutiveArkDenials = 0;
-      return body;
+      return response;
     } catch (error) {
       if (!(error instanceof ProviderHttpError) || error.status !== 403) throw error;
       consecutiveArkDenials += 1;
@@ -1558,19 +1568,20 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
       arkProxyActive = true;
       const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests.`;
       (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
-      return unwrapJinaReaderText(await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders));
+      const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders);
+      return { ...response, text: unwrapJinaReaderText(response.text) };
     }
   };
 
-  const azure = (url: string): Promise<string> => request(url, 'ARK holdings', azureGate, {
+  const azure = (url: string): Promise<ProviderResponse> => request(url, 'ARK holdings', azureGate, {
     Accept: 'text/csv,application/octet-stream;q=0.9,*/*;q=0.8',
     'User-Agent': DEFAULT_APP_USER_AGENT,
   });
-  const yahoo = (url: string): Promise<string> => request(url, 'Yahoo Finance', yahooGate, {
+  const yahoo = (url: string): Promise<ProviderResponse> => request(url, 'Yahoo Finance', yahooGate, {
     Accept: 'application/json,*/*;q=0.8',
     'User-Agent': 'Mozilla/5.0 (compatible; DaggerOk-ARK-ETF-Updater/1.0)',
   });
-  const sec = (url: string): Promise<string> => request(url, 'SEC EDGAR', secGate, {
+  const sec = (url: string): Promise<ProviderResponse> => request(url, 'SEC EDGAR', secGate, {
     Accept: 'application/json,application/atom+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
     'User-Agent': config.secUa,
   });
@@ -1597,4 +1608,956 @@ export function arkApiUrls(pageId: string): { overview: string; history: string;
     monthEnd: performanceUrl('month-end'),
     quarterEnd: performanceUrl('quarter-end'),
   };
+}
+
+// ---------------------------------------------------------------------------
+// Previous-data retention and SEC N-PORT fallback
+// ---------------------------------------------------------------------------
+
+export type SecHoldingResult = { parsed: ParsedNport; accessions: NportAccession[]; selected: NportAccession; holdings: HoldingRow[] };
+export type SecFallbackResolver = (fund: ArkFund) => Promise<SecHoldingResult | null>;
+
+export function createSecFallbackResolver(clients: RequestClients): SecFallbackResolver {
+  let fundTickersPromise: Promise<Map<string, SecSeriesRef>> | null = null;
+  let companyTickersPromise: Promise<Map<string, string>> | null = null;
+  const submissionsPromises = new Map<string, Promise<unknown>>();
+
+  const fundTickers = (): Promise<Map<string, SecSeriesRef>> => {
+    if (!fundTickersPromise) {
+      fundTickersPromise = clients.sec(SEC_FUND_TICKERS_URL)
+        .then((response) => parseFundTickerMap(parseProviderJson(response.text)));
+    }
+    return fundTickersPromise;
+  };
+  const companyTickers = (): Promise<Map<string, string>> => {
+    if (!companyTickersPromise) {
+      companyTickersPromise = clients.sec(SEC_COMPANY_TICKERS_URL)
+        .then((response) => parseCompanyTickerMap(parseProviderJson(response.text)));
+    }
+    return companyTickersPromise;
+  };
+  const submissions = (cik: string): Promise<unknown> => {
+    const paddedCik = cik.replace(/\D/g, '').padStart(10, '0');
+    const cached = submissionsPromises.get(paddedCik);
+    if (cached) return cached;
+    const work = clients.sec(`${SEC_DATA_HOST}/submissions/CIK${paddedCik}.json`)
+      .then((response) => parseProviderJson(response.text));
+    submissionsPromises.set(paddedCik, work);
+    return work;
+  };
+
+  return async (fund: ArkFund): Promise<SecHoldingResult | null> => {
+    const mapping = await fundTickers();
+    const series = mapping.get(fund.ticker);
+    if (series && series.cik !== fund.trustCik) {
+      outputNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} SEC ticker map CIK ${series.cik} did not match expected trust ${fund.trustCik}; ignoring the mapping.`);
+    }
+    const seriesId = series?.cik === fund.trustCik ? series.seriesId : '';
+    let accessions: NportAccession[] = [];
+    if (seriesId) {
+      try {
+        const response = await clients.sec(edgarSeriesFilingsUrl(seriesId, 10));
+        accessions = parseEdgarAtomFilings(response.text);
+      } catch (error) {
+        outputNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} series filing lookup failed: ${error instanceof Error ? error.message : cleanText(error)}`);
+      }
+    }
+    if (!accessions.length) {
+      const recent = await submissions(fund.trustCik);
+      accessions = parseNportAccessions(recent);
+    }
+    const names = [normalizeHoldingName(fund.name), normalizeHoldingName(fund.ticker)];
+    for (const accession of accessions.slice(0, 10)) {
+      const response = await clients.sec(accession.url);
+      const parsed = parseNportXml(response.text);
+      if (parsed.regCik && parsed.regCik !== fund.trustCik) continue;
+      if (seriesId && parsed.seriesId && parsed.seriesId !== seriesId) continue;
+      const seriesName = normalizeHoldingName(parsed.seriesName);
+      if (!seriesId && seriesName && !names.some((name) => name && (seriesName === name || seriesName.includes(name)))) continue;
+      if (!parsed.positions.length) continue;
+      let tickers = new Map<string, string>();
+      if (parsed.positions.some((position) => !position.ticker)) {
+        try { tickers = await companyTickers(); }
+        catch (error) { outputNote(`[ ${'edgar'.padEnd(9)}] SEC company ticker map unavailable: ${error instanceof Error ? error.message : cleanText(error)}`); }
+      }
+      return { parsed, accessions, selected: accession, holdings: nportToHoldings(parsed, tickers) };
+    }
+    return null;
+  };
+}
+
+type StoredSheet = { headers: string[]; rows: JsonRecord[]; asOfDate: string; source: string };
+type SheetKind = 'holdings' | 'history';
+
+function stringArray(value: unknown): string[] {
+  return arrayValue(value).map((item) => cleanText(item)).filter(Boolean);
+}
+
+async function readJsonRecord(file: string): Promise<JsonRecord | null> {
+  try {
+    const parsed: unknown = JSON.parse(await readFile(file, 'utf8'));
+    return Object.keys(record(parsed)).length ? record(parsed) : null;
+  } catch { return null; }
+}
+
+async function readStoredSheet(root: string, ticker: string, kind: SheetKind, manifestValue: unknown): Promise<StoredSheet> {
+  const manifest = record(manifestValue);
+  let headers = stringArray(manifest.headers);
+  const rows: JsonRecord[] = [];
+  const fundDirectory = path.join(root, 'funds', ticker);
+  for (const rawPage of arrayValue(manifest.pages)) {
+    const pageName = cleanText(rawPage).replace(/\\/g, '/').replace(/^\/+/, '');
+    const parts = pageName.split('/').filter(Boolean);
+    if (!parts.length || parts.includes('..')) continue;
+    const relativeParts = parts[0] === kind ? parts : [kind, ...parts];
+    const file = path.join(fundDirectory, ...relativeParts);
+    const page = await readJsonRecord(file);
+    if (!page) continue;
+    const pageHeaders = stringArray(page.headers);
+    if (!headers.length && pageHeaders.length) headers = pageHeaders;
+    const pageRows = arrayValue(page.rows);
+    for (const rawRow of pageRows) {
+      if (Array.isArray(rawRow)) {
+        const values = rawRow as unknown[];
+        rows.push(Object.fromEntries(headers.map((header, index) => [header, cleanText(values[index])] )));
+      } else {
+        const row = record(rawRow);
+        rows.push(Object.fromEntries(headers.map((header) => [header, cleanText(row[header])] )));
+      }
+    }
+  }
+  return {
+    headers,
+    rows,
+    asOfDate: cleanText(manifest.asOfDate),
+    source: cleanText(manifest.source),
+  };
+}
+
+function readDistributionWorksheet(meta: JsonRecord): JsonRecord {
+  const distribution = record(meta.distributions);
+  return {
+    frequency: cleanText(distribution.frequency) || '—',
+    exDate: cleanText(distribution.exDate) || '—',
+    dividend: cleanText(distribution.dividend) || '—',
+    headers: stringArray(distribution.headers).length ? stringArray(distribution.headers) : ['Ex-Date', 'Amount'],
+    rows: arrayValue(distribution.rows).filter(Array.isArray).map((row) => (row as unknown[]).map((cell) => cleanText(cell))),
+    source: cleanText(distribution.source),
+  };
+}
+
+function numberField(source: JsonRecord, key: string): number | null {
+  return numberOrNull(source[key]);
+}
+
+function stringField(source: JsonRecord, key: string, fallback = ''): string {
+  const value = cleanText(source[key]);
+  return value || fallback;
+}
+
+function formatPrice(value: number | null, digits = 2): string {
+  return value === null || !Number.isFinite(value) ? '—' : `$${value.toFixed(digits)}`;
+}
+
+function dateAgeDays(value: string, referenceDate: Date): number | null {
+  const iso = toIsoDate(value);
+  if (!iso) return null;
+  const sourceDay = Date.parse(`${iso}T00:00:00Z`);
+  const referenceDay = Date.parse(`${referenceDate.toISOString().slice(0, 10)}T00:00:00Z`);
+  return Number.isFinite(sourceDay) && Number.isFinite(referenceDay) ? Math.floor((referenceDay - sourceDay) / 86_400_000) : null;
+}
+
+function hasNumericReturn(value: unknown): boolean {
+  return Object.values(record(value)).some((item) => typeof item === 'number' && Number.isFinite(item));
+}
+
+function officialReturnsPresent(month: ArkPerformance | null, quarter: ArkPerformance | null): boolean {
+  if (!month && !quarter) return false;
+  return Boolean(month && (hasNumericReturn(month.navAnnualized) || hasNumericReturn(month.navCumulative))) ||
+    Boolean(quarter && (hasNumericReturn(quarter.navAnnualized) || hasNumericReturn(quarter.navCumulative)));
+}
+
+function buildHistoryRows(points: ArkDailyPoint[]): JsonRecord[] {
+  return points.map((point) => ({
+    Date: displayDate(point.date),
+    NAV: point.nav === null ? '' : point.nav.toFixed(2),
+    'Market Price': point.marketPrice === null ? '' : point.marketPrice.toFixed(2),
+    'Premium/Discount': point.premiumDiscount === null ? '' : `${point.premiumDiscount.toFixed(4)}%`,
+  }));
+}
+
+function buildYahooHistoryRows(chart: YahooChart): JsonRecord[] {
+  return chart.points.map((point) => ({
+    Date: displayDate(point.date),
+    Close: point.close === null ? '' : point.close.toFixed(2),
+    'Adj Close': point.adjClose === null ? '' : point.adjClose.toFixed(2),
+    Volume: point.volume === null ? '' : String(point.volume),
+  }));
+}
+
+function distributionData(
+  chart: YahooChart | null,
+  previous: JsonRecord,
+  referenceDate: Date,
+  price: number | null,
+): { worksheet: JsonRecord; indicatedYield: number | null; yieldKind: string } {
+  const previousWorksheet = readDistributionWorksheet(previous);
+  if (!chart) {
+    return {
+      worksheet: previousWorksheet,
+      indicatedYield: numberField(record(previous.metrics), 'dividendYield'),
+      yieldKind: stringField(record(previous.yields), 'dividendYieldKind', 'previously published distribution data'),
+    };
+  }
+  if (!chart.dividends.length) {
+    const worksheet = previousWorksheet.rows.length ? previousWorksheet : {
+      frequency: '—', exDate: '—', dividend: '—', headers: ['Ex-Date', 'Amount'], rows: [],
+      source: 'Yahoo Finance chart response contained no distribution events',
+    };
+    return {
+      worksheet,
+      indicatedYield: numberField(record(previous.metrics), 'dividendYield'),
+      yieldKind: stringField(record(previous.yields), 'dividendYieldKind', 'not available from Yahoo Finance'),
+    };
+  }
+  const eligible = chart.dividends.filter((event) => event.date <= referenceDate.toISOString().slice(0, 10));
+  const sorted = [...eligible].sort((a, b) => a.date.localeCompare(b.date));
+  if (!sorted.length) return { worksheet: previousWorksheet, indicatedYield: numberField(record(previous.metrics), 'dividendYield'), yieldKind: 'previously published distribution data' };
+  const latest = sorted[sorted.length - 1];
+  const frequency = inferDistributionFrequency(sorted.map((event) => event.date), referenceDate) ?? 'Unknown';
+  const payments = paymentsPerYear(frequency);
+  const annualized = payments !== null && price !== null && price > 0 ? round((latest.amount * payments / price) * 100, 2) : null;
+  const trailing = annualized === null ? trailingDividendYield(sorted, price, referenceDate.toISOString().slice(0, 10)) : null;
+  const indicatedYield = annualized ?? trailing;
+  const yieldKind = annualized !== null
+    ? `indicated: Yahoo Finance latest distribution x inferred ${frequency.toLowerCase()} frequency / market price`
+    : trailing !== null ? 'Yahoo Finance trailing 12-month distributions / market price' : 'not available from Yahoo Finance';
+  const worksheet: JsonRecord = {
+    frequency,
+    exDate: displayDate(latest.date),
+    dividend: formatPrice(latest.amount, 4),
+    headers: ['Ex-Date', 'Amount'],
+    rows: sorted.slice(-12).reverse().map((event) => [displayDate(event.date), formatPrice(event.amount, 4)]),
+    source: 'Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)',
+  };
+  return { worksheet, indicatedYield, yieldKind };
+}
+
+async function persistSheet(
+  root: string,
+  ticker: string,
+  kind: SheetKind,
+  headers: readonly string[],
+  rows: JsonRecord[],
+  pageSize: number,
+  asOfDate: string,
+  source: string,
+): Promise<JsonRecord> {
+  const directory = path.join(root, 'funds', ticker, kind);
+  const pageGroups = splitPages(rows, pageSize);
+  const pages: string[] = [];
+  for (let index = 0; index < pageGroups.length; index += 1) {
+    const pageNumber = index + 1;
+    const name = pageFileName(pageNumber);
+    const envelope = buildPageEnvelope(ticker, pageNumber, pageSize, rows.length, headers, pageGroups[index]);
+    await writeJsonIfChanged(path.join(directory, name), envelope);
+    pages.push(`${kind}/${name}`);
+  }
+  await prunePages(directory, pageGroups.length);
+  return { pages, pageSize, totalRows: rows.length, headers: [...headers], asOfDate: asOfDate ? displayDate(asOfDate) : '—', source };
+}
+
+// ---------------------------------------------------------------------------
+// Source fetch and per-fund build
+// ---------------------------------------------------------------------------
+
+export type ArkFundUpdateResult = {
+  entry: JsonRecord;
+  status?: string;
+  reason?: string;
+  holdingsCount: number;
+  historyCount: number;
+  distributionCount: number;
+  netAssets: number | null;
+  dividendYield: number | null;
+  secYield: number | null;
+};
+
+export type ArkFundUpdateOptions = {
+  apiRoot?: string;
+  referenceDate?: Date;
+  secFallback?: SecFallbackResolver;
+  onNote?: (message: string) => void;
+};
+
+type OfficialFundData = {
+  pageId: string | null;
+  overview: ArkOverview | null;
+  history: ArkDailyPoint[];
+  monthEnd: ArkPerformance | null;
+  quarterEnd: ArkPerformance | null;
+  urls: ReturnType<typeof arkApiUrls> | null;
+};
+
+function noteSourceFailure(onNote: (message: string) => void, source: string, ticker: string, error: unknown): void {
+  const detail = error instanceof Error ? error.message : cleanText(error);
+  onNote(`[ ${source.padEnd(9)}] ${ticker} ${detail}`);
+}
+
+async function fetchOfficialFundData(
+  fund: ArkFund,
+  config: UpdaterConfig,
+  clients: RequestClients,
+  onNote: (message: string) => void,
+): Promise<OfficialFundData> {
+  const empty: OfficialFundData = { pageId: null, overview: null, history: [], monthEnd: null, quarterEnd: null, urls: null };
+  if (config.skipArk) return empty;
+  let pageId: string | null = null;
+  try {
+    const page = await clients.ark(fund.fundPage);
+    pageId = extractFundPageId(page.text);
+    if (!pageId) throw new Error('official fund page did not expose /api/fund/overview/<id>');
+  } catch (error) {
+    noteSourceFailure(onNote, 'issuer', fund.ticker, error);
+    return empty;
+  }
+  const urls = arkApiUrls(pageId);
+  const requestJson = async (url: string, label: string): Promise<unknown | null> => {
+    try { return parseProviderJson((await clients.ark(url)).text); }
+    catch (error) { noteSourceFailure(onNote, label, fund.ticker, error); return null; }
+  };
+  const [overviewPayload, historyPayload, monthPayload, quarterPayload] = await Promise.all([
+    requestJson(urls.overview, 'overview'),
+    requestJson(urls.history, 'history'),
+    requestJson(urls.monthEnd, 'performance'),
+    requestJson(urls.quarterEnd, 'performance'),
+  ]);
+  let overview: ArkOverview | null = null;
+  if (overviewPayload !== null) {
+    try {
+      const parsed = parseArkOverview(overviewPayload);
+      if (parsed.ticker && parsed.ticker !== fund.ticker) throw new Error(`overview ticker ${parsed.ticker} did not match request`);
+      overview = parsed;
+    } catch (error) { noteSourceFailure(onNote, 'overview', fund.ticker, error); }
+  }
+  let history: ArkDailyPoint[] = [];
+  if (historyPayload !== null) {
+    try { history = parseArkNavHistory(historyPayload); }
+    catch (error) { noteSourceFailure(onNote, 'history', fund.ticker, error); }
+  }
+  const parsePerformance = (payload: unknown | null, label: string): ArkPerformance | null => {
+    if (payload === null) return null;
+    try {
+      const parsed = parseArkPerformance(payload);
+      if (parsed.ticker && parsed.ticker !== fund.ticker) throw new Error(`performance ticker ${parsed.ticker} did not match request`);
+      return parsed;
+    } catch (error) { noteSourceFailure(onNote, label, fund.ticker, error); return null; }
+  };
+  return {
+    pageId,
+    overview,
+    history,
+    monthEnd: parsePerformance(monthPayload, 'performance'),
+    quarterEnd: parsePerformance(quarterPayload, 'performance'),
+    urls,
+  };
+}
+
+async function fetchYahooFundData(
+  fund: ArkFund,
+  config: UpdaterConfig,
+  clients: RequestClients,
+  referenceDate: Date,
+  onNote: (message: string) => void,
+): Promise<YahooChart | null> {
+  if (config.skipYahoo) return null;
+  try {
+    const url = yahooChartUrl(fund.ticker, Math.floor(referenceDate.getTime() / 1000));
+    const response = await clients.yahoo(url);
+    const chart = parseYahooChart(parseProviderJson(response.text));
+    if (!chart.points.length) throw new Error('chart returned no daily price points');
+    return chart;
+  } catch (error) {
+    noteSourceFailure(onNote, 'chart', fund.ticker, error);
+    return null;
+  }
+}
+
+function holdingRowsFromStored(rows: JsonRecord[], headers: readonly string[]): HoldingRow[] {
+  return rows.map((row) => {
+    const next: HoldingRow = {};
+    for (const header of headers) next[header] = cleanText(row[header]);
+    return next;
+  });
+}
+
+function mergeNonNull(primary: JsonRecord, secondary: JsonRecord): JsonRecord {
+  const result: JsonRecord = { ...secondary };
+  for (const [key, value] of Object.entries(primary)) {
+    if (value !== null && value !== undefined && value !== '') result[key] = value;
+  }
+  return result;
+}
+
+function hasFundData(
+  freshHoldings: boolean,
+  official: OfficialFundData,
+  yahoo: YahooChart | null,
+  previousMeta: JsonRecord | null,
+  previousEntry: JsonRecord,
+): boolean {
+  const priorMetrics = mergeNonNull(record(previousMeta?.metrics), record(previousEntry.metrics));
+  const priorReturns = record(previousEntry.returns).monthEnd ? record(previousEntry.returns) : record(previousMeta?.returns);
+  const priorHoldings = Math.max(numberField(record(previousMeta?.holdings), 'totalRows') ?? 0, numberField(previousEntry, 'holdings') ?? 0);
+  const priorHistory = Math.max(numberField(record(previousMeta?.history), 'totalRows') ?? 0, numberField(previousEntry, 'history') ?? 0);
+  const priorFinancialFacts = [
+    numberField(previousMeta ?? {}, 'aumValue'), numberField(previousEntry, 'aumValue'),
+    numberField(previousMeta ?? {}, 'terValue'), numberField(previousEntry, 'terValue'),
+    numberField(previousMeta ?? {}, 'navValue'), numberField(previousEntry, 'navValue'),
+    numberField(priorMetrics, 'tr1y'), numberField(priorMetrics, 'cagr3y'), numberField(priorMetrics, 'dividendYield'),
+    numberField(record(priorReturns.monthEnd), 'ytd'), numberField(record(priorReturns.monthEnd), 'yr1'),
+  ].some((value) => value !== null);
+  return freshHoldings || Boolean(official.overview || official.history.length || officialReturnsPresent(official.monthEnd, official.quarterEnd)) ||
+    Boolean(yahoo?.points.length) || priorHoldings > 0 || priorHistory > 0 || priorFinancialFacts;
+}
+
+export async function updateArkFund(
+  fund: ArkFund,
+  config: UpdaterConfig,
+  clients: RequestClients,
+  options: ArkFundUpdateOptions = {},
+): Promise<ArkFundUpdateResult> {
+  const apiRoot = options.apiRoot ?? API_ROOT;
+  const referenceDate = options.referenceDate ?? new Date();
+  const onNote = options.onNote ?? outputNote;
+  const fundDirectory = path.join(apiRoot, 'funds', fund.ticker);
+  const previousIndex = await readJsonRecord(path.join(apiRoot, 'index.json'));
+  const previousEntry = arrayValue(previousIndex?.funds).map(record).find((entry) => entry.ticker === fund.ticker) ?? {};
+  const previousMeta = await readJsonRecord(path.join(fundDirectory, 'meta.json'));
+  const previousSource = record(previousMeta?.source);
+  const previousHoldings = await readStoredSheet(apiRoot, fund.ticker, 'holdings', previousMeta?.holdings);
+  const previousHistory = await readStoredSheet(apiRoot, fund.ticker, 'history', previousMeta?.history);
+  const previousCombined: JsonRecord = { ...previousEntry, ...(previousMeta ?? {}) };
+  const secFallback = options.secFallback ?? createSecFallbackResolver(clients);
+
+  const [official, yahoo, csvResult] = await Promise.all([
+    fetchOfficialFundData(fund, config, clients, onNote),
+    fetchYahooFundData(fund, config, clients, referenceDate, onNote),
+    (async (): Promise<ParsedHoldings | null> => {
+      if (config.skipArk) return null;
+      try {
+        const response = await clients.azure(fund.holdingsCsv);
+        return parseArkHoldingsCsv(response.text, fund.ticker, response.headers.get('last-modified') ?? '');
+      } catch (error) { noteSourceFailure(onNote, 'holdings', fund.ticker, error); return null; }
+    })(),
+  ]);
+
+  let holdingsRows: HoldingRow[] = [];
+  let holdingsHeaders: readonly string[] = [];
+  let holdingsAsOfDate = '';
+  let holdingsSource = '';
+  let edgarFiling: NportAccession | null = null;
+  let nportDoc: string | null = null;
+  if (csvResult) {
+    holdingsRows = csvResult.rows;
+    holdingsHeaders = csvResult.headers;
+    holdingsAsOfDate = csvResult.asOfDate;
+    holdingsSource = csvResult.sourceKind;
+  } else if (config.edgarFallback) {
+    try {
+      const fallback = await secFallback(fund);
+      if (fallback) {
+        holdingsRows = fallback.holdings;
+        holdingsHeaders = HOLDINGS_HEADERS;
+        holdingsAsOfDate = fallback.parsed.repPdDate || fallback.selected.reportDate;
+        holdingsSource = 'SEC EDGAR Form N-PORT-P fallback';
+        edgarFiling = fallback.selected;
+        nportDoc = fallback.selected.url;
+        onNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} using N-PORT-P ${fallback.selected.accession} (${holdingsRows.length} positions)`);
+      }
+    } catch (error) { noteSourceFailure(onNote, 'edgar', fund.ticker, error); }
+  }
+  if (!holdingsRows.length && previousHoldings.rows.length) {
+    holdingsHeaders = previousHoldings.headers.length ? previousHoldings.headers : (fund.ticker === 'ARKY' ? ARKY_HOLDINGS_HEADERS : HOLDINGS_HEADERS);
+    holdingsRows = holdingRowsFromStored(previousHoldings.rows, holdingsHeaders);
+    holdingsAsOfDate = toIsoDate(previousHoldings.asOfDate) || stringField(record(previousMeta?.holdings), 'asOfDate');
+    holdingsSource = stringField(record(previousMeta?.holdings), 'source', stringField(previousSource, 'holdingsSource', 'previously published holdings (retained)'));
+    nportDoc = stringField(previousSource, 'nportDoc') || null;
+    onNote(`[ ${'holdings'.padEnd(9)}] ${fund.ticker} retaining ${holdingsRows.length} previously published holdings rows`);
+  }
+  if (!holdingsHeaders.length) holdingsHeaders = fund.ticker === 'ARKY' ? ARKY_HOLDINGS_HEADERS : HOLDINGS_HEADERS;
+  if (!holdingsAsOfDate) holdingsAsOfDate = toIsoDate(record(previousMeta?.holdings).asOfDate);
+
+  const yahooPoints = yahoo?.points ?? [];
+  let historyRows: JsonRecord[] = [];
+  let historyHeaders: readonly string[] = [];
+  let historyAsOfDate = '';
+  let historySource = '';
+  if (official.history.length) {
+    historyRows = buildHistoryRows(official.history);
+    historyHeaders = HISTORY_HEADERS;
+    historyAsOfDate = official.history[official.history.length - 1].date;
+    historySource = 'official ARK Invest daily NAV and market-price history API';
+  } else if (yahoo && yahooPoints.length) {
+    historyRows = buildYahooHistoryRows(yahoo);
+    historyHeaders = YAHOO_HISTORY_HEADERS;
+    historyAsOfDate = yahooPoints[yahooPoints.length - 1].date;
+    historySource = 'Yahoo Finance daily adjusted-close fallback';
+  } else if (previousHistory.rows.length) {
+    historyHeaders = previousHistory.headers;
+    historyRows = previousHistory.rows;
+    historyAsOfDate = toIsoDate(previousHistory.asOfDate) || stringField(record(previousMeta?.history), 'asOfDate');
+    historySource = stringField(record(previousMeta?.history), 'source', stringField(previousSource, 'historySource', 'previously published history (retained)'));
+    onNote(`[ ${'history'.padEnd(9)}] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
+  }
+  if (!historyHeaders.length) historyHeaders = config.skipYahoo ? HISTORY_HEADERS : YAHOO_HISTORY_HEADERS;
+
+  if (!hasFundData(Boolean(csvResult) || Boolean(edgarFiling) || holdingsRows.length > 0, official, yahoo, previousMeta, previousEntry)) {
+    return {
+      entry: previousEntry,
+      status: 'failed',
+      reason: 'no provider returned usable data and no previously published fund data exists',
+      holdingsCount: 0,
+      historyCount: 0,
+      distributionCount: 0,
+      netAssets: null,
+      dividendYield: null,
+      secYield: null,
+    };
+  }
+
+  const previousMetrics = mergeNonNull(record(previousMeta?.metrics), record(previousEntry.metrics));
+  const previousReturns = record(previousEntry.returns).monthEnd || previousMeta?.returns
+    ? record(previousEntry.returns).monthEnd ? record(previousEntry.returns) : record(previousMeta?.returns)
+    : {};
+  const yahooReturns = yahooPoints.length ? buildYahooReturns(yahooPoints, referenceDate) : { monthEnd: {}, quarterEnd: {}, metrics: {} };
+  const publishedReturns = officialReturnsPresent(official.monthEnd, official.quarterEnd)
+    ? buildOfficialReturns(official.monthEnd, official.quarterEnd)
+    : { monthEnd: {}, quarterEnd: {}, metrics: {} };
+  const returns: JsonRecord = {
+    monthEnd: mergeNonNull(record(publishedReturns.monthEnd), mergeNonNull(record(yahooReturns.monthEnd), record(previousReturns.monthEnd))),
+    quarterEnd: mergeNonNull(record(publishedReturns.quarterEnd), mergeNonNull(record(yahooReturns.quarterEnd), record(previousReturns.quarterEnd))),
+  };
+  const pricePoint = official.history.length ? official.history[official.history.length - 1] : null;
+  const yahooPoint = yahooPoints.length ? yahooPoints[yahooPoints.length - 1] : null;
+  const navValue = pricePoint?.nav ?? numberField(previousEntry, 'navValue') ?? numberField(record(previousMeta), 'navValue');
+  const closePriceValue = pricePoint?.marketPrice ?? yahoo?.regularMarketPrice ?? yahooPoint?.close ?? numberField(previousEntry, 'closePriceValue') ?? numberField(record(previousMeta), 'closePriceValue');
+  const premiumDiscountValue = pricePoint?.premiumDiscount ?? numberField(previousEntry, 'premiumDiscountValue') ?? numberField(record(previousMeta), 'premiumDiscountValue');
+  const distributions = distributionData(yahoo, previousCombined, referenceDate, closePriceValue);
+  const overview = official.overview;
+  const aumValue = overview?.netAssets ?? numberField(previousEntry, 'aumValue') ?? numberField(record(previousMeta), 'aumValue');
+  const terValue = overview?.expenseRatio ?? numberField(previousEntry, 'terValue') ?? numberField(record(previousMeta), 'terValue');
+  const secYield = overview?.secYield ?? numberField(previousMetrics, 'secYield');
+  const returnMetrics = mergeNonNull(
+    record(publishedReturns.metrics),
+    mergeNonNull(record(yahooReturns.metrics), previousMetrics),
+  );
+  const metrics: JsonRecord = {
+    ...returnMetrics,
+    dividendYield: distributions.indicatedYield,
+    dividendYieldText: distributions.indicatedYield === null ? null : formatPercent(distributions.indicatedYield),
+    secYield,
+    secYieldText: secYield === null ? null : formatPercent(secYield),
+  };
+  const asOfIso = historyAsOfDate || official.history[official.history.length - 1]?.date || overview?.asOfDate || toIsoDate(previousEntry.asOfDate);
+  const asOfDate = asOfIso ? displayDate(asOfIso) : stringField(previousEntry, 'asOfDate', '—');
+  const ter = terValue === null ? stringField(previousEntry, 'ter', stringField(record(previousMeta), 'ter', '—')) : formatPercent(terValue);
+  const aum = overview?.netAssetsText || stringField(previousEntry, 'aum', stringField(record(previousMeta), 'aum', formatMoney(aumValue)));
+  const nav = navValue === null ? stringField(previousEntry, 'nav', '—') : formatPrice(navValue);
+  const closePrice = closePriceValue === null ? stringField(previousEntry, 'closePrice', stringField(record(previousMeta), 'closePrice', '—')) : formatPrice(closePriceValue);
+  const premiumDiscount = premiumDiscountValue === null ? stringField(previousEntry, 'premiumDiscount', stringField(record(previousMeta), 'premiumDiscount', '—')) : formatPercent(premiumDiscountValue, 4);
+  const inceptionIso = overview?.inceptionDate || toIsoDate(previousEntry.inceptionDate) || toIsoDate(record(previousMeta).inceptionDate);
+  const inceptionDate = inceptionIso ? displayDate(inceptionIso) : stringField(previousEntry, 'inceptionDate', stringField(record(previousMeta), 'inceptionDate', '—'));
+  const exchange = overview?.exchange || stringField(previousEntry, 'exchange', stringField(record(previousMeta), 'exchange'));
+  const cusip = overview?.cusip || stringField(record(previousMeta?.identifiers), 'cusip') || stringField(previousEntry, 'cusip') || null;
+  const isin = overview?.isin || stringField(record(previousMeta?.identifiers), 'isin') || stringField(previousEntry, 'isin') || null;
+  const category = categoryForType(overview?.fundType ?? '', fund.category);
+  const distributionWorksheet = record(distributions.worksheet);
+  const distributionRows = arrayValue(distributionWorksheet.rows).filter(Array.isArray);
+  const manifestAsOfHoldings = holdingsAsOfDate || toIsoDate(stringField(record(previousMeta?.holdings), 'asOfDate'));
+  const manifestAsOfHistory = historyAsOfDate || toIsoDate(stringField(record(previousMeta?.history), 'asOfDate'));
+  const holdingsAgeDays = dateAgeDays(holdingsAsOfDate, referenceDate);
+  if (csvResult && holdingsAgeDays !== null && holdingsAgeDays > 7) {
+    onNote(`[ ${'holdings'.padEnd(9)}] ${fund.ticker} CSV snapshot is ${holdingsAgeDays} days old (as of ${holdingsAsOfDate}); the source date is preserved and HTTP 200 is not treated as evidence of freshness.`);
+  }
+  const sourceProvider = [
+    overview ? 'ARK Invest official fund API' : '',
+    csvResult ? 'ARK Invest Azure holdings CSV' : '',
+    official.history.length ? 'ARK Invest official NAV history' : '',
+    yahoo ? 'Yahoo Finance chart' : '',
+    edgarFiling ? 'SEC EDGAR N-PORT-P fallback' : '',
+  ].filter(Boolean).join(' + ') || stringField(previousSource, 'provider', 'previously published ARK data');
+  const source: JsonRecord = {
+    ...previousSource,
+    provider: sourceProvider,
+    trustCik: fund.trustCik,
+    fundPage: fund.fundPage,
+    pageId: official.pageId || stringField(previousSource, 'pageId') || null,
+    catalogUrl: ARK_CATALOG_URL,
+    holdingsCsv: fund.holdingsCsv,
+    holdingsAsOfDate: holdingsAsOfDate || null,
+    holdingsDateBasis: csvResult
+      ? (fund.ticker === 'ARKY' ? 'Azure Last-Modified HTTP header (ARKY CSV omits a date column)' : 'official holdings CSV date column')
+      : edgarFiling ? 'SEC N-PORT-P report period' : stringField(previousSource, 'holdingsDateBasis', 'previously published metadata'),
+    holdingsSource: csvResult ? csvResult.sourceKind : holdingsSource || stringField(previousSource, 'holdingsSource', 'unavailable'),
+    historySource: historySource || stringField(previousSource, 'historySource', 'unavailable'),
+    distributionsSource: cleanText(distributionWorksheet.source) || stringField(previousSource, 'distributionsSource', 'not available'),
+    overviewApi: official.urls?.overview || stringField(previousSource, 'overviewApi') || null,
+    historyApi: official.urls?.history || stringField(previousSource, 'historyApi') || null,
+    performanceApi: official.urls?.monthEnd || stringField(previousSource, 'performanceApi') || null,
+    yahooChart: yahooChartProvenanceUrl(fund.ticker),
+    edgarFiling: edgarFiling ?? record(previousSource.edgarFiling),
+    nportDoc: nportDoc || stringField(previousSource, 'nportDoc') || null,
+  };
+  const distributionOutput: JsonRecord = {
+    ...distributionWorksheet,
+    source: cleanText(distributionWorksheet.source) || stringField(previousSource, 'distributionsSource', 'not available'),
+  };
+  const meta: JsonRecord = {
+    ...(previousMeta ?? {}),
+    ticker: fund.ticker,
+    name: fund.name,
+    category,
+    fundPage: fund.fundPage,
+    dataFile: `funds/${fund.ticker}/meta.json`,
+    generatedAt: new Date().toISOString(),
+    asOfDate,
+    inceptionDate,
+    exchange,
+    nav,
+    navValue,
+    closePrice,
+    closePriceValue,
+    premiumDiscount,
+    premiumDiscountValue,
+    ter,
+    terValue,
+    aum,
+    aumValue,
+    identifiers: { ...record(previousMeta?.identifiers), cusip, isin, indexTicker: record(previousMeta?.identifiers).indexTicker ?? null },
+    distributions: distributionOutput,
+    returns,
+    metrics,
+    yields: {
+      dividendYield: distributions.indicatedYield,
+      dividendYieldText: metrics.dividendYieldText,
+      dividendYieldKind: distributions.yieldKind,
+      secYield,
+      secYieldText: metrics.secYieldText,
+      secYieldKind: overview?.secYield === null || overview?.secYield === undefined
+        ? stringField(record(previousMeta?.yields), 'secYieldKind', 'not published by ARK for this fund')
+        : 'ARK Invest official fund-page 30-day SEC yield',
+    },
+    source,
+    holdings: {
+      pages: [], pageSize: config.holdingsPageSize, totalRows: holdingsRows.length,
+      headers: [...holdingsHeaders], asOfDate: manifestAsOfHoldings ? displayDate(manifestAsOfHoldings) : '—',
+      source: source.holdingsSource,
+    },
+    history: {
+      pages: [], pageSize: config.historyPageSize, totalRows: historyRows.length,
+      headers: [...historyHeaders], asOfDate: manifestAsOfHistory ? displayDate(manifestAsOfHistory) : '—',
+      source: source.historySource,
+    },
+  };
+  const publishedHoldingsCount = holdingsRows.length || previousHoldings.rows.length;
+  const publishedHistoryCount = historyRows.length || previousHistory.rows.length;
+  const candidateEntry: JsonRecord = {
+    ...previousEntry,
+    ticker: fund.ticker,
+    name: fund.name,
+    category,
+    fundPage: fund.fundPage,
+    dataFile: `funds/${fund.ticker}/meta.json`,
+    ter,
+    terValue,
+    nav,
+    navValue,
+    aum,
+    aumValue,
+    asOfDate,
+    inceptionDate,
+    exchange,
+    closePrice,
+    closePriceValue,
+    premiumDiscount,
+    premiumDiscountValue,
+    cusip,
+    isin,
+    distributions: {
+      frequency: stringField(distributionWorksheet, 'frequency', '—'),
+      exDate: stringField(distributionWorksheet, 'exDate', '—'),
+      dividend: stringField(distributionWorksheet, 'dividend', '—'),
+    },
+    returns,
+    metrics,
+    holdings: publishedHoldingsCount,
+    history: publishedHistoryCount,
+  };
+  if (!passesMetricFilters(candidateEntry, config)) {
+    return {
+      entry: previousEntry,
+      status: 'filtered',
+      reason: 'fresh fund metrics did not satisfy the configured ranges; previous publication retained',
+      holdingsCount: publishedHoldingsCount,
+      historyCount: publishedHistoryCount,
+      distributionCount: distributionRows.length,
+      netAssets: aumValue,
+      dividendYield: distributions.indicatedYield,
+      secYield,
+    };
+  }
+
+  const holdingsManifest = await persistSheet(apiRoot, fund.ticker, 'holdings', holdingsHeaders, holdingsRows, config.holdingsPageSize, manifestAsOfHoldings, String(source.holdingsSource));
+  const historyManifest = await persistSheet(apiRoot, fund.ticker, 'history', historyHeaders, historyRows, config.historyPageSize, manifestAsOfHistory, String(source.historySource));
+  meta.holdings = holdingsManifest;
+  meta.history = historyManifest;
+  await writeJsonIfChanged(path.join(fundDirectory, 'meta.json'), meta);
+
+  return {
+    entry: candidateEntry,
+    holdingsCount: publishedHoldingsCount,
+    historyCount: publishedHistoryCount,
+    distributionCount: distributionRows.length,
+    netAssets: aumValue,
+    dividendYield: distributions.indicatedYield,
+    secYield,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Catalog, cursor, bounded worker pool, and CLI
+// ---------------------------------------------------------------------------
+
+export type RunUpdaterOptions = {
+  config?: UpdaterConfig;
+  env?: Record<string, string | undefined>;
+  clients?: RequestClients;
+  runtime?: RequestRuntime;
+  apiRoot?: string;
+  referenceDate?: Date;
+  onNote?: (message: string) => void;
+};
+
+export type RunUpdaterReport = {
+  selectedTickers: string[];
+  processedTickers: string[];
+  filteredTickers: string[];
+  failedTickers: string[];
+  nextCursor: number | null;
+  indexPath: string;
+};
+
+function seedIndexEntry(fund: ArkFund): JsonRecord {
+  return {
+    ticker: fund.ticker,
+    name: fund.name,
+    category: fund.category,
+    fundPage: fund.fundPage,
+    dataFile: `funds/${fund.ticker}/meta.json`,
+    ter: '—', terValue: null,
+    nav: '—', navValue: null,
+    aum: '—', aumValue: null,
+    asOfDate: '—', inceptionDate: '—', exchange: '',
+    closePrice: '—', closePriceValue: null,
+    premiumDiscount: '—', premiumDiscountValue: null,
+    cusip: null, isin: null,
+    distributions: { frequency: '—', exDate: '—', dividend: '—' },
+    returns: { monthEnd: {}, quarterEnd: {} },
+    metrics: {
+      ytd: null, tr1y: null, tr3y: null, tr5y: null, tr10y: null,
+      cagr3y: null, cagr5y: null, cagr10y: null, siAnn: null,
+      dividendYield: null, dividendYieldText: null, secYield: null, secYieldText: null,
+    },
+    holdings: 0,
+    history: 0,
+  };
+}
+
+function mergeCatalogEntries(previous: JsonRecord | null): Map<string, JsonRecord> {
+  const entries = new Map<string, JsonRecord>();
+  for (const raw of arrayValue(previous?.funds)) {
+    const entry = record(raw);
+    const ticker = tickerOrBlank(entry.ticker);
+    if (ticker) entries.set(ticker, entry);
+  }
+  for (const fund of ARK_FUNDS) if (!entries.has(fund.ticker)) entries.set(fund.ticker, seedIndexEntry(fund));
+  return entries;
+}
+
+function sumIndexCounts(entries: Iterable<JsonRecord>, key: 'holdings' | 'history'): number {
+  let total = 0;
+  for (const entry of entries) total += Math.max(0, numberOrNull(entry[key]) ?? 0);
+  return total;
+}
+
+function resultCountsFromEntry(entry: JsonRecord): { holdingsCount: number; historyCount: number; distributionCount: number; netAssets: number | null; dividendYield: number | null; secYield: number | null } {
+  return {
+    holdingsCount: Math.max(0, numberOrNull(entry.holdings) ?? 0),
+    historyCount: Math.max(0, numberOrNull(entry.history) ?? 0),
+    distributionCount: arrayValue(record(entry.distributions).rows).length,
+    netAssets: numberField(entry, 'aumValue'),
+    dividendYield: numberField(record(entry.metrics), 'dividendYield'),
+    secYield: numberField(record(entry.metrics), 'secYield'),
+  };
+}
+
+export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUpdaterReport> {
+  const config = options.config ?? readConfig(options.env ?? process.env);
+  const apiRoot = options.apiRoot ?? API_ROOT;
+  const referenceDate = options.referenceDate ?? new Date();
+  const onNote = options.onNote ?? outputNote;
+  const clients = options.clients ?? createRequestClients(config, options.runtime);
+  const invalidTickers = config.tickers.filter((ticker) => !ARK_FUND_BY_TICKER.has(ticker));
+  if (invalidTickers.length) throw new Error(`TICKERS contains unsupported ARK ETF(s): ${[...new Set(invalidTickers)].join(', ')}`);
+  outputPrintConfig('ARK Invest', { ...config });
+
+  let catalogSource = 'fixed 14-fund ARK ETF catalog';
+  if (config.skipArk) {
+    catalogSource = 'fixed 14-fund ARK ETF catalog (SKIP_ARK enabled)';
+    console.log(`[ ${'catalog'.padEnd(9)}] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
+  } else {
+    try {
+      const catalogPage = await clients.ark(ARK_CATALOG_URL);
+      const discovered = parseArkCatalogHtml(catalogPage.text);
+      if (!discovered.length) throw new Error('official ETF page contained no supported ETF fund links');
+      catalogSource = `official ETF page; ${discovered.length} supported fund paths observed; fixed 14-fund catalog retained`;
+      if (discovered.length !== ARK_FUNDS.length) {
+        console.warn(`[ ${'catalog'.padEnd(9)}] official page exposed ${discovered.length}/${ARK_FUNDS.length} supported ETFs; retaining the full fixed catalog`);
+      }
+      console.log(`[ ${'catalog'.padEnd(9)}] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
+    } catch (error) {
+      catalogSource = 'fixed 14-fund ARK ETF catalog (official discovery unavailable)';
+      console.warn(`[ ${'catalog'.padEnd(9)}] official catalog unavailable; retaining all ${ARK_FUNDS.length} supported ETFs: ${error instanceof Error ? error.message : cleanText(error)}`);
+    }
+  }
+
+  const previousIndex = await readJsonRecord(path.join(apiRoot, 'index.json'));
+  const indexEntries = mergeCatalogEntries(previousIndex);
+  const staticSelection = ARK_FUNDS.filter((fund) => passesStaticFilters(fund, config));
+  outputPrintFilter(staticSelection.length, ARK_FUNDS.length, hasDeferredFilters(config));
+
+  let selectedFunds = staticSelection;
+  let nextCursor: number | null = null;
+  let startCursor = 0;
+  const stateFile = path.join(apiRoot, 'update-state.json');
+  if (config.maxFetches > 0) {
+    const state = await readJsonRecord(stateFile);
+    const configuredTickers = staticSelection.map((fund) => fund.ticker);
+    const priorTickers = stringArray(state?.tickers);
+    const savedCursor = numberOrNull(state?.cursor) ?? 0;
+    const matchingScope = configuredTickers.length === priorTickers.length && configuredTickers.every((ticker, index) => ticker === priorTickers[index]);
+    startCursor = matchingScope && configuredTickers.length ? Math.min(Math.max(0, Math.floor(savedCursor)), configuredTickers.length - 1) : 0;
+    selectedFunds = staticSelection.slice(startCursor, startCursor + config.maxFetches);
+    nextCursor = configuredTickers.length && startCursor + selectedFunds.length < configuredTickers.length
+      ? startCursor + selectedFunds.length
+      : 0;
+    console.log(`[ ${'cursor'.padEnd(9)}] starting at ${configuredTickers.length ? startCursor + 1 : 0} of ${configuredTickers.length}; processing ${selectedFunds.length}; next ${configuredTickers.length ? nextCursor + 1 : 0}`);
+  } else if (existsSync(stateFile)) {
+    await rm(stateFile, { force: true });
+  }
+
+  const reporter = outputCreateReporter(apiRoot, selectedFunds.length);
+  const secFallback = config.edgarFallback ? createSecFallbackResolver(clients) : undefined;
+  const processedTickers: string[] = [];
+  const filteredTickers: string[] = [];
+  const failedTickers: string[] = [];
+  let successes = 0;
+  let nextFundIndex = 0;
+  const worker = async (): Promise<void> => {
+    for (;;) {
+      const index = nextFundIndex;
+      nextFundIndex += 1;
+      const fund = selectedFunds[index];
+      if (!fund) return;
+      const before = await reporter.before(fund.ticker);
+      let result: ArkFundUpdateResult;
+      try {
+        result = await updateArkFund(fund, config, clients, {
+          apiRoot,
+          referenceDate,
+          secFallback,
+          onNote,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : cleanText(error);
+        onNote(`[ ${'product'.padEnd(9)}] ${fund.ticker} failed: ${message}`);
+        result = {
+          entry: indexEntries.get(fund.ticker) ?? seedIndexEntry(fund),
+          status: 'failed',
+          reason: message,
+          ...resultCountsFromEntry(indexEntries.get(fund.ticker) ?? seedIndexEntry(fund)),
+        };
+      }
+      processedTickers.push(fund.ticker);
+      if (result.status === 'filtered') filteredTickers.push(fund.ticker);
+      else if (result.status === 'failed') failedTickers.push(fund.ticker);
+      else {
+        indexEntries.set(fund.ticker, result.entry);
+        successes += 1;
+      }
+      await reporter.result(fund.ticker, before, result.status, result.reason, {
+        ...result.entry,
+        holdings: { totalRows: result.holdingsCount },
+        history: { totalRows: result.historyCount },
+        distributions: { rows: { length: result.distributionCount } },
+        netAssets: result.netAssets,
+        metrics: { dividendYield: result.dividendYield, secYield: result.secYield },
+      });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(config.concurrency, selectedFunds.length) }, () => worker()));
+
+  const sortedEntries = [...indexEntries.values()].sort((a, b) => cleanText(a.ticker).localeCompare(cleanText(b.ticker)));
+  const indexDocument: JsonRecord = {
+    ...(previousIndex ?? {}),
+    brand: 'ARK Invest',
+    generatedAt: new Date().toISOString(),
+    catalog: { url: ARK_CATALOG_URL, source: catalogSource, tickers: ARK_FUNDS.map((fund) => fund.ticker) },
+    counts: {
+      funds: sortedEntries.length,
+      holdings: sumIndexCounts(sortedEntries, 'holdings'),
+      history: sumIndexCounts(sortedEntries, 'history'),
+    },
+    funds: sortedEntries,
+  };
+  const indexPath = path.join(apiRoot, 'index.json');
+  await writeJsonIfChanged(indexPath, indexDocument);
+  if (config.maxFetches > 0) {
+    await writeJsonIfChanged(stateFile, {
+      cursor: nextCursor ?? 0,
+      tickers: staticSelection.map((fund) => fund.ticker),
+      generatedAt: new Date().toISOString(),
+    });
+  }
+  const holdingsTotal = sumIndexCounts(sortedEntries, 'holdings');
+  const historyTotal = sumIndexCounts(sortedEntries, 'history');
+  console.log(`[ ${'done'.padEnd(9)}] ${successes} funds updated, ${failedTickers.length} failures`);
+  console.log(`[ ${'done'.padEnd(9)}] counts: ${sortedEntries.length} catalog funds · ${holdingsTotal} holdings rows · ${historyTotal} history rows${filteredTickers.length ? ` · ${filteredTickers.length} filtered` : ''}`);
+
+  return {
+    selectedTickers: selectedFunds.map((fund) => fund.ticker),
+    processedTickers,
+    filteredTickers,
+    failedTickers,
+    nextCursor,
+    indexPath,
+  };
+}
+
+export async function main(argv: string[] = process.argv.slice(2), env: Record<string, string | undefined> = process.env): Promise<void> {
+  if (argv.some((arg) => arg === '--help' || arg === '-h')) {
+    console.log(USAGE);
+    return;
+  }
+  if (argv.length) throw new Error(`unsupported argument(s): ${argv.join(' ')}. Use --help for usage.`);
+  await runUpdater({ config: readConfig(env) });
+}
+
+if (import.meta.main) {
+  main().catch((error: unknown) => {
+    const detail = error instanceof Error ? error.message : cleanText(error);
+    console.error(`[ ${'error'.padEnd(9)}] ${cleanText(detail)}`);
+    process.exitCode = 1;
+  });
 }

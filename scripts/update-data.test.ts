@@ -11,8 +11,10 @@ import {
   arkApiUrls,
   createPacedGate,
   createRequestClients,
+  createSecFallbackResolver,
   jinaReaderUrl,
   parseProviderJson,
+  updateArkFund,
   unwrapJinaReaderText,
   HOLDINGS_HEADERS,
   buildOfficialReturns,
@@ -47,6 +49,7 @@ import {
   passesStaticFilters,
   paymentsPerYear,
   readConfig,
+  runUpdater,
   semanticContentKey,
   splitPages,
   stableStringify,
@@ -55,6 +58,7 @@ import {
   yahooChartProvenanceUrl,
   yahooChartUrl,
   writeIfChanged,
+  writeJsonIfChanged,
 } from './update-data';
 import { readFile as readFixture } from 'node:fs/promises';
 
@@ -379,6 +383,36 @@ describe('SEC fallback parsing and static output helpers', () => {
     expect(parseEdgarAtomFilings(atom)[0].url).toContain('/1579982/000157998226000001/primary_doc.xml');
   });
 
+  test('SEC Atom feeds with category/link attributes resolve series accessions', () => {
+    const atom = '<feed><entry><category term="NPORT-P"/><updated>2026-09-01T00:00:00Z</updated><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/" rel="alternate"/></entry></feed>';
+    expect(parseEdgarAtomFilings(atom)).toEqual([{
+      accession: '0001579982-26-000001', filed: '2026-09-01T00:00:00Z', reportDate: '',
+      url: 'https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/primary_doc.xml',
+    }]);
+  });
+
+  test('SEC fallback resolver validates trust and maps a series filing without live requests', async () => {
+    const calls: string[] = [];
+    const secClients = {
+      ark: async (url: string) => ({ text: '', url, headers: new Headers() }),
+      azure: async (url: string) => ({ text: '', url, headers: new Headers() }),
+      yahoo: async (url: string) => ({ text: '', url, headers: new Headers() }),
+      sec: async (url: string) => {
+        calls.push(url);
+        if (url.endsWith('company_tickers_mf.json')) return { text: JSON.stringify({ fields: ['cik', 'seriesId', 'classId', 'symbol'], data: [[1579982, 'S000012345', 'C000012345', 'ARKK']] }), url, headers: new Headers() };
+        if (url.includes('browse-edgar')) return { text: '<feed><entry><category term="NPORT-P"/><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/"/></entry></feed>', url, headers: new Headers() };
+        return { text: '<edgarSubmission><genInfo><regName>ARK ETF Trust</regName><regCik>0001579982</regCik><seriesName>ARK Innovation ETF</seriesName><seriesId>S000012345</seriesId><repPdDate>2026-06-30</repPdDate></genInfo><fundInfo><netAssets>1000000</netAssets></fundInfo><invstOrSec><name>EXAMPLE CORP</name><ticker>EXM</ticker><cusip>123456789</cusip><balance>25</balance><valUSD>1000</valUSD><pctVal>0.1</pctVal><assetCat>EC</assetCat></invstOrSec></edgarSubmission>', url, headers: new Headers() };
+      },
+      isArkProxyActive: () => false,
+    };
+    const fund = ARK_FUNDS.find((item) => item.ticker === 'ARKK')!;
+    const result = await createSecFallbackResolver(secClients)(fund);
+    expect(result?.selected.accession).toBe('0001579982-26-000001');
+    expect(result?.parsed.seriesId).toBe('S000012345');
+    expect(result?.holdings[0]).toMatchObject({ Ticker: 'EXM', Weight: '0.1%', 'Shares Held': '25' });
+    expect(calls.some((url) => url.includes('/Archives/edgar/data/1579982/000157998226000001/primary_doc.xml'))).toBe(true);
+  });
+
   test('pagination names and stable JSON are deterministic; timestamps are ignored only for content comparison', () => {
     expect(splitPages([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
     expect(pageFileName(1)).toBe('001.json');
@@ -452,7 +486,7 @@ describe('paced provider request clients', () => {
       sleep: async (milliseconds) => { waits.push(milliseconds); },
       onRetry: (message) => retries.push(message),
     });
-    await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toBe('ready');
+    await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toMatchObject({ text: 'ready' });
     expect(calls).toEqual(['https://assets.example.test/fund.csv', 'https://assets.example.test/fund.csv']);
     expect(waits).toEqual([500]);
     expect(retries[0]).toContain('[ retry    ] ARK holdings HTTP 503');
@@ -474,9 +508,9 @@ describe('paced provider request clients', () => {
     });
     await expect(client.ark('https://www.ark-funds.com/funds/arkk')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
     const secondUrl = 'https://www.ark-funds.com/funds/arkb';
-    await expect(client.ark(secondUrl)).resolves.toBe('{"ok":true}');
+    await expect(client.ark(secondUrl)).resolves.toMatchObject({ text: '{"ok":true}' });
     const thirdUrl = 'https://www.ark-funds.com/api/fund/overview/1010';
-    await expect(client.ark(thirdUrl)).resolves.toBe('{"ok":true}');
+    await expect(client.ark(thirdUrl)).resolves.toMatchObject({ text: '{"ok":true}' });
     expect(client.isArkProxyActive()).toBe(true);
     expect(calls).toEqual([
       'https://www.ark-funds.com/funds/arkk',
@@ -502,5 +536,121 @@ describe('paced provider request clients', () => {
     expect(new URL(urls.quarterEnd).searchParams.get('Range')).toBe('quarter-end');
     expect(unwrapJinaReaderText('Title: Example\nURL Source: https://example.test\nMarkdown Content:\n```json\n{"fund":1}\n```')).toBe('{"fund":1}');
     expect(parseProviderJson('Title: Example\nMarkdown Content:\n{"fund":1}')).toEqual({ fund: 1 });
+  });
+});
+
+describe('per-fund filesystem integration', () => {
+  test('official fixture responses produce UI-compatible paginated files and byte-stable reruns', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'ark-update-'));
+    const ticker = 'ARKK';
+    const fund = ARK_FUNDS.find((item) => item.ticker === ticker)!;
+    const referenceDate = new Date('2026-09-28T12:00:00.000Z');
+    const epochs = ['2026-09-22', '2026-09-23', '2026-09-24', '2026-09-25'].map((date) => Math.floor(Date.parse(`${date}T00:00:00Z`) / 1000));
+    const yahooPayload = {
+      chart: {
+        result: [{
+          timestamp: epochs,
+          indicators: { quote: [{ close: [91, 92, 90, 93], volume: [10, 11, 12, 13] }], adjclose: [{ adjclose: [90, 91, 89, 92] }] },
+          events: { dividends: {} },
+          meta: { regularMarketPrice: 93, currency: 'USD', exchangeName: 'NYSE Arca' },
+        }],
+        error: null,
+      },
+    };
+    const respond = (text: string, url: string, headers: Record<string, string> = {}) => ({ text, url, headers: new Headers(headers) });
+    const clients = {
+      ark: async (url: string) => {
+        if (url === fund.fundPage) return respond('<script>url: "/api/fund/overview/1004"</script>', url);
+        if (url.includes('/api/fund/overview/1004')) return respond(JSON.stringify(overviewFixture), url);
+        if (url.includes('/api/fund/nav-historical-change/1004')) return respond(JSON.stringify(navHistoryFixture), url);
+        if (url.includes('/api/fund/performance/1004')) {
+          const range = new URL(url).searchParams.get('Range');
+          return respond(JSON.stringify(range === 'quarter-end' ? quarterPerformanceFixture : monthPerformanceFixture), url);
+        }
+        throw new Error(`unexpected ARK URL: ${url}`);
+      },
+      azure: async (url: string) => respond(arkkCsv, url, { 'last-modified': 'Mon, 28 Sep 2026 06:05:47 GMT' }),
+      yahoo: async (url: string) => respond(JSON.stringify(yahooPayload), url),
+      sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
+      isArkProxyActive: () => false,
+    };
+    const config = readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
+    try {
+      const first = await updateArkFund(fund, config, clients, { apiRoot: directory, referenceDate });
+      expect(first.entry).toMatchObject({ ticker: 'ARKK', holdings: 46, history: 4, terValue: 0.75, metrics: { tr1y: 14.07, cagr3y: 25.02 } });
+      expect(first.entry).toMatchObject({ returns: { monthEnd: { ytd: 11.13, asOfDate: 'Aug 31 2026' }, quarterEnd: { asOfDate: 'Jun 30 2026' } } });
+      const fundRoot = join(directory, 'funds', ticker);
+      const metaText = await readFile(join(fundRoot, 'meta.json'), 'utf8');
+      const meta = JSON.parse(metaText) as Record<string, unknown>;
+      expect(meta).toMatchObject({ source: { pageId: '1004', holdingsSource: 'official ARK daily holdings CSV', historySource: 'official ARK Invest daily NAV and market-price history API' } });
+      const holdingsPage = JSON.parse(await readFile(join(fundRoot, 'holdings', '001.json'), 'utf8')) as Record<string, unknown>;
+      expect(holdingsPage).toMatchObject({ ticker: 'ARKK', page: 1, totalRows: 46, headers: ['Name', 'Ticker', 'Identifier', 'Weight', 'Market Value', 'Shares Held', 'Asset Category'] });
+      expect(holdingsPage.rows).toBeArrayOfSize(20);
+      expect((holdingsPage.rows as Array<Record<string, unknown>>)[0]).toMatchObject({ Ticker: 'TSLA', Weight: '9.12%' });
+      const historyPage = JSON.parse(await readFile(join(fundRoot, 'history', '001.json'), 'utf8')) as Record<string, unknown>;
+      expect(historyPage).toMatchObject({ totalRows: 4, headers: ['Date', 'NAV', 'Market Price', 'Premium/Discount'] });
+      expect(historyPage.rows).toBeArrayOfSize(2);
+
+      const paths = [
+        join(fundRoot, 'meta.json'),
+        join(fundRoot, 'holdings', '001.json'), join(fundRoot, 'holdings', '002.json'), join(fundRoot, 'holdings', '003.json'),
+        join(fundRoot, 'history', '001.json'), join(fundRoot, 'history', '002.json'),
+      ];
+      const before = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
+      await updateArkFund(fund, config, clients, { apiRoot: directory, referenceDate });
+      const after = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
+      expect(after).toEqual(before);
+      const retainedConfig = readConfig({ SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
+      const retained = await updateArkFund(fund, retainedConfig, clients, { apiRoot: directory, referenceDate });
+      expect(retained).toMatchObject({ holdingsCount: 46, historyCount: 4 });
+      const afterRetention = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
+      expect(afterRetention).toEqual(before);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('bounded updater orchestration', () => {
+  test('MAX_FETCHES resumes from a scoped cursor and never trims catalog entries on failure', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'ark-cursor-'));
+    const requests: string[] = [];
+    const clients = {
+      ark: async (url: string) => { requests.push(url); throw new Error('SKIP_ARK should prevent this request'); },
+      azure: async (url: string) => { requests.push(url); throw new Error('SKIP_ARK should prevent this request'); },
+      yahoo: async (url: string) => { requests.push(url); throw new Error('SKIP_YAHOO should prevent this request'); },
+      sec: async (url: string) => { requests.push(url); throw new Error('EDGAR_FALLBACK=0 should prevent this request'); },
+      isArkProxyActive: () => false,
+    };
+    const config = readConfig({
+      TICKERS: 'ARKK ARKY', MAX_FETCHES: '1', REQUEST_SLEEP: '0', MAX_RETRIES: '0',
+      SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0',
+    });
+    await writeJsonIfChanged(join(directory, 'index.json'), {
+      brand: 'ARK Invest',
+      funds: [{ ticker: 'ARKQ', name: 'Existing ARKQ record', category: 'Preserved', holdings: 4, history: 8, customTag: 'keep-me' }],
+    });
+    try {
+      const first = await runUpdater({ config, apiRoot: directory, clients, referenceDate: new Date('2026-09-28T12:00:00Z'), onNote: () => undefined });
+      expect(first.selectedTickers).toEqual(['ARKK']);
+      expect(first.failedTickers).toEqual(['ARKK']);
+      expect(first.nextCursor).toBe(1);
+      const firstState = JSON.parse(await readFile(join(directory, 'update-state.json'), 'utf8')) as Record<string, unknown>;
+      expect(firstState).toMatchObject({ cursor: 1, tickers: ['ARKK', 'ARKY'] });
+
+      const second = await runUpdater({ config, apiRoot: directory, clients, referenceDate: new Date('2026-09-28T12:00:00Z'), onNote: () => undefined });
+      expect(second.selectedTickers).toEqual(['ARKY']);
+      expect(second.failedTickers).toEqual(['ARKY']);
+      expect(second.nextCursor).toBe(0);
+      expect(requests).toEqual([]);
+      const index = JSON.parse(await readFile(join(directory, 'index.json'), 'utf8')) as { funds: Array<Record<string, unknown>>; counts: Record<string, unknown> };
+      expect(index.funds).toHaveLength(14);
+      expect(index.counts).toMatchObject({ funds: 14, holdings: 4, history: 8 });
+      expect(index.funds.find((fundRow) => fundRow.ticker === 'ARKB')).toMatchObject({ ticker: 'ARKB', holdings: 0, history: 0 });
+      expect(index.funds.find((fundRow) => fundRow.ticker === 'ARKQ')).toMatchObject({ name: 'Existing ARKQ record', category: 'Preserved', holdings: 4, history: 8, customTag: 'keep-me' });
+      expect(await Bun.file(join(directory, 'funds', 'ARKK', 'meta.json')).exists()).toBe(false);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
   });
 });
