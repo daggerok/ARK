@@ -492,32 +492,34 @@ describe('paced provider request clients', () => {
     expect(retries[0]).toContain('[ retry    ] ARK holdings HTTP 503');
   });
 
-  test('two consecutive ARK denials activate the proxy for the rest of the run', async () => {
-    const calls: string[] = [];
+  test('two consecutive ARK denials switch once; proxy returns raw page HTML and plain API text', async () => {
+    const calls: Array<{ url: string; respondWith: string | null }> = [];
     const notices: string[] = [];
     const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
-      fetchImpl: async (input) => {
+      fetchImpl: async (input, init) => {
         const url = String(input);
-        calls.push(url);
+        const respondWith = new Headers(init?.headers).get('x-respond-with');
+        calls.push({ url, respondWith });
         if (url.startsWith('https://r.jina.ai/')) {
-          return new Response('Title: ARK\nURL Source: https://www.ark-funds.com/funds/arkb\nMarkdown Content:\n{"ok":true}', { status: 200 });
+          if (url.includes('/api/')) return new Response('{"ok":true}', { status: 200 });
+          const id = url.includes('/funds/arkk') ? '1004' : '1010';
+          return new Response(`<html><script>url: "/api/fund/overview/${id}"</script></html>`, { status: 200 });
         }
         return new Response('blocked', { status: 403 });
       },
       onIssuerProxy: (message) => notices.push(message),
     });
-    await expect(client.ark('https://www.ark-funds.com/funds/arkk')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
-    const secondUrl = 'https://www.ark-funds.com/funds/arkb';
-    await expect(client.ark(secondUrl)).resolves.toMatchObject({ text: '{"ok":true}' });
-    const thirdUrl = 'https://www.ark-funds.com/api/fund/overview/1010';
-    await expect(client.ark(thirdUrl)).resolves.toMatchObject({ text: '{"ok":true}' });
+    await expect(client.ark('https://www.ark-funds.com/our-etfs/')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    const pageUrls = ['https://www.ark-funds.com/funds/arkk', 'https://www.ark-funds.com/funds/arkb'];
+    const pageResponses = await Promise.all(pageUrls.map((url) => client.ark(url)));
+    expect(pageResponses.map((response) => extractFundPageId(response.text))).toEqual(['1004', '1010']);
+    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).resolves.toMatchObject({ text: '{"ok":true}' });
     expect(client.isArkProxyActive()).toBe(true);
-    expect(calls).toEqual([
-      'https://www.ark-funds.com/funds/arkk',
-      secondUrl,
-      jinaReaderUrl(secondUrl),
-      jinaReaderUrl(thirdUrl),
-    ]);
+    expect(calls.filter((call) => !call.url.startsWith('https://r.jina.ai/'))).toHaveLength(3);
+    const proxiedPages = calls.filter((call) => call.url.startsWith('https://r.jina.ai/') && call.url.includes('/funds/'));
+    expect(proxiedPages).toHaveLength(2);
+    expect(proxiedPages.every((call) => call.respondWith === 'html')).toBe(true);
+    expect(calls.find((call) => call.url.includes('/api/fund/overview/1004'))?.respondWith).toBe('text');
     expect(notices).toHaveLength(1);
     expect(notices[0]).toContain('[ issuer   ]');
   });
@@ -649,6 +651,40 @@ describe('bounded updater orchestration', () => {
       expect(index.funds.find((fundRow) => fundRow.ticker === 'ARKB')).toMatchObject({ ticker: 'ARKB', holdings: 0, history: 0 });
       expect(index.funds.find((fundRow) => fundRow.ticker === 'ARKQ')).toMatchObject({ name: 'Existing ARKQ record', category: 'Preserved', holdings: 4, history: 8, customTag: 'keep-me' });
       expect(await Bun.file(join(directory, 'funds', 'ARKK', 'meta.json')).exists()).toBe(false);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  test('catalog discovery retries a direct 403 through the raw-HTML proxy before retaining the fixed catalog', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'ark-catalog-proxy-'));
+    const calls: Array<{ url: string; respondWith: string | null }> = [];
+    const notices: string[] = [];
+    const config = readConfig({ CATEGORY: 'not-a-supported-category', REQUEST_SLEEP: '0', MAX_RETRIES: '0' });
+    const clients = createRequestClients(config, {
+      fetchImpl: async (input, init) => {
+        const url = String(input);
+        const respondWith = new Headers(init?.headers).get('x-respond-with');
+        calls.push({ url, respondWith });
+        if (url.startsWith('https://r.jina.ai/')) {
+          return new Response('<html><body><a href="/funds/arkk">ARKK</a></body></html>', { status: 200 });
+        }
+        return new Response('blocked', { status: 403 });
+      },
+      onIssuerProxy: (message) => notices.push(message),
+    });
+    try {
+      const report = await runUpdater({ config, apiRoot: directory, clients, onNote: () => undefined });
+      expect(report.selectedTickers).toEqual([]);
+      expect(report.processedTickers).toEqual([]);
+      expect(calls.filter((call) => !call.url.startsWith('https://r.jina.ai/'))).toHaveLength(2);
+      expect(calls.filter((call) => call.url.startsWith('https://r.jina.ai/'))).toEqual([
+        { url: jinaReaderUrl('https://www.ark-funds.com/our-etfs/'), respondWith: 'html' },
+      ]);
+      expect(notices).toHaveLength(1);
+      const index = JSON.parse(await readFile(join(directory, 'index.json'), 'utf8')) as { catalog: { source: string; tickers: string[] } };
+      expect(index.catalog.source).toContain('official ETF page; 1 supported fund paths observed');
+      expect(index.catalog.tickers).toHaveLength(14);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

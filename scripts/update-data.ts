@@ -1552,11 +1552,17 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     headers: HeadersInit,
   ): Promise<ProviderResponse> => requestTextWithRetry(url, provider, gate, headers, config, runtime);
 
+  const arkProxy = async (url: string): Promise<ProviderResponse> => {
+    const responseFormat = new URL(url).pathname.startsWith('/api/') ? 'text' : 'html';
+    const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, {
+      ...arkHeaders,
+      'X-Respond-With': responseFormat,
+    });
+    return { ...response, text: unwrapJinaReaderText(response.text) };
+  };
+
   const ark = async (url: string): Promise<ProviderResponse> => {
-    if (arkProxyActive) {
-      const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders);
-      return { ...response, text: unwrapJinaReaderText(response.text) };
-    }
+    if (arkProxyActive) return arkProxy(url);
     try {
       const response = await request(url, 'ARK issuer', arkGate, arkHeaders);
       consecutiveArkDenials = 0;
@@ -1564,12 +1570,14 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     } catch (error) {
       if (!(error instanceof ProviderHttpError) || error.status !== 403) throw error;
       consecutiveArkDenials += 1;
-      if (consecutiveArkDenials < ISSUER_DIRECT_DENIAL_LIMIT) throw error;
+      if (consecutiveArkDenials < ISSUER_DIRECT_DENIAL_LIMIT && !arkProxyActive) throw error;
+      const firstSwitch = !arkProxyActive;
       arkProxyActive = true;
-      const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests.`;
-      (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
-      const response = await request(jinaReaderUrl(url), 'ARK proxy', arkGate, arkHeaders);
-      return { ...response, text: unwrapJinaReaderText(response.text) };
+      if (firstSwitch) {
+        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests.`;
+        (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
+      }
+      return arkProxy(url);
     }
   };
 
@@ -2418,7 +2426,15 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
     console.log(`[ ${'catalog'.padEnd(9)}] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
   } else {
     try {
-      const catalogPage = await clients.ark(ARK_CATALOG_URL);
+      let catalogPage: ProviderResponse;
+      try {
+        catalogPage = await clients.ark(ARK_CATALOG_URL);
+      } catch (error) {
+        if (!(error instanceof ProviderHttpError) || error.status !== 403 || clients.isArkProxyActive()) throw error;
+        // A single repeated catalog request reaches the configured denial threshold,
+        // letting the request client retry this page through Jina's raw-HTML mode.
+        catalogPage = await clients.ark(ARK_CATALOG_URL);
+      }
       const discovered = parseArkCatalogHtml(catalogPage.text);
       if (!discovered.length) throw new Error('official ETF page contained no supported ETF fund links');
       catalogSource = `official ETF page; ${discovered.length} supported fund paths observed; fixed 14-fund catalog retained`;
