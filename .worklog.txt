@@ -68,7 +68,7 @@ CURRENT STATE
 - Repository: https://github.com/daggerok/ARK
 - Authorization: Edit this repository, commit/push to feat/ark-etfs, and open a PR against main. No merge authorization was given. The user authorized runtime-only use of supplied credentials for the daggerok account; never persist credential values.
 - Branch: feat/ark-etfs, published and tracking origin/feat/ark-etfs. No PR yet.
-- Last confirmed pushed SHA: 009984805a733725fa79429b7f4ede4ee5425b32 on origin/feat/ark-etfs (acceptance/evidence push succeeded and `git ls-remote` returned the same SHA).
+- Last confirmed pushed SHA: 569118c82d4818e3a874351f20b82974a1205f28 on origin/feat/ark-etfs (worklog push succeeded and `git ls-remote` returned the same SHA).
 - Completed:
   1. Reconciled the starting repository state and confirmed no existing PRs.
   2. Created/published feat/ark-etfs and verified pushed refs after each checkpoint.
@@ -88,7 +88,7 @@ CURRENT STATE
 - Active / remaining:
   1. Complete manual type-safety review and browser/header regression checks against the accepted API fixture; then validate a full-catalog updater generation and repeat-run stability without overwriting the isolated acceptance evidence.
   2. Add workflow, Dependabot and README; set authorized repository metadata; open a PR against main. Do not merge or modify other siblings without explicit authorization.
-- Exact next action: verify remote SHA `0099848`, create a separate temporary UI worktree with `evidence/live-acceptance-2026-09-28/accepted-api/ark` copied to its `api/ark`, and check the static UI's data loading/rendering and headers without modifying production or the preserved evidence fixture.
+- Exact next action: verify `origin/feat/ark-etfs` at `569118c`, create a separate temporary UI worktree with `evidence/live-acceptance-2026-09-28/accepted-api/ark` copied to its `api/ark`, and check the static UI's data loading/rendering and headers without modifying production or the preserved evidence fixture.
 - Blockers / security: No current authentication blocker. Keep the credential ephemeral, never echo it, and revoke it when remote work is complete. GitHub CLI is not installed; runtime HTTPS Git and API access work.
 
 AUTHORITY / USER AMENDMENTS
