@@ -1,4 +1,4 @@
-name: Update ARK Invest ETF data
+name: Update abrdn ETF data
 
 on:
   schedule:
@@ -11,12 +11,12 @@ on:
         default: ""
         type: string
       request_sleep:
-        description: "Seconds between request starts per worker, including retries and the r.jina.ai issuer fallback; blank inherits scripts/update-data.config.json"
+        description: "Seconds between request starts including retries; conservative shared gate; blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
       concurrency:
-        description: "Independent parallel fund workers, each with its own request pacing; blank inherits scripts/update-data.config.json"
+        description: "Parallel fund workers; request starts remain conservatively paced; blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
@@ -51,7 +51,7 @@ on:
         default: ""
         type: string
       history_page_size:
-        description: "Rows per official NAV / fallback market-price history JSON page; blank inherits scripts/update-data.config.json"
+        description: "Rows per market-price history JSON page; blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
@@ -60,8 +60,8 @@ on:
         required: false
         default: ""
         type: string
-      category:
-        description: "Keep funds whose category contains this text (case-insensitive); blank inherits scripts/update-data.config.json"
+      history_range:
+        description: "Yahoo daily history range: max or Ny (e.g. 5y); preserves prior history; blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
@@ -151,7 +151,7 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
       - name: Run updater unit tests
-        run: bun test
+        run: bun test scripts/update-data.test.ts
       - name: Resolve file defaults and manual overrides
         env:
           DISPATCH_INPUTS: ${{ toJSON(inputs) }}
@@ -169,19 +169,17 @@ jobs:
             await appendFile(process.env.GITHUB_ENV,
               Object.entries(controls).map(([key,value]) => `${key}=${value}\n`).join(""));
           '
-      - name: Generate api/ark static data
-        env:
-          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+      - name: Generate api/aberdeen static data
         run: bun ./scripts/update-data.ts
       - name: Commit updated data
         if: ${{ !cancelled() }}
         run: |
-          git add api/ark
-          if git diff --cached --quiet -- api/ark; then
-            echo "api/ark is already up to date"
+          git add api/aberdeen
+          if git diff --cached --quiet -- api/aberdeen; then
+            echo "api/aberdeen is already up to date"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(data): update ARK Invest ETF data"
+          git commit -m "chore(data): update abrdn ETF data"
           git push

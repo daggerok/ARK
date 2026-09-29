@@ -8,6 +8,7 @@ import { fileURLToPath as outputFileURLToPath } from 'node:url';
 import { mkdir, readFile, readdir, writeFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 // Console presentation; no changes to provider requests or persisted data.
 /** Presentation only: no requests, writes, filtering, or changes to updater state. */
@@ -33,6 +34,8 @@ function outputConfigEntries(config: Record<string, any>): [string, string][] {
       for (const period of ['YTD', '1Y', '3Y', '5Y', '10Y']) values.set(`${name}_${period}`, range(value?.[period]));
     } else if (['AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD'].includes(name)) {
       values.set(name, range(value));
+    } else if (name === 'JINA_API_KEY') {
+      values.set(name, value ? '(set)' : ''); // never echo secrets
     } else {
       values.set(name, value instanceof Set ? [...value].join(',') || 'all' : Array.isArray(value) ? value.join(',') || 'all' : outputClean(value));
     }
@@ -930,6 +933,7 @@ export type UpdaterConfig = {
   tickers: string[];
   category: string;
   secUa: string;
+  jinaApiKey: string;
   skipArk: boolean;
   skipYahoo: boolean;
   edgarFallback: boolean;
@@ -1033,6 +1037,7 @@ export function readConfig(env: Record<string, string | undefined> = process.env
     tickers,
     category: cleanText(envValue(env, 'CATEGORY')),
     secUa: envValue(env, 'SEC_UA') || 'DaggerOk ARK static feed updater admin@daggerok.example.com',
+    jinaApiKey: envValue(env, 'JINA_API_KEY'),
     skipArk: parseBoolean(envValue(env, 'SKIP_ARK')),
     skipYahoo: parseBoolean(envValue(env, 'SKIP_YAHOO')),
     edgarFallback: parseBoolean(envValue(env, 'EDGAR_FALLBACK'), true),
@@ -1098,10 +1103,8 @@ Usage: bun ./scripts/update-data.ts [--help]
 Environment controls:
   TICKERS              Space/comma separated ETF tickers. ANDed with other filters.
   MAX_FETCHES          0 means all selected funds; positive values resume at the saved cursor.
-  REQUEST_SLEEP        Seconds between request starts (default 1.5; issuer site uses one conservative gate).
-  CONCURRENCY          Parallel fund workers and paced lanes for Azure, Yahoo, and SEC requests (default 2).
-                       ark-funds.com data always flows through one paced lane, one fund at a time,
-                       so higher values do not speed up issuer requests.
+  REQUEST_SLEEP        Seconds between request starts within each worker, including retries (default 1.5).
+  CONCURRENCY          Independent parallel fund workers, each with its own request pacing (default 2).
   MAX_RETRIES          Retry count for network/temporary HTTP errors (default 2).
   HOLDINGS_PAGE_SIZE   Holdings rows per static JSON page (default 250).
   HISTORY_PAGE_SIZE    History rows per static JSON page (default 1000).
@@ -1117,8 +1120,14 @@ Environment controls:
   SKIP_ARK             Do not request ark-funds.com (requires prior static data for source fallbacks).
   SKIP_YAHOO           Disable Yahoo history/distribution fallback.
   VERBOSE              Show per-request retries and fallback notices.
+  JINA_API_KEY         Optional r.jina.ai key (environment/secret only, never a file control). ark-funds.com
+                       rejects Bun's TLS fingerprint, so issuer data flows through the read-only r.jina.ai
+                       proxy; keyless it is limited to about 20 requests/minute for the whole run, with a
+                       key every worker paces itself by REQUEST_SLEEP only.
 
-Range syntax is strict min:max with one colon; an empty side is unbounded.
+Defaults: scripts/update-data.config.json; explicit environment overrides the file (ARK_<KEY> wins over <KEY>).
+Actions: file < advanced JSON < individual nonblank inputs. Range syntax is strict min:max with one colon;
+an empty side is unbounded.
 
 Examples:
   TICKERS="ARKK ARKY ARKB" bun ./scripts/update-data.ts
@@ -1388,7 +1397,14 @@ export type RequestRuntime = PaceClock & {
 type RequestGate = <T>(task: () => T | Promise<T>) => Promise<T>;
 type Sleep = (milliseconds: number) => Promise<void>;
 
-const DEFAULT_APP_USER_AGENT = 'DaggerOk ARK Invest ETF data updater (+https://github.com/daggerok/ARK; admin@daggerok.example.com)';
+/**
+ * Honest, contact-bearing User-Agent. Verified live 2026-09-28: ark-funds.com
+ * sits behind a Cloudflare managed challenge that keys on the TLS fingerprint,
+ * so Bun's fetch receives HTTP 403 with ANY User-Agent (curl passes, Bun does
+ * not); spoofing a browser UA does not help there and makes r.jina.ai (also on
+ * Cloudflare) challenge the request instead. Keep the tool UA everywhere.
+ */
+export const ISSUER_USER_AGENT = 'DaggerOk ARK Invest ETF data updater (+https://github.com/daggerok/ARK; admin@daggerok.example.com)';
 const ISSUER_DIRECT_DENIAL_LIMIT = 2;
 /**
  * r.jina.ai throttles keyless read requests to about 20 per minute per IP
@@ -1440,6 +1456,24 @@ export function createPacedGate(concurrency: number, intervalMs: number, clock: 
   };
 }
 
+/**
+ * Sibling-parity pacing (Capital-Group model): CONCURRENCY independent fund
+ * workers, each with its OWN request lane. Only a lane's timer reservations are
+ * queued, never network operations; a worker keeps its lane across funds,
+ * retries, proxy fallbacks and providers. Requests issued outside any worker
+ * (catalog discovery, SEC ticker tables) use the shared discovery gate.
+ */
+export function createRequestGate(delayMs: number, clock: PaceClock = {}): RequestGate {
+  return createPacedGate(1, Math.max(0, delayMs), clock);
+}
+const requestLane = new AsyncLocalStorage<RequestGate>();
+export function withRequestLane<T>(delayMs: number, work: () => Promise<T>, clock: PaceClock = {}): Promise<T> {
+  return requestLane.run(createRequestGate(delayMs, clock), work);
+}
+export function currentRequestLane(): RequestGate | undefined {
+  return requestLane.getStore();
+}
+
 export class ProviderHttpError extends Error {
   readonly status: number;
   readonly url: string;
@@ -1489,16 +1523,17 @@ async function requestTextWithRetry(
     let response: Response;
     let responseText: string;
     try {
-      const signal = AbortSignal.timeout(timeoutMs);
-      response = await gate(() => fetchImpl(url, { headers, redirect: 'follow', signal }));
+      // The timeout clock starts when the request actually starts, i.e. inside
+      // the gate: queued requests must not expire while waiting for their slot.
+      response = await gate(() => fetchImpl(url, { headers, redirect: 'follow', signal: AbortSignal.timeout(timeoutMs) }));
       responseText = await response.text();
     } catch (error) {
+      const detail = cleanText(error instanceof Error ? `${error.name}: ${error.message}` : String(error));
       if (attempt >= config.maxRetries) {
-        const detail = error instanceof Error ? error.message : String(error);
-        throw new Error(`${provider} request failed for ${url} after ${attempt + 1} attempt(s): ${cleanText(detail)}`);
+        throw new Error(`${provider} request failed for ${url} after ${attempt + 1} attempt(s): ${detail}`);
       }
       const wait = Math.min(30_000, 500 * (2 ** attempt));
-      const message = `[ ${'retry'.padEnd(9)}] ${provider} network error for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
+      const message = `[ ${'retry'.padEnd(9)}] ${provider} network error (${detail.slice(0, 120)}) for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
       (runtime.onRetry ?? outputNote)(message);
       await sleep(wait);
       continue;
@@ -1544,30 +1579,33 @@ export function parseProviderJson(text: string): unknown {
 
 export type RequestClients = {
   ark: (url: string) => Promise<ProviderResponse>;
-  /**
-   * Runs one fund's sequence of issuer requests without interleaving other
-   * funds on the single issuer lane, so funds finish one after another and
-   * report progress instead of all completing together at the end of the run.
-   */
-  arkSession: <T>(work: () => Promise<T>) => Promise<T>;
   azure: (url: string) => Promise<ProviderResponse>;
   yahoo: (url: string) => Promise<ProviderResponse>;
   sec: (url: string) => Promise<ProviderResponse>;
   isArkProxyActive: () => boolean;
 };
 
-/** Creates separate host-specific gates; issuer HTML/API always uses one cautious lane. */
+/**
+ * Provider clients. Every request is paced on the calling worker's own lane
+ * (see withRequestLane); with no lane it falls back to one discovery gate.
+ * Issuer traffic goes direct with a browser User-Agent; after repeated 403s it
+ * switches to the read-only r.jina.ai proxy, whose keyless per-IP limit is
+ * enforced by one extra process-wide gate on top of the worker lane.
+ */
 export function createRequestClients(config: UpdaterConfig, runtime: RequestRuntime = {}): RequestClients {
   const intervalMs = config.requestSleepSeconds * 1000;
   const paceClock: PaceClock = { now: runtime.now, sleep: runtime.sleep };
-  const arkGate = createPacedGate(1, intervalMs, paceClock);
-  const arkProxyGate = createPacedGate(1, Math.max(intervalMs, ISSUER_PROXY_MIN_INTERVAL_MS), paceClock);
-  const azureGate = createPacedGate(config.concurrency, intervalMs, paceClock);
-  const yahooGate = createPacedGate(config.concurrency, intervalMs, paceClock);
-  const secGate = createPacedGate(config.concurrency, intervalMs, paceClock);
+  const discoveryGate = createRequestGate(intervalMs, paceClock);
+  const jinaApiKey = cleanText(config.jinaApiKey);
+  // Keyless r.jina.ai is limited per IP (~20/min): one process-wide gate on top
+  // of the worker lanes. With an API key the documented limit is 500/min, so
+  // only the per-worker REQUEST_SLEEP pacing applies.
+  const proxyLimitGate = jinaApiKey ? null : createRequestGate(ISSUER_PROXY_MIN_INTERVAL_MS, paceClock);
+  const laneGate: RequestGate = (task) => (currentRequestLane() ?? discoveryGate)(task);
+  const proxyGate: RequestGate = (task) => laneGate(() => (proxyLimitGate ? proxyLimitGate(task) : task()));
   const arkHeaders = {
     Accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
-    'User-Agent': DEFAULT_APP_USER_AGENT,
+    'User-Agent': ISSUER_USER_AGENT,
     Referer: `${ARK_SITE}/our-etfs/`,
   };
   let consecutiveArkDenials = 0;
@@ -1582,9 +1620,10 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
 
   const arkProxy = async (url: string): Promise<ProviderResponse> => {
     const responseFormat = new URL(url).pathname.startsWith('/api/') ? 'text' : 'html';
-    const response = await request(jinaReaderUrl(url), 'ARK proxy', arkProxyGate, {
+    const response = await request(jinaReaderUrl(url), 'ARK proxy', proxyGate, {
       ...arkHeaders,
       'X-Respond-With': responseFormat,
+      ...(jinaApiKey ? { Authorization: `Bearer ${jinaApiKey}` } : {}),
     });
     return { ...response, text: unwrapJinaReaderText(response.text) };
   };
@@ -1592,7 +1631,7 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
   const ark = async (url: string): Promise<ProviderResponse> => {
     if (arkProxyActive) return arkProxy(url);
     try {
-      const response = await request(url, 'ARK issuer', arkGate, arkHeaders);
+      const response = await request(url, 'ARK issuer', laneGate, arkHeaders);
       consecutiveArkDenials = 0;
       return response;
     } catch (error) {
@@ -1602,34 +1641,30 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
       const firstSwitch = !arkProxyActive;
       arkProxyActive = true;
       if (firstSwitch) {
-        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests.`;
+        const pacing = jinaApiKey
+          ? 'authenticated (JINA_API_KEY set), paced per worker by REQUEST_SLEEP'
+          : `keyless (about 20 requests per minute; set JINA_API_KEY for parallel issuer fetches)`;
+        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests — ${pacing}.`;
         (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
       }
       return arkProxy(url);
     }
   };
 
-  const azure = (url: string): Promise<ProviderResponse> => request(url, 'ARK holdings', azureGate, {
+  const azure = (url: string): Promise<ProviderResponse> => request(url, 'ARK holdings', laneGate, {
     Accept: 'text/csv,application/octet-stream;q=0.9,*/*;q=0.8',
-    'User-Agent': DEFAULT_APP_USER_AGENT,
+    'User-Agent': ISSUER_USER_AGENT,
   });
-  const yahoo = (url: string): Promise<ProviderResponse> => request(url, 'Yahoo Finance', yahooGate, {
+  const yahoo = (url: string): Promise<ProviderResponse> => request(url, 'Yahoo Finance', laneGate, {
     Accept: 'application/json,*/*;q=0.8',
     'User-Agent': 'Mozilla/5.0 (compatible; DaggerOk-ARK-ETF-Updater/1.0)',
   });
-  const sec = (url: string): Promise<ProviderResponse> => request(url, 'SEC EDGAR', secGate, {
+  const sec = (url: string): Promise<ProviderResponse> => request(url, 'SEC EDGAR', laneGate, {
     Accept: 'application/json,application/atom+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
     'User-Agent': config.secUa,
   });
 
-  let arkSessionTail: Promise<void> = Promise.resolve();
-  const arkSession = <T>(work: () => Promise<T>): Promise<T> => {
-    const turn = arkSessionTail.then(work);
-    arkSessionTail = turn.then(() => undefined, () => undefined);
-    return turn;
-  };
-
-  return { ark, arkSession, azure, yahoo, sec, isArkProxyActive: () => arkProxyActive };
+  return { ark, azure, yahoo, sec, isArkProxyActive: () => arkProxyActive };
 }
 
 export function arkApiUrls(pageId: string): { overview: string; history: string; monthEnd: string; quarterEnd: string } {
@@ -1952,6 +1987,7 @@ async function fetchOfficialFundData(
   config: UpdaterConfig,
   clients: RequestClients,
   onNote: (message: string) => void,
+  knownPageId: string | null = null,
 ): Promise<OfficialFundData> {
   const empty: OfficialFundData = { pageId: null, overview: null, history: [], monthEnd: null, quarterEnd: null, urls: null };
   if (config.skipArk) return empty;
@@ -1959,36 +1995,42 @@ async function fetchOfficialFundData(
     try { return parseProviderJson((await clients.ark(url)).text); }
     catch (error) { noteSourceFailure(onNote, label, fund.ticker, error); return null; }
   };
-  const session = await clients.arkSession(async () => {
-    let pageId: string | null = null;
+  const parseOverview = (payload: unknown | null): ArkOverview | null => {
+    if (payload === null) return null;
+    try {
+      const parsed = parseArkOverview(payload);
+      if (parsed.ticker && parsed.ticker !== fund.ticker) throw new Error(`overview ticker ${parsed.ticker} did not match request`);
+      return parsed;
+    } catch (error) { noteSourceFailure(onNote, 'overview', fund.ticker, error); return null; }
+  };
+  // Page IDs are derived from the fund page at runtime, never from a static
+  // map. A previously published ID is reused only when the overview endpoint
+  // confirms it still answers for this ticker; otherwise the page is re-read.
+  let pageId: string | null = null;
+  let overview: ArkOverview | null = null;
+  const reusableId = cleanText(knownPageId);
+  if (reusableId) {
+    const candidate = parseOverview(await requestJson(arkApiUrls(reusableId).overview, 'overview'));
+    if (candidate?.ticker === fund.ticker) { pageId = reusableId; overview = candidate; }
+  }
+  if (!pageId) {
     try {
       const page = await clients.ark(fund.fundPage);
       pageId = extractFundPageId(page.text);
       if (!pageId) throw new Error('official fund page did not expose /api/fund/overview/<id>');
     } catch (error) {
       noteSourceFailure(onNote, 'issuer', fund.ticker, error);
-      return null;
+      return empty;
     }
-    const urls = arkApiUrls(pageId);
-    const payloads = await Promise.all([
-      requestJson(urls.overview, 'overview'),
-      requestJson(urls.history, 'history'),
-      requestJson(urls.monthEnd, 'performance'),
-      requestJson(urls.quarterEnd, 'performance'),
-    ]);
-    return { pageId, urls, payloads };
-  });
-  if (!session) return empty;
-  const { pageId, urls } = session;
-  const [overviewPayload, historyPayload, monthPayload, quarterPayload] = session.payloads;
-  let overview: ArkOverview | null = null;
-  if (overviewPayload !== null) {
-    try {
-      const parsed = parseArkOverview(overviewPayload);
-      if (parsed.ticker && parsed.ticker !== fund.ticker) throw new Error(`overview ticker ${parsed.ticker} did not match request`);
-      overview = parsed;
-    } catch (error) { noteSourceFailure(onNote, 'overview', fund.ticker, error); }
   }
+  const urls = arkApiUrls(pageId);
+  const [overviewPayload, historyPayload, monthPayload, quarterPayload] = await Promise.all([
+    overview ? Promise.resolve(null) : requestJson(urls.overview, 'overview'),
+    requestJson(urls.history, 'history'),
+    requestJson(urls.monthEnd, 'performance'),
+    requestJson(urls.quarterEnd, 'performance'),
+  ]);
+  if (!overview) overview = parseOverview(overviewPayload);
   let history: ArkDailyPoint[] = [];
   if (historyPayload !== null) {
     try { history = parseArkNavHistory(historyPayload); }
@@ -2090,7 +2132,7 @@ export async function updateArkFund(
   const secFallback = options.secFallback ?? createSecFallbackResolver(clients);
 
   const [official, yahoo, csvResult] = await Promise.all([
-    fetchOfficialFundData(fund, config, clients, onNote),
+    fetchOfficialFundData(fund, config, clients, onNote, stringField(previousSource, 'pageId') || null),
     fetchYahooFundData(fund, config, clients, referenceDate, onNote),
     (async (): Promise<ParsedHoldings | null> => {
       if (config.skipArk) return null;
@@ -2563,7 +2605,9 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
       });
     }
   };
-  await Promise.all(Array.from({ length: Math.min(config.concurrency, selectedFunds.length) }, () => worker()));
+  const laneClock: PaceClock = { now: options.runtime?.now, sleep: options.runtime?.sleep };
+  const workerCount = Math.min(config.concurrency, selectedFunds.length);
+  await Promise.all(Array.from({ length: workerCount }, () => withRequestLane(config.requestSleepSeconds * 1000, worker, laneClock)));
 
   const sortedEntries = [...indexEntries.values()].sort((a, b) => cleanText(a.ticker).localeCompare(cleanText(b.ticker)));
   const indexDocument: JsonRecord = {
@@ -2602,13 +2646,80 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
   };
 }
 
+// File defaults and explicit overrides, same mechanism as the sibling
+// daggerok/aberdeen and daggerok/Capital-Group updaters: allowlisted scalar
+// controls only, so GitHub Actions can resolve them without interpolating user
+// input into bash. Precedence: config file < advanced JSON < nonblank inputs <
+// environment (`ARK_<KEY>` alias wins over `<KEY>`). JINA_API_KEY is a secret
+// and is deliberately NOT a control: it is read from the environment only.
+export const CONTROL_NAMES = [
+  'MAX_FETCHES', 'REQUEST_SLEEP', 'CONCURRENCY', 'AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD', 'TICKERS',
+  'CATEGORY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES', 'SEC_UA',
+  'SKIP_YAHOO', 'SKIP_ARK', 'EDGAR_FALLBACK', 'VERBOSE',
+  ...['PERFORMANCE', 'TOTAL_RETURN'].flatMap((prefix) => ['YTD', '1Y', '3Y', '5Y', '10Y'].map((period) => `${prefix}_${period}`)),
+] as const;
+export type ControlName = (typeof CONTROL_NAMES)[number];
+export const CONFIG_FILE_URL = new URL('./update-data.config.json', import.meta.url);
+
+export function resolveControls(
+  file: unknown = {},
+  advanced: unknown = {},
+  inputs: unknown = {},
+  env: Record<string, string | undefined> = {},
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  const known = new Set<string>(CONTROL_NAMES);
+  const apply = (value: unknown, skipEmpty = false): void => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Configuration must be a JSON object');
+    for (const [key, raw] of Object.entries(value)) {
+      if (!known.has(key)) throw new Error(`Unknown updater control: ${key}`);
+      if (skipEmpty && (raw === '' || raw === undefined || raw === null)) continue;
+      if (!['string', 'number', 'boolean'].includes(typeof raw)) throw new Error(`${key}: expected string, number or boolean`);
+      const text = String(raw);
+      if (/[\r\n\0]/.test(text)) throw new Error(`${key}: multiline/control characters are not allowed`);
+      result[key] = text;
+    }
+  };
+  apply(file);
+  apply(advanced);
+  apply(inputs, true);
+  for (const key of CONTROL_NAMES) {
+    const value = env[`ARK_${key}`] ?? env[key];
+    if (value !== undefined) apply({ [key]: value });
+  }
+  for (const key of ['MAX_FETCHES', 'CONCURRENCY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES']) {
+    const v = result[key];
+    if (v === undefined || v === '') continue;
+    const min = ['MAX_FETCHES', 'MAX_RETRIES'].includes(key) ? 0 : 1;
+    if (!/^\d+$/.test(v) || !Number.isSafeInteger(Number(v)) || Number(v) < min) throw new Error(`${key}: expected integer >= ${min}`);
+  }
+  if (result.REQUEST_SLEEP && (!Number.isFinite(Number(result.REQUEST_SLEEP)) || Number(result.REQUEST_SLEEP) < 0)) throw new Error('REQUEST_SLEEP: expected nonnegative seconds');
+  for (const key of ['SKIP_YAHOO', 'SKIP_ARK', 'EDGAR_FALLBACK', 'VERBOSE']) {
+    if (result[key] && !/^(0|1|true|false|yes|no|y|n|on|off)$/i.test(result[key])) throw new Error(`${key}: expected boolean`);
+  }
+  readConfig(result); // validate every min:max filter before any request or write
+  return result;
+}
+
+export async function runtimeControls(env: Record<string, string | undefined> = process.env): Promise<Record<string, string>> {
+  let file: unknown = {};
+  try { file = JSON.parse(await readFile(CONFIG_FILE_URL, 'utf8')); }
+  catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  const controls = resolveControls(file, {}, {}, env);
+  // Secrets and non-control passthroughs stay environment-only.
+  if (env.JINA_API_KEY !== undefined) controls.JINA_API_KEY = env.JINA_API_KEY;
+  return controls;
+}
+
 export async function main(argv: string[] = process.argv.slice(2), env: Record<string, string | undefined> = process.env): Promise<void> {
   if (argv.some((arg) => arg === '--help' || arg === '-h')) {
     console.log(USAGE);
     return;
   }
   if (argv.length) throw new Error(`unsupported argument(s): ${argv.join(' ')}. Use --help for usage.`);
-  await runUpdater({ config: readConfig(env) });
+  const controls = await runtimeControls(env);
+  if (controls.VERBOSE !== undefined && env === process.env) process.env.VERBOSE = controls.VERBOSE;
+  await runUpdater({ config: readConfig(controls) });
 }
 
 if (import.meta.main) {

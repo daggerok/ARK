@@ -10,8 +10,10 @@ import {
   ProviderHttpError,
   arkApiUrls,
   ISSUER_PROXY_MIN_INTERVAL_MS,
+  ISSUER_USER_AGENT,
   REQUEST_TIMEOUT_MS,
   USAGE,
+  withRequestLane,
   createPacedGate,
   createRequestClients,
   createSecFallbackResolver,
@@ -406,7 +408,6 @@ describe('SEC fallback parsing and static output helpers', () => {
         if (url.includes('browse-edgar')) return { text: '<feed><entry><category term="NPORT-P"/><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/"/></entry></feed>', url, headers: new Headers() };
         return { text: '<edgarSubmission><genInfo><regName>ARK ETF Trust</regName><regCik>0001579982</regCik><seriesName>ARK Innovation ETF</seriesName><seriesId>S000012345</seriesId><repPdDate>2026-06-30</repPdDate></genInfo><fundInfo><netAssets>1000000</netAssets></fundInfo><invstOrSec><name>EXAMPLE CORP</name><ticker>EXM</ticker><cusip>123456789</cusip><balance>25</balance><valUSD>1000</valUSD><pctVal>0.1</pctVal><assetCat>EC</assetCat></invstOrSec></edgarSubmission>', url, headers: new Headers() };
       },
-      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const fund = ARK_FUNDS.find((item) => item.ticker === 'ARKK')!;
@@ -582,26 +583,112 @@ describe('paced provider request clients', () => {
     await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toMatchObject({ text: 'recovered' });
     expect(calls).toBe(2);
     expect(retries).toHaveLength(1);
-    expect(retries[0]).toContain('[ retry    ] ARK holdings network error');
+    expect(retries[0]).toContain('[ retry    ] ARK holdings network error (TimeoutError:');
   });
 
-  test('issuer sessions run one fund at a time so funds complete progressively under high concurrency', async () => {
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', CONCURRENCY: '15' }), {
-      fetchImpl: async () => new Response('ok', { status: 200 }),
+  test('the request timeout starts when the request starts, not while it waits in a pacing queue', async () => {
+    // Real timers: a 40 ms timeout with 3 requests queued behind a 60 ms lane.
+    // Before the fix the last requests expired in the queue and were retried.
+    const retries: string[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0.06', MAX_RETRIES: '0' }), {
+      requestTimeoutMs: 40,
+      onRetry: (message) => retries.push(message),
+      fetchImpl: (input, init) => new Promise<Response>((resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => reject(init.signal?.reason ?? new Error('aborted')));
+        setTimeout(() => resolve(new Response(String(input), { status: 200 })), 5);
+      }),
     });
-    const events: string[] = [];
-    const fundWork = (ticker: string) => client.arkSession(async () => {
-      events.push(`${ticker}:start`);
-      await client.ark(`https://www.ark-funds.com/funds/${ticker.toLowerCase()}`);
-      await Promise.all([1, 2, 3, 4].map((n) => client.ark(`https://www.ark-funds.com/api/fund/x/${ticker}/${n}`)));
-      events.push(`${ticker}:end`);
-      return ticker;
-    });
-    const rejected = client.arkSession(async () => { throw new Error('one fund failing must not block the lane'); });
-    const results = await Promise.all([fundWork('ARKK'), fundWork('ARKW'), fundWork('ARKG'), rejected.catch(() => 'rejected')]);
-    expect(results).toEqual(['ARKK', 'ARKW', 'ARKG', 'rejected']);
-    expect(events).toEqual(['ARKK:start', 'ARKK:end', 'ARKW:start', 'ARKW:end', 'ARKG:start', 'ARKG:end']);
+    const urls = ['a', 'b', 'c', 'd'].map((name) => `https://assets.example.test/${name}.csv`);
+    const results = await withRequestLane(60, () => Promise.all(urls.map((url) => client.azure(url))));
+    expect(results.map((result) => result.text)).toEqual(urls);
+    expect(retries).toEqual([]);
   });
+
+  test('issuer requests carry the honest contact-bearing User-Agent (no browser spoofing)', async () => {
+    const seen: string[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+      fetchImpl: async (_input, init) => { seen.push(new Headers(init?.headers).get('user-agent') ?? ''); return new Response('ok', { status: 200 }); },
+    });
+    await client.ark('https://www.ark-funds.com/funds/arkk');
+    expect(seen).toEqual([ISSUER_USER_AGENT]);
+    expect(ISSUER_USER_AGENT).toContain('DaggerOk');
+    expect(ISSUER_USER_AGENT).toContain('https://github.com/daggerok/ARK');
+    expect(ISSUER_USER_AGENT.startsWith('Mozilla/5.0')).toBe(false);
+    expect(client.isArkProxyActive()).toBe(false);
+  });
+
+  test('JINA_API_KEY authenticates the proxy and lifts the process-wide keyless gate (workers pace themselves)', async () => {
+    let clock = 0;
+    const proxyStarts: number[] = [];
+    const authHeaders: string[] = [];
+    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', JINA_API_KEY: 'jina_test_key' }), {
+      now: () => clock,
+      sleep: async (milliseconds) => { clock += milliseconds; },
+      fetchImpl: async (input, init) => {
+        const url = String(input);
+        if (url.startsWith('https://r.jina.ai/')) {
+          proxyStarts.push(clock);
+          authHeaders.push(new Headers(init?.headers).get('authorization') ?? '');
+          return new Response('{"ok":true}', { status: 200 });
+        }
+        expect(new Headers(init?.headers).get('authorization')).toBeNull();
+        return new Response('blocked', { status: 403 });
+      },
+      onIssuerProxy: (message) => expect(message).toContain('JINA_API_KEY set'),
+    });
+    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    await Promise.all(['1004', '1001', '1002', '1003'].map((id) => client.ark(`https://www.ark-funds.com/api/fund/overview/${id}`)));
+    expect(client.isArkProxyActive()).toBe(true);
+    expect(authHeaders).toEqual(Array(4).fill('Bearer jina_test_key'));
+    expect(Math.max(...proxyStarts) - Math.min(...proxyStarts)).toBeLessThan(ISSUER_PROXY_MIN_INTERVAL_MS);
+  });
+
+  test('real HTTP: 1, 3 and 15 worker lanes overlap requests, keep per-lane spacing and improve throughput', async () => {
+    const starts = new Map<string, number[]>();
+    let active = 0;
+    let peak = 0;
+    const server = Bun.serve({ hostname: '127.0.0.1', port: 0, async fetch(request) {
+      const lane = new URL(request.url).pathname.split('/')[1]!;
+      const times = starts.get(lane) ?? [];
+      times.push(performance.now());
+      starts.set(lane, times);
+      peak = Math.max(peak, ++active);
+      await Bun.sleep(20);
+      active -= 1;
+      return new Response('ok');
+    } });
+    try {
+      const durations: number[] = [];
+      for (const concurrency of [1, 3, 15]) {
+        starts.clear();
+        peak = 0;
+        const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0.06', MAX_RETRIES: '0', CONCURRENCY: String(concurrency) }));
+        const funds = Array.from({ length: 15 }, (_, index) => index);
+        const before = performance.now();
+        await Promise.all(Array.from({ length: concurrency }, (_, lane) => withRequestLane(60, async () => {
+          while (funds.length) {
+            const fund = funds.shift()!;
+            for (let request = 0; request < 3; request += 1) {
+              const response = await client.azure(`${server.url}${lane}/${fund}/${request}`);
+              expect(response.text).toBe('ok');
+            }
+          }
+        })));
+        durations.push(performance.now() - before);
+        expect(starts.size).toBe(concurrency);
+        expect(peak).toBe(concurrency);
+        expect([...starts.values()].reduce((count, times) => count + times.length, 0)).toBe(45);
+        // Server arrivals, not client starts: allow connection jitter.
+        for (const times of starts.values()) {
+          for (let index = 1; index < times.length; index += 1) expect(times[index]! - times[index - 1]!).toBeGreaterThanOrEqual(40);
+        }
+      }
+      // Wide ratio tolerance for busy CI; a single global gate cannot pass this.
+      expect(durations[1]!).toBeLessThan(durations[0]! * 0.65);
+      expect(durations[2]!).toBeLessThan(durations[0]! * 0.3);
+      console.log('[ concurrency test ] HTTP durations ms (1/3/15 lanes):', durations.map(Math.round).join('/'));
+    } finally { server.stop(true); }
+  }, 15000);
 
   test('issuer API paths mirror the verified page parameters and proxy JSON is unwrapped', () => {
     const urls = arkApiUrls('1004');
@@ -639,8 +726,10 @@ describe('per-fund filesystem integration', () => {
       },
     };
     const respond = (text: string, url: string, headers: Record<string, string> = {}) => ({ text, url, headers: new Headers(headers) });
+    const arkUrls: string[] = [];
     const clients = {
       ark: async (url: string) => {
+        arkUrls.push(url);
         if (url === fund.fundPage) return respond('<script>url: "/api/fund/overview/1004"</script>', url);
         if (url.includes('/api/fund/overview/1004')) return respond(JSON.stringify(overviewFixture), url);
         if (url.includes('/api/fund/nav-historical-change/1004')) return respond(JSON.stringify(navHistoryFixture), url);
@@ -653,7 +742,6 @@ describe('per-fund filesystem integration', () => {
       azure: async (url: string) => respond(arkkCsv, url, { 'last-modified': 'Mon, 28 Sep 2026 06:05:47 GMT' }),
       yahoo: async (url: string) => respond(JSON.stringify(yahooPayload), url),
       sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
-      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const config = readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
@@ -679,9 +767,15 @@ describe('per-fund filesystem integration', () => {
         join(fundRoot, 'history', '001.json'), join(fundRoot, 'history', '002.json'),
       ];
       const before = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
+      expect(arkUrls).toContain(fund.fundPage);
+      arkUrls.length = 0;
       await updateArkFund(fund, config, clients, { apiRoot: directory, referenceDate });
       const after = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
       expect(after).toEqual(before);
+      // The published page ID is reused once the overview confirms it, so the
+      // heavy fund-page render is skipped on repeat runs (never a static map).
+      expect(arkUrls).not.toContain(fund.fundPage);
+      expect(arkUrls.filter((url) => url.includes('/api/fund/overview/1004'))).toHaveLength(1);
       const retainedConfig = readConfig({ SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
       const retained = await updateArkFund(fund, retainedConfig, clients, { apiRoot: directory, referenceDate });
       expect(retained).toMatchObject({ holdingsCount: 46, historyCount: 4 });
@@ -702,7 +796,6 @@ describe('bounded updater orchestration', () => {
       azure: async (url: string) => { requests.push(url); throw new Error('SKIP_ARK should prevent this request'); },
       yahoo: async (url: string) => { requests.push(url); throw new Error('SKIP_YAHOO should prevent this request'); },
       sec: async (url: string) => { requests.push(url); throw new Error('EDGAR_FALLBACK=0 should prevent this request'); },
-      arkSession: <T,>(work: () => Promise<T>) => work(),
       isArkProxyActive: () => false,
     };
     const config = readConfig({
