@@ -871,9 +871,10 @@ describe('README parity guard', () => {
       '## Using Bun',
       '## Updating the static ARK Invest data',
       '### Data sources',
+      '### Metrics and caveats',
       '### Update controls',
       '### Examples',
-      '## TypeScript',
+      '## TypeScript and verification',
       '## Brands table',
       '## Sibling applications',
       '## License',
@@ -898,7 +899,7 @@ describe('README parity guard', () => {
       for (const tenor of name.slice(prefix.length).split('|')) implemented.add(`${prefix}${tenor}`);
     }
     expect([...documented].sort()).toEqual([...implemented].sort());
-    for (const example of markdown.match(/^[A-Z_]+="?[^\s"]*"? \.\/scripts\/update-data\.ts$/gm) ?? []) {
+    for (const example of markdown.match(/^[A-Z_]+="?[^\s"]*"? bun scripts\/update-data\.ts$/gm) ?? []) {
       expect(implemented.has(example.split('=')[0])).toBe(true);
     }
   });
@@ -908,8 +909,8 @@ describe('README parity guard', () => {
     const brandNames = tableRows(markdown, '## Brands table').map((row) => row.split('|')[1].trim().replace(/\*\*/g, ''));
     const siblingNames = tableRows(markdown, '## Sibling applications').map((row) => row.split('|')[1].trim());
     const sorted = (values: string[]): string[] => [...values].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-    expect(brandNames).toHaveLength(21);
-    expect(siblingNames).toHaveLength(21);
+    expect(brandNames).toHaveLength(27);
+    expect(siblingNames).toHaveLength(27);
     expect(brandNames).toEqual(sorted(brandNames));
     expect(siblingNames).toEqual(sorted(siblingNames));
     expect(brandNames).toContain('ARK Invest');
