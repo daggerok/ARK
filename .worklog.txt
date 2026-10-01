@@ -1086,3 +1086,5 @@ REQUEST PACING & CONCURRENCY:
 REPORT BACK WHEN DONE:
   Confirm CSV columns across all active funds and exact ticker mapping.
 
+
+2026-10-01: standardized config/workflow/README (branch chore/standardize-config): SEC_UA default is now a repo-URL descriptor, the workflow reads the protected SEC_UA Actions variable, README follows the shared section layout.
