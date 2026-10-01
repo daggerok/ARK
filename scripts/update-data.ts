@@ -46,7 +46,7 @@ function outputConfigEntries(config: Record<string, any>): [string, string][] {
 }
 function outputPrintConfig(brand: string, config: Record<string, any>): void {
   const entries: [string, string][] = [...outputConfigEntries(config), ['VERBOSE', String(outputVerbose())]];
-  console.log(`[ config   ] ${brand} updater:\n${entries.map(([key, value]) => `              ${key}=${/TOKEN|PASSWORD|SECRET|COOKIE/i.test(key) ? '<redacted>' : outputClean(value)}`).join('\n')}`);
+  console.log(`[ config   ] ${brand} updater:\n${entries.map(([key, value]) => `              ${key}=${/TOKEN|PASSWORD|SECRET|COOKIE|^SEC_UA$/i.test(key) ? '<redacted>' : outputClean(value)}`).join('\n')}`);
 }
 function outputHasOutputFilters(config: Record<string, any>): boolean {
   return outputConfigEntries(config).some(([name, value]) =>
@@ -1033,7 +1033,7 @@ export function readConfig(env: Record<string, string | undefined> = process.env
     historyPageSize: parsePositiveInt(envValue(env, 'HISTORY_PAGE_SIZE', ['HISTORICAL_PAGE_SIZE']), DEFAULT_HISTORY_PAGE_SIZE),
     tickers,
     category: cleanText(envValue(env, 'CATEGORY')),
-    secUa: envValue(env, 'SEC_UA') || 'DaggerOk ARK static feed updater admin@daggerok.example.com',
+    secUa: envValue(env, 'SEC_UA') || 'DaggerOk ARK static feed updater https://github.com/daggerok/ARK',
     skipArk: parseBoolean(envValue(env, 'SKIP_ARK')),
     skipYahoo: parseBoolean(envValue(env, 'SKIP_YAHOO')),
     edgarFallback: parseBoolean(envValue(env, 'EDGAR_FALLBACK'), true),

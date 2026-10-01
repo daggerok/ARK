@@ -11,7 +11,7 @@
   "HOLDINGS_PAGE_SIZE": "250",
   "HISTORY_PAGE_SIZE": "1000",
   "MAX_RETRIES": "2",
-  "SEC_UA": "DaggerOk ARK static feed updater admin@daggerok.example.com",
+  "SEC_UA": "DaggerOk ARK static feed updater https://github.com/daggerok/ARK",
   "SKIP_YAHOO": "false",
   "SKIP_ARK": "false",
   "EDGAR_FALLBACK": "true",
