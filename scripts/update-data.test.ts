@@ -962,8 +962,8 @@ describe('README parity guard', () => {
     const brandNames = tableRows(markdown, '## Brands table').map((row) => row.split('|')[1].trim().replace(/\*\*/g, ''));
     const siblingNames = tableRows(markdown, '## Sibling applications').map((row) => row.split('|')[1].trim());
     const sorted = (values: string[]): string[] => [...values].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-    expect(brandNames).toHaveLength(27);
-    expect(siblingNames).toHaveLength(27);
+    expect(brandNames).toHaveLength(29);
+    expect(siblingNames).toHaveLength(29);
     expect(brandNames).toEqual(sorted(brandNames));
     expect(siblingNames).toEqual(sorted(siblingNames));
     expect(brandNames).toContain('ARK Invest');
