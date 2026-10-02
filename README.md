@@ -49,6 +49,9 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 - `siAnn` — since-inception annualized → *SI Ann.*
 - `dividendYield` — indicated yield (latest Yahoo Finance distribution × inferred frequency ÷ market price) or trailing 12-month yield; `—` when no distributions are reported
 - `secYield` — 30-day SEC yield when published on the fund page; `—` otherwise
+- `returnsBasis` — always a non-empty label of how the returns were computed: official ARK Invest NAV total returns, Yahoo Finance adjusted close estimates, or a mixed label when the values come from more than one source (never empty and never `-`)
+- `performanceAsOf` — ISO `YYYY-MM-DD` date the returns are as of: the month-end date of the ark-funds.com performance table for official returns, the Yahoo close the derived returns end on (the last close at or before the month end), the oldest of these for mixed values; `null` when unknown. It is not the NAV date
+- Every `metrics` object carries the full key set in a fixed order, with `returnsBasis` and `performanceAsOf` last; unavailable values are `null`
 
 - Official NAV returns come from ark-funds.com; market-price history and distribution-based yields come from Yahoo Finance and are estimates, not official figures
 - Unavailable values are shown as `—` and are never written as `0`
