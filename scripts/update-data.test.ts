@@ -11,6 +11,8 @@ import {
   DEFAULT_SEC_UA,
   historyWindowStartEpoch,
   resolveControls,
+  isCertError,
+  installSystemCa,
   ARKY_HOLDINGS_HEADERS,
   ProviderHttpError,
   arkApiUrls,
@@ -990,7 +992,7 @@ describe('configuration resolver', () => {
 
   test('invalid layers and values are rejected, never silently replaced', () => {
     const bad: unknown[] = [{ UNKNOWN: 1 }, { SEC_UA: 'x\nEVIL=yes' }, { CONCURRENCY: 0 }, { MAX_RETRIES: 0 }, { MAX_RETRIES: -1 }, { MAX_RETRIES: 'x' }, { MAX_FETCHES: 1.5 },
-      { REQUEST_SLEEP: '-1' }, { VERBOSE: 'maybe' }, { AUM: '1:2:3' }, { TER: '5:1' }, { HISTORY_RANGE: '0y' }, { HISTORY_RANGE: 'forever' }, { TICKERS: ['ARKK'] }, null, []];
+      { REQUEST_SLEEP: '-1' }, { VERBOSE: 'maybe' }, { USE_SYSTEM_CA: 'maybe' }, { AUM: '1:2:3' }, { TER: '5:1' }, { HISTORY_RANGE: '0y' }, { HISTORY_RANGE: 'forever' }, { TICKERS: ['ARKK'] }, null, []];
     for (const value of bad) expect(() => resolveControls(value)).toThrow();
     expect(() => resolveControls({}, { SEC_UA: 'x\rfoo' })).toThrow();
     expect(() => resolveControls({}, {}, {}, { ARK_SEC_UA: 'x\0bad' })).toThrow();
@@ -1070,5 +1072,56 @@ describe('workflow shape', () => {
     expect(workflow).toContain('timeout-minutes: 30');
     expect(workflow.match(/git add (\S+)/g)).toEqual(['git add api/ark']);
     expect(workflow.match(/api\/[\w-]+/g)!.every((p) => p === 'api/ark')).toBe(true);
+  });
+});
+
+describe('system CA support', () => {
+  test('USE_SYSTEM_CA resolver: auto/true/false case-insensitive, default auto', () => {
+    for (const v of ['auto', 'true', 'false', 'AUTO', 'True', 'FALSE']) expect(resolveControls({ USE_SYSTEM_CA: v }).USE_SYSTEM_CA).toBe(v.toLowerCase());
+    expect(() => resolveControls({ USE_SYSTEM_CA: 'maybe' })).toThrow('USE_SYSTEM_CA');
+    expect(resolveControls(JSON.parse(readFileSync(new URL('./update-data.config.json', import.meta.url), 'utf8'))).USE_SYSTEM_CA).toBe('auto');
+  });
+
+  test('isCertError recognizes certificate failures, also through .cause', () => {
+    expect(isCertError({ code: 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' })).toBe(true);
+    expect(isCertError(new Error('unable to get local issuer certificate'))).toBe(true);
+    expect(isCertError(new Error('fetch failed', { cause: new Error('unable to get local issuer certificate') }))).toBe(true);
+    expect(isCertError({ code: 'ECONNRESET' })).toBe(false);
+    expect(isCertError(new Error('HTTP 403 Forbidden'))).toBe(false);
+    expect(isCertError(null)).toBe(false);
+  });
+
+  test('installSystemCa wraps fetch only in auto mode and restarts once on a cert error', async () => {
+    const original = globalThis.fetch;
+    const reexec = () => { calls += 1; return undefined as never; };
+    let calls = 0;
+    try {
+      installSystemCa('false', reexec, false);
+      expect(globalThis.fetch).toBe(original);
+      installSystemCa('auto', reexec, true);
+      expect(globalThis.fetch).toBe(original);
+      installSystemCa('true', reexec, true);
+      expect(calls).toBe(0);
+      installSystemCa('true', reexec, false);
+      expect(calls).toBe(1);
+      globalThis.fetch = original;
+
+      calls = 0;
+      let next: () => Promise<Response> = async () => new Response('ok');
+      globalThis.fetch = (async () => next()) as unknown as typeof fetch;
+      const base = globalThis.fetch;
+      installSystemCa('auto', reexec, false);
+      expect(globalThis.fetch).not.toBe(base);
+      expect(await (await fetch('https://example.test/')).text()).toBe('ok');
+      expect(calls).toBe(0);
+      next = async () => { throw new Error('ECONNRESET'); };
+      await expect(fetch('https://example.test/')).rejects.toThrow('ECONNRESET');
+      expect(calls).toBe(0);
+      next = async () => { throw new Error('fetch failed', { cause: { code: 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY' } }); };
+      await fetch('https://example.test/');
+      expect(calls).toBe(1);
+    } finally {
+      globalThis.fetch = original;
+    }
   });
 });
