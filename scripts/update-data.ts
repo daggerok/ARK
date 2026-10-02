@@ -1435,11 +1435,14 @@ export function buildPageEnvelope<T>(ticker: string, page: number, pageSize: num
   return { ticker, page, pageSize, totalRows, headers: [...headers], rows };
 }
 
-function sortJsonKeys(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortJsonKeys);
+// Keys are sorted for stable diffs, except `metrics` objects: they keep contract order
+// (returns, yields, then returnsBasis and performanceAsOf last).
+function sortJsonKeys(value: unknown, parentKey = ''): unknown {
+  if (Array.isArray(value)) return value.map((item) => sortJsonKeys(item));
   if (value !== null && typeof value === 'object') {
     const source = value as JsonRecord;
-    return Object.fromEntries(Object.keys(source).sort().map((key) => [key, sortJsonKeys(source[key])]));
+    const keys = parentKey === 'metrics' ? Object.keys(source) : Object.keys(source).sort();
+    return Object.fromEntries(keys.map((key) => [key, sortJsonKeys(source[key], key)]));
   }
   return value;
 }

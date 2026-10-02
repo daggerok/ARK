@@ -366,6 +366,9 @@ describe('Yahoo fallback and return math', () => {
     expect(nothing.returnsBasis).toBe(UNAVAILABLE_RETURNS_BASIS);
     expect(nothing.performanceAsOf).toBeNull();
     expect(nothing.dividendYield).toBe(1.5);
+    const serialized = JSON.parse(stableStringify({ b: 1, metrics: { ytd: 1, returnsBasis: 'x', performanceAsOf: null, a: 2 } }));
+    expect(Object.keys(serialized)).toEqual(['b', 'metrics']);
+    expect(Object.keys(serialized.metrics)).toEqual(['ytd', 'returnsBasis', 'performanceAsOf', 'a']);
     expect(buildFundMetrics({ returnsBasis: '-' }, null, null).returnsBasis).toBe(UNAVAILABLE_RETURNS_BASIS);
     expect(buildFundMetrics({ performanceAsOf: '' }, null, null).performanceAsOf).toBeNull();
   });
