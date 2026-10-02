@@ -1,11 +1,16 @@
 #!/usr/bin/env bun
 /// <reference types="bun" />
 import { describe, expect, test } from 'bun:test';
+import { readFileSync } from 'node:fs';
 import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   ARK_FUNDS,
+  CONTROL_NAMES,
+  DEFAULT_SEC_UA,
+  historyWindowStartEpoch,
+  resolveControls,
   ARKY_HOLDINGS_HEADERS,
   ProviderHttpError,
   arkApiUrls,
@@ -65,15 +70,54 @@ import {
   writeIfChanged,
   writeJsonIfChanged,
 } from './update-data';
-import { readFile as readFixture } from 'node:fs/promises';
+// Small inline samples of the official ARK payloads (no captured pages).
+const overviewSample: unknown = {
+  feesView: '<div><div class="b-fees__item"><div class="b-fees__item-top"><b>TOTAL FEES</b><span>0.75%</span></div></div></div>',
+  detailsView: '<ul><li>TICKER <span>ARKK</span></li><li>NET ASSETS <span>$5,562 Million</span></li><li>TYPE <span>Active Equity ETF</span></li>' +
+    '<li>CUSIP <span>00214Q104</span></li><li>ISIN <span>US00214Q1040</span></li><li>PRIMARY EXCHANGE <span>Cboe BZX</span></li>' +
+    '<li>INCEPTION DATE <span>10/31/2014</span></li><li>EXPENSE RATIO <span>0.75%</span></li></ul>',
+  formattedDate: 'As of 08/31/2026',
+};
+const navHistorySample: unknown = {
+  chartData: [
+    { nav: 20.12, marketPrice: 20.38, epochDateMilliSeconds: 1414713600000 },
+    { nav: 20.11, marketPrice: 20.38, epochDateMilliSeconds: 1414972800000 },
+    { nav: 91.71, marketPrice: 91.7, epochDateMilliSeconds: 1790226000000 },
+    { nav: 90.78, marketPrice: 90.77, epochDateMilliSeconds: 1790312400000 },
+  ],
+};
+const performanceSample = (asOf: string, annualized: string[], cumulative: string[]): unknown => {
+  const table = (id: string, heads: string[], values: string[]): string =>
+    `<div class="tab-pane" id="${id}"><table><thead><tr><td>ARKK</td>${heads.map((h) => `<td>${h}</td>`).join('')}</tr></thead>` +
+    `<tbody><tr><td>NAV</td>${values.map((v) => `<td>${v}</td>`).join('')}</tr></tbody></table></div>`;
+  return {
+    ticker: 'ARKK',
+    view: `<div class="b-date__text">As of ${asOf}</div>` +
+      table('tab-annualized', ['1 Year', '3 Years', '5 Years', '10 Years', 'Since Inception'], annualized) +
+      table('tab-cumulative', ['1 Months', '3 Months', 'YTD', 'Since Inception'], cumulative) +
+      table('tab-calendar-year', ['2025 Year'], ['35.58%']),
+  };
+};
+const monthPerformanceSample = performanceSample('08/31/2026', ['14.07%', '25.02%', '-6.70%', '16.15%', '13.98%'], ['20.20%', '4.37%', '11.13%', '370.38%']);
+const quarterPerformanceSample = performanceSample('06/30/2026', ['14.82%', '22.29%', '-9.05%', '16.16%', '13.63%'], ['-1.53%', '19.45%', '4.85%', '343.82%']);
+const DISCLAIMER = '"Investors should carefully consider the investment objectives and risks of an ARK ETF before investing. ""NAV"" may differ from market price."';
+const arkkCsv = [
+  'date,fund,company,ticker,cusip,shares,market value ($),weight (%)',
+  '09/28/2026,ARKK,TESLA INC,TSLA,88160R101,"2,141,056","$796,708,348.16",9.12%',
+  '09/28/2026,ARKK,SPACE EXPLORATION TECHN-CL A,SPCX,84615Q103,"3,514,048","$522,468,656.64",5.98%',
+  '09/28/2026,ARKK,BRERA HOLDINGS PLC WTS,,BREADUMMY,"431,626","$936,627.77",0.01%',
+  DISCLAIMER,
+].join('\r\n');
+const arkyRows = [
+  'position,cusip,$ notional per note,market value ($),market weight (%)',
+  'GOLDMAN FS TRSY OBLIG INST 468,X9USDGSFT,"35,922,746","$35,922,745.78",86.13%',
+  'TREASURY BILL 0 8/5/2027,912797VR5,"4,900,000","$4,718,634.73",11.31%',
+  'BMNR Autocall ELN LONG TRS 31.22 PA 10/18/2027,1740056,"800,000","$136,407.00",0.33%',
+].join('\r\n') + '\r\n';
+const arkyCsv = arkyRows;
 
-const fixture = (name: string): URL => new URL(`./fixtures/${name}`, import.meta.url);
-const arkkCsv = await readFixture(fixture('arkk-holdings-2026-09-28.csv'), 'utf8');
-const arkyCsv = await readFixture(fixture('arky-holdings-2026-09-28.csv'), 'utf8');
-const overviewFixture = JSON.parse(await readFixture(fixture('arkk-overview-2026-09-28.json'), 'utf8')) as unknown;
-const monthPerformanceFixture = JSON.parse(await readFixture(fixture('arkk-performance-month-end-2026-09-28.json'), 'utf8')) as unknown;
-const quarterPerformanceFixture = JSON.parse(await readFixture(fixture('arkk-performance-quarter-end-2026-09-28.json'), 'utf8')) as unknown;
-const navHistoryFixture = JSON.parse(await readFixture(fixture('arkk-nav-history-sample-2026-09-28.json'), 'utf8')) as unknown;
+// readConfig rejects MAX_RETRIES < 1; unit tests that must not retry zero it on the parsed config
+const noRetryConfig = (env: Record<string, string>): ReturnType<typeof readConfig> => ({ ...readConfig(env), maxRetries: 0 });
 
 describe('ARK catalog and official page parsers', () => {
   test('the supported universe contains exactly the 14 official ETFs and excludes ARKVX', () => {
@@ -99,7 +143,7 @@ describe('ARK catalog and official page parsers', () => {
   });
 
   test('overview parser reads issuer facts, scaled net assets, fee and effective dates', () => {
-    const parsed = parseArkOverview(overviewFixture);
+    const parsed = parseArkOverview(overviewSample);
     expect(parsed.ticker).toBe('ARKK');
     expect(parsed.netAssets).toBe(5_562_000_000);
     expect(parsed.netAssetsText).toBe('$5,562 Million');
@@ -125,7 +169,7 @@ describe('ARK catalog and official page parsers', () => {
   });
 
   test('official NAV history parser sorts source points and computes premium/discount', () => {
-    const rows = parseArkNavHistory(navHistoryFixture);
+    const rows = parseArkNavHistory(navHistorySample);
     expect(rows).toHaveLength(4);
     expect(rows[0].date).toBe('2014-10-31');
     expect(rows[0].nav).toBe(20.12);
@@ -137,8 +181,8 @@ describe('ARK catalog and official page parsers', () => {
   });
 
   test('official performance parser reads month-end and quarter-end NAV tables', () => {
-    const month = parseArkPerformance(monthPerformanceFixture);
-    const quarter = parseArkPerformance(quarterPerformanceFixture);
+    const month = parseArkPerformance(monthPerformanceSample);
+    const quarter = parseArkPerformance(quarterPerformanceSample);
     expect(month.ticker).toBe('ARKK');
     expect(month.asOfDate).toBe('2026-08-31');
     expect(month.navAnnualized['1Y']).toBe(14.07);
@@ -190,7 +234,7 @@ describe('official holdings CSV parsers', () => {
   test('standard ARK CSV preserves source identifiers, share counts, market values and weights', () => {
     const parsed = parseArkHoldingsCsv(arkkCsv, 'ARKK');
     expect(parsed.headers).toEqual([...HOLDINGS_HEADERS]);
-    expect(parsed.totalRows).toBe(46); // source also has one trailing legal disclaimer row
+    expect(parsed.totalRows).toBe(3); // source also has one trailing legal disclaimer row
     expect(parsed.asOfDate).toBe('2026-09-28');
     expect(parsed.rows[0]).toMatchObject({
       Name: 'TESLA INC', Ticker: 'TSLA', Identifier: '88160R101', Weight: '9.12%',
@@ -202,7 +246,7 @@ describe('official holdings CSV parsers', () => {
   test('ARKY uses the separate five-source-column parser and does not mislabel notional as shares', () => {
     const parsed = parseArkHoldingsCsv(arkyCsv, 'ARKY', 'Mon, 28 Sep 2026 06:05:49 GMT');
     expect(parsed.headers).toEqual([...ARKY_HOLDINGS_HEADERS]);
-    expect(parsed.totalRows).toBe(47);
+    expect(parsed.totalRows).toBe(3);
     expect(parsed.asOfDate).toBe('2026-09-28');
     expect(parsed.rows[0]).toMatchObject({
       Name: 'GOLDMAN FS TRSY OBLIG INST 468', Ticker: '', Identifier: 'X9USDGSFT',
@@ -214,7 +258,7 @@ describe('official holdings CSV parsers', () => {
   });
 
   test('ARKY source percentages over 100 percent are preserved unchanged', () => {
-    const synthetic = arkyCsv + 'OVERWEIGHT NOTE,CUSIP-X,1,1,101.25%\r\n';
+    const synthetic = arkyRows + 'OVERWEIGHT NOTE,CUSIP-X,1,1,101.25%\r\n';
     const parsed = parseArkHoldingsCsv(synthetic, 'ARKY', '2026-09-28');
     expect(parsed.rows.at(-1)?.Weight).toBe('101.25%');
     expect(numberOrNull(parsed.rows.at(-1)?.Weight)).toBe(101.25);
@@ -429,7 +473,7 @@ describe('SEC fallback parsing and static output helpers', () => {
   });
 
   test('writeIfChanged distinguishes the first write from an identical rerun', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'ark-fixture-'));
+    const directory = await mkdtemp(join(tmpdir(), 'ark-sample-'));
     try {
       const file = join(directory, 'funds', 'ARKK', '001.json');
       expect(await writeIfChanged(file, '{"rows":[]}\n')).toBe('written');
@@ -501,7 +545,7 @@ describe('paced provider request clients', () => {
     const calls: Array<{ url: string; respondWith: string | null }> = [];
     const notices: string[] = [];
     let clock = 0;
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+    const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0' }), {
       now: () => clock,
       sleep: async (milliseconds) => { clock += milliseconds; },
       fetchImpl: async (input, init) => {
@@ -535,7 +579,7 @@ describe('paced provider request clients', () => {
   test('proxied issuer requests never start closer than the r.jina.ai keyless limit allows', async () => {
     let clock = 0;
     const proxyStarts: number[] = [];
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+    const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0' }), {
       now: () => clock,
       sleep: async (milliseconds) => { clock += milliseconds; },
       fetchImpl: async (input) => {
@@ -590,7 +634,7 @@ describe('paced provider request clients', () => {
     // Real timers: a 40 ms timeout with 3 requests queued behind a 60 ms lane.
     // Before the fix the last requests expired in the queue and were retried.
     const retries: string[] = [];
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0.06', MAX_RETRIES: '0' }), {
+    const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0.06' }), {
       requestTimeoutMs: 40,
       onRetry: (message) => retries.push(message),
       fetchImpl: (input, init) => new Promise<Response>((resolve, reject) => {
@@ -606,12 +650,12 @@ describe('paced provider request clients', () => {
 
   test('issuer requests carry the honest contact-bearing User-Agent (no browser spoofing)', async () => {
     const seen: string[] = [];
-    const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0' }), {
+    const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0' }), {
       fetchImpl: async (_input, init) => { seen.push(new Headers(init?.headers).get('user-agent') ?? ''); return new Response('ok', { status: 200 }); },
     });
     await client.ark('https://www.ark-funds.com/funds/arkk');
     expect(seen).toEqual([ISSUER_USER_AGENT]);
-    expect(ISSUER_USER_AGENT).toContain('DaggerOk');
+    expect(ISSUER_USER_AGENT).toBe('daggerok ETF feed daggerok@gmail.com');
     expect(ISSUER_USER_AGENT).toContain('@'); // contact
     expect(ISSUER_USER_AGENT).not.toMatch(/https?:\/\//); // any URL in the UA is answered with HTTP 403 by ark-funds.com
     expect(ISSUER_USER_AGENT.startsWith('Mozilla/5.0')).toBe(false);
@@ -637,7 +681,7 @@ describe('paced provider request clients', () => {
       for (const concurrency of [1, 3, 15]) {
         starts.clear();
         peak = 0;
-        const client = createRequestClients(readConfig({ REQUEST_SLEEP: '0.06', MAX_RETRIES: '0', CONCURRENCY: String(concurrency) }));
+        const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0.06', CONCURRENCY: String(concurrency) }));
         const funds = Array.from({ length: 15 }, (_, index) => index);
         const before = performance.now();
         await Promise.all(Array.from({ length: concurrency }, (_, lane) => withRequestLane(60, async () => {
@@ -683,7 +727,7 @@ describe('paced provider request clients', () => {
 });
 
 describe('per-fund filesystem integration', () => {
-  test('official fixture responses produce UI-compatible paginated files and byte-stable reruns', async () => {
+  test('official sample responses produce UI-compatible paginated files and byte-stable reruns', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'ark-update-'));
     const ticker = 'ARKK';
     const fund = ARK_FUNDS.find((item) => item.ticker === ticker)!;
@@ -706,11 +750,11 @@ describe('per-fund filesystem integration', () => {
       ark: async (url: string) => {
         arkUrls.push(url);
         if (url === fund.fundPage) return respond('<script>url: "/api/fund/overview/1004"</script>', url);
-        if (url.includes('/api/fund/overview/1004')) return respond(JSON.stringify(overviewFixture), url);
-        if (url.includes('/api/fund/nav-historical-change/1004')) return respond(JSON.stringify(navHistoryFixture), url);
+        if (url.includes('/api/fund/overview/1004')) return respond(JSON.stringify(overviewSample), url);
+        if (url.includes('/api/fund/nav-historical-change/1004')) return respond(JSON.stringify(navHistorySample), url);
         if (url.includes('/api/fund/performance/1004')) {
           const range = new URL(url).searchParams.get('Range');
-          return respond(JSON.stringify(range === 'quarter-end' ? quarterPerformanceFixture : monthPerformanceFixture), url);
+          return respond(JSON.stringify(range === 'quarter-end' ? quarterPerformanceSample : monthPerformanceSample), url);
         }
         throw new Error(`unexpected ARK URL: ${url}`);
       },
@@ -719,18 +763,18 @@ describe('per-fund filesystem integration', () => {
       sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
       isArkProxyActive: () => false,
     };
-    const config = readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
+    const config = noRetryConfig({ REQUEST_SLEEP: '0', HOLDINGS_PAGE_SIZE: '2', HISTORY_PAGE_SIZE: '2' });
     try {
       const first = await updateArkFund(fund, config, clients, { apiRoot: directory, referenceDate });
-      expect(first.entry).toMatchObject({ ticker: 'ARKK', holdings: 46, history: 4, terValue: 0.75, metrics: { tr1y: 14.07, cagr3y: 25.02 } });
+      expect(first.entry).toMatchObject({ ticker: 'ARKK', holdings: 3, history: 4, terValue: 0.75, metrics: { tr1y: 14.07, cagr3y: 25.02 } });
       expect(first.entry).toMatchObject({ returns: { monthEnd: { ytd: 11.13, asOfDate: 'Aug 31 2026' }, quarterEnd: { asOfDate: 'Jun 30 2026' } } });
       const fundRoot = join(directory, 'funds', ticker);
       const metaText = await readFile(join(fundRoot, 'meta.json'), 'utf8');
       const meta = JSON.parse(metaText) as Record<string, unknown>;
       expect(meta).toMatchObject({ source: { pageId: '1004', holdingsSource: 'official ARK daily holdings CSV', historySource: 'official ARK Invest daily NAV and market-price history API' } });
       const holdingsPage = JSON.parse(await readFile(join(fundRoot, 'holdings', '001.json'), 'utf8')) as Record<string, unknown>;
-      expect(holdingsPage).toMatchObject({ ticker: 'ARKK', page: 1, totalRows: 46, headers: ['Name', 'Ticker', 'Identifier', 'Weight', 'Market Value', 'Shares Held', 'Asset Category'] });
-      expect(holdingsPage.rows).toBeArrayOfSize(20);
+      expect(holdingsPage).toMatchObject({ ticker: 'ARKK', page: 1, totalRows: 3, headers: ['Name', 'Ticker', 'Identifier', 'Weight', 'Market Value', 'Shares Held', 'Asset Category'] });
+      expect(holdingsPage.rows).toBeArrayOfSize(2);
       expect((holdingsPage.rows as Array<Record<string, unknown>>)[0]).toMatchObject({ Ticker: 'TSLA', Weight: '9.12%' });
       const historyPage = JSON.parse(await readFile(join(fundRoot, 'history', '001.json'), 'utf8')) as Record<string, unknown>;
       expect(historyPage).toMatchObject({ totalRows: 4, headers: ['Date', 'NAV', 'Market Price', 'Premium/Discount'] });
@@ -738,7 +782,7 @@ describe('per-fund filesystem integration', () => {
 
       const paths = [
         join(fundRoot, 'meta.json'),
-        join(fundRoot, 'holdings', '001.json'), join(fundRoot, 'holdings', '002.json'), join(fundRoot, 'holdings', '003.json'),
+        join(fundRoot, 'holdings', '001.json'), join(fundRoot, 'holdings', '002.json'),
         join(fundRoot, 'history', '001.json'), join(fundRoot, 'history', '002.json'),
       ];
       const before = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
@@ -751,11 +795,20 @@ describe('per-fund filesystem integration', () => {
       // heavy fund-page render is skipped on repeat runs (never a static map).
       expect(arkUrls).not.toContain(fund.fundPage);
       expect(arkUrls.filter((url) => url.includes('/api/fund/overview/1004'))).toHaveLength(1);
-      const retainedConfig = readConfig({ SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0', MAX_RETRIES: '0', HOLDINGS_PAGE_SIZE: '20', HISTORY_PAGE_SIZE: '2' });
+      const retainedConfig = noRetryConfig({ SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0', HOLDINGS_PAGE_SIZE: '2', HISTORY_PAGE_SIZE: '2' });
       const retained = await updateArkFund(fund, retainedConfig, clients, { apiRoot: directory, referenceDate });
-      expect(retained).toMatchObject({ holdingsCount: 46, historyCount: 4 });
+      expect(retained).toMatchObject({ holdingsCount: 3, historyCount: 4 });
       const afterRetention = await Promise.all(paths.map((file) => readFile(file, 'utf8')));
       expect(afterRetention).toEqual(before);
+
+      // HISTORY_RANGE=1y keeps only the official NAV points of the last year (2 of the 4 sample points)
+      const windowDirectory = await mkdtemp(join(tmpdir(), 'ark-window-'));
+      try {
+        const windowed = await updateArkFund(fund, noRetryConfig({ REQUEST_SLEEP: '0', HISTORY_RANGE: '1y' }), clients, { apiRoot: windowDirectory, referenceDate });
+        expect(windowed).toMatchObject({ historyCount: 2 });
+      } finally {
+        await rm(windowDirectory, { recursive: true, force: true });
+      }
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
@@ -773,8 +826,8 @@ describe('bounded updater orchestration', () => {
       sec: async (url: string) => { requests.push(url); throw new Error('EDGAR_FALLBACK=0 should prevent this request'); },
       isArkProxyActive: () => false,
     };
-    const config = readConfig({
-      TICKERS: 'ARKK ARKY', MAX_FETCHES: '1', REQUEST_SLEEP: '0', MAX_RETRIES: '0',
+    const config = noRetryConfig({
+      TICKERS: 'ARKK ARKY', MAX_FETCHES: '1', REQUEST_SLEEP: '0',
       SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0',
     });
     await writeJsonIfChanged(join(directory, 'index.json'), {
@@ -809,7 +862,7 @@ describe('bounded updater orchestration', () => {
     const directory = await mkdtemp(join(tmpdir(), 'ark-catalog-proxy-'));
     const calls: Array<{ url: string; respondWith: string | null }> = [];
     const notices: string[] = [];
-    const config = readConfig({ CATEGORY: 'not-a-supported-category', REQUEST_SLEEP: '0', MAX_RETRIES: '0' });
+    const config = noRetryConfig({ CATEGORY: 'not-a-supported-category', REQUEST_SLEEP: '0' });
     const clients = createRequestClients(config, {
       fetchImpl: async (input, init) => {
         const url = String(input);
@@ -917,5 +970,105 @@ describe('README parity guard', () => {
     expect(siblingNames).toEqual(brandNames);
     expect(markdown).toContain('https://daggerok.github.io/ARK/');
     expect(markdown).toContain('https://github.com/daggerok/ARK');
+  });
+});
+
+describe('configuration resolver', () => {
+  const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+  const file = JSON.parse(read('scripts/update-data.config.json'));
+
+  test('precedence: file < advanced < nonblank input < environment (explicit empty env clears)', () => {
+    const c = resolveControls({ CONCURRENCY: 2, TICKERS: 'ARKK' }, { CONCURRENCY: 3, TICKERS: 'ARKQ' }, { CONCURRENCY: '4', TICKERS: '' }, { ARK_CONCURRENCY: '5', CONCURRENCY: '6' });
+    expect(c.CONCURRENCY).toBe('5');
+    expect(c.TICKERS).toBe('ARKQ');
+    expect(resolveControls({ TICKERS: 'ARKK' }, { TICKERS: '' }, { TICKERS: '' }).TICKERS).toBe('');
+    expect(resolveControls({ CONCURRENCY: 2 }, {}, { CONCURRENCY: '' }).CONCURRENCY).toBe('2');
+    expect(resolveControls({ SKIP_YAHOO: true }, {}, {}, { SKIP_YAHOO: 'false' }).SKIP_YAHOO).toBe('false');
+    expect(resolveControls({ TICKERS: 'ARKK' }, {}, { TICKERS: 'ARKW' }, { TICKERS: '' }).TICKERS).toBe('');
+    expect(readConfig(resolveControls({ CATEGORY: 'Thematic' })).category).toBe('Thematic');
+  });
+
+  test('invalid layers and values are rejected, never silently replaced', () => {
+    const bad: unknown[] = [{ UNKNOWN: 1 }, { SEC_UA: 'x\nEVIL=yes' }, { CONCURRENCY: 0 }, { MAX_RETRIES: 0 }, { MAX_RETRIES: -1 }, { MAX_RETRIES: 'x' }, { MAX_FETCHES: 1.5 },
+      { REQUEST_SLEEP: '-1' }, { VERBOSE: 'maybe' }, { AUM: '1:2:3' }, { TER: '5:1' }, { HISTORY_RANGE: '0y' }, { HISTORY_RANGE: 'forever' }, { TICKERS: ['ARKK'] }, null, []];
+    for (const value of bad) expect(() => resolveControls(value)).toThrow();
+    expect(() => resolveControls({}, { SEC_UA: 'x\rfoo' })).toThrow();
+    expect(() => resolveControls({}, {}, {}, { ARK_SEC_UA: 'x\0bad' })).toThrow();
+    expect(() => resolveControls(file, 'x')).toThrow();
+    expect(() => resolveControls(file, {}, { TICKERS: { a: 1 } })).toThrow();
+    expect(() => readConfig({ MAX_RETRIES: '0' })).toThrow('MAX_RETRIES');
+    expect(readConfig(resolveControls({ MAX_RETRIES: 1 })).maxRetries).toBe(1);
+  });
+
+  test('scheduled path (empty inputs and advanced) equals config defaults, with provider defaults', () => {
+    expect(resolveControls(file, {}, {}, {})).toEqual(Object.fromEntries(Object.entries(file).map(([k, v]) => [k, String(v)])));
+    const config = readConfig(resolveControls(file));
+    expect(config.tickers).toEqual([]);
+    expect(config.maxFetches).toBe(0);
+    expect(config.requestSleepSeconds).toBe(1.5);
+    expect(config.concurrency).toBe(2);
+    expect(config.maxRetries).toBe(2);
+    expect(config.historyRange).toBe('max');
+    expect(config.edgarFallback).toBe(true);
+    expect(file.SEC_UA).toBe('daggerok ETF feed daggerok@gmail.com');
+    expect(config.secUa).toBe(DEFAULT_SEC_UA);
+    expect(DEFAULT_SEC_UA).toBe(file.SEC_UA);
+  });
+
+  test('the protected SEC_UA variable wins only when the workflow passes it as the last layer', () => {
+    expect(resolveControls(file, { SEC_UA: 'adv' }, { SEC_UA: 'in' }, { SEC_UA: 'protected' }).SEC_UA).toBe('protected');
+    expect(resolveControls(file, { SEC_UA: 'adv' }, { SEC_UA: 'in' }, {}).SEC_UA).toBe('in');
+  });
+
+  test('HISTORY_RANGE limits the Yahoo request window', () => {
+    const now = 1_800_000_000;
+    expect(new URL(yahooChartUrl('ARKK', now)).searchParams.get('period1')).toBe('0');
+    expect(new URL(yahooChartUrl('ARKK', now, 'max')).searchParams.get('period1')).toBe('0');
+    expect(new URL(yahooChartUrl('ARKK', now, '5y')).searchParams.get('period1')).toBe(String(Math.floor(now - 5 * 365.25 * 86_400)));
+    expect(historyWindowStartEpoch('1y', now)).toBeGreaterThan(historyWindowStartEpoch('10y', now));
+    expect(historyWindowStartEpoch('max', now)).toBe(0);
+  });
+
+  test('config keys, CONTROL_NAMES, README rows and --help are in sync', () => {
+    expect(Object.keys(file).sort()).toEqual([...CONTROL_NAMES].sort());
+    const doc = read('README.md');
+    for (const name of CONTROL_NAMES) {
+      const tenor = name.match(/^(PERFORMANCE|TOTAL_RETURN)_(1Y|3Y|5Y|10Y)$/);
+      expect(doc).toContain(tenor ? '`_' + tenor[2] + '`' : '`' + name + '`');
+      if (tenor) expect(doc).toContain('`' + tenor[1] + '_YTD`');
+    }
+    expect(doc).toContain('scripts/update-data.config.json');
+    for (const name of CONTROL_NAMES) {
+      const tenor = name.match(/^(PERFORMANCE|TOTAL_RETURN)_(YTD|1Y|3Y|5Y|10Y)$/);
+      expect(USAGE).toContain(tenor ? `${tenor[1]}_YTD|1Y|3Y|5Y|10Y` : name);
+    }
+  });
+});
+
+describe('workflow shape', () => {
+  const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+  const workflow = read('.github/workflows/update-data.yml');
+
+  test('at most 25 inputs, advanced JSON, every individual input maps to a control', () => {
+    const names = [...workflow.slice(workflow.indexOf('    inputs:'), workflow.indexOf('\npermissions:')).matchAll(/^      (\w+):$/gm)].map((m) => m[1]);
+    expect(names.length).toBeLessThanOrEqual(25);
+    expect(names).toContain('advanced');
+    for (const name of names.filter((n) => n !== 'advanced')) expect(CONTROL_NAMES as readonly string[]).toContain(name.toUpperCase());
+    expect(workflow).toContain("default: '{}'");
+    expect(workflow).toContain("cron: '0 0 * * 0'");
+    expect(workflow).not.toMatch(/^  push:/m);
+  });
+
+  test('uses the shared resolver, keeps SEC_UA protected and writes only api/ark', () => {
+    expect(workflow).toContain('resolveControls(file, advanced, individual, protectedVars)');
+    expect(workflow).toContain('PROTECTED_SEC_UA: ${{ vars.SEC_UA }}');
+    expect(workflow).toContain('toJSON(inputs)');
+    expect(workflow).not.toMatch(/\$\{\{\s*inputs\./);
+    expect(workflow).not.toMatch(/OUTPUT_DIR|output_dir/i);
+    expect(workflow).not.toContain('bunx tsc');
+    expect(workflow).toContain('persist-credentials: false');
+    expect(workflow).toContain('timeout-minutes: 30');
+    expect(workflow.match(/git add (\S+)/g)).toEqual(['git add api/ark']);
+    expect(workflow.match(/api\/[\w-]+/g)!.every((p) => p === 'api/ark')).toBe(true);
   });
 });
