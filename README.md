@@ -10,7 +10,7 @@ bunx serve . -p 1234
 open http://0:1234
 ```
 
-GitHub Pages serves the `main` branch; the application will be available at <https://daggerok.github.io/ARK/> once the implementation branch is merged (deployment pending).
+The published application is available at <https://daggerok.github.io/ARK/>.
 
 ## Updating the static ARK Invest data
 
