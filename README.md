@@ -23,7 +23,7 @@ bun scripts/update-data.ts
 
 Run `bun scripts/update-data.ts -h` (or `--help`) to print every configuration variable with its default and usage examples.
 
-Defaults live in `scripts/update-data.config.json` (every control as a string). Explicit environment variables override the file; an `ARK_<KEY>` alias (for example `ARK_CONCURRENCY`) wins over the plain `<KEY>` when both are set. The **Update ARK Invest ETF data** GitHub Actions workflow uses the same `resolveControls` resolver: individual `workflow_dispatch` inputs are blank by default and inherit the file, the `advanced` input accepts a JSON object with any control, and the precedence is file defaults < advanced JSON < nonblank individual inputs < protected Actions variable/env. GitHub allows at most 25 inputs, so `SEC_UA`, `SKIP_ARK` and `VERBOSE` are set through `advanced` (for example `{"VERBOSE":"true"}`). Scheduled runs have no inputs and use the file defaults. The real SEC contact belongs in the protected repository Actions variable `SEC_UA`, which wins when nonblank; the config default is a non-personal descriptor with the repository URL. All supplied filters use **AND** logic.
+Defaults live in `scripts/update-data.config.json` (every control as a string). Explicit environment variables override the file; an `ARK_<KEY>` alias (for example `ARK_CONCURRENCY`) wins over the plain `<KEY>` when both are set. The **Update ARK Invest ETF data** GitHub Actions workflow uses the same `resolveControls` resolver: individual `workflow_dispatch` inputs are blank by default and inherit the file, the `advanced` input accepts a JSON object with any control, and the precedence is file defaults < advanced JSON < nonblank individual inputs < protected Actions variable/env. GitHub allows at most 25 inputs, so controls without an individual input (see the workflow) are set through `advanced` (for example `{"VERBOSE":"true"}`). Scheduled runs have no inputs and use the file defaults. The real SEC contact belongs in the protected repository Actions variable `SEC_UA`, which wins when nonblank; the config default is `daggerok ETF feed daggerok@gmail.com`. An explicitly set environment variable wins even when empty (it clears the control), and invalid values fail with an error instead of falling back silently. All supplied filters use **AND** logic.
 
 ### Data sources
 
@@ -37,7 +37,7 @@ Defaults live in `scripts/update-data.config.json` (every control as a string). 
 | Distributions | Yahoo Finance chart API dividend events (ARK publishes no dividend-history endpoint) |
 | Fallback | SEC EDGAR N-PORT-P (ARK ETF Trust, CIK 0001579982; Ark 21Shares Bitcoin ETF, CIK 0001869699) + Yahoo Finance chart API as fallbacks |
 
-All issuer requests go directly to ark-funds.com with a short contact-bearing User-Agent (`DaggerOk ARK static feed updater (admin@…)`). The site's Cloudflare WAF answers HTTP 403 to any User-Agent that contains a URL (the crawler-style `(+https://github.com/…)`) and challenges browser User-Agents sent from a non-browser TLS stack, so the updater deliberately uses neither. Only if two consecutive direct requests are still denied does it fall back to the read-only `r.jina.ai` reader for the remaining issuer requests (one `[ issuer   ]` notice; that reader is limited to roughly 20 requests per minute, so proxied requests are spaced 3 seconds apart across the whole run). A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page download on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund whose sources fail keeps its previously published data.
+All issuer requests go directly to ark-funds.com with a short contact-bearing User-Agent (`daggerok ETF feed daggerok@gmail.com`). The site's Cloudflare WAF answers HTTP 403 to any User-Agent that contains a URL (the crawler-style `(+https://github.com/…)`) and challenges browser User-Agents sent from a non-browser TLS stack, so the updater deliberately uses neither. Only if two consecutive direct requests are still denied does it fall back to the read-only `r.jina.ai` reader for the remaining issuer requests (one `[ issuer   ]` notice; that reader is limited to roughly 20 requests per minute, so proxied requests are spaced 3 seconds apart across the whole run). A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page download on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund whose sources fail keeps its previously published data.
 
 ### Metrics and caveats
 
@@ -72,8 +72,9 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | `TOTAL_RETURN_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Cumulative NAV total-return ranges in %. |
 | `HOLDINGS_PAGE_SIZE` | `250` | Rows in each generated current-holdings JSON page. |
 | `HISTORY_PAGE_SIZE` | `1000` | Rows in each generated daily-history JSON page. |
-| `MAX_RETRIES` | `2` | Retries after the initial request. Only network errors (including the 90-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
-| `SEC_UA` | repo-URL descriptor | Override the SEC User-Agent. SEC policy requires automated tools to declare a contact; set the real one through the protected `SEC_UA` Actions variable. |
+| `MAX_RETRIES` | `2` | Retries after the initial request (integer >= 1). Only network errors (including the 90-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
+| `HISTORY_RANGE` | `max` | `max` or `Ny` (for example `5y`): limits the Yahoo request window and the published daily-history rows to the last N years. |
+| `SEC_UA` | `daggerok ETF feed daggerok@gmail.com` | SEC User-Agent; SEC policy requires automated tools to declare a contact. The protected `SEC_UA` Actions variable overrides it when nonblank. |
 | `EDGAR_FALLBACK` | on | Set to `0`/`false` to disable the SEC EDGAR N-PORT-P holdings fallback. |
 | `SKIP_ARK` | off | Do not request ark-funds.com; keep the fixed catalog and previously published official data and only run the fallbacks. |
 | `SKIP_YAHOO` | off | Skip Yahoo Finance history and distribution updates. |
@@ -104,7 +105,7 @@ bun build --target=bun scripts/update-data.ts --outfile=/dev/null
 git diff --check
 ```
 
-The config/README/`--help` parity and workflow checks run as part of `bun test` (`scripts/config-docs.test.ts`).
+Config, README and `--help` parity, workflow shape and parser checks all run as part of `bun test`.
 
 ## Brands table
 
@@ -129,7 +130,7 @@ The config/README/`--help` parity and workflow checks run as part of `bun test` 
 | **ProShares** | [proshares.com](https://www.proshares.com/our-etfs/find-proshares-etfs) \| [ProShares](https://daggerok.github.io/ProShares/) |
 | **Schwab** | [schwabassetmanagement.com](https://www.schwabassetmanagement.com/products) \| [Schwab](https://daggerok.github.io/Schwab/) |
 | **SPDR** | [ssga.com](https://www.ssga.com/us/en/intermediary/etfs/fund-finder) \| [SPDR](https://daggerok.github.io/SPDR/) |
-| **Sprott ETFs** | [sprottetfs.com](https://sprottetfs.com/) \| [Sprott](https://daggerok.github.io/Sprott/) (deployment pending) |
+| **Sprott ETFs** | [sprottetfs.com](https://sprottetfs.com/) \| [Sprott](https://daggerok.github.io/Sprott/) |
 | **Tema ETFs** | [temaetfs.com](https://temaetfs.com/funds) \| [Tema](https://daggerok.github.io/Tema/) |
 | **Themes ETFs** | [themesetfs.com/etfs](https://themesetfs.com/etfs) \| [Themes](https://daggerok.github.io/Themes/) |
 | **VanEck** | [vaneck.com](https://www.vaneck.com/us/en/etf-mutual-fund-finder/) \| [VanEck](https://daggerok.github.io/VanEck/) |
