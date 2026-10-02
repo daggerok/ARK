@@ -167,6 +167,7 @@ const DEFAULT_HISTORY_PAGE_SIZE = 1000;
 const DEFAULT_REQUEST_SLEEP = 1.5;
 const DEFAULT_CONCURRENCY = 2;
 const DEFAULT_MAX_RETRIES = 2;
+export const DEFAULT_SEC_UA = 'daggerok ETF feed daggerok@gmail.com';
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const RETURN_PERIODS: readonly ReturnPeriod[] = ['YTD', '1Y', '3Y', '5Y', '10Y'];
 const AUM_PRESETS = {
@@ -676,10 +677,16 @@ export function buildOfficialReturns(monthEnd: ArkPerformance | null, quarterEnd
 // Yahoo Finance fallback and return calculations
 // ---------------------------------------------------------------------------
 
-export function yahooChartUrl(tickerValue: string, nowEpochSeconds = Math.floor(Date.now() / 1000)): string {
+/** First epoch second of the Yahoo request window: `max` -> 0, `Ny` -> N years before now. */
+export function historyWindowStartEpoch(historyRange: string, nowEpochSeconds: number): number {
+  const years = /^([1-9]\d*)y$/i.exec(historyRange.trim());
+  return years ? Math.max(0, Math.floor(nowEpochSeconds - Number(years[1]) * 365.25 * 86_400)) : 0;
+}
+
+export function yahooChartUrl(tickerValue: string, nowEpochSeconds = Math.floor(Date.now() / 1000), historyRange = 'max'): string {
   const ticker = tickerOrBlank(tickerValue);
   const query = new URLSearchParams({
-    period1: '0',
+    period1: String(historyWindowStartEpoch(historyRange, nowEpochSeconds)),
     period2: String(Math.floor(nowEpochSeconds)),
     interval: '1d',
     events: 'div|split',
@@ -928,6 +935,7 @@ export type UpdaterConfig = {
   maxRetries: number;
   holdingsPageSize: number;
   historyPageSize: number;
+  historyRange: string;
   tickers: string[];
   category: string;
   secUa: string;
@@ -958,6 +966,18 @@ export function parsePositiveInt(raw: string, fallback: number): number {
 export function parseNonNegativeInt(raw: string, fallback: number): number {
   const parsed = Number.parseInt(raw, 10);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+export function parseRetries(raw: string): number {
+  if (!raw) return DEFAULT_MAX_RETRIES;
+  if (!/^\d+$/.test(raw) || !Number.isSafeInteger(Number(raw)) || Number(raw) < 1) throw new Error('MAX_RETRIES: expected integer >= 1');
+  return Number(raw);
+}
+
+export function parseHistoryRange(raw: string): string {
+  if (!raw) return 'max';
+  if (!/^(max|[1-9]\d*y)$/i.test(raw)) throw new Error('HISTORY_RANGE: use max or Ny (e.g. 5y)');
+  return raw.toLowerCase();
 }
 
 export function parseNonNegativeDecimal(raw: string, fallback: number): number {
@@ -1028,12 +1048,13 @@ export function readConfig(env: Record<string, string | undefined> = process.env
     concurrency: parsePositiveInt(envValue(env, 'CONCURRENCY'), DEFAULT_CONCURRENCY),
     requestSleepSeconds: parseNonNegativeDecimal(envValue(env, 'REQUEST_SLEEP'), DEFAULT_REQUEST_SLEEP),
     maxFetches: parseNonNegativeInt(envValue(env, 'MAX_FETCHES'), 0),
-    maxRetries: parseNonNegativeInt(envValue(env, 'MAX_RETRIES'), DEFAULT_MAX_RETRIES),
+    maxRetries: parseRetries(envValue(env, 'MAX_RETRIES')),
     holdingsPageSize: parsePositiveInt(envValue(env, 'HOLDINGS_PAGE_SIZE'), DEFAULT_HOLDINGS_PAGE_SIZE),
     historyPageSize: parsePositiveInt(envValue(env, 'HISTORY_PAGE_SIZE', ['HISTORICAL_PAGE_SIZE']), DEFAULT_HISTORY_PAGE_SIZE),
+    historyRange: parseHistoryRange(envValue(env, 'HISTORY_RANGE')),
     tickers,
     category: cleanText(envValue(env, 'CATEGORY')),
-    secUa: envValue(env, 'SEC_UA') || 'DaggerOk ARK static feed updater https://github.com/daggerok/ARK',
+    secUa: envValue(env, 'SEC_UA') || DEFAULT_SEC_UA,
     skipArk: parseBoolean(envValue(env, 'SKIP_ARK')),
     skipYahoo: parseBoolean(envValue(env, 'SKIP_YAHOO')),
     edgarFallback: parseBoolean(envValue(env, 'EDGAR_FALLBACK'), true),
@@ -1101,9 +1122,10 @@ Environment controls:
   MAX_FETCHES          0 means all selected funds; positive values resume at the saved cursor.
   REQUEST_SLEEP        Seconds between request starts within each worker, including retries (default 1.5).
   CONCURRENCY          Independent parallel fund workers, each with its own request pacing (default 2).
-  MAX_RETRIES          Retry count for network/temporary HTTP errors (default 2).
+  MAX_RETRIES          Retry count for network/temporary HTTP errors (integer >= 1, default 2).
   HOLDINGS_PAGE_SIZE   Holdings rows per static JSON page (default 250).
   HISTORY_PAGE_SIZE    History rows per static JSON page (default 1000).
+  HISTORY_RANGE        Yahoo request window and published history rows: max or Ny (default max).
   CATEGORY             Keep a category name (case-insensitive substring).
   AUM                  Dollar min:max; K/M/B/T suffixes or nano/micro/small/mid/large presets.
   TER                  Expense-ratio percent min:max.
@@ -1111,7 +1133,7 @@ Environment controls:
   SEC_YIELD            Published 30-day SEC yield percent min:max.
   PERFORMANCE_YTD|1Y|3Y|5Y|10Y   Official annualized NAV performance range.
   TOTAL_RETURN_YTD|1Y|3Y|5Y|10Y  Cumulative NAV total-return range.
-  SEC_UA               Contact-bearing User-Agent for SEC EDGAR (default is a repository placeholder).
+  SEC_UA               Contact-bearing User-Agent for SEC EDGAR (default daggerok ETF feed daggerok@gmail.com).
   EDGAR_FALLBACK       Enable Form N-PORT-P holdings fallback (default true).
   SKIP_ARK             Do not request ark-funds.com (requires prior static data for source fallbacks).
   SKIP_YAHOO           Disable Yahoo history/distribution fallback.
@@ -1397,7 +1419,7 @@ type Sleep = (milliseconds: number) => Promise<void>;
  * stack; a plain tool name with a contact e-mail is accepted, also for 16
  * parallel requests. Never put a URL back into this string.
  */
-export const ISSUER_USER_AGENT = 'DaggerOk ARK static feed updater (admin@daggerok.example.com)';
+export const ISSUER_USER_AGENT = 'daggerok ETF feed daggerok@gmail.com';
 const ISSUER_DIRECT_DENIAL_LIMIT = 2;
 /**
  * r.jina.ai throttles keyless read requests to about 20 per minute per IP
@@ -2050,7 +2072,7 @@ async function fetchYahooFundData(
 ): Promise<YahooChart | null> {
   if (config.skipYahoo) return null;
   try {
-    const url = yahooChartUrl(fund.ticker, Math.floor(referenceDate.getTime() / 1000));
+    const url = yahooChartUrl(fund.ticker, Math.floor(referenceDate.getTime() / 1000), config.historyRange);
     const response = await clients.yahoo(url);
     const chart = parseYahooChart(parseProviderJson(response.text));
     if (!chart.points.length) throw new Error('chart returned no daily price points');
@@ -2172,7 +2194,9 @@ export async function updateArkFund(
   let historyAsOfDate = '';
   let historySource = '';
   if (official.history.length) {
-    historyRows = buildHistoryRows(official.history);
+    const windowStart = config.historyRange === 'max' ? '' : new Date(historyWindowStartEpoch(config.historyRange, Math.floor(referenceDate.getTime() / 1000)) * 1000).toISOString().slice(0, 10);
+    const windowed = windowStart ? official.history.filter((point) => point.date >= windowStart) : official.history;
+    historyRows = buildHistoryRows(windowed.length ? windowed : official.history);
     historyHeaders = HISTORY_HEADERS;
     historyAsOfDate = official.history[official.history.length - 1].date;
     historySource = 'official ARK Invest daily NAV and market-price history API';
@@ -2640,7 +2664,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
 // environment (`ARK_<KEY>` alias wins over `<KEY>`).
 export const CONTROL_NAMES = [
   'MAX_FETCHES', 'REQUEST_SLEEP', 'CONCURRENCY', 'AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD', 'TICKERS',
-  'CATEGORY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES', 'SEC_UA',
+  'CATEGORY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES', 'HISTORY_RANGE', 'SEC_UA',
   'SKIP_YAHOO', 'SKIP_ARK', 'EDGAR_FALLBACK', 'VERBOSE',
   ...['PERFORMANCE', 'TOTAL_RETURN'].flatMap((prefix) => ['YTD', '1Y', '3Y', '5Y', '10Y'].map((period) => `${prefix}_${period}`)),
 ] as const;
@@ -2676,7 +2700,7 @@ export function resolveControls(
   for (const key of ['MAX_FETCHES', 'CONCURRENCY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES']) {
     const v = result[key];
     if (v === undefined || v === '') continue;
-    const min = ['MAX_FETCHES', 'MAX_RETRIES'].includes(key) ? 0 : 1;
+    const min = key === 'MAX_FETCHES' ? 0 : 1;
     if (!/^\d+$/.test(v) || !Number.isSafeInteger(Number(v)) || Number(v) < min) throw new Error(`${key}: expected integer >= ${min}`);
   }
   if (result.REQUEST_SLEEP && (!Number.isFinite(Number(result.REQUEST_SLEEP)) || Number(result.REQUEST_SLEEP) < 0)) throw new Error('REQUEST_SLEEP: expected nonnegative seconds');
