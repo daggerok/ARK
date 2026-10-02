@@ -29,7 +29,13 @@ import {
   updateArkFund,
   unwrapJinaReaderText,
   HOLDINGS_HEADERS,
+  buildFundMetrics,
   buildOfficialReturns,
+  resolveReturnMetrics,
+  OFFICIAL_RETURNS_BASIS,
+  YAHOO_RETURNS_BASIS,
+  MIXED_RETURNS_BASIS,
+  UNAVAILABLE_RETURNS_BASIS,
   buildPageEnvelope,
   buildYahooReturns,
   cumulativeFromAnnualized,
@@ -203,6 +209,7 @@ describe('ARK catalog and official page parsers', () => {
     expect(returns.metrics.cagr3y).toBe(25.02);
     expect(returns.metrics.tr3y).toBe(cumulativeFromAnnualized(25.02, 3));
     expect(returns.metrics.returnsBasis).toContain('official ARK Invest');
+    expect(returns.metrics.performanceAsOf).toBe('2026-08-31');
   });
 
   test('performance parser supports reordered headings, zeroes and unavailable cells', () => {
@@ -326,6 +333,44 @@ describe('Yahoo fallback and return math', () => {
     expect(derived.quarterEnd.asOfDate).toBe('Jun 30 2026');
     expect(derived.quarterEnd.ytd).toBe(13.64);
     expect(derived.metrics.returnsBasis).toContain('Yahoo Finance');
+    expect(derived.metrics.performanceAsOf).toBe('2026-08-31');
+  });
+
+  test('metrics contract: full key set, basis and as-of last, null never zero', () => {
+    const official = { ytd: 5, tr1y: 10, cagr3y: 8, returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-08-31' };
+    const yahoo = { ytd: 6, tr1y: 11, cagr3y: 9, cagr5y: 7, returnsBasis: YAHOO_RETURNS_BASIS, performanceAsOf: '2026-08-31' };
+    const officialOnly = buildFundMetrics(resolveReturnMetrics(official, {}, {}), null, null);
+    expect(Object.keys(officialOnly)).toEqual([
+      'ytd', 'tr1y', 'tr3y', 'tr5y', 'tr10y', 'cagr3y', 'cagr5y', 'cagr10y', 'siAnn',
+      'dividendYield', 'dividendYieldText', 'secYield', 'secYieldText', 'returnsBasis', 'performanceAsOf',
+    ]);
+    expect(officialOnly.tr3y).toBeNull();
+    expect(officialOnly.ytd).toBe(5);
+    expect(officialOnly.returnsBasis).toBe(OFFICIAL_RETURNS_BASIS);
+    expect(officialOnly.performanceAsOf).toBe('2026-08-31');
+
+    const mixed = resolveReturnMetrics(official, yahoo, {});
+    expect(mixed.cagr5y).toBe(7);
+    expect(mixed.ytd).toBe(5);
+    expect(mixed.returnsBasis).toBe(MIXED_RETURNS_BASIS);
+
+    const yahooOnly = resolveReturnMetrics({}, { ...yahoo, performanceAsOf: '2026-09-25' }, {});
+    expect(yahooOnly.returnsBasis).toBe(YAHOO_RETURNS_BASIS);
+    expect(yahooOnly.performanceAsOf).toBe('2026-09-25');
+
+    const retained = resolveReturnMetrics({}, {}, { ytd: 3, returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-07-31' });
+    expect(retained.returnsBasis).toBe(OFFICIAL_RETURNS_BASIS);
+    expect(retained.performanceAsOf).toBe('2026-07-31');
+
+    const nothing = buildFundMetrics(resolveReturnMetrics({}, {}, {}), 1.5, null);
+    expect(nothing.returnsBasis).toBe(UNAVAILABLE_RETURNS_BASIS);
+    expect(nothing.performanceAsOf).toBeNull();
+    expect(nothing.dividendYield).toBe(1.5);
+    const serialized = JSON.parse(stableStringify({ b: 1, metrics: { ytd: 1, returnsBasis: 'x', performanceAsOf: null, a: 2 } }));
+    expect(Object.keys(serialized)).toEqual(['b', 'metrics']);
+    expect(Object.keys(serialized.metrics)).toEqual(['ytd', 'returnsBasis', 'performanceAsOf', 'a']);
+    expect(buildFundMetrics({ returnsBasis: '-' }, null, null).returnsBasis).toBe(UNAVAILABLE_RETURNS_BASIS);
+    expect(buildFundMetrics({ performanceAsOf: '' }, null, null).performanceAsOf).toBeNull();
   });
 
   test('dividend yield/frequency handling distinguishes None placeholder from Unknown', () => {

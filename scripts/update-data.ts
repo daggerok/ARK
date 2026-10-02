@@ -658,6 +658,57 @@ export function parseArkPerformance(payload: unknown): ArkPerformance {
   };
 }
 
+export const OFFICIAL_RETURNS_BASIS = 'official ARK Invest NAV total returns (fund performance API, month-end series)';
+export const YAHOO_RETURNS_BASIS = 'Yahoo Finance adjusted close total-return proxy (official ARK performance unavailable)';
+export const MIXED_RETURNS_BASIS = 'mixed: official ARK Invest NAV total returns where published, Yahoo Finance adjusted close estimates or previously published values for the rest';
+export const UNAVAILABLE_RETURNS_BASIS = 'no returns available (official ARK performance and Yahoo Finance history both unavailable)';
+export const RETURN_METRIC_KEYS = ['ytd', 'tr1y', 'tr3y', 'tr5y', 'tr10y', 'cagr3y', 'cagr5y', 'cagr10y', 'siAnn'] as const;
+
+function numberOrNullMetric(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function validIsoDate(value: unknown): string | null {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+}
+
+/**
+ * Merge return metrics in priority order (official > Yahoo > previously published) into the full
+ * contract key set (null when unavailable), ending with `returnsBasis` and `performanceAsOf`.
+ * The basis is honest about which sources actually supplied values; the as-of date is the oldest
+ * date among contributing sources (the provider table date, or the Yahoo close the returns end on).
+ */
+export function resolveReturnMetrics(official: JsonRecord, yahoo: JsonRecord, previous: JsonRecord): JsonRecord {
+  const layers: Array<{ name: 'official' | 'yahoo' | 'previous'; data: JsonRecord }> = [
+    { name: 'official', data: official },
+    { name: 'yahoo', data: yahoo },
+    { name: 'previous', data: previous },
+  ];
+  const out: JsonRecord = {};
+  const used = new Set<string>();
+  for (const key of RETURN_METRIC_KEYS) {
+    out[key] = null;
+    for (const layer of layers) {
+      const value = numberOrNullMetric(layer.data[key]);
+      if (value !== null) {
+        out[key] = value;
+        used.add(layer.name);
+        break;
+      }
+    }
+  }
+  const present = layers.filter((layer) => layer.name !== 'previous' && typeof layer.data.returnsBasis === 'string' && layer.data.returnsBasis);
+  const contributors = used.size ? layers.filter((layer) => used.has(layer.name)) : present.length ? [present[0]] : layers.filter((layer) => layer.name === 'previous');
+  const previousBasis = typeof previous.returnsBasis === 'string' && previous.returnsBasis.trim() && previous.returnsBasis.trim() !== '-' ? previous.returnsBasis.trim() : '';
+  const labels = new Set(contributors.map((layer) => (
+    layer.name === 'official' ? OFFICIAL_RETURNS_BASIS : layer.name === 'yahoo' ? YAHOO_RETURNS_BASIS : previousBasis || UNAVAILABLE_RETURNS_BASIS
+  )));
+  const dates = contributors.map((layer) => validIsoDate(layer.data.performanceAsOf)).filter((date): date is string => Boolean(date));
+  out.returnsBasis = labels.size === 1 ? [...labels][0] : MIXED_RETURNS_BASIS;
+  out.performanceAsOf = dates.length ? dates.sort()[0] : null;
+  return out;
+}
+
 export function buildOfficialReturns(monthEnd: ArkPerformance | null, quarterEnd: ArkPerformance | null): {
   monthEnd: JsonRecord;
   quarterEnd: JsonRecord;
@@ -704,7 +755,8 @@ export function buildOfficialReturns(monthEnd: ArkPerformance | null, quarterEnd
     cagr5y,
     cagr10y,
     siAnn: month.sinceInception,
-    returnsBasis: 'official ARK Invest NAV total returns (fund performance API, month-end series)',
+    returnsBasis: OFFICIAL_RETURNS_BASIS,
+    performanceAsOf: monthEnd?.asOfDate ? toIsoDate(monthEnd.asOfDate) || null : null,
   };
   return { monthEnd: month, quarterEnd: quarter, metrics };
 }
@@ -955,7 +1007,8 @@ export function buildYahooReturns(points: YahooPricePoint[], referenceDate = new
       cagr5y,
       cagr10y,
       siAnn: monthEnd.sinceInception,
-      returnsBasis: 'Yahoo Finance adjusted close total-return proxy (official ARK performance unavailable)',
+      returnsBasis: YAHOO_RETURNS_BASIS,
+      performanceAsOf: priceAtOrBefore(ordered, monthEndBefore(referenceDate))?.date ?? null,
     },
   };
 }
@@ -1382,11 +1435,14 @@ export function buildPageEnvelope<T>(ticker: string, page: number, pageSize: num
   return { ticker, page, pageSize, totalRows, headers: [...headers], rows };
 }
 
-function sortJsonKeys(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortJsonKeys);
+// Keys are sorted for stable diffs, except `metrics` objects: they keep contract order
+// (returns, yields, then returnsBasis and performanceAsOf last).
+function sortJsonKeys(value: unknown, parentKey = ''): unknown {
+  if (Array.isArray(value)) return value.map((item) => sortJsonKeys(item));
   if (value !== null && typeof value === 'object') {
     const source = value as JsonRecord;
-    return Object.fromEntries(Object.keys(source).sort().map((key) => [key, sortJsonKeys(source[key])]));
+    const keys = parentKey === 'metrics' ? Object.keys(source) : Object.keys(source).sort();
+    return Object.fromEntries(keys.map((key) => [key, sortJsonKeys(source[key], key)]));
   }
   return value;
 }
@@ -2128,6 +2184,20 @@ function holdingRowsFromStored(rows: JsonRecord[], headers: readonly string[]): 
   });
 }
 
+/** Full metrics object in contract order: returns, yields, then returnsBasis and performanceAsOf last. */
+export function buildFundMetrics(returnMetrics: JsonRecord, dividendYield: number | null, secYield: number | null): JsonRecord {
+  const metrics: JsonRecord = {};
+  for (const key of RETURN_METRIC_KEYS) metrics[key] = numberOrNullMetric(returnMetrics[key]);
+  metrics.dividendYield = dividendYield;
+  metrics.dividendYieldText = dividendYield === null ? null : formatPercent(dividendYield);
+  metrics.secYield = secYield;
+  metrics.secYieldText = secYield === null ? null : formatPercent(secYield);
+  const basis = typeof returnMetrics.returnsBasis === 'string' ? returnMetrics.returnsBasis.trim() : '';
+  metrics.returnsBasis = basis && basis !== '-' ? basis : UNAVAILABLE_RETURNS_BASIS;
+  metrics.performanceAsOf = validIsoDate(returnMetrics.performanceAsOf);
+  return metrics;
+}
+
 function mergeNonNull(primary: JsonRecord, secondary: JsonRecord): JsonRecord {
   const result: JsonRecord = { ...secondary };
   for (const [key, value] of Object.entries(primary)) {
@@ -2287,17 +2357,12 @@ export async function updateArkFund(
   const aumValue = overview?.netAssets ?? numberField(previousEntry, 'aumValue') ?? numberField(record(previousMeta), 'aumValue');
   const terValue = overview?.expenseRatio ?? numberField(previousEntry, 'terValue') ?? numberField(record(previousMeta), 'terValue');
   const secYield = overview?.secYield ?? numberField(previousMetrics, 'secYield');
-  const returnMetrics = mergeNonNull(
-    record(publishedReturns.metrics),
-    mergeNonNull(record(yahooReturns.metrics), previousMetrics),
-  );
-  const metrics: JsonRecord = {
-    ...returnMetrics,
-    dividendYield: distributions.indicatedYield,
-    dividendYieldText: distributions.indicatedYield === null ? null : formatPercent(distributions.indicatedYield),
-    secYield,
-    secYieldText: secYield === null ? null : formatPercent(secYield),
-  };
+  const previousReturnMetrics: JsonRecord = { ...previousMetrics };
+  if (!validIsoDate(previousReturnMetrics.performanceAsOf) && previousReturnMetrics.returnsBasis === OFFICIAL_RETURNS_BASIS) {
+    previousReturnMetrics.performanceAsOf = toIsoDate(record(previousReturns.monthEnd).asOfDate) || null;
+  }
+  const returnMetrics = resolveReturnMetrics(record(publishedReturns.metrics), record(yahooReturns.metrics), previousReturnMetrics);
+  const metrics: JsonRecord = buildFundMetrics(returnMetrics, distributions.indicatedYield, secYield);
   const asOfIso = historyAsOfDate || official.history[official.history.length - 1]?.date || overview?.asOfDate || toIsoDate(previousEntry.asOfDate);
   const asOfDate = asOfIso ? displayDate(asOfIso) : stringField(previousEntry, 'asOfDate', '—');
   const ter = terValue === null ? stringField(previousEntry, 'ter', stringField(record(previousMeta), 'ter', '—')) : formatPercent(terValue);
