@@ -56,12 +56,12 @@ on:
         default: ""
         type: string
       max_retries:
-        description: "Retries after the first request; 0 disables retries; blank inherits scripts/update-data.config.json"
+        description: "Retries after the first request (integer >= 1); blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
-      category:
-        description: "Keep funds whose category contains this text (case-insensitive); blank inherits scripts/update-data.config.json"
+      history_range:
+        description: "Yahoo request window and published history rows: max or Ny (e.g. 5y); blank inherits scripts/update-data.config.json"
         required: false
         default: ""
         type: string
@@ -141,9 +141,12 @@ concurrency:
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -167,7 +170,7 @@ jobs:
               .filter(([key]) => key !== "advanced")
               .map(([key, value]) => [key.toUpperCase(), value]));
             const file = await Bun.file("scripts/update-data.config.json").json();
-            // Protected repository Actions variable: highest precedence, applied only when nonblank (never printed).
+            // Protected repository Actions variables: highest precedence, applied only when nonblank (never printed).
             const protectedVars = {};
             if ((process.env.PROTECTED_SEC_UA ?? "").trim()) protectedVars.SEC_UA = process.env.PROTECTED_SEC_UA.trim();
             const controls = resolveControls(file, advanced, individual, protectedVars);
@@ -178,6 +181,8 @@ jobs:
         run: bun ./scripts/update-data.ts
       - name: Commit updated data
         if: ${{ !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git add api/ark
           if git diff --cached --quiet -- api/ark; then
@@ -187,4 +192,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(data): update ARK Invest ETF data"
-          git push
+          # Runtime-only auth; no token/header stored in URL, file or Git config.
+          git -c credential.helper= -c credential.helper='!f() { if test "$1" = get; then printf "username=x-access-token\npassword=%s\n" "$GITHUB_TOKEN"; fi; }; f' push
