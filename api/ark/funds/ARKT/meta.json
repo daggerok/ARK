@@ -65,12 +65,21 @@
   },
   "inceptionDate": "Oct 01 2025",
   "metrics": {
+    "ytd": 5.35,
+    "tr1y": null,
+    "tr3y": null,
+    "tr5y": null,
+    "tr10y": null,
+    "cagr3y": null,
+    "cagr5y": null,
+    "cagr10y": null,
+    "siAnn": null,
     "dividendYield": 0.23,
     "dividendYieldText": "0.23%",
-    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "secYield": null,
     "secYieldText": null,
-    "ytd": 5.35
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "performanceAsOf": "2026-08-31"
   },
   "name": "ARK DIET Q4 Buffer ETF",
   "nav": "$20.17",

@@ -61,12 +61,21 @@
   },
   "inceptionDate": "Aug 19 2026",
   "metrics": {
+    "ytd": null,
+    "tr1y": null,
+    "tr3y": null,
+    "tr5y": null,
+    "tr10y": null,
+    "cagr3y": null,
+    "cagr5y": null,
+    "cagr10y": null,
+    "siAnn": 1.38,
     "dividendYield": null,
     "dividendYieldText": null,
-    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "secYield": null,
     "secYieldText": null,
-    "siAnn": 1.38
+    "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
+    "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Active Autocallable Income ETF",
   "nav": "$20.34",
