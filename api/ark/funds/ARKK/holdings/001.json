@@ -14,281 +14,272 @@
     {
       "Asset Category": "Equity",
       "Identifier": "88160R101",
-      "Market Value": "$796,708,348.16",
+      "Market Value": "$740,605,557.30",
       "Name": "TESLA INC",
-      "Shares Held": "2,141,056",
+      "Shares Held": "2,087,330",
       "Ticker": "TSLA",
-      "Weight": "9.12%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "88023B103",
-      "Market Value": "$537,168,923.91",
-      "Name": "TEMPUS AI INC-CL A",
-      "Shares Held": "6,318,891",
-      "Ticker": "TEM",
-      "Weight": "6.15%"
+      "Weight": "9.08%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "84615Q103",
-      "Market Value": "$522,468,656.64",
+      "Market Value": "$504,496,507.82",
       "Name": "SPACE EXPLORATION TECHN-CL A",
-      "Shares Held": "3,514,048",
+      "Shares Held": "3,344,137",
       "Ticker": "SPCX",
-      "Weight": "5.98%"
+      "Weight": "6.19%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "88023B103",
+      "Market Value": "$481,676,668.20",
+      "Name": "TEMPUS AI INC-CL A",
+      "Shares Held": "5,881,278",
+      "Ticker": "TEM",
+      "Weight": "5.91%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "172573107",
-      "Market Value": "$424,572,275.00",
+      "Market Value": "$373,038,241.95",
       "Name": "CIRCLE INTERNET GROUP INC",
-      "Shares Held": "4,770,475",
+      "Shares Held": "4,539,835",
       "Ticker": "CRCL",
-      "Weight": "4.86%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "19260Q107",
-      "Market Value": "$395,093,262.47",
-      "Name": "COINBASE GLOBAL INC -CLASS A",
-      "Shares Held": "2,024,977",
-      "Ticker": "COIN",
-      "Weight": "4.52%"
+      "Weight": "4.58%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "H17182108",
-      "Market Value": "$374,315,579.33",
+      "Market Value": "$363,374,620.08",
       "Name": "CRISPR THERAPEUTICS AG",
-      "Shares Held": "6,902,371",
+      "Shares Held": "6,568,594",
       "Ticker": "CRSP",
-      "Weight": "4.28%"
+      "Weight": "4.46%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "19260Q107",
+      "Market Value": "$359,221,017.68",
+      "Name": "COINBASE GLOBAL INC -CLASS A",
+      "Shares Held": "1,927,048",
+      "Ticker": "COIN",
+      "Weight": "4.41%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "90184D100",
-      "Market Value": "$364,318,759.12",
+      "Market Value": "$357,098,630.96",
       "Name": "TWIST BIOSCIENCE CORP",
-      "Shares Held": "1,992,664",
+      "Shares Held": "1,847,954",
       "Ticker": "TWST",
-      "Weight": "4.17%"
+      "Weight": "4.38%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "770700102",
-      "Market Value": "$351,466,437.00",
+      "Market Value": "$315,147,937.50",
       "Name": "ROBINHOOD MARKETS INC - A",
-      "Shares Held": "2,943,605",
+      "Shares Held": "2,801,315",
       "Ticker": "HOOD",
-      "Weight": "4.02%"
+      "Weight": "3.87%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "88025U109",
-      "Market Value": "$319,351,945.89",
+      "Market Value": "$284,462,406.36",
       "Name": "10X GENOMICS INC-CLASS A",
-      "Shares Held": "3,725,959",
+      "Shares Held": "3,148,101",
       "Ticker": "TXG",
-      "Weight": "3.66%"
+      "Weight": "3.49%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "82509L107",
-      "Market Value": "$266,235,242.25",
+      "Market Value": "$264,138,909.60",
       "Name": "SHOPIFY INC - CLASS A",
-      "Shares Held": "1,871,601",
+      "Shares Held": "1,781,112",
       "Ticker": "SHOP",
-      "Weight": "3.05%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "007903107",
-      "Market Value": "$258,058,210.41",
-      "Name": "ADVANCED MICRO DEVICES",
-      "Shares Held": "409,207",
-      "Ticker": "AMD",
-      "Weight": "2.95%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "69608A108",
-      "Market Value": "$233,661,111.45",
-      "Name": "PALANTIR TECHNOLOGIES INC-A",
-      "Shares Held": "1,231,935",
-      "Ticker": "PLTR",
-      "Weight": "2.67%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "15675D103",
-      "Market Value": "$226,921,150.25",
-      "Name": "CEREBRAS SYSTEMS INC - A",
-      "Shares Held": "1,097,563",
-      "Ticker": "CBRS",
-      "Weight": "2.60%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "21873S108",
-      "Market Value": "$223,306,325.50",
-      "Name": "COREWEAVE INC-CL A",
-      "Shares Held": "2,549,450",
-      "Ticker": "CRWV",
-      "Weight": "2.56%"
+      "Weight": "3.24%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "67066G104",
-      "Market Value": "$209,179,157.72",
+      "Market Value": "$246,034,230.76",
       "Name": "NVIDIA CORP",
-      "Shares Held": "929,396",
+      "Shares Held": "1,077,302",
       "Ticker": "NVDA",
-      "Weight": "2.39%"
+      "Weight": "3.02%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "30303M102",
-      "Market Value": "$201,850,776.40",
-      "Name": "META PLATFORMS INC-CLASS A",
-      "Shares Held": "268,540",
-      "Ticker": "META",
-      "Weight": "2.31%"
+      "Identifier": "21873S108",
+      "Market Value": "$229,189,023.36",
+      "Name": "COREWEAVE INC-CL A",
+      "Shares Held": "2,630,728",
+      "Ticker": "CRWV",
+      "Weight": "2.81%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "69608A108",
+      "Market Value": "$219,300,225.75",
+      "Name": "PALANTIR TECHNOLOGIES INC-A",
+      "Shares Held": "1,172,415",
+      "Ticker": "PLTR",
+      "Weight": "2.69%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "15675D103",
+      "Market Value": "$185,564,840.45",
+      "Name": "CEREBRAS SYSTEMS INC - A",
+      "Shares Held": "1,044,553",
+      "Ticker": "CBRS",
+      "Weight": "2.28%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "07373V105",
-      "Market Value": "$193,203,762.00",
+      "Market Value": "$185,225,204.85",
       "Name": "BEAM THERAPEUTICS INC",
-      "Shares Held": "7,960,600",
+      "Shares Held": "7,575,673",
       "Ticker": "BEAM",
-      "Weight": "2.21%"
+      "Weight": "2.27%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "852234103",
-      "Market Value": "$192,169,247.32",
-      "Name": "BLOCK INC",
-      "Shares Held": "2,514,646",
-      "Ticker": "XYZ",
-      "Weight": "2.20%"
+      "Identifier": "30303M102",
+      "Market Value": "$185,365,435.34",
+      "Name": "META PLATFORMS INC-CLASS A",
+      "Shares Held": "255,613",
+      "Ticker": "META",
+      "Weight": "2.27%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "023135106",
-      "Market Value": "$191,266,194.92",
+      "Market Value": "$181,645,797.30",
       "Name": "AMAZON.COM INC",
-      "Shares Held": "766,076",
+      "Shares Held": "729,062",
       "Ticker": "AMZN",
-      "Weight": "2.19%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "G16910120",
-      "Market Value": "$186,624,985.76",
-      "Name": "BULLISH",
-      "Shares Held": "4,966,072",
-      "Ticker": "BLSH",
-      "Weight": "2.14%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "09175A206",
-      "Market Value": "$176,784,336.56",
-      "Name": "BITMINE IMMERSION TECHNOLOGI",
-      "Shares Held": "6,414,526",
-      "Ticker": "BMNR",
-      "Weight": "2.02%"
+      "Weight": "2.23%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "PPOPENAIC",
-      "Market Value": "$172,563,178.42",
+      "Market Value": "$176,923,370.20",
       "Name": "OPENAI GROUP PBC SERIES C",
       "Shares Held": "254,476",
       "Ticker": "",
+      "Weight": "2.17%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "852234103",
+      "Market Value": "$175,964,275.35",
+      "Name": "BLOCK INC",
+      "Shares Held": "2,393,095",
+      "Ticker": "XYZ",
+      "Weight": "2.16%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "007903107",
+      "Market Value": "$172,721,259.60",
+      "Name": "ADVANCED MICRO DEVICES",
+      "Shares Held": "282,335",
+      "Ticker": "AMD",
+      "Weight": "2.12%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "G16910120",
+      "Market Value": "$164,888,255.94",
+      "Name": "BULLISH",
+      "Shares Held": "4,725,946",
+      "Ticker": "BLSH",
+      "Weight": "2.02%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "09175A206",
+      "Market Value": "$161,338,525.53",
+      "Name": "BITMINE IMMERSION TECHNOLOGI",
+      "Shares Held": "6,104,371",
+      "Ticker": "BMNR",
       "Weight": "1.98%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "11135F101",
-      "Market Value": "$137,416,319.71",
+      "Market Value": "$151,898,805.94",
       "Name": "BROADCOM INC",
-      "Shares Held": "389,491",
+      "Shares Held": "432,526",
       "Ticker": "AVGO",
-      "Weight": "1.57%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "02079K107",
-      "Market Value": "$123,005,385.80",
-      "Name": "ALPHABET INC-CL C",
-      "Shares Held": "360,635",
-      "Ticker": "GOOG",
-      "Weight": "1.41%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "18915M107",
-      "Market Value": "$119,552,263.74",
-      "Name": "CLOUDFLARE INC - CLASS A",
-      "Shares Held": "342,537",
-      "Ticker": "NET",
-      "Weight": "1.37%"
+      "Weight": "1.86%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "45826J105",
-      "Market Value": "$115,608,990.25",
+      "Market Value": "$125,040,238.74",
       "Name": "INTELLIA THERAPEUTICS INC",
-      "Shares Held": "9,839,063",
+      "Shares Held": "10,368,179",
       "Ticker": "NTLA",
+      "Weight": "1.53%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "02079K107",
+      "Market Value": "$116,956,960.56",
+      "Name": "ALPHABET INC-CL C",
+      "Shares Held": "343,244",
+      "Ticker": "GOOG",
+      "Weight": "1.43%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "18915M107",
+      "Market Value": "$113,207,376.24",
+      "Name": "CLOUDFLARE INC - CLASS A",
+      "Shares Held": "325,983",
+      "Ticker": "NET",
+      "Weight": "1.39%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "452327109",
+      "Market Value": "$107,471,946.56",
+      "Name": "ILLUMINA INC",
+      "Shares Held": "392,692",
+      "Ticker": "ILMN",
       "Weight": "1.32%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "773121108",
-      "Market Value": "$113,857,043.55",
+      "Market Value": "$102,098,550.32",
       "Name": "ROCKET LAB",
-      "Shares Held": "1,539,649",
+      "Shares Held": "1,465,249",
       "Ticker": "RKLB UQ",
-      "Weight": "1.30%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "452327109",
-      "Market Value": "$111,400,380.00",
-      "Name": "ILLUMINA INC",
-      "Shares Held": "412,594",
-      "Ticker": "ILMN",
-      "Weight": "1.28%"
+      "Weight": "1.25%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "632307104",
-      "Market Value": "$105,257,670.48",
+      "Market Value": "$100,375,226.67",
       "Name": "NATERA INC",
-      "Shares Held": "255,133",
+      "Shares Held": "242,857",
       "Ticker": "NTRA",
+      "Weight": "1.23%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "75629V104",
+      "Market Value": "$97,945,506.47",
+      "Name": "RECURSION PHARMACEUTICALS-A",
+      "Shares Held": "23,715,619",
+      "Ticker": "RXRX",
       "Weight": "1.20%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "81663L200",
-      "Market Value": "$103,729,267.20",
-      "Name": "GENEDX HOLDINGS CORP",
-      "Shares Held": "1,173,408",
-      "Ticker": "WGS",
-      "Weight": "1.19%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "03945R102",
-      "Market Value": "$101,032,318.86",
-      "Name": "ARCHER AVIATION INC-A",
-      "Shares Held": "18,009,326",
-      "Ticker": "ACHR",
-      "Weight": "1.16%"
     },
     {
       "Asset Category": "Other",
@@ -297,129 +288,138 @@
       "Name": "KALSHI INC.",
       "Shares Held": "90,024",
       "Ticker": "",
-      "Weight": "1.10%"
+      "Weight": "1.18%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "75629V104",
-      "Market Value": "$93,203,814.44",
-      "Name": "RECURSION PHARMACEUTICALS-A",
-      "Shares Held": "24,920,806",
-      "Ticker": "RXRX",
-      "Weight": "1.07%"
+      "Identifier": "03945R102",
+      "Market Value": "$85,177,753.57",
+      "Name": "ARCHER AVIATION INC-A",
+      "Shares Held": "17,138,381",
+      "Ticker": "ACHR",
+      "Weight": "1.04%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "874039100",
-      "Market Value": "$85,926,370.29",
+      "Market Value": "$82,790,273.58",
       "Name": "TAIWAN SEMICONDUCTOR-SP ADR",
-      "Shares Held": "190,689",
+      "Shares Held": "181,482",
       "Ticker": "TSM",
-      "Weight": "0.98%"
+      "Weight": "1.02%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "98386P102",
-      "Market Value": "$85,257,358.68",
-      "Name": "X-ENERGY INC",
-      "Shares Held": "5,653,671",
-      "Ticker": "XE",
-      "Weight": "0.98%"
+      "Identifier": "81663L200",
+      "Market Value": "$80,735,819.40",
+      "Name": "GENEDX HOLDINGS CORP",
+      "Shares Held": "1,116,678",
+      "Ticker": "WGS",
+      "Weight": "0.99%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "880770102",
-      "Market Value": "$84,027,106.36",
+      "Market Value": "$80,496,714.35",
       "Name": "TERADYNE INC",
-      "Shares Held": "210,922",
+      "Shares Held": "200,785",
       "Ticker": "TER",
-      "Weight": "0.96%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "50077B207",
-      "Market Value": "$77,968,183.98",
-      "Name": "KRATOS DEFENSE & SECURITY",
-      "Shares Held": "1,709,079",
-      "Ticker": "KTOS",
-      "Weight": "0.89%"
+      "Weight": "0.99%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "92337F107",
-      "Market Value": "$70,032,207.63",
+      "Market Value": "$76,721,378.28",
       "Name": "VERACYTE INC",
-      "Shares Held": "1,541,541",
+      "Shares Held": "1,666,407",
       "Ticker": "VCYT",
-      "Weight": "0.80%"
+      "Weight": "0.94%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "98386P102",
+      "Market Value": "$76,291,959.18",
+      "Name": "X-ENERGY INC",
+      "Shares Held": "5,380,251",
+      "Ticker": "XE",
+      "Weight": "0.94%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "50077B207",
+      "Market Value": "$69,435,071.55",
+      "Name": "KRATOS DEFENSE & SECURITY",
+      "Shares Held": "1,626,495",
+      "Ticker": "KTOS",
+      "Weight": "0.85%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "05605H100",
-      "Market Value": "$63,647,320.09",
+      "Market Value": "$59,926,540.00",
       "Name": "BWX TECHNOLOGIES INC",
-      "Shares Held": "459,647",
+      "Shares Held": "437,420",
       "Ticker": "BWXT",
-      "Weight": "0.73%"
-    },
-    {
-      "Asset Category": "Cash & Equivalents",
-      "Identifier": "X9USDGSFT",
-      "Market Value": "$60,495,611.84",
-      "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "60,495,612",
-      "Ticker": "",
-      "Weight": "0.69%"
+      "Weight": "0.74%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "83406F102",
-      "Market Value": "$45,507,159.16",
+      "Market Value": "$41,060,498.52",
       "Name": "SOFI TECHNOLOGIES INC",
-      "Shares Held": "2,744,702",
+      "Shares Held": "2,611,991",
       "Ticker": "SOFI",
-      "Weight": "0.52%"
+      "Weight": "0.50%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "532457108",
-      "Market Value": "$41,298,020.16",
+      "Market Value": "$38,440,511.76",
       "Name": "ELI LILLY & CO",
-      "Shares Held": "34,896",
+      "Shares Held": "33,222",
       "Ticker": "LLY",
       "Weight": "0.47%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "157085101",
-      "Market Value": "$29,292,514.38",
-      "Name": "CERUS CORP",
-      "Shares Held": "11,180,349",
-      "Ticker": "CERS",
-      "Weight": "0.34%"
+      "Identifier": "69404D108",
+      "Market Value": "$35,546,942.70",
+      "Name": "PACIFIC BIOSCIENCES OF CALIF",
+      "Shares Held": "14,998,710",
+      "Ticker": "PACB",
+      "Weight": "0.44%"
+    },
+    {
+      "Asset Category": "Cash & Equivalents",
+      "Identifier": "X9USDGSFT",
+      "Market Value": "$31,179,932.01",
+      "Name": "GOLDMAN FS TRSY OBLIG INST 468",
+      "Shares Held": "31,179,932",
+      "Ticker": "",
+      "Weight": "0.38%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "00214Q724",
-      "Market Value": "$28,824,320.66",
+      "Market Value": "$29,782,301.30",
       "Name": "ARK ACTIVE AUTOCALL INC ETF",
-      "Shares Held": "1,411,573",
+      "Shares Held": "1,470,005",
       "Ticker": "ARKY",
-      "Weight": "0.33%"
+      "Weight": "0.37%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "69404D108",
-      "Market Value": "$25,532,719.56",
-      "Name": "PACIFIC BIOSCIENCES OF CALIF",
-      "Shares Held": "15,760,938",
-      "Ticker": "PACB",
-      "Weight": "0.29%"
+      "Identifier": "157085101",
+      "Market Value": "$25,322,359.86",
+      "Name": "CERUS CORP",
+      "Shares Held": "10,639,647",
+      "Ticker": "CERS",
+      "Weight": "0.31%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "BREADUMMY",
-      "Market Value": "$936,627.77",
+      "Market Value": "$798,507.55",
       "Name": "BRERA HOLDINGS PLC WTS",
       "Shares Held": "431,626",
       "Ticker": "",
