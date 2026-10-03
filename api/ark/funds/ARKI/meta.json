@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$1 Million",
   "aumValue": 1000000,
   "category": "Defined Outcome",
-  "closePrice": "$23.47",
-  "closePriceValue": 23.47,
+  "closePrice": "$23.69",
+  "closePriceValue": 23.69,
   "dataFile": "funds/ARKI/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arki",
-  "generatedAt": "2026-10-03T05:19:43Z",
+  "generatedAt": "2026-10-03T06:11:45Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,7 +33,7 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 127
+    "totalRows": 128
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -77,10 +77,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK DIET Q2 Buffer ETF",
-  "nav": "$23.47",
-  "navValue": 23.47,
-  "premiumDiscount": "0.0000%",
-  "premiumDiscountValue": 0,
+  "nav": "$23.67",
+  "navValue": 23.67,
+  "premiumDiscount": "0.0845%",
+  "premiumDiscountValue": 0.0845,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",

@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$58.7 Million",
   "aumValue": 58700000,
   "category": "Thematic Equity",
-  "closePrice": "$25.07",
-  "closePriceValue": 25.07,
+  "closePrice": "$25.24",
+  "closePriceValue": 25.24,
   "dataFile": "funds/PRNT/meta.json",
   "distributions": {
     "dividend": "$0.1750",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/prnt",
-  "generatedAt": "2026-10-03T05:20:20Z",
+  "generatedAt": "2026-10-03T06:12:22Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,7 +64,7 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2566
+    "totalRows": 2567
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -100,18 +100,18 @@
     "cagr5y": -7.96,
     "cagr10y": 2.57,
     "siAnn": 2.94,
-    "dividendYield": 0.7,
-    "dividendYieldText": "0.70%",
+    "dividendYield": 0.69,
+    "dividendYieldText": "0.69%",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "performanceAsOf": "2026-08-31"
   },
   "name": "The 3D Printing ETF",
-  "nav": "$25.14",
-  "navValue": 25.14,
-  "premiumDiscount": "-0.2784%",
-  "premiumDiscountValue": -0.2784,
+  "nav": "$25.43",
+  "navValue": 25.43,
+  "premiumDiscount": "-0.7471%",
+  "premiumDiscountValue": -0.7471,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -161,9 +161,9 @@
   "terValue": 0.66,
   "ticker": "PRNT",
   "yields": {
-    "dividendYield": 0.7,
+    "dividendYield": 0.69,
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.70%",
+    "dividendYieldText": "0.69%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

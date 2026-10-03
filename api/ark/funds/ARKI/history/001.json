@@ -769,8 +769,14 @@
       "Market Price": "23.47",
       "NAV": "23.47",
       "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Oct 02 2026",
+      "Market Price": "23.69",
+      "NAV": "23.67",
+      "Premium/Discount": "0.0845%"
     }
   ],
   "ticker": "ARKI",
-  "totalRows": 127
+  "totalRows": 128
 }

@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$5,562 Million",
   "aumValue": 5562000000,
   "category": "Thematic Equity",
-  "closePrice": "$88.58",
-  "closePriceValue": 88.58,
+  "closePrice": "$89.83",
+  "closePriceValue": 89.83,
   "dataFile": "funds/ARKK/meta.json",
   "distributions": {
     "dividend": "$0.3640",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkk",
-  "generatedAt": "2026-10-03T05:19:52Z",
+  "generatedAt": "2026-10-03T06:11:54Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,7 +64,7 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2996
+    "totalRows": 2997
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -108,10 +108,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Innovation ETF",
-  "nav": "$88.52",
-  "navValue": 88.52,
-  "premiumDiscount": "0.0678%",
-  "premiumDiscountValue": 0.0678,
+  "nav": "$89.75",
+  "navValue": 89.75,
+  "premiumDiscount": "0.0891%",
+  "premiumDiscountValue": 0.0891,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",

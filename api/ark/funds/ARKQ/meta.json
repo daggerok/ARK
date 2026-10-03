@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$1,857 Million",
   "aumValue": 1857000000,
   "category": "Thematic Equity",
-  "closePrice": "$121.43",
-  "closePriceValue": 121.43,
+  "closePrice": "$124.48",
+  "closePriceValue": 124.48,
   "dataFile": "funds/ARKQ/meta.json",
   "distributions": {
     "dividend": "$0.3060",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-10-03T05:19:52Z",
+  "generatedAt": "2026-10-03T06:11:55Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3019
+    "totalRows": 3020
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -105,10 +105,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Autonomous Technology & Robotics ETF",
-  "nav": "$121.36",
-  "navValue": 121.36,
-  "premiumDiscount": "0.0577%",
-  "premiumDiscountValue": 0.0577,
+  "nav": "$124.39",
+  "navValue": 124.39,
+  "premiumDiscount": "0.0724%",
+  "premiumDiscountValue": 0.0724,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",

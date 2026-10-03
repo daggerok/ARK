@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$759.5 Million",
   "aumValue": 759500000,
   "category": "Thematic Equity",
-  "closePrice": "$31.97",
-  "closePriceValue": 31.97,
+  "closePrice": "$32.68",
+  "closePriceValue": 32.68,
   "dataFile": "funds/ARKX/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkx",
-  "generatedAt": "2026-10-03T05:20:10Z",
+  "generatedAt": "2026-10-03T06:12:12Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -34,7 +34,7 @@
       "history/002.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 1384
+    "totalRows": 1385
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -78,10 +78,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Space & Defense Innovation ETF",
-  "nav": "$31.94",
-  "navValue": 31.94,
-  "premiumDiscount": "0.0939%",
-  "premiumDiscountValue": 0.0939,
+  "nav": "$32.61",
+  "navValue": 32.61,
+  "premiumDiscount": "0.2147%",
+  "premiumDiscountValue": 0.2147,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",

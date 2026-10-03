@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$2,663 Million",
   "aumValue": 2663000000,
   "category": "Defined Outcome",
-  "closePrice": "$28.05",
-  "closePriceValue": 28.05,
+  "closePrice": "$27.93",
+  "closePriceValue": 27.93,
   "dataFile": "funds/ARKB/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkb",
-  "generatedAt": "2026-10-03T05:19:25Z",
+  "generatedAt": "2026-10-03T06:11:27Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,7 +33,7 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 683
+    "totalRows": 684
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -77,10 +77,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK 21Shares Bitcoin ETF",
-  "nav": "$28.07",
-  "navValue": 28.07,
-  "premiumDiscount": "-0.0713%",
-  "premiumDiscountValue": -0.0713,
+  "nav": "$27.90",
+  "navValue": 27.9,
+  "premiumDiscount": "0.1075%",
+  "premiumDiscountValue": 0.1075,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",

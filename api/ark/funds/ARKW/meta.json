@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$1,607 Million",
   "aumValue": 1607000000,
   "category": "Thematic Equity",
-  "closePrice": "$160.50",
-  "closePriceValue": 160.5,
+  "closePrice": "$162.89",
+  "closePriceValue": 162.89,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-10-03T05:20:01Z",
+  "generatedAt": "2026-10-03T06:12:03Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3019
+    "totalRows": 3020
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -97,18 +97,18 @@
     "cagr5y": 1.69,
     "cagr10y": 22.91,
     "siAnn": 21.13,
-    "dividendYield": 1.47,
-    "dividendYieldText": "1.47%",
+    "dividendYield": 1.44,
+    "dividendYieldText": "1.44%",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$160.74",
-  "navValue": 160.74,
-  "premiumDiscount": "-0.1493%",
-  "premiumDiscountValue": -0.1493,
+  "nav": "$162.57",
+  "navValue": 162.57,
+  "premiumDiscount": "0.1968%",
+  "premiumDiscountValue": 0.1968,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -158,9 +158,9 @@
   "terValue": 0.76,
   "ticker": "ARKW",
   "yields": {
-    "dividendYield": 1.47,
+    "dividendYield": 1.44,
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.47%",
+    "dividendYieldText": "1.44%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

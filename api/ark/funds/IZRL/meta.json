@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 01 2026",
+  "asOfDate": "Oct 02 2026",
   "aum": "$136.9 Million",
   "aumValue": 136900000,
   "category": "Thematic Equity",
-  "closePrice": "$28.56",
-  "closePriceValue": 28.56,
+  "closePrice": "$28.80",
+  "closePriceValue": 28.8,
   "dataFile": "funds/IZRL/meta.json",
   "distributions": {
     "dividend": "$0.7750",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-10-03T05:20:20Z",
+  "generatedAt": "2026-10-03T06:12:21Z",
   "history": {
-    "asOfDate": "Oct 01 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Date",
       "NAV",
@@ -56,7 +56,7 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2217
+    "totalRows": 2218
   },
   "holdings": {
     "asOfDate": "Oct 02 2026",
@@ -92,18 +92,18 @@
     "cagr5y": -0.5,
     "cagr10y": null,
     "siAnn": 5.49,
-    "dividendYield": 2.71,
-    "dividendYieldText": "2.71%",
+    "dividendYield": 2.69,
+    "dividendYieldText": "2.69%",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Israel Innovative Technology ETF",
-  "nav": "$28.67",
-  "navValue": 28.67,
-  "premiumDiscount": "-0.3837%",
-  "premiumDiscountValue": -0.3837,
+  "nav": "$28.86",
+  "navValue": 28.86,
+  "premiumDiscount": "-0.2079%",
+  "premiumDiscountValue": -0.2079,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -153,9 +153,9 @@
   "terValue": 0.49,
   "ticker": "IZRL",
   "yields": {
-    "dividendYield": 2.71,
+    "dividendYield": 2.69,
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "2.71%",
+    "dividendYieldText": "2.69%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

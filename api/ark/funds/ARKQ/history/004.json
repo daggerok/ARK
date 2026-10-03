@@ -121,8 +121,14 @@
       "Market Price": "121.43",
       "NAV": "121.36",
       "Premium/Discount": "0.0577%"
+    },
+    {
+      "Date": "Oct 02 2026",
+      "Market Price": "124.48",
+      "NAV": "124.39",
+      "Premium/Discount": "0.0724%"
     }
   ],
   "ticker": "ARKQ",
-  "totalRows": 3019
+  "totalRows": 3020
 }
