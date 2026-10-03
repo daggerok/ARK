@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$1,607 Million",
   "aumValue": 1607000000,
   "category": "Thematic Equity",
-  "closePrice": "$163.88",
-  "closePriceValue": 163.88,
+  "closePrice": "$160.50",
+  "closePriceValue": 160.5,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-09-29T03:25:20.083Z",
+  "generatedAt": "2026-10-03T05:20:01Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,10 +61,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3015
+    "totalRows": 3019
   },
   "holdings": {
-    "asOfDate": "Sep 28 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -97,18 +97,18 @@
     "cagr5y": 1.69,
     "cagr10y": 22.91,
     "siAnn": 21.13,
-    "dividendYield": 1.44,
-    "dividendYieldText": "1.44%",
+    "dividendYield": 1.47,
+    "dividendYieldText": "1.47%",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$163.79",
-  "navValue": 163.79,
-  "premiumDiscount": "0.0549%",
-  "premiumDiscountValue": 0.0549,
+  "nav": "$160.74",
+  "navValue": 160.74,
+  "premiumDiscount": "-0.1493%",
+  "premiumDiscountValue": -0.1493,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -142,7 +142,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkw",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1002?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-09-28",
+    "holdingsAsOfDate": "2026-10-02",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_NEXT_GENERATION_INTERNET_ETF_ARKW_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
@@ -158,9 +158,9 @@
   "terValue": 0.76,
   "ticker": "ARKW",
   "yields": {
-    "dividendYield": 1.44,
+    "dividendYield": 1.47,
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.44%",
+    "dividendYieldText": "1.47%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

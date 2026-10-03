@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$2,663 Million",
   "aumValue": 2663000000,
   "category": "Defined Outcome",
-  "closePrice": "$27.86",
-  "closePriceValue": 27.86,
+  "closePrice": "$28.05",
+  "closePriceValue": 28.05,
   "dataFile": "funds/ARKB/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkb",
-  "generatedAt": "2026-09-29T03:23:08.743Z",
+  "generatedAt": "2026-10-03T05:19:25Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,10 +33,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 679
+    "totalRows": 683
   },
   "holdings": {
-    "asOfDate": "Sep 28 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -77,10 +77,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK 21Shares Bitcoin ETF",
-  "nav": "$27.84",
-  "navValue": 27.84,
-  "premiumDiscount": "0.0718%",
-  "premiumDiscountValue": 0.0718,
+  "nav": "$28.07",
+  "navValue": 28.07,
+  "premiumDiscount": "-0.0713%",
+  "premiumDiscountValue": -0.0713,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -89,6 +89,9 @@
       "sinceInception": 22.66,
       "sinceInceptionCumulative": 71.5,
       "yr1": -27.52,
+      "yr10": null,
+      "yr3": null,
+      "yr5": null,
       "ytd": -9.58
     },
     "quarterEnd": {
@@ -98,6 +101,9 @@
       "sinceInception": 10.22,
       "sinceInceptionCumulative": 27.17,
       "yr1": -45.59,
+      "yr10": null,
+      "yr3": null,
+      "yr5": null,
       "ytd": -32.95
     }
   },
@@ -108,7 +114,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkb",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1010?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-09-28",
+    "holdingsAsOfDate": "2026-10-02",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_21SHARES_BITCOIN_ETF_ARKB_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

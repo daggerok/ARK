@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$1,857 Million",
   "aumValue": 1857000000,
   "category": "Thematic Equity",
-  "closePrice": "$124.42",
-  "closePriceValue": 124.42,
+  "closePrice": "$121.43",
+  "closePriceValue": 121.43,
   "dataFile": "funds/ARKQ/meta.json",
   "distributions": {
     "dividend": "$0.3060",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-09-29T03:24:50.080Z",
+  "generatedAt": "2026-10-03T05:19:52Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,10 +61,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3015
+    "totalRows": 3019
   },
   "holdings": {
-    "asOfDate": "Sep 28 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -79,7 +79,7 @@
       "holdings/001.json"
     ],
     "source": "official ARK daily holdings CSV",
-    "totalRows": 38
+    "totalRows": 37
   },
   "identifiers": {
     "cusip": "00214Q203",
@@ -105,10 +105,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Autonomous Technology & Robotics ETF",
-  "nav": "$124.36",
-  "navValue": 124.36,
-  "premiumDiscount": "0.0482%",
-  "premiumDiscountValue": 0.0482,
+  "nav": "$121.36",
+  "navValue": 121.36,
+  "premiumDiscount": "0.0577%",
+  "premiumDiscountValue": 0.0577,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -142,7 +142,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkq",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1001?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-09-28",
+    "holdingsAsOfDate": "2026-10-02",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_AUTONOMOUS_TECH._%26_ROBOTICS_ETF_ARKQ_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

@@ -1,5 +1,5 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$136.9 Million",
   "aumValue": 136900000,
   "category": "Thematic Equity",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-09-29T03:26:08.330Z",
+  "generatedAt": "2026-10-03T05:20:20Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -56,10 +56,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2213
+    "totalRows": 2217
   },
   "holdings": {
-    "asOfDate": "Sep 28 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -112,6 +112,7 @@
       "sinceInception": 5.49,
       "sinceInceptionCumulative": 59.49,
       "yr1": 8.43,
+      "yr10": null,
       "yr3": 15.72,
       "yr5": -0.5,
       "ytd": -1.41
@@ -123,6 +124,7 @@
       "sinceInception": 6.08,
       "sinceInceptionCumulative": 65.82,
       "yr1": 15.42,
+      "yr10": null,
       "yr3": 18.38,
       "yr5": -0.41,
       "ytd": 2.5
@@ -135,7 +137,7 @@
     "fundPage": "https://www.ark-funds.com/funds/izrl",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-09-28",
+    "holdingsAsOfDate": "2026-10-02",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

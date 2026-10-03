@@ -373,8 +373,32 @@
       "Market Price": "21.32",
       "NAV": "21.27",
       "Premium/Discount": "0.2351%"
+    },
+    {
+      "Date": "Sep 28 2026",
+      "Market Price": "21.04",
+      "NAV": "21.05",
+      "Premium/Discount": "-0.0475%"
+    },
+    {
+      "Date": "Sep 29 2026",
+      "Market Price": "21.11",
+      "NAV": "21.04",
+      "Premium/Discount": "0.3327%"
+    },
+    {
+      "Date": "Sep 30 2026",
+      "Market Price": "21.10",
+      "NAV": "21.02",
+      "Premium/Discount": "0.3806%"
+    },
+    {
+      "Date": "Oct 01 2026",
+      "Market Price": "21.02",
+      "NAV": "20.96",
+      "Premium/Discount": "0.2863%"
     }
   ],
   "ticker": "ARKE",
-  "totalRows": 61
+  "totalRows": 65
 }

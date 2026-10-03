@@ -13,287 +13,305 @@
   "rows": [
     {
       "Asset Category": "Equity",
-      "Identifier": "BKMFJ94",
-      "Market Value": "$3,431,725.29",
-      "Name": "BICO GROUP AB",
-      "Shares Held": "1,527,673",
-      "Ticker": "BICO",
-      "Weight": "5.59%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "BM8H5Y5",
-      "Market Value": "$3,361,835.56",
-      "Name": "DASSAULT SYSTEMES SE",
-      "Shares Held": "140,010",
-      "Ticker": "DSY FP",
-      "Weight": "5.48%"
+      "Identifier": "871607107",
+      "Market Value": "$3,448,496.20",
+      "Name": "SYNOPSYS INC",
+      "Shares Held": "7,030",
+      "Ticker": "SNPS",
+      "Weight": "5.63%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "69370C100",
-      "Market Value": "$3,179,384.28",
+      "Market Value": "$3,371,592.93",
       "Name": "PTC INC",
       "Shares Held": "23,019",
       "Ticker": "PTC",
-      "Weight": "5.18%"
+      "Weight": "5.50%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "BKMFJ94",
+      "Market Value": "$3,274,518.41",
+      "Name": "BICO GROUP AB",
+      "Shares Held": "1,527,673",
+      "Ticker": "BICO",
+      "Weight": "5.34%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "BM8H5Y5",
+      "Market Value": "$3,237,707.64",
+      "Name": "DASSAULT SYSTEMES SE",
+      "Shares Held": "140,010",
+      "Ticker": "DSY FP",
+      "Weight": "5.28%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "5727973",
-      "Market Value": "$3,054,481.25",
+      "Market Value": "$2,943,912.33",
       "Name": "SIEMENS AG-REG",
       "Shares Held": "9,631",
       "Ticker": "SIE",
-      "Weight": "4.98%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "871607107",
-      "Market Value": "$2,993,092.80",
-      "Name": "SYNOPSYS INC",
-      "Shares Held": "7,030",
-      "Ticker": "SNPS",
-      "Weight": "4.88%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "88554D205",
-      "Market Value": "$2,935,578.87",
-      "Name": "3D SYSTEMS CORP",
-      "Shares Held": "822,291",
-      "Ticker": "DDD",
-      "Weight": "4.78%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "57667T100",
-      "Market Value": "$2,884,096.89",
-      "Name": "MATERIALISE NV-ADR",
-      "Shares Held": "342,123",
-      "Ticker": "MTLS",
-      "Weight": "4.70%"
+      "Weight": "4.80%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "40434L105",
-      "Market Value": "$2,845,107.40",
+      "Market Value": "$2,922,370.70",
       "Name": "HP INC",
       "Shares Held": "90,898",
       "Ticker": "HPQ",
-      "Weight": "4.64%"
+      "Weight": "4.77%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "88554D205",
+      "Market Value": "$2,910,910.14",
+      "Name": "3D SYSTEMS CORP",
+      "Shares Held": "822,291",
+      "Ticker": "DDD",
+      "Weight": "4.75%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "57667T100",
+      "Market Value": "$2,908,045.50",
+      "Name": "MATERIALISE NV-ADR",
+      "Shares Held": "342,123",
+      "Ticker": "MTLS",
+      "Weight": "4.74%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "052769106",
-      "Market Value": "$2,802,190.80",
+      "Market Value": "$2,827,750.42",
       "Name": "AUTODESK INC",
       "Shares Held": "13,382",
       "Ticker": "ADSK",
-      "Weight": "4.57%"
+      "Weight": "4.61%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "743713109",
-      "Market Value": "$2,757,466.25",
+      "Market Value": "$2,703,606.13",
       "Name": "PROTO LABS INC",
       "Shares Held": "28,649",
       "Ticker": "PRLB",
-      "Weight": "4.49%"
+      "Weight": "4.41%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "0732358",
-      "Market Value": "$2,582,639.81",
+      "Market Value": "$2,660,829.83",
       "Name": "RENISHAW PLC",
       "Shares Held": "34,439",
       "Ticker": "RSW",
-      "Weight": "4.21%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "92259N302",
-      "Market Value": "$2,369,737.13",
-      "Name": "VELO3D INC",
-      "Shares Held": "209,897",
-      "Ticker": "VELO",
-      "Weight": "3.86%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "63008G203",
-      "Market Value": "$2,294,522.03",
-      "Name": "NANO DIMENSION LTD - ADR",
-      "Shares Held": "1,461,479",
-      "Ticker": "NNDM",
-      "Weight": "3.74%"
+      "Weight": "4.34%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "98423F109",
-      "Market Value": "$2,293,398.28",
+      "Market Value": "$2,376,860.92",
       "Name": "XOMETRY INC-A",
       "Shares Held": "22,804",
       "Ticker": "XMTR",
-      "Weight": "3.74%"
+      "Weight": "3.88%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "63008G203",
+      "Market Value": "$2,367,595.98",
+      "Name": "NANO DIMENSION LTD - ADR",
+      "Shares Held": "1,461,479",
+      "Ticker": "NNDM",
+      "Weight": "3.86%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M85548101",
-      "Market Value": "$2,271,516.52",
+      "Market Value": "$2,345,767.06",
       "Name": "STRATASYS LTD",
       "Shares Held": "275,002",
       "Ticker": "SSYS",
-      "Weight": "3.70%"
+      "Weight": "3.83%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "92259N302",
+      "Market Value": "$2,197,621.59",
+      "Name": "VELO3D INC",
+      "Shares Held": "209,897",
+      "Ticker": "VELO",
+      "Weight": "3.58%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BQ7ZV06",
-      "Market Value": "$2,148,584.40",
+      "Market Value": "$2,012,193.90",
       "Name": "STRAUMANN HOLDING AG-REG",
       "Shares Held": "18,259",
       "Ticker": "STMN SE",
-      "Weight": "3.50%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "24906P109",
-      "Market Value": "$1,952,633.80",
-      "Name": "DENTSPLY SIRONA INC",
-      "Shares Held": "207,727",
-      "Ticker": "XRAY UW",
-      "Weight": "3.18%"
+      "Weight": "3.28%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6642321",
-      "Market Value": "$1,903,755.80",
+      "Market Value": "$1,980,191.24",
       "Name": "NIKON CORP",
       "Shares Held": "159,759",
       "Ticker": "7731",
-      "Weight": "3.10%"
+      "Weight": "3.23%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "24906P109",
+      "Market Value": "$1,815,533.98",
+      "Name": "DENTSPLY SIRONA INC",
+      "Shares Held": "207,727",
+      "Ticker": "XRAY UW",
+      "Weight": "2.96%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BYZ03N6",
-      "Market Value": "$1,428,873.37",
+      "Market Value": "$1,292,087.70",
       "Name": "TITOMIC LTD",
       "Shares Held": "16,946,200",
       "Ticker": "TTT",
-      "Weight": "2.33%"
+      "Weight": "2.11%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "4612757",
-      "Market Value": "$1,260,705.75",
+      "Market Value": "$1,220,183.30",
       "Name": "OC OERLIKON CORP AG-REG",
       "Shares Held": "181,314",
       "Ticker": "OERL",
-      "Weight": "2.05%"
+      "Weight": "1.99%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BNZFHC1",
-      "Market Value": "$1,159,806.36",
+      "Market Value": "$1,149,822.94",
       "Name": "HEXAGON AB-B SHS",
       "Shares Held": "116,745",
       "Ticker": "HEXAB S",
-      "Weight": "1.89%"
+      "Weight": "1.88%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "533900106",
-      "Market Value": "$1,158,800.50",
+      "Market Value": "$1,148,991.00",
       "Name": "LINCOLN ELECTRIC HOLDINGS",
       "Shares Held": "4,265",
       "Ticker": "LECO",
-      "Weight": "1.89%"
+      "Weight": "1.87%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "615394202",
-      "Market Value": "$1,066,450.00",
+      "Market Value": "$1,073,022.50",
       "Name": "MOOG INC-CLASS A",
       "Shares Held": "2,750",
       "Ticker": "MOG/A",
-      "Weight": "1.74%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "483007704",
-      "Market Value": "$1,052,137.35",
-      "Name": "KAISER ALUMINUM CORP",
-      "Shares Held": "6,897",
-      "Ticker": "KALU",
-      "Weight": "1.71%"
+      "Weight": "1.75%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "031100100",
-      "Market Value": "$1,030,541.40",
+      "Market Value": "$1,023,759.90",
       "Name": "AMETEK INC",
       "Shares Held": "4,110",
       "Ticker": "AME",
-      "Weight": "1.68%"
+      "Weight": "1.67%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "483007704",
+      "Market Value": "$1,023,445.83",
+      "Name": "KAISER ALUMINUM CORP",
+      "Shares Held": "6,897",
+      "Ticker": "KALU",
+      "Weight": "1.67%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BPBPJ01",
-      "Market Value": "$1,030,139.26",
+      "Market Value": "$995,173.13",
       "Name": "MICHELIN (CGDE)",
       "Shares Held": "26,744",
       "Ticker": "ML",
-      "Weight": "1.68%"
+      "Weight": "1.62%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "369604301",
-      "Market Value": "$1,012,997.73",
+      "Market Value": "$967,471.83",
       "Name": "GENERAL ELECTRIC",
       "Shares Held": "3,097",
       "Ticker": "GE",
-      "Weight": "1.65%"
+      "Weight": "1.58%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "502431109",
-      "Market Value": "$908,451.18",
+      "Market Value": "$911,164.80",
       "Name": "L3HARRIS TECHNOLOGIES INC",
       "Shares Held": "3,822",
       "Ticker": "LHX",
-      "Weight": "1.48%"
+      "Weight": "1.49%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "016255101",
-      "Market Value": "$802,446.26",
+      "Market Value": "$794,601.12",
       "Name": "ALIGN TECHNOLOGY INC",
       "Shares Held": "5,467",
       "Ticker": "ALGN",
-      "Weight": "1.31%"
+      "Weight": "1.30%"
     },
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$298,868.76",
+      "Market Value": "$300,266.16",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "298,869",
+      "Shares Held": "300,266",
       "Ticker": "",
       "Weight": "0.49%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "576690101",
-      "Market Value": "$90,086.40",
+      "Market Value": "$96,947.60",
       "Name": "MATERION CORP",
       "Shares Held": "340",
       "Ticker": "MTRN",
+      "Weight": "0.16%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "B5ZQ9D3",
+      "Market Value": "$91,031.95",
+      "Name": "EVONIK INDUSTRIES AG",
+      "Shares Held": "3,927",
+      "Ticker": "EVK",
+      "Weight": "0.15%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "4818351",
+      "Market Value": "$90,022.30",
+      "Name": "SGL CARBON SE",
+      "Shares Held": "16,112",
+      "Ticker": "SGL",
       "Weight": "0.15%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "88579Y101",
-      "Market Value": "$86,300.95",
+      "Market Value": "$82,977.18",
       "Name": "3M CO",
       "Shares Held": "509",
       "Ticker": "MMM",
@@ -301,26 +319,17 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "B5ZQ9D3",
-      "Market Value": "$86,684.89",
-      "Name": "EVONIK INDUSTRIES AG",
-      "Shares Held": "3,927",
-      "Ticker": "EVK",
-      "Weight": "0.14%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "4818351",
-      "Market Value": "$84,002.74",
-      "Name": "SGL CARBON SE",
-      "Shares Held": "16,112",
-      "Ticker": "SGL",
+      "Identifier": "01741R102",
+      "Market Value": "$84,866.16",
+      "Name": "ATI INC",
+      "Shares Held": "444",
+      "Ticker": "ATI",
       "Weight": "0.14%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6897143",
-      "Market Value": "$84,781.92",
+      "Market Value": "$82,847.64",
       "Name": "TORAY INDUSTRIES INC",
       "Shares Held": "10,638",
       "Ticker": "3402",
@@ -328,17 +337,8 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "01741R102",
-      "Market Value": "$82,353.12",
-      "Name": "ATI INC",
-      "Shares Held": "444",
-      "Ticker": "ATI",
-      "Weight": "0.13%"
-    },
-    {
-      "Asset Category": "Equity",
       "Identifier": "05368V106",
-      "Market Value": "$82,848.96",
+      "Market Value": "$81,363.78",
       "Name": "AVIENT CORP",
       "Shares Held": "2,007",
       "Ticker": "AVNT",
@@ -346,17 +346,8 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "466313103",
-      "Market Value": "$78,868.26",
-      "Name": "JABIL INC",
-      "Shares Held": "249",
-      "Ticker": "JBL",
-      "Weight": "0.13%"
-    },
-    {
-      "Asset Category": "Equity",
       "Identifier": "B0Z5YZ2",
-      "Market Value": "$75,784.05",
+      "Market Value": "$71,452.02",
       "Name": "ARKEMA",
       "Shares Held": "1,177",
       "Ticker": "AKE",
@@ -365,7 +356,7 @@
     {
       "Asset Category": "Equity",
       "Identifier": "5076705",
-      "Market Value": "$76,050.94",
+      "Market Value": "$73,171.60",
       "Name": "HENKEL AG & CO KGAA VOR-PREF",
       "Shares Held": "905",
       "Ticker": "HEN3",
@@ -373,17 +364,17 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "B1VQ252",
-      "Market Value": "$74,952.37",
-      "Name": "SANDVIK AB",
-      "Shares Held": "1,964",
-      "Ticker": "SAND",
+      "Identifier": "466313103",
+      "Market Value": "$74,647.71",
+      "Name": "JABIL INC",
+      "Shares Held": "249",
+      "Ticker": "JBL",
       "Weight": "0.12%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "4943402",
-      "Market Value": "$75,785.30",
+      "Market Value": "$71,398.60",
       "Name": "VOESTALPINE AG",
       "Shares Held": "1,452",
       "Ticker": "VOE",
@@ -392,7 +383,7 @@
     {
       "Asset Category": "Equity",
       "Identifier": "489170100",
-      "Market Value": "$66,714.50",
+      "Market Value": "$68,090.50",
       "Name": "KENNAMETAL INC",
       "Shares Held": "2,150",
       "Ticker": "KMT",
@@ -400,12 +391,21 @@
     },
     {
       "Asset Category": "Equity",
+      "Identifier": "B1VQ252",
+      "Market Value": "$70,032.62",
+      "Name": "SANDVIK AB",
+      "Shares Held": "1,964",
+      "Ticker": "SAND",
+      "Weight": "0.11%"
+    },
+    {
+      "Asset Category": "Equity",
       "Identifier": "144285103",
-      "Market Value": "$58,732.32",
+      "Market Value": "$56,786.12",
       "Name": "CARPENTER TECHNOLOGY",
       "Shares Held": "148",
       "Ticker": "CRS",
-      "Weight": "0.10%"
+      "Weight": "0.09%"
     }
   ],
   "ticker": "PRNT",

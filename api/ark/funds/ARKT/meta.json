@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$1.8 Million",
   "aumValue": 1800000,
   "category": "Defined Outcome",
-  "closePrice": "$20.15",
-  "closePriceValue": 20.15,
+  "closePrice": "$19.87",
+  "closePriceValue": 19.87,
   "dataFile": "funds/ARKT/meta.json",
   "distributions": {
     "dividend": "$0.0460",
@@ -24,9 +24,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkt",
-  "generatedAt": "2026-09-29T03:25:08.187Z",
+  "generatedAt": "2026-10-03T05:20:01Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -38,10 +38,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 248
+    "totalRows": 252
   },
   "holdings": {
-    "asOfDate": "Sep 28 2026",
+    "asOfDate": "Oct 02 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -82,23 +82,33 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK DIET Q4 Buffer ETF",
-  "nav": "$20.17",
-  "navValue": 20.17,
-  "premiumDiscount": "-0.0992%",
-  "premiumDiscountValue": -0.0992,
+  "nav": "$19.85",
+  "navValue": 19.85,
+  "premiumDiscount": "0.1008%",
+  "premiumDiscountValue": 0.1008,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
       "mo1": 8.68,
       "mo3": 1.89,
+      "sinceInception": null,
       "sinceInceptionCumulative": -0.96,
+      "yr1": null,
+      "yr10": null,
+      "yr3": null,
+      "yr5": null,
       "ytd": 5.35
     },
     "quarterEnd": {
       "asOfDate": "Jun 30 2026",
       "mo1": -0.71,
       "mo3": 8.75,
+      "sinceInception": null,
       "sinceInceptionCumulative": -3.48,
+      "yr1": null,
+      "yr10": null,
+      "yr3": null,
+      "yr5": null,
       "ytd": 2.66
     }
   },
@@ -109,7 +119,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1011?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-09-28",
+    "holdingsAsOfDate": "2026-10-02",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q4_BUFFER_ETF_ARKT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

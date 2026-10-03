@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Sep 25 2026",
+  "asOfDate": "Oct 01 2026",
   "aum": "$700.8 Million",
   "aumValue": 700800000,
   "category": "Thematic Equity",
-  "closePrice": "$46.88",
-  "closePriceValue": 46.88,
+  "closePrice": "$45.55",
+  "closePriceValue": 45.55,
   "dataFile": "funds/ARKF/meta.json",
   "distributions": {
     "dividend": "$0.0430",
@@ -32,9 +32,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkf",
-  "generatedAt": "2026-09-29T03:23:50.389Z",
+  "generatedAt": "2026-10-03T05:19:35Z",
   "history": {
-    "asOfDate": "Sep 25 2026",
+    "asOfDate": "Oct 01 2026",
     "headers": [
       "Date",
       "NAV",
@@ -47,7 +47,7 @@
       "history/002.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 1922
+    "totalRows": 1926
   },
   "holdings": {
     "asOfDate": "Jan 02 2026",
@@ -91,10 +91,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Blockchain & Fintech Innovation ETF",
-  "nav": "$46.86",
-  "navValue": 46.86,
-  "premiumDiscount": "0.0427%",
-  "premiumDiscountValue": 0.0427,
+  "nav": "$45.62",
+  "navValue": 45.62,
+  "premiumDiscount": "-0.1534%",
+  "premiumDiscountValue": -0.1534,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -103,6 +103,7 @@
       "sinceInception": 11.99,
       "sinceInceptionCumulative": 135.91,
       "yr1": -13.28,
+      "yr10": null,
       "yr3": 30.09,
       "yr5": -2.94,
       "ytd": -2.91
@@ -114,6 +115,7 @@
       "sinceInception": 9.86,
       "sinceInceptionCumulative": 100.68,
       "yr1": -21.32,
+      "yr10": null,
       "yr3": 23.64,
       "yr5": -6.11,
       "ytd": -17.41
