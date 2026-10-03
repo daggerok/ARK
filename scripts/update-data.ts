@@ -5,7 +5,7 @@ import { readFile as outputReadFile, readdir as outputReadDir } from 'node:fs/pr
 import { createHash as outputCreateHash } from 'node:crypto';
 import { join as outputJoin } from 'node:path';
 import { fileURLToPath as outputFileURLToPath } from 'node:url';
-import { mkdir, readFile, readdir, writeFile, rm } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, readdir, writeFile, rm, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -317,6 +317,7 @@ export function numberOrNull(value: unknown): number | null {
   let negative = false;
   if (/^\(.*\)$/.test(text)) { negative = true; text = text.slice(1, -1); }
   text = text.replace(/[$,%\s,]/g, '');
+  if (!text) return null;
   const parsed = Number(text);
   if (!Number.isFinite(parsed)) return null;
   return negative ? -parsed : parsed;
@@ -349,8 +350,14 @@ export function toIsoDate(value: unknown): string {
   if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
   const slash = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text);
   if (slash) return `${slash[3]}-${slash[1].padStart(2, '0')}-${slash[2].padStart(2, '0')}`;
-  const parsed = Date.parse(text);
+  // Month-name dates ("Sep 28 2026") carry no zone: read them as UTC so a run east of UTC gives the same day.
+  const parsed = Date.parse(/(?:GMT|UTC|Z|[+-]\d{2}:?\d{2})\s*$/i.test(text) ? text : `${text} UTC`);
   return Number.isFinite(parsed) ? new Date(parsed).toISOString().slice(0, 10) : '';
+}
+
+/** ISO timestamp without milliseconds, e.g. 2026-10-03T04:05:06Z. */
+export function isoStamp(date: Date = new Date()): string {
+  return date.toISOString().replace(/\.\d{3}Z$/, 'Z');
 }
 
 export function displayDate(value: unknown): string {
@@ -485,7 +492,8 @@ export function parseArkHoldingsCsv(text: string, tickerValue: string, modifiedA
       const rowTicker = at(row, 'fund').toUpperCase();
       if (rowTicker && rowTicker !== ticker) throw new Error(`${ticker} holdings CSV contains fund ${rowTicker}`);
       const sourceDate = toIsoDate(at(row, 'date'));
-      if (sourceDate && !asOfDate) asOfDate = sourceDate;
+      // The snapshot date is the newest row date, not the first row's (a stale leading row must not date the file).
+      if (sourceDate && sourceDate > asOfDate) asOfDate = sourceDate;
       const holdingTicker = tickerOrBlank(at(row, 'ticker'));
       rows.push({
         Name: name,
@@ -521,6 +529,21 @@ export function parseArkCatalogHtml(html: string): ArkFund[] {
     if (ARK_FUND_BY_TICKER.has(ticker)) discovered.add(ticker);
   }
   return ARK_FUNDS.filter((fund) => discovered.has(fund.ticker));
+}
+
+/** Slugs on the official ETF page that are not ETFs of the trust (ARK Venture Fund is an interval fund). */
+const NON_ETF_SLUGS: ReadonlySet<string> = new Set(['ARKVX']);
+
+/** Every `/funds/<slug>` on the official ETF page, upper-cased: the only official discovery source for ARK funds. */
+export function parseArkCatalogSlugs(html: string): string[] {
+  const slugs = new Set<string>();
+  for (const match of String(html).matchAll(/\/funds\/([a-z]{3,6})(?![a-z0-9-])/gi)) slugs.add(String(match[1]).toUpperCase());
+  return [...slugs].sort();
+}
+
+/** Tickers the official page lists that are neither in the built-in catalog nor a known non-ETF. */
+export function detectUnlistedArkFunds(html: string): string[] {
+  return parseArkCatalogSlugs(html).filter((ticker) => !ARK_FUND_BY_TICKER.has(ticker) && !NON_ETF_SLUGS.has(ticker));
 }
 
 export function extractFundPageId(html: string): string | null {
@@ -660,7 +683,6 @@ export function parseArkPerformance(payload: unknown): ArkPerformance {
 
 export const OFFICIAL_RETURNS_BASIS = 'official ARK Invest NAV total returns (fund performance API, month-end series)';
 export const YAHOO_RETURNS_BASIS = 'Yahoo Finance adjusted close total-return proxy (official ARK performance unavailable)';
-export const MIXED_RETURNS_BASIS = 'mixed: official ARK Invest NAV total returns where published, Yahoo Finance adjusted close estimates or previously published values for the rest';
 export const UNAVAILABLE_RETURNS_BASIS = 'no returns available (official ARK performance and Yahoo Finance history both unavailable)';
 export const RETURN_METRIC_KEYS = ['ytd', 'tr1y', 'tr3y', 'tr5y', 'tr10y', 'cagr3y', 'cagr5y', 'cagr10y', 'siAnn'] as const;
 
@@ -673,10 +695,10 @@ function validIsoDate(value: unknown): string | null {
 }
 
 /**
- * Merge return metrics in priority order (official > Yahoo > previously published) into the full
- * contract key set (null when unavailable), ending with `returnsBasis` and `performanceAsOf`.
- * The basis is honest about which sources actually supplied values; the as-of date is the oldest
- * date among contributing sources (the provider table date, or the Yahoo close the returns end on).
+ * Pick the return metrics of ONE source layer (official > Yahoo > previous publication) and emit the
+ * full contract key set (null when unavailable), ending with `returnsBasis` and `performanceAsOf` of that
+ * same layer. Layers are never mixed key by key: a number a source later nulls stays null, and a value
+ * never travels under another source's basis or date.
  */
 export function resolveReturnMetrics(official: JsonRecord, yahoo: JsonRecord, previous: JsonRecord): JsonRecord {
   const layers: Array<{ name: 'official' | 'yahoo' | 'previous'; data: JsonRecord }> = [
@@ -684,39 +706,44 @@ export function resolveReturnMetrics(official: JsonRecord, yahoo: JsonRecord, pr
     { name: 'yahoo', data: yahoo },
     { name: 'previous', data: previous },
   ];
+  const hasValues = (data: JsonRecord): boolean => RETURN_METRIC_KEYS.some((key) => numberOrNullMetric(data[key]) !== null);
+  const hasBasis = (data: JsonRecord): boolean => typeof data.returnsBasis === 'string' && data.returnsBasis.trim() !== '';
+  const chosen = layers.find((layer) => hasValues(layer.data))
+    ?? layers.find((layer) => layer.name !== 'previous' && hasBasis(layer.data))
+    ?? layers[2];
   const out: JsonRecord = {};
-  const used = new Set<string>();
-  for (const key of RETURN_METRIC_KEYS) {
-    out[key] = null;
-    for (const layer of layers) {
-      const value = numberOrNullMetric(layer.data[key]);
-      if (value !== null) {
-        out[key] = value;
-        used.add(layer.name);
-        break;
-      }
-    }
-  }
-  const present = layers.filter((layer) => layer.name !== 'previous' && typeof layer.data.returnsBasis === 'string' && layer.data.returnsBasis);
-  const contributors = used.size ? layers.filter((layer) => used.has(layer.name)) : present.length ? [present[0]] : layers.filter((layer) => layer.name === 'previous');
-  const previousBasis = typeof previous.returnsBasis === 'string' && previous.returnsBasis.trim() && previous.returnsBasis.trim() !== '-' ? previous.returnsBasis.trim() : '';
-  const labels = new Set(contributors.map((layer) => (
-    layer.name === 'official' ? OFFICIAL_RETURNS_BASIS : layer.name === 'yahoo' ? YAHOO_RETURNS_BASIS : previousBasis || UNAVAILABLE_RETURNS_BASIS
-  )));
-  const dates = contributors.map((layer) => validIsoDate(layer.data.performanceAsOf)).filter((date): date is string => Boolean(date));
-  out.returnsBasis = labels.size === 1 ? [...labels][0] : MIXED_RETURNS_BASIS;
-  out.performanceAsOf = dates.length ? dates.sort()[0] : null;
+  for (const key of RETURN_METRIC_KEYS) out[key] = numberOrNullMetric(chosen.data[key]);
+  const previousBasis = typeof chosen.data.returnsBasis === 'string' && chosen.data.returnsBasis.trim() && chosen.data.returnsBasis.trim() !== '-' ? chosen.data.returnsBasis.trim() : '';
+  out.returnsBasis = chosen.name === 'official' ? OFFICIAL_RETURNS_BASIS : chosen.name === 'yahoo' ? YAHOO_RETURNS_BASIS : previousBasis || UNAVAILABLE_RETURNS_BASIS;
+  out.performanceAsOf = validIsoDate(chosen.data.performanceAsOf);
   return out;
 }
 
-export function buildOfficialReturns(monthEnd: ArkPerformance | null, quarterEnd: ArkPerformance | null): {
+/** A horizon is only published when the fund existed for all of it at the table's as-of date. */
+function fundOldEnough(inceptionIso: string | null | undefined, asOfIso: string, years: number): boolean {
+  const inception = toIsoDate(inceptionIso);
+  const asOf = toIsoDate(asOfIso);
+  if (!inception || !asOf) return true;
+  return addYears(inception, years) <= asOf;
+}
+
+/** Drop annualized horizons (and since-inception annualized) longer than the fund's age. */
+function ageGuarded(table: Record<string, number | null>, inceptionIso: string | null | undefined, asOfIso: string): Record<string, number | null> {
+  const guarded = { ...table };
+  for (const [key, years] of [['1Y', 1], ['3Y', 3], ['5Y', 5], ['10Y', 10], ['SI', 1]] as const) {
+    if (!fundOldEnough(inceptionIso, asOfIso, years)) guarded[key] = null;
+  }
+  return guarded;
+}
+
+export function buildOfficialReturns(monthEnd: ArkPerformance | null, quarterEnd: ArkPerformance | null, inceptionIso: string | null = null): {
   monthEnd: JsonRecord;
   quarterEnd: JsonRecord;
   metrics: JsonRecord;
 } {
-  const monthAnn = monthEnd?.navAnnualized ?? {};
+  const monthAnn = ageGuarded(monthEnd?.navAnnualized ?? {}, inceptionIso, monthEnd?.asOfDate ?? '');
   const monthCum = monthEnd?.navCumulative ?? {};
-  const quarterAnn = quarterEnd?.navAnnualized ?? {};
+  const quarterAnn = ageGuarded(quarterEnd?.navAnnualized ?? {}, inceptionIso, quarterEnd?.asOfDate ?? '');
   const quarterCum = quarterEnd?.navCumulative ?? {};
   const month: JsonRecord = {
     asOfDate: monthEnd?.asOfDate ? displayDate(monthEnd.asOfDate) : '',
@@ -858,7 +885,7 @@ export function paymentsPerYear(frequency: string | null | undefined): number | 
   const text = cleanText(frequency).toLowerCase().replace(/[‐‑‒–—]/g, '-');
   if (['monthly', 'mdec', 'month'].includes(text)) return 12;
   if (['quarterly', 'qdec', 'quarter'].includes(text)) return 4;
-  if (['semi-annually', 'semiannually', 'semi-annual', 'semiannual', 'sdec'].includes(text)) return 6;
+  if (['semi-annually', 'semiannually', 'semi-annual', 'semiannual', 'sdec'].includes(text)) return 2;
   if (['annually', 'annual', 'ydec', 'yearly'].includes(text)) return 1;
   if (text === 'weekly') return 52;
   return null;
@@ -926,6 +953,12 @@ function addMonths(iso: string, amount: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+function addDays(iso: string, amount: number): string {
+  const date = new Date(`${iso}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + amount);
+  return date.toISOString().slice(0, 10);
+}
+
 function priceAtOrBefore(points: YahooPricePoint[], date: string): YahooPricePoint | null {
   let result: YahooPricePoint | null = null;
   for (const point of points) {
@@ -967,8 +1000,9 @@ function sinceInceptionReturns(points: YahooPricePoint[], endDate: string): { an
   return { annualized: years >= 1 ? annualizedFromCumulative(cumulative, years) : null, cumulative };
 }
 
-function derivedPeriod(points: YahooPricePoint[], endDate: string): JsonRecord {
-  const inception = sinceInceptionReturns(points, endDate);
+function derivedPeriod(points: YahooPricePoint[], endDate: string, coversInception: boolean): JsonRecord {
+  // The first point of a shrunken window (HISTORY_RANGE=Ny) is not the fund's inception.
+  const inception = coversInception ? sinceInceptionReturns(points, endDate) : { annualized: null, cumulative: null };
   const yr1 = totalReturn(points, endDate, addYears(endDate, -1));
   const yr3 = annualizedReturn(points, endDate, 3);
   const yr5 = annualizedReturn(points, endDate, 5);
@@ -987,10 +1021,10 @@ function derivedPeriod(points: YahooPricePoint[], endDate: string): JsonRecord {
   };
 }
 
-export function buildYahooReturns(points: YahooPricePoint[], referenceDate = new Date()): { monthEnd: JsonRecord; quarterEnd: JsonRecord; metrics: JsonRecord } {
+export function buildYahooReturns(points: YahooPricePoint[], referenceDate = new Date(), coversInception = true): { monthEnd: JsonRecord; quarterEnd: JsonRecord; metrics: JsonRecord } {
   const ordered = [...points].sort((a, b) => a.date.localeCompare(b.date));
-  const monthEnd = derivedPeriod(ordered, monthEndBefore(referenceDate));
-  const quarterEnd = derivedPeriod(ordered, quarterEndBefore(referenceDate));
+  const monthEnd = derivedPeriod(ordered, monthEndBefore(referenceDate), coversInception);
+  const quarterEnd = derivedPeriod(ordered, quarterEndBefore(referenceDate), coversInception);
   const cagr3y = typeof monthEnd.yr3 === 'number' ? monthEnd.yr3 : null;
   const cagr5y = typeof monthEnd.yr5 === 'number' ? monthEnd.yr5 : null;
   const cagr10y = typeof monthEnd.yr10 === 'number' ? monthEnd.yr10 : null;
@@ -1133,6 +1167,8 @@ function parseReturnRanges(env: Record<string, string | undefined>, prefix: 'PER
 
 export function readConfig(env: Record<string, string | undefined> = process.env): UpdaterConfig {
   const tickers = envValue(env, 'TICKERS').split(/[\s,;]+/).map((value) => tickerOrBlank(value)).filter(Boolean);
+  const unknown = tickers.filter((ticker) => !ARK_FUND_BY_TICKER.has(ticker));
+  if (unknown.length) throw new Error(`TICKERS contains unsupported ARK ETF(s): ${[...new Set(unknown)].join(', ')}`);
   return {
     concurrency: parsePositiveInt(envValue(env, 'CONCURRENCY'), DEFAULT_CONCURRENCY),
     requestSleepSeconds: parseNonNegativeDecimal(envValue(env, 'REQUEST_SLEEP'), DEFAULT_REQUEST_SLEEP),
@@ -1196,8 +1232,9 @@ export function passesMetricFilters(entry: JsonRecord, config: UpdaterConfig): b
     '10Y': numberOrNull(metrics.tr10y),
   };
   for (const period of RETURN_PERIODS) {
-    if (!withinRange(published[period], config.performanceRanges[period], true)) return false;
-    if (!withinRange(total[period], config.totalReturnRanges[period], true)) return false;
+    // A bounded range excludes funds without that figure (no number cannot be inside a range).
+    if (!withinRange(published[period], config.performanceRanges[period])) return false;
+    if (!withinRange(total[period], config.totalReturnRanges[period])) return false;
   }
   return true;
 }
@@ -1208,19 +1245,19 @@ Usage: bun ./scripts/update-data.ts [--help]
 
 Environment controls:
   TICKERS              Space/comma separated ETF tickers. ANDed with other filters.
-  MAX_FETCHES          0 means all selected funds; positive values resume at the saved cursor.
+  MAX_FETCHES          0 means all selected funds; positive values resume at the saved per-scope cursor and wrap around. A TICKERS run never touches the full-feed cursor.
   REQUEST_SLEEP        Seconds between request starts within each worker, including retries (default 1.5).
   CONCURRENCY          Independent parallel fund workers, each with its own request pacing (default 2).
   MAX_RETRIES          Retry count for network/temporary HTTP errors (integer >= 1, default 2).
   HOLDINGS_PAGE_SIZE   Holdings rows per static JSON page (default 250).
   HISTORY_PAGE_SIZE    History rows per static JSON page (default 1000).
-  HISTORY_RANGE        Yahoo request window and published history rows: max or Ny (default max).
+  HISTORY_RANGE        Yahoo request window and fresh history rows: max or Ny (default max). Older published rows are merged back, never pruned.
   CATEGORY             Keep a category name (case-insensitive substring).
   AUM                  Dollar min:max; K/M/B/T suffixes or nano/micro/small/mid/large presets.
   TER                  Expense-ratio percent min:max.
   DIVIDEND_YIELD       Trailing 12-month indicated dividend yield percent min:max.
   SEC_YIELD            Published 30-day SEC yield percent min:max.
-  PERFORMANCE_YTD|1Y|3Y|5Y|10Y   Official annualized NAV performance range.
+  PERFORMANCE_YTD|1Y|3Y|5Y|10Y   Official annualized NAV performance range (funds without the figure are excluded).
   TOTAL_RETURN_YTD|1Y|3Y|5Y|10Y  Cumulative NAV total-return range.
   SEC_UA               Contact-bearing User-Agent for SEC EDGAR (default daggerok ETF feed daggerok@gmail.com).
   EDGAR_FALLBACK       Enable Form N-PORT-P holdings fallback (default true).
@@ -1455,10 +1492,25 @@ export function semanticContentKey(value: unknown): string {
   return outputContentKey(value);
 }
 
+let atomicWriteCounter = 0;
+
+/** Write via a sibling tmp file and rename, so a crash or timeout never leaves a half-written file. */
+export async function writeFileAtomic(file: string, content: string): Promise<void> {
+  await mkdir(path.dirname(file), { recursive: true });
+  atomicWriteCounter += 1;
+  const tmp = `${file}.${process.pid}.${atomicWriteCounter}.tmp`;
+  try {
+    await writeFile(tmp, content, 'utf8');
+    await rename(tmp, file);
+  } catch (error) {
+    await rm(tmp, { force: true }).catch(() => undefined);
+    throw error;
+  }
+}
+
 export async function writeIfChanged(file: string, content: string): Promise<'written' | 'unchanged'> {
   if (existsSync(file) && await readFile(file, 'utf8') === content) return 'unchanged';
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content, 'utf8');
+  await writeFileAtomic(file, content);
   return 'written';
 }
 
@@ -1470,8 +1522,7 @@ export async function writeJsonIfChanged(file: string, value: unknown): Promise<
       if (semanticContentKey(JSON.parse(currentText)) === semanticContentKey(value)) return 'unchanged';
     } catch { /* Replace a malformed prior JSON file with the valid candidate. */ }
   }
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, serialized, 'utf8');
+  await writeFileAtomic(file, serialized);
   return 'written';
 }
 
@@ -1517,17 +1568,17 @@ const ISSUER_DIRECT_DENIAL_LIMIT = 2;
 /**
  * r.jina.ai throttles keyless read requests to about 20 per minute per IP
  * (observed live as HTTP 429 "Per IP rate limit exceeded" at 1.5-second pacing).
- * Proxied issuer requests therefore never start closer than 3 seconds apart,
+ * Proxied issuer requests therefore never start closer than 3.2 seconds apart,
  * regardless of a shorter REQUEST_SLEEP.
  */
-export const ISSUER_PROXY_MIN_INTERVAL_MS = 3000;
+export const ISSUER_PROXY_MIN_INTERVAL_MS = 3200;
 /**
  * Every provider request (including the r.jina.ai proxy, which renders pages
  * in a headless browser) is aborted after this long so one stalled connection
  * cannot block a paced lane for the rest of the run; the abort is retried as
  * a network error.
  */
-export const REQUEST_TIMEOUT_MS = 90_000;
+export const REQUEST_TIMEOUT_MS = 45_000;
 
 function defaultSleep(milliseconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -1722,34 +1773,41 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
     provider: string,
     gate: RequestGate,
     headers: HeadersInit,
-  ): Promise<ProviderResponse> => requestTextWithRetry(url, provider, gate, headers, config, runtime);
+    retryCap = Number.POSITIVE_INFINITY,
+  ): Promise<ProviderResponse> => requestTextWithRetry(url, provider, gate, headers, retryCap < config.maxRetries ? { ...config, maxRetries: retryCap } : config, runtime);
 
   const arkProxy = async (url: string): Promise<ProviderResponse> => {
     const responseFormat = new URL(url).pathname.startsWith('/api/') ? 'text' : 'html';
+    // The keyless proxy is rate limited for everybody: at most one retry, whatever MAX_RETRIES says.
     const response = await request(jinaReaderUrl(url), 'ARK proxy', proxyGate, {
       ...arkHeaders,
       'X-Respond-With': responseFormat,
-    });
+    }, 1);
     return { ...response, text: unwrapJinaReaderText(response.text) };
   };
 
   const ark = async (url: string): Promise<ProviderResponse> => {
-    if (arkProxyActive) return arkProxy(url);
-    try {
-      const response = await request(url, 'ARK issuer', laneGate, arkHeaders);
-      consecutiveArkDenials = 0;
-      return response;
-    } catch (error) {
-      if (!(error instanceof ProviderHttpError) || error.status !== 403) throw error;
-      consecutiveArkDenials += 1;
-      if (consecutiveArkDenials < ISSUER_DIRECT_DENIAL_LIMIT && !arkProxyActive) throw error;
-      const firstSwitch = !arkProxyActive;
-      arkProxyActive = true;
-      if (firstSwitch) {
-        const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests (shared limit of about 20 requests per minute).`;
-        (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
+    // A 403 is not retried by the generic client (retryableStatus), but dropping the request on the
+    // first denial loses it on a datacenter IP. Retry the request once directly (a transient WAF
+    // challenge may pass), then send this very request through the proxy.
+    for (let attempt = 0; ; attempt += 1) {
+      if (arkProxyActive) return arkProxy(url);
+      try {
+        const response = await request(url, 'ARK issuer', laneGate, arkHeaders);
+        consecutiveArkDenials = 0;
+        return response;
+      } catch (error) {
+        if (!(error instanceof ProviderHttpError) || error.status !== 403) throw error;
+        consecutiveArkDenials += 1;
+        if (attempt < 1 && consecutiveArkDenials < ISSUER_DIRECT_DENIAL_LIMIT) continue;
+        const firstSwitch = !arkProxyActive;
+        arkProxyActive = true;
+        if (firstSwitch) {
+          const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests (shared limit of about 20 requests per minute).`;
+          (runtime.onIssuerProxy ?? ((message: string) => console.warn(message)))(notice);
+        }
+        return arkProxy(url);
       }
-      return arkProxy(url);
     }
   };
 
@@ -1994,15 +2052,12 @@ function distributionData(
       frequency: '—', exDate: '—', dividend: '—', headers: ['Ex-Date', 'Amount'], rows: [],
       source: 'Yahoo Finance chart response contained no distribution events',
     };
-    return {
-      worksheet,
-      indicatedYield: numberField(record(previous.metrics), 'dividendYield'),
-      yieldKind: stringField(record(previous.yields), 'dividendYieldKind', 'not available from Yahoo Finance'),
-    };
+    // The chart answered and shows no distributions: an honest null yield, not the previous number.
+    return { worksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance' };
   }
   const eligible = chart.dividends.filter((event) => event.date <= referenceDate.toISOString().slice(0, 10));
   const sorted = [...eligible].sort((a, b) => a.date.localeCompare(b.date));
-  if (!sorted.length) return { worksheet: previousWorksheet, indicatedYield: numberField(record(previous.metrics), 'dividendYield'), yieldKind: 'previously published distribution data' };
+  if (!sorted.length) return { worksheet: previousWorksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance' };
   const latest = sorted[sorted.length - 1];
   const frequency = inferDistributionFrequency(sorted.map((event) => event.date), referenceDate) ?? 'Unknown';
   const payments = paymentsPerYear(frequency);
@@ -2023,6 +2078,7 @@ function distributionData(
   return { worksheet, indicatedYield, yieldKind };
 }
 
+/** Write the pages of one sheet and return its manifest. Stale pages are pruned later, after meta.json. */
 async function persistSheet(
   root: string,
   ticker: string,
@@ -2043,8 +2099,19 @@ async function persistSheet(
     await writeJsonIfChanged(path.join(directory, name), envelope);
     pages.push(`${kind}/${name}`);
   }
-  await prunePages(directory, pageGroups.length);
   return { pages, pageSize, totalRows: rows.length, headers: [...headers], asOfDate: asOfDate ? displayDate(asOfDate) : '—', source };
+}
+
+/** Merge older published rows back under a (possibly shorter) fresh window; the fresh rows win. */
+export function mergeHistoryRows(previous: { headers: string[]; rows: JsonRecord[] }, headers: readonly string[], fresh: JsonRecord[]): JsonRecord[] {
+  if (!previous.rows.length || previous.headers.join('|') !== headers.join('|') || !fresh.length) return fresh;
+  const firstFresh = fresh.map((row) => toIsoDate(row.Date)).filter(Boolean).sort()[0];
+  if (!firstFresh) return fresh;
+  const older = previous.rows.filter((row) => {
+    const date = toIsoDate(row.Date);
+    return Boolean(date) && date < firstFresh;
+  });
+  return older.length ? [...older, ...fresh] : fresh;
 }
 
 // ---------------------------------------------------------------------------
@@ -2068,6 +2135,8 @@ export type ArkFundUpdateOptions = {
   referenceDate?: Date;
   secFallback?: SecFallbackResolver;
   onNote?: (message: string) => void;
+  /** Always-visible warnings (stale snapshots); defaults to console.warn. */
+  onWarn?: (message: string) => void;
 };
 
 type OfficialFundData = {
@@ -2237,6 +2306,7 @@ export async function updateArkFund(
   const apiRoot = options.apiRoot ?? API_ROOT;
   const referenceDate = options.referenceDate ?? new Date();
   const onNote = options.onNote ?? outputNote;
+  const onWarn = options.onWarn ?? ((message: string) => console.warn(message));
   const fundDirectory = path.join(apiRoot, 'funds', fund.ticker);
   const previousIndex = await readJsonRecord(path.join(apiRoot, 'index.json'));
   const previousEntry = arrayValue(previousIndex?.funds).map(record).find((entry) => entry.ticker === fund.ticker) ?? {};
@@ -2259,12 +2329,14 @@ export async function updateArkFund(
     })(),
   ]);
 
+  const failedSources: string[] = [];
   let holdingsRows: HoldingRow[] = [];
   let holdingsHeaders: readonly string[] = [];
   let holdingsAsOfDate = '';
   let holdingsSource = '';
   let edgarFiling: NportAccession | null = null;
   let nportDoc: string | null = null;
+  const previousHoldingsAsOf = toIsoDate(previousHoldings.asOfDate) || toIsoDate(stringField(record(previousMeta?.holdings), 'asOfDate'));
   if (csvResult) {
     holdingsRows = csvResult.rows;
     holdingsHeaders = csvResult.headers;
@@ -2274,20 +2346,27 @@ export async function updateArkFund(
     try {
       const fallback = await secFallback(fund);
       if (fallback) {
-        holdingsRows = fallback.holdings;
-        holdingsHeaders = HOLDINGS_HEADERS;
-        holdingsAsOfDate = fallback.parsed.repPdDate || fallback.selected.reportDate;
-        holdingsSource = 'SEC EDGAR Form N-PORT-P fallback';
-        edgarFiling = fallback.selected;
-        nportDoc = fallback.selected.url;
-        onNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} using N-PORT-P ${fallback.selected.accession} (${holdingsRows.length} positions)`);
+        const nportDate = toIsoDate(fallback.parsed.repPdDate || fallback.selected.reportDate);
+        // An N-PORT report is at most a quarter old: it may only replace holdings that are older still.
+        if (previousHoldings.rows.length && (!nportDate || nportDate <= previousHoldingsAsOf)) {
+          onNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} N-PORT-P ${fallback.selected.accession} (${nportDate || 'undated'}) is not newer than the published holdings (${previousHoldingsAsOf || 'undated'}); keeping the published rows`);
+        } else {
+          holdingsRows = fallback.holdings;
+          holdingsHeaders = HOLDINGS_HEADERS;
+          holdingsAsOfDate = nportDate;
+          holdingsSource = 'SEC EDGAR Form N-PORT-P fallback';
+          edgarFiling = fallback.selected;
+          nportDoc = fallback.selected.url;
+          onNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} using N-PORT-P ${fallback.selected.accession} (${holdingsRows.length} positions)`);
+        }
       }
     } catch (error) { noteSourceFailure(onNote, 'edgar', fund.ticker, error); }
   }
+  if (!config.skipArk && !csvResult && !edgarFiling) failedSources.push('holdings CSV');
   if (!holdingsRows.length && previousHoldings.rows.length) {
     holdingsHeaders = previousHoldings.headers.length ? previousHoldings.headers : (fund.ticker === 'ARKY' ? ARKY_HOLDINGS_HEADERS : HOLDINGS_HEADERS);
     holdingsRows = holdingRowsFromStored(previousHoldings.rows, holdingsHeaders);
-    holdingsAsOfDate = toIsoDate(previousHoldings.asOfDate) || stringField(record(previousMeta?.holdings), 'asOfDate');
+    holdingsAsOfDate = previousHoldingsAsOf;
     holdingsSource = stringField(record(previousMeta?.holdings), 'source', stringField(previousSource, 'holdingsSource', 'previously published holdings (retained)'));
     nportDoc = stringField(previousSource, 'nportDoc') || null;
     onNote(`[ ${'holdings'.padEnd(9)}] ${fund.ticker} retaining ${holdingsRows.length} previously published holdings rows`);
@@ -2295,7 +2374,19 @@ export async function updateArkFund(
   if (!holdingsHeaders.length) holdingsHeaders = fund.ticker === 'ARKY' ? ARKY_HOLDINGS_HEADERS : HOLDINGS_HEADERS;
   if (!holdingsAsOfDate) holdingsAsOfDate = toIsoDate(record(previousMeta?.holdings).asOfDate);
 
+  if (!config.skipArk) {
+    if (!official.pageId) failedSources.push('issuer fund page');
+    else {
+      if (!official.overview) failedSources.push('overview');
+      if (!official.history.length) failedSources.push('NAV history');
+      if (!official.monthEnd || !official.quarterEnd) failedSources.push('performance');
+    }
+  }
+  if (!config.skipYahoo && !yahoo) failedSources.push('Yahoo chart');
+
   const yahooPoints = yahoo?.points ?? [];
+  const yahooHistoryHeaders: readonly string[] = YAHOO_HISTORY_HEADERS;
+  const previousIsOfficialHistory = previousHistory.rows.length > 0 && previousHistory.headers.join('|') !== yahooHistoryHeaders.join('|');
   let historyRows: JsonRecord[] = [];
   let historyHeaders: readonly string[] = [];
   let historyAsOfDate = '';
@@ -2303,13 +2394,21 @@ export async function updateArkFund(
   if (official.history.length) {
     const windowStart = config.historyRange === 'max' ? '' : new Date(historyWindowStartEpoch(config.historyRange, Math.floor(referenceDate.getTime() / 1000)) * 1000).toISOString().slice(0, 10);
     const windowed = windowStart ? official.history.filter((point) => point.date >= windowStart) : official.history;
-    historyRows = buildHistoryRows(windowed.length ? windowed : official.history);
     historyHeaders = HISTORY_HEADERS;
+    // A shorter HISTORY_RANGE never shrinks the published series: older published rows are merged back.
+    historyRows = mergeHistoryRows(previousHistory, historyHeaders, buildHistoryRows(windowed.length ? windowed : official.history));
     historyAsOfDate = official.history[official.history.length - 1].date;
     historySource = 'official ARK Invest daily NAV and market-price history API';
+  } else if (previousIsOfficialHistory) {
+    // Official NAV/market-price rows are never replaced by Yahoo adjusted closes under other headers.
+    historyHeaders = previousHistory.headers;
+    historyRows = previousHistory.rows;
+    historyAsOfDate = toIsoDate(previousHistory.asOfDate) || stringField(record(previousMeta?.history), 'asOfDate');
+    historySource = stringField(record(previousMeta?.history), 'source', stringField(previousSource, 'historySource', 'previously published history (retained)'));
+    onNote(`[ ${'history'.padEnd(9)}] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
   } else if (yahoo && yahooPoints.length) {
-    historyRows = buildYahooHistoryRows(yahoo);
-    historyHeaders = YAHOO_HISTORY_HEADERS;
+    historyHeaders = yahooHistoryHeaders;
+    historyRows = mergeHistoryRows(previousHistory, historyHeaders, buildYahooHistoryRows(yahoo));
     historyAsOfDate = yahooPoints[yahooPoints.length - 1].date;
     historySource = 'Yahoo Finance daily adjusted-close fallback';
   } else if (previousHistory.rows.length) {
@@ -2334,34 +2433,60 @@ export async function updateArkFund(
       secYield: null,
     };
   }
+  // Fund-level consistency: a fund is either fully refreshed or kept exactly as published. A failed
+  // required source with a complete previous state never yields a half-new, half-stale publication.
+  if (failedSources.length && previousMeta) {
+    return {
+      entry: previousEntry,
+      status: 'failed',
+      reason: `required source(s) failed (${failedSources.join(', ')}); previous complete publication kept`,
+      ...resultCountsFromEntry(previousEntry),
+    };
+  }
 
   const previousMetrics = mergeNonNull(record(previousMeta?.metrics), record(previousEntry.metrics));
   const previousReturns = record(previousEntry.returns).monthEnd || previousMeta?.returns
     ? record(previousEntry.returns).monthEnd ? record(previousEntry.returns) : record(previousMeta?.returns)
     : {};
-  const yahooReturns = yahooPoints.length ? buildYahooReturns(yahooPoints, referenceDate) : { monthEnd: {}, quarterEnd: {}, metrics: {} };
+  const overview = official.overview;
+  const inceptionIso = overview?.inceptionDate || toIsoDate(previousEntry.inceptionDate) || toIsoDate(record(previousMeta).inceptionDate);
+  // Yahoo's window may start after the fund's first trade (HISTORY_RANGE=Ny): then "since inception" is unknown.
+  const yahooFirstPoint = yahooPoints[0]?.date ?? '';
+  const yahooCoversInception = Boolean(yahooFirstPoint) && (yahoo?.firstTradeDate
+    ? yahooFirstPoint <= addDays(yahoo.firstTradeDate, 10)
+    : config.historyRange === 'max');
+  const yahooReturns = yahooPoints.length ? buildYahooReturns(yahooPoints, referenceDate, yahooCoversInception) : { monthEnd: {}, quarterEnd: {}, metrics: {} };
   const publishedReturns = officialReturnsPresent(official.monthEnd, official.quarterEnd)
-    ? buildOfficialReturns(official.monthEnd, official.quarterEnd)
+    ? buildOfficialReturns(official.monthEnd, official.quarterEnd, inceptionIso || null)
     : { monthEnd: {}, quarterEnd: {}, metrics: {} };
-  const returns: JsonRecord = {
-    monthEnd: mergeNonNull(record(publishedReturns.monthEnd), mergeNonNull(record(yahooReturns.monthEnd), record(previousReturns.monthEnd))),
-    quarterEnd: mergeNonNull(record(publishedReturns.quarterEnd), mergeNonNull(record(yahooReturns.quarterEnd), record(previousReturns.quarterEnd))),
-  };
+  const previousReturnMetrics: JsonRecord = { ...previousMetrics };
+  if (!validIsoDate(previousReturnMetrics.performanceAsOf) && previousReturnMetrics.returnsBasis === OFFICIAL_RETURNS_BASIS) {
+    previousReturnMetrics.performanceAsOf = toIsoDate(record(previousReturns.monthEnd).asOfDate) || null;
+  }
+  // One source per fund for the whole returns unit (metrics, month-end, quarter-end, basis, as-of date):
+  // official ARK first, then Yahoo, then the previous publication only when both sources are unavailable.
+  const officialUnit = Object.keys(publishedReturns.monthEnd).length > 0;
+  const yahooUnit = !officialUnit && yahooPoints.length > 0;
+  const returns: JsonRecord = officialUnit
+    ? { monthEnd: publishedReturns.monthEnd, quarterEnd: publishedReturns.quarterEnd }
+    : yahooUnit
+      ? { monthEnd: yahooReturns.monthEnd, quarterEnd: yahooReturns.quarterEnd }
+      : { monthEnd: record(previousReturns.monthEnd), quarterEnd: record(previousReturns.quarterEnd) };
   const pricePoint = official.history.length ? official.history[official.history.length - 1] : null;
   const yahooPoint = yahooPoints.length ? yahooPoints[yahooPoints.length - 1] : null;
   const navValue = pricePoint?.nav ?? numberField(previousEntry, 'navValue') ?? numberField(record(previousMeta), 'navValue');
   const closePriceValue = pricePoint?.marketPrice ?? yahoo?.regularMarketPrice ?? yahooPoint?.close ?? numberField(previousEntry, 'closePriceValue') ?? numberField(record(previousMeta), 'closePriceValue');
   const premiumDiscountValue = pricePoint?.premiumDiscount ?? numberField(previousEntry, 'premiumDiscountValue') ?? numberField(record(previousMeta), 'premiumDiscountValue');
   const distributions = distributionData(yahoo, previousCombined, referenceDate, closePriceValue);
-  const overview = official.overview;
   const aumValue = overview?.netAssets ?? numberField(previousEntry, 'aumValue') ?? numberField(record(previousMeta), 'aumValue');
   const terValue = overview?.expenseRatio ?? numberField(previousEntry, 'terValue') ?? numberField(record(previousMeta), 'terValue');
-  const secYield = overview?.secYield ?? numberField(previousMetrics, 'secYield');
-  const previousReturnMetrics: JsonRecord = { ...previousMetrics };
-  if (!validIsoDate(previousReturnMetrics.performanceAsOf) && previousReturnMetrics.returnsBasis === OFFICIAL_RETURNS_BASIS) {
-    previousReturnMetrics.performanceAsOf = toIsoDate(record(previousReturns.monthEnd).asOfDate) || null;
-  }
-  const returnMetrics = resolveReturnMetrics(record(publishedReturns.metrics), record(yahooReturns.metrics), previousReturnMetrics);
+  // An honest null from a parsed overview stays null; the previous yield survives only an outage.
+  const secYield = overview ? overview.secYield : numberField(previousMetrics, 'secYield');
+  const returnMetrics = resolveReturnMetrics(
+    officialUnit ? record(publishedReturns.metrics) : {},
+    yahooUnit ? record(yahooReturns.metrics) : {},
+    officialUnit || yahooUnit ? {} : previousReturnMetrics,
+  );
   const metrics: JsonRecord = buildFundMetrics(returnMetrics, distributions.indicatedYield, secYield);
   const asOfIso = historyAsOfDate || official.history[official.history.length - 1]?.date || overview?.asOfDate || toIsoDate(previousEntry.asOfDate);
   const asOfDate = asOfIso ? displayDate(asOfIso) : stringField(previousEntry, 'asOfDate', '—');
@@ -2370,7 +2495,6 @@ export async function updateArkFund(
   const nav = navValue === null ? stringField(previousEntry, 'nav', '—') : formatPrice(navValue);
   const closePrice = closePriceValue === null ? stringField(previousEntry, 'closePrice', stringField(record(previousMeta), 'closePrice', '—')) : formatPrice(closePriceValue);
   const premiumDiscount = premiumDiscountValue === null ? stringField(previousEntry, 'premiumDiscount', stringField(record(previousMeta), 'premiumDiscount', '—')) : formatPercent(premiumDiscountValue, 4);
-  const inceptionIso = overview?.inceptionDate || toIsoDate(previousEntry.inceptionDate) || toIsoDate(record(previousMeta).inceptionDate);
   const inceptionDate = inceptionIso ? displayDate(inceptionIso) : stringField(previousEntry, 'inceptionDate', stringField(record(previousMeta), 'inceptionDate', '—'));
   const exchange = overview?.exchange || stringField(previousEntry, 'exchange', stringField(record(previousMeta), 'exchange'));
   const cusip = overview?.cusip || stringField(record(previousMeta?.identifiers), 'cusip') || stringField(previousEntry, 'cusip') || null;
@@ -2382,7 +2506,8 @@ export async function updateArkFund(
   const manifestAsOfHistory = historyAsOfDate || toIsoDate(stringField(record(previousMeta?.history), 'asOfDate'));
   const holdingsAgeDays = dateAgeDays(holdingsAsOfDate, referenceDate);
   if (csvResult && holdingsAgeDays !== null && holdingsAgeDays > 7) {
-    onNote(`[ ${'holdings'.padEnd(9)}] ${fund.ticker} CSV snapshot is ${holdingsAgeDays} days old (as of ${holdingsAsOfDate}); the source date is preserved and HTTP 200 is not treated as evidence of freshness.`);
+    // Always printed (not only with VERBOSE): a stale snapshot must not be published silently.
+    onWarn(`[ ${'stale'.padEnd(9)}] ${fund.ticker} holdings CSV snapshot is ${holdingsAgeDays} days old (as of ${holdingsAsOfDate}); the source date is preserved and HTTP 200 is not treated as evidence of freshness.`);
   }
   const sourceProvider = [
     overview ? 'ARK Invest official fund API' : '',
@@ -2424,7 +2549,7 @@ export async function updateArkFund(
     category,
     fundPage: fund.fundPage,
     dataFile: `funds/${fund.ticker}/meta.json`,
-    generatedAt: new Date().toISOString(),
+    generatedAt: isoStamp(),
     asOfDate,
     inceptionDate,
     exchange,
@@ -2517,6 +2642,9 @@ export async function updateArkFund(
   meta.holdings = holdingsManifest;
   meta.history = historyManifest;
   await writeJsonIfChanged(path.join(fundDirectory, 'meta.json'), meta);
+  // Order: pages, then meta.json, then stale-page removal (a crash never leaves meta pointing at removed pages).
+  await prunePages(path.join(fundDirectory, 'holdings'), Math.ceil(holdingsRows.length / config.holdingsPageSize));
+  await prunePages(path.join(fundDirectory, 'history'), Math.ceil(historyRows.length / config.historyPageSize));
 
   return {
     entry: candidateEntry,
@@ -2541,7 +2669,12 @@ export type RunUpdaterOptions = {
   apiRoot?: string;
   referenceDate?: Date;
   onNote?: (message: string) => void;
+  onWarn?: (message: string) => void;
+  /** Soft deadline: no new fund is started after this many milliseconds (default 25 minutes; workflow limit is 30). */
+  deadlineMs?: number;
 };
+
+export const RUN_SOFT_DEADLINE_MS = 25 * 60_000;
 
 export type RunUpdaterReport = {
   selectedTickers: string[];
@@ -2550,6 +2683,8 @@ export type RunUpdaterReport = {
   failedTickers: string[];
   nextCursor: number | null;
   indexPath: string;
+  newFunds: string[];
+  deadlineReached: boolean;
 };
 
 function seedIndexEntry(fund: ArkFund): JsonRecord {
@@ -2558,7 +2693,7 @@ function seedIndexEntry(fund: ArkFund): JsonRecord {
     name: fund.name,
     category: fund.category,
     fundPage: fund.fundPage,
-    dataFile: `funds/${fund.ticker}/meta.json`,
+    dataFile: null,
     ter: '—', terValue: null,
     nav: '—', navValue: null,
     aum: '—', aumValue: null,
@@ -2572,6 +2707,7 @@ function seedIndexEntry(fund: ArkFund): JsonRecord {
       ytd: null, tr1y: null, tr3y: null, tr5y: null, tr10y: null,
       cagr3y: null, cagr5y: null, cagr10y: null, siAnn: null,
       dividendYield: null, dividendYieldText: null, secYield: null, secYieldText: null,
+      returnsBasis: UNAVAILABLE_RETURNS_BASIS, performanceAsOf: null,
     },
     holdings: 0,
     history: 0,
@@ -2606,16 +2742,41 @@ function resultCountsFromEntry(entry: JsonRecord): { holdingsCount: number; hist
   };
 }
 
+type CursorScope = { cursor: number; tickers: string[] };
+
+/** Cursor state holds one scope per candidate set, so a TICKERS/filtered run never overwrites the full-feed cursor. */
+function readCursorScopes(state: JsonRecord | null): Record<string, CursorScope> {
+  const scopes: Record<string, CursorScope> = {};
+  const nested = record(state?.scopes);
+  for (const [key, raw] of Object.entries(nested)) {
+    const entry = record(raw);
+    scopes[key] = { cursor: Math.max(0, Math.floor(numberOrNull(entry.cursor) ?? 0)), tickers: stringArray(entry.tickers) };
+  }
+  const legacyTickers = stringArray(state?.tickers);
+  if (!Object.keys(nested).length && legacyTickers.length) scopes[legacyTickers.join(',')] = { cursor: Math.max(0, Math.floor(numberOrNull(state?.cursor) ?? 0)), tickers: legacyTickers };
+  return scopes;
+}
+
 export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUpdaterReport> {
   const config = options.config ?? readConfig(options.env ?? process.env);
   const apiRoot = options.apiRoot ?? API_ROOT;
   const referenceDate = options.referenceDate ?? new Date();
   const onNote = options.onNote ?? outputNote;
+  const onWarn = options.onWarn ?? ((message: string) => console.warn(message));
+  const now = options.runtime?.now ?? Date.now;
+  const startedAt = now();
+  const deadlineMs = options.deadlineMs ?? RUN_SOFT_DEADLINE_MS;
   const clients = options.clients ?? createRequestClients(config, options.runtime);
   const invalidTickers = config.tickers.filter((ticker) => !ARK_FUND_BY_TICKER.has(ticker));
   if (invalidTickers.length) throw new Error(`TICKERS contains unsupported ARK ETF(s): ${[...new Set(invalidTickers)].join(', ')}`);
   outputPrintConfig('ARK Invest', { ...config });
 
+  const previousIndex = await readJsonRecord(path.join(apiRoot, 'index.json'));
+  const previousTickers = new Set(arrayValue(previousIndex?.funds).map((raw) => tickerOrBlank(record(raw).ticker)).filter(Boolean));
+  // Funds the official ETF page lists that this built-in catalog does not know. The 14-fund catalog stays hard-coded:
+  // the official page only lists fund slugs (no names, CSV file names or trust data), so a new fund cannot be
+  // fully described automatically - it is detected and reported, and must be added to ARK_FUNDS.
+  let unlistedOnPage: string[] = [];
   let catalogSource = 'fixed 14-fund ARK ETF catalog';
   if (config.skipArk) {
     catalogSource = 'fixed 14-fund ARK ETF catalog (SKIP_ARK enabled)';
@@ -2633,6 +2794,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
       }
       const discovered = parseArkCatalogHtml(catalogPage.text);
       if (!discovered.length) throw new Error('official ETF page contained no supported ETF fund links');
+      unlistedOnPage = detectUnlistedArkFunds(catalogPage.text);
       catalogSource = `official ETF page; ${discovered.length} supported fund paths observed; fixed 14-fund catalog retained`;
       if (discovered.length !== ARK_FUNDS.length) {
         console.warn(`[ ${'catalog'.padEnd(9)}] official page exposed ${discovered.length}/${ARK_FUNDS.length} supported ETFs; retaining the full fixed catalog`);
@@ -2643,29 +2805,46 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
       console.warn(`[ ${'catalog'.padEnd(9)}] official catalog unavailable; retaining all ${ARK_FUNDS.length} supported ETFs: ${error instanceof Error ? error.message : cleanText(error)}`);
     }
   }
+  const newFunds = [...new Set([
+    ...(previousTickers.size ? ARK_FUNDS.map((fund) => fund.ticker).filter((ticker) => !previousTickers.has(ticker)) : []),
+    ...unlistedOnPage,
+  ])].sort();
+  if (newFunds.length) {
+    const line = `NEW FUNDS: ${newFunds.join(', ')}${unlistedOnPage.length ? ` (${unlistedOnPage.join(', ')} listed on ${ARK_CATALOG_URL} but missing from ARK_FUNDS: add them to the catalog)` : ''}`;
+    console.log(line);
+    const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+    if (summaryFile) await appendFile(summaryFile, `${line}\n`).catch(() => undefined);
+  }
 
-  const previousIndex = await readJsonRecord(path.join(apiRoot, 'index.json'));
   const indexEntries = mergeCatalogEntries(previousIndex);
   const staticSelection = ARK_FUNDS.filter((fund) => passesStaticFilters(fund, config));
   outputPrintFilter(staticSelection.length, ARK_FUNDS.length, hasDeferredFilters(config));
+  // The cursor counts only funds that can pass the data filters: published rows are pre-checked, never-published funds stay in.
+  const candidates = hasDeferredFilters(config)
+    ? staticSelection.filter((fund) => {
+      const entry = indexEntries.get(fund.ticker);
+      return !entry || !entry.dataFile || passesMetricFilters(entry, config);
+    })
+    : staticSelection;
 
-  let selectedFunds = staticSelection;
+  let selectedFunds = candidates;
   let nextCursor: number | null = null;
   let startCursor = 0;
   const stateFile = path.join(apiRoot, 'update-state.json');
+  const scopeKey = candidates.map((fund) => fund.ticker).join(',');
+  let scopes: Record<string, CursorScope> = {};
   if (config.maxFetches > 0) {
-    const state = await readJsonRecord(stateFile);
-    const configuredTickers = staticSelection.map((fund) => fund.ticker);
-    const priorTickers = stringArray(state?.tickers);
-    const savedCursor = numberOrNull(state?.cursor) ?? 0;
-    const matchingScope = configuredTickers.length === priorTickers.length && configuredTickers.every((ticker, index) => ticker === priorTickers[index]);
-    startCursor = matchingScope && configuredTickers.length ? Math.min(Math.max(0, Math.floor(savedCursor)), configuredTickers.length - 1) : 0;
-    selectedFunds = staticSelection.slice(startCursor, startCursor + config.maxFetches);
-    nextCursor = configuredTickers.length && startCursor + selectedFunds.length < configuredTickers.length
-      ? startCursor + selectedFunds.length
-      : 0;
-    console.log(`[ ${'cursor'.padEnd(9)}] starting at ${configuredTickers.length ? startCursor + 1 : 0} of ${configuredTickers.length}; processing ${selectedFunds.length}; next ${configuredTickers.length ? nextCursor + 1 : 0}`);
-  } else if (existsSync(stateFile)) {
+    scopes = readCursorScopes(await readJsonRecord(stateFile));
+    const saved = scopes[scopeKey];
+    const total = candidates.length;
+    startCursor = saved && total ? saved.cursor % total : 0;
+    const count = Math.min(config.maxFetches, total);
+    // Wrap around the end of the candidate list so every batch is full-sized.
+    selectedFunds = Array.from({ length: count }, (_, offset) => candidates[(startCursor + offset) % total]);
+    nextCursor = total ? (startCursor + count) % total : 0;
+    console.log(`[ ${'cursor'.padEnd(9)}] starting at ${total ? startCursor + 1 : 0} of ${total}; processing ${selectedFunds.length}; next ${total ? nextCursor + 1 : 0}`);
+  } else if (!config.tickers.length && existsSync(stateFile)) {
+    // A full refresh resets the cursor; a TICKERS run never touches the cursor state.
     await rm(stateFile, { force: true });
   }
 
@@ -2676,8 +2855,16 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
   const failedTickers: string[] = [];
   let successes = 0;
   let nextFundIndex = 0;
+  let deadlineReached = false;
   const worker = async (): Promise<void> => {
     for (;;) {
+      if (now() - startedAt >= deadlineMs) {
+        if (nextFundIndex < selectedFunds.length && !deadlineReached) {
+          deadlineReached = true;
+          console.warn(`[ ${'deadline'.padEnd(9)}] soft deadline of ${Math.round(deadlineMs / 1000)}s reached; ${selectedFunds.length - nextFundIndex} fund(s) not started, the index is still written`);
+        }
+        return;
+      }
       const index = nextFundIndex;
       nextFundIndex += 1;
       const fund = selectedFunds[index];
@@ -2690,6 +2877,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
           referenceDate,
           secFallback,
           onNote,
+          onWarn,
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : cleanText(error);
@@ -2721,12 +2909,22 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
   const laneClock: PaceClock = { now: options.runtime?.now, sleep: options.runtime?.sleep };
   const workerCount = Math.min(config.concurrency, selectedFunds.length);
   await Promise.all(Array.from({ length: workerCount }, () => withRequestLane(config.requestSleepSeconds * 1000, worker, laneClock)));
+  if (config.maxFetches > 0 && deadlineReached) {
+    // Only funds that were actually started count towards the cursor, in queue order.
+    const total = candidates.length;
+    nextCursor = total ? (startCursor + Math.min(nextFundIndex, selectedFunds.length)) % total : 0;
+  }
 
+  // dataFile mirrors the files on disk: a row without funds/<T>/meta.json points nowhere.
+  for (const entry of indexEntries.values()) {
+    const ticker = cleanText(entry.ticker);
+    entry.dataFile = existsSync(path.join(apiRoot, 'funds', ticker, 'meta.json')) ? `funds/${ticker}/meta.json` : null;
+  }
   const sortedEntries = [...indexEntries.values()].sort((a, b) => cleanText(a.ticker).localeCompare(cleanText(b.ticker)));
   const indexDocument: JsonRecord = {
     ...(previousIndex ?? {}),
     brand: 'ARK Invest',
-    generatedAt: new Date().toISOString(),
+    generatedAt: isoStamp(),
     catalog: { url: ARK_CATALOG_URL, source: catalogSource, tickers: ARK_FUNDS.map((fund) => fund.ticker) },
     counts: {
       funds: sortedEntries.length,
@@ -2738,11 +2936,8 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
   const indexPath = path.join(apiRoot, 'index.json');
   await writeJsonIfChanged(indexPath, indexDocument);
   if (config.maxFetches > 0) {
-    await writeJsonIfChanged(stateFile, {
-      cursor: nextCursor ?? 0,
-      tickers: staticSelection.map((fund) => fund.ticker),
-      generatedAt: new Date().toISOString(),
-    });
+    scopes[scopeKey] = { cursor: nextCursor ?? 0, tickers: candidates.map((fund) => fund.ticker) };
+    await writeJsonIfChanged(stateFile, { scopes, generatedAt: isoStamp() });
   }
   const holdingsTotal = sumIndexCounts(sortedEntries, 'holdings');
   const historyTotal = sumIndexCounts(sortedEntries, 'history');
@@ -2756,6 +2951,8 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
     failedTickers,
     nextCursor,
     indexPath,
+    newFunds,
+    deadlineReached,
   };
 }
 
@@ -2796,7 +2993,9 @@ export function resolveControls(
   apply(advanced);
   apply(inputs, true);
   for (const key of CONTROL_NAMES) {
-    const value = env[`ARK_${key}`] ?? env[key];
+    const aliases = key === 'HISTORY_PAGE_SIZE' ? ['HISTORICAL_PAGE_SIZE'] : [];
+    // ARK_<KEY> wins over <KEY>; the legacy HISTORICAL_PAGE_SIZE spelling stays a working alias.
+    const value = env[`ARK_${key}`] ?? aliases.map((alias) => env[`ARK_${alias}`]).find((v) => v !== undefined) ?? env[key] ?? aliases.map((alias) => env[alias]).find((v) => v !== undefined);
     if (value !== undefined) apply({ [key]: value });
   }
   for (const key of ['MAX_FETCHES', 'CONCURRENCY', 'HOLDINGS_PAGE_SIZE', 'HISTORY_PAGE_SIZE', 'MAX_RETRIES']) {
@@ -2825,7 +3024,7 @@ export async function runtimeControls(env: Record<string, string | undefined> = 
   return resolveControls(file, {}, {}, env);
 }
 
-export async function main(argv: string[] = process.argv.slice(2), env: Record<string, string | undefined> = process.env): Promise<void> {
+export async function main(argv: string[] = process.argv.slice(2), env: Record<string, string | undefined> = process.env, options: RunUpdaterOptions = {}): Promise<RunUpdaterReport | void> {
   if (argv.some((arg) => arg === '--help' || arg === '-h')) {
     console.log(USAGE);
     return;
@@ -2834,7 +3033,10 @@ export async function main(argv: string[] = process.argv.slice(2), env: Record<s
   const controls = await runtimeControls(env);
   if (controls.VERBOSE !== undefined && env === process.env) process.env.VERBOSE = controls.VERBOSE;
   installSystemCa(controls.USE_SYSTEM_CA ?? 'auto');
-  await runUpdater({ config: readConfig(controls) });
+  const report = await runUpdater({ ...options, config: readConfig(controls) });
+  // Every selected fund failed: the run produced nothing, so the CI step must not look green.
+  if (report.processedTickers.length > 0 && report.failedTickers.length === report.processedTickers.length) process.exitCode = 1;
+  return report;
 }
 
 if (import.meta.main) {

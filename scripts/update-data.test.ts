@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
 /// <reference types="bun" />
-import { describe, expect, test } from 'bun:test';
+import { afterEach, describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { readFile, readdir, stat, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -17,6 +17,13 @@ import {
   ProviderHttpError,
   arkApiUrls,
   ISSUER_PROXY_MIN_INTERVAL_MS,
+  RUN_SOFT_DEADLINE_MS,
+  main,
+  mergeHistoryRows,
+  parseArkCatalogSlugs,
+  detectUnlistedArkFunds,
+  isoStamp,
+  writeFileAtomic,
   ISSUER_USER_AGENT,
   REQUEST_TIMEOUT_MS,
   USAGE,
@@ -34,7 +41,6 @@ import {
   resolveReturnMetrics,
   OFFICIAL_RETURNS_BASIS,
   YAHOO_RETURNS_BASIS,
-  MIXED_RETURNS_BASIS,
   UNAVAILABLE_RETURNS_BASIS,
   buildPageEnvelope,
   buildYahooReturns,
@@ -349,10 +355,11 @@ describe('Yahoo fallback and return math', () => {
     expect(officialOnly.returnsBasis).toBe(OFFICIAL_RETURNS_BASIS);
     expect(officialOnly.performanceAsOf).toBe('2026-08-31');
 
-    const mixed = resolveReturnMetrics(official, yahoo, {});
-    expect(mixed.cagr5y).toBe(7);
-    expect(mixed.ytd).toBe(5);
-    expect(mixed.returnsBasis).toBe(MIXED_RETURNS_BASIS);
+    // One source per fund: the official unit wins whole, a Yahoo-only figure never fills its nulls
+    const unit = resolveReturnMetrics(official, yahoo, {});
+    expect(unit.cagr5y).toBeNull();
+    expect(unit.ytd).toBe(5);
+    expect(unit.returnsBasis).toBe(OFFICIAL_RETURNS_BASIS);
 
     const yahooOnly = resolveReturnMetrics({}, { ...yahoo, performanceAsOf: '2026-09-25' }, {});
     expect(yahooOnly.returnsBasis).toBe(YAHOO_RETURNS_BASIS);
@@ -424,16 +431,23 @@ describe('configuration and filters', () => {
     expect(parseAumRange('1.5B:')).toMatchObject({ min: 1_500_000_000, max: Number.POSITIVE_INFINITY });
   });
 
-  test('static and post-fetch filters are ANDed; missing return periods pass for young funds', () => {
+  test('static and post-fetch filters are ANDed; a bounded return range excludes funds without that figure', () => {
     const config = readConfig({ TICKERS: 'ARKK ARKY', CATEGORY: 'equity', AUM: '1B:', TER: ':1', PERFORMANCE_3Y: '10:30' });
     const arkk = ARK_FUNDS.find((fund) => fund.ticker === 'ARKK')!;
     const arky = ARK_FUNDS.find((fund) => fund.ticker === 'ARKY')!;
     expect(passesStaticFilters(arkk, config)).toBe(true);
     expect(passesStaticFilters(arky, config)).toBe(false);
     const entry = { aumValue: 2_000_000_000, terValue: 0.75, metrics: { dividendYield: null, secYield: null, tr1y: 12, cagr3y: null }, returns: { monthEnd: { ytd: 5, yr1: 12, yr3: null } } };
-    expect(passesMetricFilters(entry, config)).toBe(true);
-    expect(passesMetricFilters({ ...entry, aumValue: 500_000_000 }, config)).toBe(false);
+    expect(passesMetricFilters(entry, config)).toBe(false);
+    const withThreeYear = { ...entry, metrics: { ...entry.metrics, cagr3y: 20 }, returns: { monthEnd: { ytd: 5, yr1: 12, yr3: 20 } } };
+    expect(passesMetricFilters(withThreeYear, config)).toBe(true);
+    expect(passesMetricFilters({ ...withThreeYear, aumValue: 500_000_000 }, config)).toBe(false);
     expect(passesMetricFilters({ ...entry, metrics: { ...entry.metrics, cagr3y: 35 } }, config)).toBe(false);
+    // 3Y bounded and the fund has no 3Y figure (young fund): excluded, not waved through
+    expect(passesMetricFilters({ ...entry, metrics: { ...entry.metrics, cagr3y: null }, returns: { monthEnd: { ytd: 5, yr1: 12, yr3: null } } }, config)).toBe(false);
+    expect(passesMetricFilters({ ...entry, metrics: { ...entry.metrics, tr3y: null } }, readConfig({ TOTAL_RETURN_3Y: '0:' }))).toBe(false);
+    // an unbounded return range keeps funds without the figure
+    expect(passesMetricFilters(entry, readConfig({}))).toBe(true);
   });
 });
 
@@ -588,7 +602,7 @@ describe('paced provider request clients', () => {
     expect(retries[0]).toContain('[ retry    ] ARK holdings HTTP 503');
   });
 
-  test('two consecutive ARK denials switch once; proxy returns raw page HTML and plain API text', async () => {
+  test('a first ARK denial is retried once, then the request and all later ones use the proxy (raw page HTML and plain API text)', async () => {
     const calls: Array<{ url: string; respondWith: string | null }> = [];
     const notices: string[] = [];
     let clock = 0;
@@ -608,13 +622,15 @@ describe('paced provider request clients', () => {
       },
       onIssuerProxy: (message) => notices.push(message),
     });
-    await expect(client.ark('https://www.ark-funds.com/our-etfs/')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    // The first 403 is retried once directly and then THIS request goes through the proxy (it is not lost)
+    await expect(client.ark('https://www.ark-funds.com/our-etfs/')).resolves.toBeDefined();
+    expect(client.isArkProxyActive()).toBe(true);
     const pageUrls = ['https://www.ark-funds.com/funds/arkk', 'https://www.ark-funds.com/funds/arkb'];
     const pageResponses = await Promise.all(pageUrls.map((url) => client.ark(url)));
     expect(pageResponses.map((response) => extractFundPageId(response.text))).toEqual(['1004', '1010']);
     await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).resolves.toMatchObject({ text: '{"ok":true}' });
     expect(client.isArkProxyActive()).toBe(true);
-    expect(calls.filter((call) => !call.url.startsWith('https://r.jina.ai/'))).toHaveLength(3);
+    expect(calls.filter((call) => !call.url.startsWith('https://r.jina.ai/'))).toHaveLength(2);
     const proxiedPages = calls.filter((call) => call.url.startsWith('https://r.jina.ai/') && call.url.includes('/funds/'));
     expect(proxiedPages).toHaveLength(2);
     expect(proxiedPages.every((call) => call.respondWith === 'html')).toBe(true);
@@ -639,15 +655,15 @@ describe('paced provider request clients', () => {
       },
       onIssuerProxy: () => undefined,
     });
-    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).rejects.toMatchObject({ status: 403 } satisfies Partial<ProviderHttpError>);
+    await client.ark('https://www.ark-funds.com/api/fund/overview/1004');
     await Promise.all([
       client.ark('https://www.ark-funds.com/api/fund/overview/1004'),
       client.ark('https://www.ark-funds.com/api/fund/overview/1001'),
       client.ark('https://www.ark-funds.com/api/fund/overview/1002'),
     ]);
     expect(client.isArkProxyActive()).toBe(true);
-    expect(proxyStarts).toHaveLength(3);
-    expect(ISSUER_PROXY_MIN_INTERVAL_MS).toBe(3000);
+    expect(proxyStarts).toHaveLength(4);
+    expect(ISSUER_PROXY_MIN_INTERVAL_MS).toBeGreaterThanOrEqual(3200);
     for (let index = 1; index < proxyStarts.length; index += 1) {
       expect(proxyStarts[index] - proxyStarts[index - 1]).toBeGreaterThanOrEqual(ISSUER_PROXY_MIN_INTERVAL_MS);
     }
@@ -670,7 +686,7 @@ describe('paced provider request clients', () => {
         return Promise.resolve(new Response('recovered', { status: 200 }));
       },
     });
-    expect(REQUEST_TIMEOUT_MS).toBe(90_000);
+    expect(REQUEST_TIMEOUT_MS).toBe(45_000);
     await expect(client.azure('https://assets.example.test/fund.csv')).resolves.toMatchObject({ text: 'recovered' });
     expect(calls).toBe(2);
     expect(retries).toHaveLength(1);
@@ -887,7 +903,7 @@ describe('bounded updater orchestration', () => {
       expect(first.failedTickers).toEqual(['ARKK']);
       expect(first.nextCursor).toBe(1);
       const firstState = JSON.parse(await readFile(join(directory, 'update-state.json'), 'utf8')) as Record<string, unknown>;
-      expect(firstState).toMatchObject({ cursor: 1, tickers: ['ARKK', 'ARKY'] });
+      expect(firstState).toMatchObject({ scopes: { 'ARKK,ARKY': { cursor: 1, tickers: ['ARKK', 'ARKY'] } } });
 
       const second = await runUpdater({ config, apiRoot: directory, clients, referenceDate: new Date('2026-09-28T12:00:00Z'), onNote: () => undefined });
       expect(second.selectedTickers).toEqual(['ARKY']);
@@ -1168,5 +1184,422 @@ describe('system CA support', () => {
     } finally {
       globalThis.fetch = original;
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Robustness and data-contract fixes (each test fails on the previous implementation)
+// ---------------------------------------------------------------------------
+
+type Scenario = {
+  csv?: string | Error;
+  month?: unknown;
+  quarter?: unknown;
+  history?: unknown;
+  yahooPoints?: number | Error;
+  firstTrade?: string;
+  dividends?: Record<string, { date: number; amount: number }>;
+  overview?: unknown;
+};
+const DAY_MS = 86_400_000;
+const navPoints = (count: number, end = '2026-09-25'): unknown => ({
+  chartData: Array.from({ length: count }, (_, index) => ({ nav: 50 + index * 0.01, marketPrice: 50 + index * 0.01, epochDateMilliSeconds: Date.parse(`${end}T00:00:00Z`) - (count - 1 - index) * DAY_MS })),
+});
+const yahooPayload = (count: number, firstTrade = '2014-10-31', dividends: Scenario['dividends'] = {}): unknown => ({
+  chart: {
+    result: [{
+      timestamp: Array.from({ length: count }, (_, index) => Math.floor((Date.parse('2026-09-25T00:00:00Z') - (count - 1 - index) * DAY_MS) / 1000)),
+      indicators: { quote: [{ close: Array.from({ length: count }, (_, index) => 50 + index * 0.01), volume: Array.from({ length: count }, () => 1) }], adjclose: [{ adjclose: Array.from({ length: count }, (_, index) => 50 + index * 0.01) }] },
+      events: { dividends },
+      meta: { regularMarketPrice: 60, firstTradeDate: Math.floor(Date.parse(`${firstTrade}T00:00:00Z`) / 1000) },
+    }],
+    error: null,
+  },
+});
+const csvAt = (date: string): string => ['date,fund,company,ticker,cusip,shares,market value ($),weight (%)', `${date},ARKK,TESLA INC,TSLA,88160R101,"2","$3",9%`].join('\r\n');
+const respondWith = (text: string, url: string, headers: Record<string, string> = {}) => ({ text, url, headers: new Headers(headers) });
+const clientsFor = (scenario: Scenario = {}) => ({
+  ark: async (url: string) => {
+    if (url.endsWith('/funds/arkk')) return respondWith('url: "/api/fund/overview/1004"', url);
+    if (url.includes('/api/fund/overview/')) return respondWith(JSON.stringify(scenario.overview ?? overviewSample), url);
+    if (url.includes('/api/fund/nav-historical-change/')) return respondWith(JSON.stringify(scenario.history ?? navHistorySample), url);
+    if (url.includes('/api/fund/performance/')) {
+      const quarter = new URL(url).searchParams.get('Range') === 'quarter-end';
+      return respondWith(JSON.stringify(quarter ? scenario.quarter ?? quarterPerformanceSample : scenario.month ?? monthPerformanceSample), url);
+    }
+    throw new Error(`unexpected ARK URL: ${url}`);
+  },
+  azure: async (url: string) => {
+    if (scenario.csv instanceof Error) throw scenario.csv;
+    return respondWith(scenario.csv ?? arkkCsv, url, { 'last-modified': 'Mon, 28 Sep 2026 06:05:47 GMT' });
+  },
+  yahoo: async (url: string) => {
+    if (scenario.yahooPoints instanceof Error) throw scenario.yahooPoints;
+    return respondWith(JSON.stringify(yahooPayload(scenario.yahooPoints ?? 4, scenario.firstTrade, scenario.dividends)), url);
+  },
+  sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
+  isArkProxyActive: () => false,
+});
+const arkkFund = ARK_FUNDS.find((fund) => fund.ticker === 'ARKK')!;
+const REF = new Date('2026-09-28T12:00:00Z');
+const quietConfig = (env: Record<string, string> = {}) => noRetryConfig({ REQUEST_SLEEP: '0', ...env });
+const readJson = async (file: string): Promise<any> => JSON.parse(await readFile(file, 'utf8'));
+const withTempRoot = async (work: (root: string) => Promise<void>): Promise<void> => {
+  const root = await mkdtemp(join(tmpdir(), 'ark-fix-'));
+  try { await work(root); } finally { await rm(root, { recursive: true, force: true }); }
+};
+const update = (root: string, scenario: Scenario, env: Record<string, string> = {}, extra: Record<string, unknown> = {}, warns: string[] = []) =>
+  updateArkFund(arkkFund, quietConfig(env), clientsFor(scenario), { apiRoot: root, referenceDate: REF, onNote: () => undefined, onWarn: (message) => warns.push(message), ...extra });
+const oldNport = (repPdDate: string) => async () => ({
+  parsed: { repPdDate, positions: [], regCik: '', seriesName: '', seriesId: '', netAssets: null },
+  accessions: [],
+  selected: { accession: 'acc', filed: repPdDate, reportDate: repPdDate, url: 'https://example.test/primary_doc.xml' },
+  holdings: [{ Name: 'N-PORT CO', Ticker: 'NPT', Identifier: '1', Weight: '1%', 'Market Value': '1', 'Shares Held': '1', 'Asset Category': 'Equity' }],
+});
+
+afterEach(() => { process.exitCode = 0; });
+
+describe('fix: distribution frequency', () => {
+  test('semi-annual means 2 payments a year, so the indicated yield is not overstated 3x', async () => {
+    expect(paymentsPerYear('semi-annually')).toBe(2);
+    expect(paymentsPerYear('SDEC')).toBe(2);
+    expect(paymentsPerYear('Semi-Annual')).toBe(2);
+    expect(inferDistributionFrequency(['2025-09-01', '2026-03-01', '2026-08-28'], new Date('2026-09-28T00:00:00Z'))).toBe('Semi-annually');
+    const epoch = (date: string): number => Math.floor(Date.parse(`${date}T00:00:00Z`) / 1000);
+    const dividends = { a: { date: epoch('2025-09-01'), amount: 0.5 }, b: { date: epoch('2026-03-01'), amount: 0.5 }, c: { date: epoch('2026-08-28'), amount: 0.5 } };
+    await withTempRoot(async (root) => {
+      await update(root, { dividends });
+      const meta = await readJson(join(root, 'funds', 'ARKK', 'meta.json'));
+      expect(meta.distributions.frequency).toBe('Semi-annually');
+      expect(meta.metrics.dividendYield).toBe(1.1); // 0.50 x 2 / 90.77 (last market price), not x 6 = 3.31
+    });
+  });
+});
+
+describe('fix: holdings freshness', () => {
+  test('the snapshot date is the newest row date and a stale snapshot is always surfaced', async () => {
+    const csv = ['date,fund,company,ticker,cusip,shares,market value ($),weight (%)', '01/02/2026,ARKF,OLD CO,OLD,1,"1","$1",1%', '09/28/2026,ARKF,TESLA INC,TSLA,88160R101,"2","$3",9%'].join('\n');
+    expect(parseArkHoldingsCsv(csv, 'ARKF').asOfDate).toBe('2026-09-28');
+    const warnings: string[] = [];
+    await withTempRoot(async (root) => {
+      await update(root, { csv: csvAt('01/02/2026') }, {}, {}, warnings);
+    });
+    expect(warnings.some((message) => message.includes('days old') && message.includes('ARKK'))).toBe(true);
+  });
+
+  test('a failed CSV never replaces published holdings with an older N-PORT and keeps the whole fund as published', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, {});
+      const files = async () => Promise.all(['meta.json', 'holdings/001.json', 'history/001.json'].map((file) => readFile(join(root, 'funds', 'ARKK', file), 'utf8')));
+      const before = await files();
+      const result = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: oldNport('2026-06-30') });
+      expect(result.status).toBe('failed');
+      expect(result.reason).toContain('holdings CSV');
+      expect(await files()).toEqual(before);
+      expect((await readJson(join(root, 'funds', 'ARKK', 'meta.json'))).holdings.asOfDate).toBe('Sep 28 2026');
+    });
+  });
+
+  test('an N-PORT report that is newer than the published holdings is still used', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, { csv: csvAt('06/01/2026') });
+      const result = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: oldNport('2026-08-31') });
+      expect(result.status).toBeUndefined();
+      const meta = await readJson(join(root, 'funds', 'ARKK', 'meta.json'));
+      expect(meta.holdings.source).toBe('SEC EDGAR Form N-PORT-P fallback');
+      expect(meta.holdings.asOfDate).toBe('Aug 31 2026');
+    });
+  });
+});
+
+describe('fix: returns are one unit', () => {
+  test('a figure ARK later nulls stays null and never travels under a new date', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, {});
+      expect((await readJson(join(root, 'funds', 'ARKK', 'meta.json'))).metrics).toMatchObject({ cagr3y: 25.02, tr1y: 14.07 });
+      const thinMonth = performanceSample('09/30/2026', ['14.07%', '', '', '', '13.98%'], ['20.20%', '4.37%', '11.13%', '370.38%']);
+      await update(root, { month: thinMonth });
+      const meta = await readJson(join(root, 'funds', 'ARKK', 'meta.json'));
+      expect(meta.metrics.tr1y).toBe(14.07);
+      expect(meta.metrics.cagr3y).toBeNull();
+      expect(meta.metrics.tr3y).toBeNull();
+      expect(meta.metrics.cagr5y).toBeNull();
+      expect(meta.metrics.returnsBasis).toBe(OFFICIAL_RETURNS_BASIS);
+      expect(meta.metrics.performanceAsOf).toBe('2026-09-30');
+      expect(meta.returns.monthEnd.yr3).toBeNull();
+      expect(meta.returns.monthEnd.yr5).toBeNull();
+    });
+  });
+
+  test('a failed performance endpoint keeps the whole previous fund instead of mixing sources', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, {});
+      const before = await readFile(join(root, 'funds', 'ARKK', 'meta.json'), 'utf8');
+      const clients = { ...clientsFor({}), ark: async (url: string) => {
+        if (url.includes('/api/fund/performance/')) throw new Error('HTTP 503');
+        return clientsFor({}).ark(url);
+      } };
+      const result = await updateArkFund(arkkFund, quietConfig(), clients, { apiRoot: root, referenceDate: REF, onNote: () => undefined });
+      expect(result.status).toBe('failed');
+      expect(result.reason).toContain('performance');
+      expect(await readFile(join(root, 'funds', 'ARKK', 'meta.json'), 'utf8')).toBe(before);
+    });
+  });
+
+  test('horizons longer than the fund age and a since-inception figure under one year are null', () => {
+    const month = parseArkPerformance(performanceSample('08/31/2026', ['1.10%', '5.00%', '6.00%', '7.00%', '1.38%'], ['1%', '2%', '3%', '1.38%']));
+    const young = buildOfficialReturns(month, null, '2026-08-19');
+    expect(young.metrics).toMatchObject({ tr1y: null, cagr3y: null, cagr5y: null, siAnn: null });
+    expect(young.monthEnd.sinceInception).toBeNull();
+    expect(young.monthEnd.sinceInceptionCumulative).toBe(1.38);
+    // 2.93 years old: no 3Y yet, a 1Y figure is real
+    const almostThree = buildOfficialReturns(month, null, '2023-09-26');
+    expect(almostThree.metrics).toMatchObject({ tr1y: 1.1, cagr3y: null, tr3y: null, siAnn: 1.38 });
+    expect(buildOfficialReturns(month, null, '2020-01-01').metrics).toMatchObject({ cagr3y: 5, cagr5y: 6 });
+  });
+});
+
+describe('fix: HISTORY_RANGE never shrinks the published history', () => {
+  test('a shorter window merges older published rows back and keeps every page', async () => {
+    await withTempRoot(async (root) => {
+      const full = navPoints(1500);
+      await update(root, { history: full, yahooPoints: 1500 }, { HISTORY_PAGE_SIZE: '1000' });
+      const meta = await readJson(join(root, 'funds', 'ARKK', 'meta.json'));
+      expect(meta.history.totalRows).toBe(1500);
+      await update(root, { history: full, yahooPoints: 800 }, { HISTORY_RANGE: '2y', HISTORY_PAGE_SIZE: '1000' });
+      const after = await readJson(join(root, 'funds', 'ARKK', 'meta.json'));
+      expect(after.history.totalRows).toBe(1500);
+      expect((await readdir(join(root, 'funds', 'ARKK', 'history'))).sort()).toEqual(['001.json', '002.json']);
+      expect(after.history.asOfDate).toBe('Sep 25 2026');
+    });
+    const previous = { headers: ['Date', 'NAV'], rows: [{ Date: 'Jan 02 2026', NAV: '1' }, { Date: 'Jun 01 2026', NAV: '2' }] };
+    expect(mergeHistoryRows(previous, ['Date', 'NAV'], [{ Date: 'Jun 01 2026', NAV: '3' }]).map((row) => row.NAV)).toEqual(['1', '3']);
+    expect(mergeHistoryRows(previous, ['Date', 'Close'], [{ Date: 'Jun 01 2026', Close: '3' }])).toHaveLength(1);
+  });
+
+  test('siAnn and since-inception cumulative come only from a window that reaches the first trade', () => {
+    const points = Array.from({ length: 800 }, (_, index) => ({ date: new Date(Date.parse('2024-07-20T00:00:00Z') + index * DAY_MS).toISOString().slice(0, 10), close: 50 + index * 0.01, adjClose: 50 + index * 0.01, volume: 1 }));
+    expect(buildYahooReturns(points, REF, true).metrics.siAnn).not.toBeNull();
+    const clipped = buildYahooReturns(points, REF, false);
+    expect(clipped.metrics.siAnn).toBeNull();
+    expect(clipped.monthEnd.sinceInceptionCumulative).toBeNull();
+  });
+
+  test('a Yahoo-only run with HISTORY_RANGE=2y does not label the window start as inception', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, { yahooPoints: 800, firstTrade: '2014-10-31' }, { SKIP_ARK: '1', HISTORY_RANGE: '2y' });
+      expect((await readJson(join(root, 'funds', 'ARKK', 'meta.json'))).metrics.siAnn).toBeNull();
+    });
+  });
+});
+
+describe('fix: network behavior', () => {
+  test('the r.jina.ai proxy retries at most once and paces at 3.2 s or more, whatever MAX_RETRIES says', async () => {
+    let clock = 0;
+    const proxyStarts: number[] = [];
+    const client = createRequestClients({ ...readConfig({ REQUEST_SLEEP: '0', MAX_RETRIES: '5' }) }, {
+      now: () => clock,
+      sleep: async (milliseconds) => { clock += milliseconds; },
+      onRetry: () => undefined,
+      onIssuerProxy: () => undefined,
+      fetchImpl: async (input) => {
+        if (String(input).startsWith('https://r.jina.ai/')) { proxyStarts.push(clock); return new Response('busy', { status: 503 }); }
+        return new Response('blocked', { status: 403 });
+      },
+    });
+    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).rejects.toThrow('503');
+    expect(proxyStarts).toHaveLength(2);
+    expect(proxyStarts[1] - proxyStarts[0]).toBeGreaterThanOrEqual(3200);
+    expect(ISSUER_PROXY_MIN_INTERVAL_MS).toBeGreaterThanOrEqual(3200);
+  });
+
+  test('the first 403 of a run is retried directly once and a transient denial costs nothing', async () => {
+    let calls = 0;
+    const client = createRequestClients(noRetryConfig({ REQUEST_SLEEP: '0' }), {
+      sleep: async () => undefined,
+      fetchImpl: async () => { calls += 1; return calls === 1 ? new Response('challenge', { status: 403 }) : new Response('{"ok":true}', { status: 200 }); },
+      onIssuerProxy: () => undefined,
+    });
+    await expect(client.ark('https://www.ark-funds.com/api/fund/overview/1004')).resolves.toMatchObject({ text: '{"ok":true}' });
+    expect(calls).toBe(2);
+    expect(client.isArkProxyActive()).toBe(false);
+  });
+});
+
+describe('fix: numbers, dates and writes', () => {
+  test('numberOrNull maps symbol-only strings to null, not 0', () => {
+    for (const value of ['$', '%', ',', '$,%', ' $ ']) expect(numberOrNull(value)).toBeNull();
+    expect(numberOrNull('$0')).toBe(0);
+    expect(numberOrNull('0.00%')).toBe(0);
+  });
+
+  test('month-name dates parse as UTC in any time zone and generatedAt has no milliseconds', () => {
+    const original = process.env.TZ;
+    try {
+      for (const zone of ['Asia/Tokyo', 'America/Los_Angeles', 'UTC']) {
+        process.env.TZ = zone;
+        expect(toIsoDate('Sep 28 2026')).toBe('2026-09-28');
+        expect(toIsoDate('September 5, 2026')).toBe('2026-09-05');
+        expect(displayDate('Sep 04 2026')).toBe('Sep 04 2026');
+        expect(toIsoDate('Mon, 28 Sep 2026 06:05:47 GMT')).toBe('2026-09-28');
+      }
+    } finally {
+      if (original === undefined) delete process.env.TZ; else process.env.TZ = original;
+    }
+    expect(isoStamp(new Date('2026-10-03T04:05:06.789Z'))).toBe('2026-10-03T04:05:06Z');
+  });
+
+  test('writes are atomic: no tmp files are left and a failed write keeps the old file', async () => {
+    await withTempRoot(async (root) => {
+      const file = join(root, 'x', 'a.json');
+      await writeFileAtomic(file, '{"a":1}\n');
+      await writeJsonIfChanged(file, { a: 2 });
+      expect(await readdir(join(root, 'x'))).toEqual(['a.json']);
+      await expect(writeFileAtomic(join(root, 'x', 'a.json', 'nested.json'), 'z')).rejects.toBeDefined();
+      expect(await readJson(file)).toEqual({ a: 2 });
+      expect((await readdir(join(root, 'x'))).filter((name) => name.endsWith('.tmp'))).toEqual([]);
+    });
+  });
+
+  test('stale pages are removed only after meta.json is written (a failed meta write leaves them in place)', async () => {
+    await withTempRoot(async (root) => {
+      await update(root, { history: navPoints(5) }, { HISTORY_PAGE_SIZE: '2' });
+      const historyDir = join(root, 'funds', 'ARKK', 'history');
+      expect((await readdir(historyDir)).sort()).toEqual(['001.json', '002.json', '003.json']);
+      // make the meta.json write fail: a non-empty directory sits where the file must go
+      await rm(join(root, 'funds', 'ARKK', 'meta.json'));
+      await mkdir(join(root, 'funds', 'ARKK', 'meta.json', 'blocker'), { recursive: true });
+      await expect(update(root, { history: navPoints(5) }, { HISTORY_PAGE_SIZE: '5' })).rejects.toBeDefined();
+      expect((await readdir(historyDir)).sort()).toEqual(['001.json', '002.json', '003.json']);
+      await rm(join(root, 'funds', 'ARKK', 'meta.json'), { recursive: true, force: true });
+      await update(root, { history: navPoints(5) }, { HISTORY_PAGE_SIZE: '5' });
+      expect((await readdir(historyDir)).sort()).toEqual(['001.json']);
+    });
+  });
+
+  test('a rerun with identical upstream data writes nothing, stamps included', async () => {
+    await withTempRoot(async (root) => {
+      const config = quietConfig({ TICKERS: 'ARKK', SKIP_ARK: '0', EDGAR_FALLBACK: '0' });
+      const clients = clientsFor({});
+      const run = () => runUpdater({ config, apiRoot: root, clients, referenceDate: REF, onNote: () => undefined, onWarn: () => undefined });
+      await run();
+      const snapshot = async (): Promise<Array<[string, string, number]>> => {
+        const out: Array<[string, string, number]> = [];
+        const walk = async (dir: string): Promise<void> => {
+          for (const entry of await readdir(dir, { withFileTypes: true })) {
+            const full = join(dir, entry.name);
+            if (entry.isDirectory()) await walk(full);
+            else out.push([full, await readFile(full, 'utf8'), (await stat(full)).mtimeMs]);
+          }
+        };
+        await walk(root);
+        return out.sort((a, b) => a[0].localeCompare(b[0]));
+      };
+      const first = await snapshot();
+      await Bun.sleep(15);
+      await run();
+      expect(await snapshot()).toEqual(first);
+      expect(first.some(([file]) => file.endsWith('.tmp'))).toBe(false);
+    });
+  });
+});
+
+describe('fix: orchestration', () => {
+  test('unknown TICKERS are a configuration error, also through the resolver', () => {
+    expect(() => readConfig({ TICKERS: 'ARKK NOPE' })).toThrow('NOPE');
+    expect(() => resolveControls({}, {}, {}, { TICKERS: 'ARKK ZZZZ' })).toThrow('ZZZZ');
+  });
+
+  test('the legacy HISTORICAL_PAGE_SIZE alias still works through resolveControls (ARK_ spelling wins)', () => {
+    expect(resolveControls({ HISTORY_PAGE_SIZE: '1000' }, {}, {}, { HISTORICAL_PAGE_SIZE: '500' }).HISTORY_PAGE_SIZE).toBe('500');
+    expect(resolveControls({}, {}, {}, { HISTORICAL_PAGE_SIZE: '500', ARK_HISTORY_PAGE_SIZE: '300' }).HISTORY_PAGE_SIZE).toBe('300');
+    expect(() => resolveControls({}, {}, {}, { HISTORICAL_PAGE_SIZE: '0' })).toThrow('HISTORY_PAGE_SIZE');
+  });
+
+  test('rows without meta.json get dataFile null and a complete metrics object', async () => {
+    await withTempRoot(async (root) => {
+      const config = quietConfig({ TICKERS: 'ARKK' });
+      await runUpdater({ config, apiRoot: root, clients: clientsFor({}), referenceDate: REF, onNote: () => undefined, onWarn: () => undefined });
+      const index = await readJson(join(root, 'index.json'));
+      const arkk = index.funds.find((row: any) => row.ticker === 'ARKK');
+      const arkq = index.funds.find((row: any) => row.ticker === 'ARKQ');
+      expect(arkk.dataFile).toBe('funds/ARKK/meta.json');
+      expect(arkq.dataFile).toBeNull();
+      expect(Object.keys(arkq.metrics)).toEqual(Object.keys(arkk.metrics));
+      expect(arkq.metrics.returnsBasis).toBe(UNAVAILABLE_RETURNS_BASIS);
+      expect(arkq.metrics.performanceAsOf).toBeNull();
+      expect(arkq.metrics.ytd).toBeNull();
+    });
+  });
+
+  test('main exits non-zero only when every selected fund failed', async () => {
+    await withTempRoot(async (root) => {
+      const env = { TICKERS: 'ARKK', SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0' };
+      process.exitCode = 0;
+      const report = await main([], env, { apiRoot: root, clients: clientsFor({}), onNote: () => undefined, onWarn: () => undefined });
+      expect(report?.failedTickers).toEqual(['ARKK']);
+      expect(process.exitCode).toBe(1);
+      process.exitCode = 0;
+      const okEnv = { TICKERS: 'ARKK', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0' };
+      await main([], okEnv, { apiRoot: root, clients: clientsFor({}), referenceDate: REF, onNote: () => undefined, onWarn: () => undefined });
+      expect(process.exitCode).toBe(0);
+    });
+  });
+
+  test('NEW FUNDS: funds listed on the official page but missing from the catalog are detected and reported', async () => {
+    const html = '<a href="/funds/arkk">ARKK</a><a href="/funds/arkvx">Venture</a><a href="/funds/arkz">ARKZ</a><a href="/funds/arkk">dup</a>';
+    expect(parseArkCatalogSlugs(html)).toEqual(['ARKK', 'ARKVX', 'ARKZ']);
+    expect(detectUnlistedArkFunds(html)).toEqual(['ARKZ']);
+    await withTempRoot(async (root) => {
+      const summary = join(root, 'summary.md');
+      const previousSummary = process.env.GITHUB_STEP_SUMMARY;
+      process.env.GITHUB_STEP_SUMMARY = summary;
+      try {
+        const clients = { ...clientsFor({}), ark: async (url: string) => url.endsWith('/our-etfs/') ? respondWith(html, url) : clientsFor({}).ark(url) };
+        const report = await runUpdater({ config: quietConfig({ CATEGORY: 'nothing-matches' }), apiRoot: root, clients, onNote: () => undefined });
+        expect(report.newFunds).toEqual(['ARKZ']);
+        expect(await readFile(summary, 'utf8')).toContain('NEW FUNDS: ARKZ');
+      } finally {
+        if (previousSummary === undefined) delete process.env.GITHUB_STEP_SUMMARY; else process.env.GITHUB_STEP_SUMMARY = previousSummary;
+      }
+    });
+  });
+
+  test('the cursor wraps around, counts only funds that can pass the filters and a TICKERS run leaves it alone', async () => {
+    await withTempRoot(async (root) => {
+      const skipAll = { SKIP_ARK: '1', SKIP_YAHOO: '1', EDGAR_FALLBACK: '0' };
+      const run = (env: Record<string, string>) => runUpdater({ config: quietConfig({ ...skipAll, ...env }), apiRoot: root, clients: clientsFor({}), referenceDate: REF, onNote: () => undefined, onWarn: () => undefined });
+      const first = await run({ MAX_FETCHES: '5' });
+      expect(first.selectedTickers).toHaveLength(5);
+      const second = await run({ MAX_FETCHES: '5' });
+      const third = await run({ MAX_FETCHES: '5' });
+      expect(third.selectedTickers).toHaveLength(5); // 14 funds: 5 + 5 + 5 wraps instead of a short last batch
+      expect(new Set([...first.selectedTickers, ...second.selectedTickers]).size).toBe(10);
+      expect(third.selectedTickers.slice(4)).toEqual(first.selectedTickers.slice(0, 1));
+      const state = await readJson(join(root, 'update-state.json'));
+      const scopeKeys = Object.keys(state.scopes);
+      // a TICKERS run (bounded or full) neither deletes nor overwrites the full-feed cursor
+      await run({ TICKERS: 'ARKK ARKY', MAX_FETCHES: '1' });
+      await run({ TICKERS: 'ARKK ARKY', MAX_FETCHES: '0' });
+      const after = await readJson(join(root, 'update-state.json'));
+      expect(Object.keys(after.scopes)).toEqual(expect.arrayContaining(scopeKeys));
+      expect(after.scopes[scopeKeys[0]].cursor).toBe(state.scopes[scopeKeys[0]].cursor);
+      expect(Object.keys(after.scopes)).toContain('ARKK,ARKY');
+    });
+  });
+
+  test('a soft deadline stops taking new funds, still writes the index and moves the cursor only by started funds', async () => {
+    expect(RUN_SOFT_DEADLINE_MS).toBe(25 * 60_000);
+    await withTempRoot(async (root) => {
+      let clock = 0;
+      const clients = { ...clientsFor({}), ark: async (url: string) => { if (url.includes('/api/fund/overview/')) clock += 10_000; return clientsFor({}).ark(url); } };
+      const config = quietConfig({ MAX_FETCHES: '3', CONCURRENCY: '1', EDGAR_FALLBACK: '0', TICKERS: 'ARKK ARKB ARKQ' });
+      const report = await runUpdater({ config, apiRoot: root, clients, referenceDate: REF, runtime: { now: () => clock, sleep: async () => undefined }, deadlineMs: 5_000, onNote: () => undefined, onWarn: () => undefined });
+      expect(report.deadlineReached).toBe(true);
+      // candidate order is ARKB, ARKK, ARKQ: ARKB fails fast, ARKK burns the budget, ARKQ is never started
+      expect(report.processedTickers).toEqual(['ARKB', 'ARKK']);
+      expect(report.nextCursor).toBe(2);
+      expect((await readJson(join(root, 'index.json'))).funds).toHaveLength(14);
+    });
   });
 });
