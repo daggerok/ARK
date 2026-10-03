@@ -37,7 +37,7 @@ Defaults live in `scripts/update-data.config.json` (every control as a string). 
 | Distributions | Yahoo Finance chart API dividend events (ARK publishes no dividend-history endpoint) |
 | Fallback | SEC EDGAR N-PORT-P (ARK ETF Trust, CIK 0001579982; Ark 21Shares Bitcoin ETF, CIK 0001869699) + Yahoo Finance chart API as fallbacks |
 
-All issuer requests go directly to ark-funds.com with a short contact-bearing User-Agent (`daggerok ETF feed daggerok@gmail.com`). The site's Cloudflare WAF answers HTTP 403 to any User-Agent that contains a URL (the crawler-style `(+https://github.com/…)`) and challenges browser User-Agents sent from a non-browser TLS stack, so the updater deliberately uses neither. Only if two consecutive direct requests are still denied does it fall back to the read-only `r.jina.ai` reader for the remaining issuer requests (one `[ issuer   ]` notice; that reader is limited to roughly 20 requests per minute, so proxied requests are spaced 3 seconds apart across the whole run). A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page download on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund whose sources fail keeps its previously published data.
+All issuer requests go directly to ark-funds.com with a short contact-bearing User-Agent (`daggerok ETF feed daggerok@gmail.com`). The site's Cloudflare WAF answers HTTP 403 to any User-Agent that contains a URL (the crawler-style `(+https://github.com/…)`) and challenges browser User-Agents sent from a non-browser TLS stack, so the updater deliberately uses neither. A first HTTP 403 is retried once directly (a transient WAF challenge may pass); if that is denied too, this very request and all remaining issuer requests go through the read-only `r.jina.ai` reader (one `[ issuer   ]` notice; that reader is limited to roughly 20 requests per minute, so proxied requests are spaced at least 3.2 seconds apart across the whole run and retried at most once). A previously published fund page ID is reused when the overview endpoint confirms it still answers for the same ticker, which skips the heaviest page download on repeat runs; IDs are never hard-coded. Holdings CSVs, SEC EDGAR and Yahoo Finance are always fetched directly. A fund is either fully refreshed or kept exactly as published: when a required source fails (official fund page, overview, NAV history, performance, holdings CSV, Yahoo chart) the fund's previous complete state stays untouched and the run reports it as failed. The workflow may therefore commit a partial run safely. A fund that has never been published is written best-effort from whatever sources answered. A run in which every selected fund failed exits non-zero.
 
 ### Metrics and caveats
 
@@ -46,24 +46,28 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 - `ytd` / `tr1y` — official YTD and 1-year NAV returns → *YTD Return*, *TR 1Y*
 - `cagr3y` / `cagr5y` / `cagr10y` — published annualized 3Y/5Y/10Y figures → *CAGR 3Y/5Y/10Y*
 - `tr3y` / `tr5y` / `tr10y` — cumulative 3Y/5Y/10Y figures `(1 + CAGR)^n - 1` → *TR 3Y/5Y/10Y*
-- `siAnn` — since-inception annualized → *SI Ann.*
-- `dividendYield` — indicated yield (latest Yahoo Finance distribution × inferred frequency ÷ market price) or trailing 12-month yield; `—` when no distributions are reported
-- `secYield` — 30-day SEC yield when published on the fund page; `—` otherwise
-- `returnsBasis` — always a non-empty label of how the returns were computed: official ARK Invest NAV total returns, Yahoo Finance adjusted close estimates, or a mixed label when the values come from more than one source (never empty and never `-`)
-- `performanceAsOf` — ISO `YYYY-MM-DD` date the returns are as of: the month-end date of the ark-funds.com performance table for official returns, the Yahoo close the derived returns end on (the last close at or before the month end), the oldest of these for mixed values; `null` when unknown. It is not the NAV date
+- `siAnn` — since-inception annualized → *SI Ann.*; only for funds at least one year old (and, for Yahoo-derived values, only when the history window reaches the first trade, so `HISTORY_RANGE=2y` never labels the window start as inception). Horizons longer than the fund's age (for example 3Y for a fund under three years old) are `null`
+- `dividendYield` — indicated yield (latest Yahoo Finance distribution × inferred payments per year ÷ market price; monthly 12, quarterly 4, semi-annual 2, annual 1) or trailing 12-month yield; `—` when no distributions are reported
+- `secYield` — 30-day SEC yield when published on the fund page; `null` otherwise (an honest null is never replaced by an older number)
+- `returnsBasis` — always a non-empty label of how the returns were computed: official ARK Invest NAV total returns, Yahoo Finance adjusted close estimates, or the previous publication's label when both sources are down (never empty and never `-`). All return figures of a fund come from one source as a unit (no per-figure mixing): a figure ARK later nulls stays `null`
+- `performanceAsOf` — ISO `YYYY-MM-DD` date the returns are as of: the month-end date of the ark-funds.com performance table for official returns, the Yahoo close the derived returns end on (the last close at or before the month end); `null` when unknown. It is not the NAV date
 - Every `metrics` object carries the full key set in a fixed order, with `returnsBasis` and `performanceAsOf` last; unavailable values are `null`
 
 - Official NAV returns come from ark-funds.com; market-price history and distribution-based yields come from Yahoo Finance and are estimates, not official figures
 - Unavailable values are shown as `—` and are never written as `0`
 - ARKVX (an interval fund) is excluded from the catalog; ARKY uses a structured-note holdings layout
+- The 14-fund catalog stays built in: the official ETF page lists only fund slugs (no names, CSV file names or trust data), so a new ARK fund cannot be fully described automatically. Each run reads the page, prints `NEW FUNDS: A, B` (also appended to `$GITHUB_STEP_SUMMARY`) for any fund that is listed there or missing from the previous index, and the fund must then be added to `ARK_FUNDS`
+- TER: ARK publishes one expense ratio (the fund page `EXPENSE RATIO`, or `TOTAL FEES`); it is published as `terValue` (net, the only figure available) and no gross figure is invented
+- Holdings `asOfDate` is the newest row date of the CSV; a snapshot older than 7 days is always printed as a `[ stale ]` warning and an N-PORT-P fallback never replaces holdings that are newer than its report period
+- The index row of a fund without `funds/<T>/meta.json` has `dataFile: null` and a full `metrics` object of nulls
 - Each fund records its holdings source (official CSV or SEC EDGAR N-PORT-P fallback) and as-of date; a fund whose sources fail keeps its previously published data
 
 ### Update controls
 
 | Environment variable | Default | Meaning |
 | --- | --: | --- |
-| `MAX_FETCHES` | all | Batch size: with a positive value the updater continues after the committed cursor in `api/ark/update-state.json`; empty or `0` is a full pass — every fund is refreshed in one run. |
-| `REQUEST_SLEEP` | `1.5` | Minimum delay in seconds between request starts **within one worker**, including retries, for every provider (ark-funds.com, Azure holdings, Yahoo Finance, SEC EDGAR). Only the last-resort `r.jina.ai` fallback is additionally limited to one request every 3 seconds across all workers. |
+| `MAX_FETCHES` | all | Batch size: with a positive value the updater continues after the committed cursor in `api/ark/update-state.json` (one cursor per filter scope, wrapping around the end of the candidate list; funds whose published figures cannot pass the data filters are not counted); empty or `0` is a full pass — every fund is refreshed in one run and the full-feed cursor is reset. A `TICKERS` run never deletes or overwrites the full-feed cursor. The run stops starting new funds after 25 minutes and still writes the index. |
+| `REQUEST_SLEEP` | `1.5` | Minimum delay in seconds between request starts **within one worker**, including retries, for every provider (ark-funds.com, Azure holdings, Yahoo Finance, SEC EDGAR). Only the last-resort `r.jina.ai` fallback is additionally limited to one request every 3.2 seconds across all workers. |
 | `CONCURRENCY` | `2` | Number of independent fund workers. Each worker owns its request lane, so `CONCURRENCY=15` starts 15 funds at once and total run time shrinks roughly in proportion. |
 | `AUM` | `:` | Net Assets range. Each bound may be a USD amount or `K`/`M`/`B`/`T`, or one of `nano`, `micro`, `small`, `mid`, `large`. |
 | `TER` | `:` | Expense ratio range in % (strict `min:max`). |
@@ -71,12 +75,12 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | `SEC_YIELD` | `:` | 30-day SEC yield percentage range. |
 | `CATEGORY` | all | Case-insensitive substring of the fund category, e.g. `Thematic`. |
 | `TICKERS` | all | Space-, comma- or semicolon-separated ticker allowlist, e.g. `ARKK ARKW ARKG ARKB`. |
-| `PERFORMANCE_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Official annualized NAV return ranges in %. |
-| `TOTAL_RETURN_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Cumulative NAV total-return ranges in %. |
+| `PERFORMANCE_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Official annualized NAV return ranges in %; a bounded range excludes funds without that figure. |
+| `TOTAL_RETURN_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Cumulative NAV total-return ranges in %; a bounded range excludes funds without that figure. |
 | `HOLDINGS_PAGE_SIZE` | `250` | Rows in each generated current-holdings JSON page. |
 | `HISTORY_PAGE_SIZE` | `1000` | Rows in each generated daily-history JSON page. |
-| `MAX_RETRIES` | `2` | Retries after the initial request (integer >= 1). Only network errors (including the 90-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
-| `HISTORY_RANGE` | `max` | `max` or `Ny` (for example `5y`): limits the Yahoo request window and the published daily-history rows to the last N years. |
+| `MAX_RETRIES` | `2` | Retries after the initial request (integer >= 1). Only network errors (including the 45-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
+| `HISTORY_RANGE` | `max` | `max` or `Ny` (for example `5y`): limits the Yahoo request window (explicit period1/period2) and the fresh daily-history rows to the last N years; older published rows are merged back and no history page is pruned because of a shorter window. |
 | `SEC_UA` | `daggerok ETF feed daggerok@gmail.com` | SEC User-Agent; SEC policy requires automated tools to declare a contact. The protected `SEC_UA` Actions variable overrides it when nonblank. |
 | `EDGAR_FALLBACK` | on | Set to `0`/`false` to disable the SEC EDGAR N-PORT-P holdings fallback. |
 | `SKIP_ARK` | off | Do not request ark-funds.com; keep the fixed catalog and previously published official data and only run the fallbacks. |
