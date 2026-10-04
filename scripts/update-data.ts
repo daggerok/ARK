@@ -6,7 +6,7 @@ import { createHash as outputCreateHash } from 'node:crypto';
 import { join as outputJoin } from 'node:path';
 import { fileURLToPath as outputFileURLToPath } from 'node:url';
 import { appendFile, mkdir, readFile, readdir, writeFile, rm, rename } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
@@ -2033,18 +2033,44 @@ function buildYahooHistoryRows(chart: YahooChart): JsonRecord[] {
   }));
 }
 
+export type YieldBasis = 'official-trailing-12m' | 'official-distribution-rate' | 'official-other' | 'computed-trailing-12m' | 'indicated';
+export const YIELD_BASIS_CODES: readonly YieldBasis[] = ['official-trailing-12m', 'official-distribution-rate', 'official-other', 'computed-trailing-12m', 'indicated'];
+
+/**
+ * Code for a yield-kind text written by this updater. ARK publishes no distribution yield, so every
+ * non-null yield is an updater figure: an unrecognized text can only be an estimate ('indicated'), never official.
+ */
+export function yieldBasisFromKind(kind: string): YieldBasis | null {
+  const text = kind.trim().toLowerCase();
+  if (text.startsWith('not available')) return null;
+  if (text.startsWith('indicated')) return 'indicated';
+  if (text.includes('trailing 12-month')) return 'computed-trailing-12m';
+  return 'indicated';
+}
+
+/** The code travels with the yield it describes: null exactly when the yield is null, a known code is kept. */
+export function resolveYieldBasis(dividendYield: number | null, basis: unknown, kind = ''): YieldBasis | null {
+  if (dividendYield === null) return null;
+  const known = YIELD_BASIS_CODES.find((code) => code === basis);
+  return known ?? yieldBasisFromKind(kind) ?? 'indicated';
+}
+
 function distributionData(
   chart: YahooChart | null,
   previous: JsonRecord,
   referenceDate: Date,
   price: number | null,
-): { worksheet: JsonRecord; indicatedYield: number | null; yieldKind: string } {
+): { worksheet: JsonRecord; indicatedYield: number | null; yieldKind: string; yieldBasis: YieldBasis | null } {
   const previousWorksheet = readDistributionWorksheet(previous);
   if (!chart) {
+    const retainedYield = numberField(record(previous.metrics), 'dividendYield');
+    const retainedKind = stringField(record(previous.yields), 'dividendYieldKind', 'previously published distribution data');
     return {
       worksheet: previousWorksheet,
-      indicatedYield: numberField(record(previous.metrics), 'dividendYield'),
-      yieldKind: stringField(record(previous.yields), 'dividendYieldKind', 'previously published distribution data'),
+      indicatedYield: retainedYield,
+      yieldKind: retainedKind,
+      // the previous code stays with the previous yield; a legacy row without one is derived from its kind text
+      yieldBasis: resolveYieldBasis(retainedYield, record(previous.metrics).dividendYieldBasis, retainedKind),
     };
   }
   if (!chart.dividends.length) {
@@ -2053,11 +2079,11 @@ function distributionData(
       source: 'Yahoo Finance chart response contained no distribution events',
     };
     // The chart answered and shows no distributions: an honest null yield, not the previous number.
-    return { worksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance' };
+    return { worksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance', yieldBasis: null };
   }
   const eligible = chart.dividends.filter((event) => event.date <= referenceDate.toISOString().slice(0, 10));
   const sorted = [...eligible].sort((a, b) => a.date.localeCompare(b.date));
-  if (!sorted.length) return { worksheet: previousWorksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance' };
+  if (!sorted.length) return { worksheet: previousWorksheet, indicatedYield: null, yieldKind: 'not available from Yahoo Finance', yieldBasis: null };
   const latest = sorted[sorted.length - 1];
   const frequency = inferDistributionFrequency(sorted.map((event) => event.date), referenceDate) ?? 'Unknown';
   const payments = paymentsPerYear(frequency);
@@ -2075,7 +2101,7 @@ function distributionData(
     rows: sorted.slice(-12).reverse().map((event) => [displayDate(event.date), formatPrice(event.amount, 4)]),
     source: 'Yahoo Finance chart dividend events (ARK does not publish a dividend-history API endpoint)',
   };
-  return { worksheet, indicatedYield, yieldKind };
+  return { worksheet, indicatedYield, yieldKind, yieldBasis: resolveYieldBasis(indicatedYield, annualized !== null ? 'indicated' : trailing !== null ? 'computed-trailing-12m' : null, yieldKind) };
 }
 
 /** Write the pages of one sheet and return its manifest. Stale pages are pruned later, after meta.json. */
@@ -2254,11 +2280,12 @@ function holdingRowsFromStored(rows: JsonRecord[], headers: readonly string[]): 
 }
 
 /** Full metrics object in contract order: returns, yields, then returnsBasis and performanceAsOf last. */
-export function buildFundMetrics(returnMetrics: JsonRecord, dividendYield: number | null, secYield: number | null): JsonRecord {
+export function buildFundMetrics(returnMetrics: JsonRecord, dividendYield: number | null, secYield: number | null, yieldBasis: YieldBasis | null = null): JsonRecord {
   const metrics: JsonRecord = {};
   for (const key of RETURN_METRIC_KEYS) metrics[key] = numberOrNullMetric(returnMetrics[key]);
   metrics.dividendYield = dividendYield;
   metrics.dividendYieldText = dividendYield === null ? null : formatPercent(dividendYield);
+  metrics.dividendYieldBasis = resolveYieldBasis(dividendYield, yieldBasis);
   metrics.secYield = secYield;
   metrics.secYieldText = secYield === null ? null : formatPercent(secYield);
   const basis = typeof returnMetrics.returnsBasis === 'string' ? returnMetrics.returnsBasis.trim() : '';
@@ -2487,7 +2514,7 @@ export async function updateArkFund(
     yahooUnit ? record(yahooReturns.metrics) : {},
     officialUnit || yahooUnit ? {} : previousReturnMetrics,
   );
-  const metrics: JsonRecord = buildFundMetrics(returnMetrics, distributions.indicatedYield, secYield);
+  const metrics: JsonRecord = buildFundMetrics(returnMetrics, distributions.indicatedYield, secYield, distributions.yieldBasis);
   const asOfIso = historyAsOfDate || official.history[official.history.length - 1]?.date || overview?.asOfDate || toIsoDate(previousEntry.asOfDate);
   const asOfDate = asOfIso ? displayDate(asOfIso) : stringField(previousEntry, 'asOfDate', '—');
   const ter = terValue === null ? stringField(previousEntry, 'ter', stringField(record(previousMeta), 'ter', '—')) : formatPercent(terValue);
@@ -2571,6 +2598,7 @@ export async function updateArkFund(
       dividendYield: distributions.indicatedYield,
       dividendYieldText: metrics.dividendYieldText,
       dividendYieldKind: distributions.yieldKind,
+      dividendYieldBasis: metrics.dividendYieldBasis,
       secYield,
       secYieldText: metrics.secYieldText,
       secYieldKind: overview?.secYield === null || overview?.secYield === undefined
@@ -2706,12 +2734,33 @@ function seedIndexEntry(fund: ArkFund): JsonRecord {
     metrics: {
       ytd: null, tr1y: null, tr3y: null, tr5y: null, tr10y: null,
       cagr3y: null, cagr5y: null, cagr10y: null, siAnn: null,
-      dividendYield: null, dividendYieldText: null, secYield: null, secYieldText: null,
+      dividendYield: null, dividendYieldText: null, dividendYieldBasis: null, secYield: null, secYieldText: null,
       returnsBasis: UNAVAILABLE_RETURNS_BASIS, performanceAsOf: null,
     },
     holdings: 0,
     history: 0,
   };
+}
+
+/** Insert `dividendYieldBasis` after `dividendYieldText`; a legacy row's code comes from its meta kind text. */
+function withYieldBasisKey(metrics: JsonRecord, apiRoot: string, ticker: string): JsonRecord {
+  const yieldValue = numberOrNull(metrics.dividendYield);
+  let kind = '';
+  if (yieldValue !== null && !YIELD_BASIS_CODES.some((code) => code === metrics.dividendYieldBasis)) {
+    try {
+      kind = stringField(record(record(JSON.parse(readFileSync(path.join(apiRoot, 'funds', ticker, 'meta.json'), 'utf8'))).yields), 'dividendYieldKind');
+    } catch { /* no meta: the yield can only be an updater estimate */ }
+  }
+  const code = resolveYieldBasis(yieldValue, metrics.dividendYieldBasis, kind);
+  const out: JsonRecord = {};
+  let placed = false;
+  for (const [key, value] of Object.entries(metrics)) {
+    if (key === 'dividendYieldBasis') continue;
+    out[key] = value;
+    if (key === 'dividendYieldText') { out.dividendYieldBasis = code; placed = true; }
+  }
+  if (!placed) out.dividendYieldBasis = code;
+  return out;
 }
 
 function mergeCatalogEntries(previous: JsonRecord | null): Map<string, JsonRecord> {
@@ -2920,6 +2969,8 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
     const ticker = cleanText(entry.ticker);
     entry.dataFile = existsSync(path.join(apiRoot, 'funds', ticker, 'meta.json')) ? `funds/${ticker}/meta.json` : null;
   }
+  // Every row (fresh, kept, unselected, legacy) carries the same key set, the code next to the yield it describes.
+  for (const entry of indexEntries.values()) entry.metrics = withYieldBasisKey(record(entry.metrics), apiRoot, cleanText(entry.ticker));
   const sortedEntries = [...indexEntries.values()].sort((a, b) => cleanText(a.ticker).localeCompare(cleanText(b.ticker)));
   const indexDocument: JsonRecord = {
     ...(previousIndex ?? {}),

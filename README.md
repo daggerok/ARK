@@ -65,6 +65,14 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 - `tr3y` / `tr5y` / `tr10y` — cumulative 3Y/5Y/10Y figures `(1 + CAGR)^n - 1` → *TR 3Y/5Y/10Y*
 - `siAnn` — since-inception annualized → *SI Ann.*; only for funds at least one year old (and, for Yahoo-derived values, only when the history window reaches the first trade, so `HISTORY_RANGE=2y` never labels the window start as inception). Horizons longer than the fund's age (for example 3Y for a fund under three years old) are `null`
 - `dividendYield` — indicated yield (latest Yahoo Finance distribution × inferred payments per year ÷ market price; monthly 12, quarterly 4, semi-annual 2, annual 1) or trailing 12-month yield; `—` when no distributions are reported
+- `dividendYieldBasis` — short code of the definition behind `dividendYield`, `null` exactly when `dividendYield` is `null`. ARK publishes no distribution yield, so every ARK yield is an updater figure, never an official one. A retained yield keeps its code; a pre-existing row without one is derived from its `dividendYieldKind` text in `meta.json`:
+
+  | Code | Meaning for ARK |
+  | --- | --- |
+  | `indicated` | latest Yahoo Finance distribution × inferred payments per year ÷ market price (not a trailing yield); also the fallback for an unrecognized kind text |
+  | `computed-trailing-12m` | sum of the last 12 months of Yahoo Finance distributions ÷ market price, used when the payment frequency cannot be inferred |
+  | `null` | no yield |
+
 - `secYield` — 30-day SEC yield when published on the fund page; `null` otherwise (an honest null is never replaced by an older number)
 - `returnsBasis` — always a non-empty label of how the returns were computed: official ARK Invest NAV total returns, Yahoo Finance adjusted close estimates, or the previous publication's label when both sources are down (never empty and never `-`). All return figures of a fund come from one source as a unit (no per-figure mixing): a figure ARK later nulls stays `null`
 - `performanceAsOf` — ISO `YYYY-MM-DD` date the returns are as of: the month-end date of the ark-funds.com performance table for official returns, the Yahoo close the derived returns end on (the last close at or before the month end); `null` when unknown. It is not the NAV date

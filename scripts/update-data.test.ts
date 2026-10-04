@@ -22,6 +22,8 @@ import {
   annualizedFromCumulative,
   arkApiUrls,
   buildFundMetrics,
+  resolveYieldBasis,
+  yieldBasisFromKind,
   buildOfficialReturns,
   buildPageEnvelope,
   buildYahooReturns,
@@ -480,7 +482,7 @@ describe('metrics', () => {
   test('one metrics shape: same key set, returnsBasis and performanceAsOf travel together, one source per fund', () => {
     const official = { ytd: 5, tr1y: 10, cagr3y: 8, returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-08-31' };
     const yahoo = { ytd: 6, tr1y: 11, cagr3y: 9, cagr5y: 7, returnsBasis: YAHOO_RETURNS_BASIS, performanceAsOf: '2026-08-31' };
-    const keys = ['ytd', 'tr1y', 'tr3y', 'tr5y', 'tr10y', 'cagr3y', 'cagr5y', 'cagr10y', 'siAnn', 'dividendYield', 'dividendYieldText', 'secYield', 'secYieldText', 'returnsBasis', 'performanceAsOf'];
+    const keys = ['ytd', 'tr1y', 'tr3y', 'tr5y', 'tr10y', 'cagr3y', 'cagr5y', 'cagr10y', 'siAnn', 'dividendYield', 'dividendYieldText', 'dividendYieldBasis', 'secYield', 'secYieldText', 'returnsBasis', 'performanceAsOf'];
     const officialOnly = buildFundMetrics(resolveReturnMetrics(official, {}, {}), null, null);
     expect(Object.keys(officialOnly)).toEqual(keys);
     expect(officialOnly).toMatchObject({ ytd: 5, tr3y: null, returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-08-31' });
@@ -496,6 +498,63 @@ describe('metrics', () => {
     expect(resolveReturnMetrics({}, {}, { ytd: 3, returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-07-31' })).toMatchObject({ returnsBasis: OFFICIAL_RETURNS_BASIS, performanceAsOf: '2026-07-31' });
     const serialized = JSON.parse(stableStringify({ b: 1, metrics: { ytd: 1, returnsBasis: 'x', performanceAsOf: null, a: 2 } }));
     expect(Object.keys(serialized.metrics)).toEqual(['ytd', 'returnsBasis', 'performanceAsOf', 'a']);
+  });
+
+  test('dividendYieldBasis: a code per yield source, null exactly when the yield is null, same key set on every row', async () => {
+    // lookup of the kind texts this updater writes; ARK publishes no yield, so nothing is official
+    expect(yieldBasisFromKind('indicated: Yahoo Finance latest distribution x inferred monthly frequency / market price')).toBe('indicated');
+    expect(yieldBasisFromKind('Yahoo Finance trailing 12-month distributions / market price')).toBe('computed-trailing-12m');
+    expect(yieldBasisFromKind('not available from Yahoo Finance')).toBeNull();
+    expect(yieldBasisFromKind('previously published distribution data')).toBe('indicated');
+    expect(resolveYieldBasis(null, 'indicated')).toBeNull();
+    expect(resolveYieldBasis(0, 'computed-trailing-12m')).toBe('computed-trailing-12m');
+    expect(resolveYieldBasis(2, 'bogus', 'Yahoo Finance trailing 12-month distributions / market price')).toBe('computed-trailing-12m');
+    expect(buildFundMetrics({}, 1.5, null, 'computed-trailing-12m').dividendYieldBasis).toBe('computed-trailing-12m');
+    expect(buildFundMetrics({}, null, null, 'indicated').dividendYieldBasis).toBeNull();
+    const epoch = (date: string): number => Math.floor(Date.parse(`${date}T00:00:00Z`) / 1000);
+    const monthly = Object.fromEntries(['2026-06-01', '2026-07-01', '2026-08-01', '2026-09-01'].map((d, i) => [String(i), { date: epoch(d), amount: 0.1 }]));
+    await withTempRoot(async (root) => {
+      await update(root, { dividends: monthly });
+      expect((await metaOf(root)).metrics).toMatchObject({ dividendYield: expect.any(Number), dividendYieldBasis: 'indicated' });
+      expect((await metaOf(root)).yields.dividendYieldBasis).toBe('indicated');
+    });
+    await withTempRoot(async (root) => {
+      await update(root, { dividends: { a: { date: epoch('2026-08-28'), amount: 0.5 } } });
+      expect((await metaOf(root)).metrics).toMatchObject({ dividendYieldBasis: 'computed-trailing-12m' });
+      // Yahoo down on the next run: the old yield keeps its old code
+      await update(root, {}, { SKIP_YAHOO: '1' });
+      const kept = (await metaOf(root)).metrics;
+      expect(kept.dividendYield).not.toBeNull();
+      expect(kept.dividendYieldBasis).toBe('computed-trailing-12m');
+    });
+    await withTempRoot(async (root) => {
+      await update(root, {});
+      const meta = await metaOf(root);
+      expect(meta.metrics.dividendYield).toBeNull();
+      expect(meta.metrics.dividendYieldBasis).toBeNull();
+    });
+    // fresh, kept (legacy, no key) and placeholder rows share one key set; a legacy row gets its code from the meta kind text
+    await withTempRoot(async (root) => {
+      await run(root, { TICKERS: 'ARKK' });
+      const metaPath = join(root, 'funds', 'ARKK', 'meta.json');
+      const indexPath = join(root, 'index.json');
+      const meta = await readJson(metaPath);
+      meta.yields.dividendYieldKind = 'Yahoo Finance trailing 12-month distributions / market price';
+      await Bun.write(metaPath, JSON.stringify(meta));
+      const index = await readJson(indexPath);
+      const legacy = index.funds.find((row: any) => row.ticker === 'ARKK');
+      legacy.metrics.dividendYield = 2.5;
+      legacy.metrics.dividendYieldText = '2.50%';
+      delete legacy.metrics.dividendYieldBasis;
+      await Bun.write(indexPath, JSON.stringify(index));
+      await run(root, { TICKERS: 'ARKY' });
+      const after = await readJson(indexPath);
+      const arkk = after.funds.find((row: any) => row.ticker === 'ARKK');
+      const arkq = after.funds.find((row: any) => row.ticker === 'ARKQ');
+      expect(arkk.metrics.dividendYieldBasis).toBe('computed-trailing-12m');
+      expect(arkq.metrics.dividendYieldBasis).toBeNull();
+      for (const row of after.funds) expect(Object.keys(row.metrics)).toEqual(Object.keys(arkq.metrics));
+    });
   });
 
   test('young funds: horizons longer than the fund age and a since-inception figure under one year are null', () => {
