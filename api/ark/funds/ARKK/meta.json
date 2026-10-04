@@ -48,7 +48,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkk",
-  "generatedAt": "2026-10-03T06:11:54Z",
+  "generatedAt": "2026-10-04T03:27:11Z",
   "history": {
     "asOfDate": "Oct 02 2026",
     "headers": [
@@ -102,6 +102,7 @@
     "siAnn": 13.98,
     "dividendYield": null,
     "dividendYieldText": null,
+    "dividendYieldBasis": null,
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
@@ -162,6 +163,7 @@
   "ticker": "ARKK",
   "yields": {
     "dividendYield": null,
+    "dividendYieldBasis": null,
     "dividendYieldKind": "not available from Yahoo Finance",
     "dividendYieldText": null,
     "secYield": null,

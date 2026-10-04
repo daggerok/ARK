@@ -44,7 +44,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-10-03T06:12:03Z",
+  "generatedAt": "2026-10-04T03:27:20Z",
   "history": {
     "asOfDate": "Oct 02 2026",
     "headers": [
@@ -99,6 +99,7 @@
     "siAnn": 21.13,
     "dividendYield": 1.44,
     "dividendYieldText": "1.44%",
+    "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
@@ -159,6 +160,7 @@
   "ticker": "ARKW",
   "yields": {
     "dividendYield": 1.44,
+    "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
     "dividendYieldText": "1.44%",
     "secYield": null,

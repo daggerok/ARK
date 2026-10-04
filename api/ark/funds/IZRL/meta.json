@@ -40,7 +40,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-10-03T06:12:21Z",
+  "generatedAt": "2026-10-04T03:27:38Z",
   "history": {
     "asOfDate": "Oct 02 2026",
     "headers": [
@@ -94,6 +94,7 @@
     "siAnn": 5.49,
     "dividendYield": 2.69,
     "dividendYieldText": "2.69%",
+    "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
@@ -154,6 +155,7 @@
   "ticker": "IZRL",
   "yields": {
     "dividendYield": 2.69,
+    "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
     "dividendYieldText": "2.69%",
     "secYield": null,
