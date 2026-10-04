@@ -1545,7 +1545,7 @@ export type PaceClock = {
 };
 
 export type RequestRuntime = PaceClock & {
-  fetchImpl?: typeof fetch;
+  fetchImpl?: (input: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
   onRetry?: (message: string) => void;
   onIssuerProxy?: (message: string) => void;
   /** Per-request wall-clock limit (headers + body); tests override it. */
@@ -1972,7 +1972,7 @@ async function readStoredSheet(root: string, ticker: string, kind: SheetKind, ma
   };
 }
 
-function readDistributionWorksheet(meta: JsonRecord): JsonRecord {
+function readDistributionWorksheet(meta: JsonRecord): JsonRecord & { rows: string[][] } {
   const distribution = record(meta.distributions);
   return {
     frequency: cleanText(distribution.frequency) || '—',
