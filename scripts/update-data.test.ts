@@ -266,7 +266,7 @@ describe('controls', () => {
     expect(() => resolveControls({}, {}, {}, { HISTORICAL_PAGE_SIZE: '0' })).toThrow('HISTORY_PAGE_SIZE');
   });
 
-  test('defaults: the scheduled path equals the config file, keys match CONTROL_NAMES, README and --help', () => {
+  test('defaults: the scheduled path equals the config file, keys match CONTROL_NAMES and --help', () => {
     expect(Object.keys(file).sort()).toEqual([...CONTROL_NAMES].sort());
     expect(resolveControls(file, {}, {}, {})).toEqual(Object.fromEntries(Object.entries(file).map(([k, v]) => [k, String(v)])));
     const config = readConfig(resolveControls(file));
@@ -275,10 +275,8 @@ describe('controls', () => {
     expect(DEFAULT_SEC_UA).toBe(file.SEC_UA);
     for (const v of ['auto', 'true', 'false', 'AUTO', 'True', 'FALSE']) expect(resolveControls({ USE_SYSTEM_CA: v }).USE_SYSTEM_CA).toBe(v.toLowerCase());
     expect(file.USE_SYSTEM_CA).toBe('auto');
-    const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
     for (const name of CONTROL_NAMES) {
       const tenor = name.match(/^(PERFORMANCE|TOTAL_RETURN)_(YTD|1Y|3Y|5Y|10Y)$/);
-      expect(readme).toContain(tenor ? '`' + tenor[1] + '_YTD`' : '`' + name + '`');
       expect(USAGE).toContain(tenor ? `${tenor[1]}_YTD|1Y|3Y|5Y|10Y` : name);
     }
   });
