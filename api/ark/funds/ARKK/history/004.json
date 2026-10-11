@@ -1,0 +1,26 @@
+{
+  "headers": [
+    "Date",
+    "NAV",
+    "Market Price",
+    "Premium/Discount"
+  ],
+  "page": 4,
+  "pageSize": 1000,
+  "rows": [
+    {
+      "Date": "Oct 08 2026",
+      "Market Price": "87.60",
+      "NAV": "87.59",
+      "Premium/Discount": "0.0114%"
+    },
+    {
+      "Date": "Oct 09 2026",
+      "Market Price": "89.62",
+      "NAV": "89.63",
+      "Premium/Discount": "-0.0112%"
+    }
+  ],
+  "ticker": "ARKK",
+  "totalRows": 3002
+}

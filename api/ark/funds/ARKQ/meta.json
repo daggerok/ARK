@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 02 2026",
+  "asOfDate": "Oct 09 2026",
   "aum": "$1,857 Million",
   "aumValue": 1857000000,
   "category": "Thematic Equity",
-  "closePrice": "$124.48",
-  "closePriceValue": 124.48,
+  "closePrice": "$123.51",
+  "closePriceValue": 123.51,
   "dataFile": "funds/ARKQ/meta.json",
   "distributions": {
     "dividend": "$0.3060",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-10-04T03:27:11Z",
+  "generatedAt": "2026-10-11T05:10:44Z",
   "history": {
-    "asOfDate": "Oct 02 2026",
+    "asOfDate": "Oct 09 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,10 +61,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3020
+    "totalRows": 3025
   },
   "holdings": {
-    "asOfDate": "Oct 02 2026",
+    "asOfDate": "Oct 09 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Autonomous Technology & Robotics ETF",
-  "nav": "$124.39",
-  "navValue": 124.39,
-  "premiumDiscount": "0.0724%",
-  "premiumDiscountValue": 0.0724,
+  "nav": "$123.53",
+  "navValue": 123.53,
+  "premiumDiscount": "-0.0162%",
+  "premiumDiscountValue": -0.0162,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -143,7 +143,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkq",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1001?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-02",
+    "holdingsAsOfDate": "2026-10-09",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_AUTONOMOUS_TECH._%26_ROBOTICS_ETF_ARKQ_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

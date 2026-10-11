@@ -14,47 +14,47 @@
     {
       "Asset Category": "Fund",
       "Identifier": "00214Q104",
-      "Market Value": "$1,629,783.42",
+      "Market Value": "$1,611,752.40",
       "Name": "ARK INNOVATION ETF",
       "Shares Held": "18,399",
       "Ticker": "ARKK",
-      "Weight": "103.91%"
+      "Weight": "103.63%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "E27C08486",
-      "Market Value": "$160,457.00",
+      "Market Value": "$153,164.08",
       "Name": "4ARKK US 06/30/27 C84.86",
       "Shares Held": "116",
       "Ticker": "",
-      "Weight": "10.23%"
+      "Weight": "9.85%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "E27P08082",
-      "Market Value": "$63,558.04",
+      "Market Value": "$63,940.24",
       "Name": "4ARKK US 06/30/27 P80.82",
       "Shares Held": "91",
       "Ticker": "",
-      "Weight": "4.05%"
+      "Weight": "4.11%"
     },
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$11,694.07",
+      "Market Value": "$11,567.96",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "11,694",
+      "Shares Held": "11,568",
       "Ticker": "",
-      "Weight": "0.75%"
+      "Weight": "0.74%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "E27C08082",
-      "Market Value": "-$297,013.80",
+      "Market Value": "-$285,196.00",
       "Name": "4ARKK US 06/30/27 C80.82",
       "Shares Held": "-185",
       "Ticker": "",
-      "Weight": "-18.94%"
+      "Weight": "-18.34%"
     }
   ],
   "ticker": "ARKE",

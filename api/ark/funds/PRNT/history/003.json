@@ -3409,8 +3409,38 @@
       "Market Price": "25.24",
       "NAV": "25.43",
       "Premium/Discount": "-0.7471%"
+    },
+    {
+      "Date": "Oct 05 2026",
+      "Market Price": "25.61",
+      "NAV": "25.70",
+      "Premium/Discount": "-0.3502%"
+    },
+    {
+      "Date": "Oct 06 2026",
+      "Market Price": "25.83",
+      "NAV": "25.89",
+      "Premium/Discount": "-0.2317%"
+    },
+    {
+      "Date": "Oct 07 2026",
+      "Market Price": "25.48",
+      "NAV": "25.56",
+      "Premium/Discount": "-0.3130%"
+    },
+    {
+      "Date": "Oct 08 2026",
+      "Market Price": "25.30",
+      "NAV": "25.37",
+      "Premium/Discount": "-0.2759%"
+    },
+    {
+      "Date": "Oct 09 2026",
+      "Market Price": "25.50",
+      "NAV": "25.54",
+      "Premium/Discount": "-0.1566%"
     }
   ],
   "ticker": "PRNT",
-  "totalRows": 2567
+  "totalRows": 2572
 }

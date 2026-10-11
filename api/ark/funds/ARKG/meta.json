@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 02 2026",
+  "asOfDate": "Oct 09 2026",
   "aum": "$1,557 Million",
   "aumValue": 1557000000,
   "category": "Thematic Equity",
-  "closePrice": "$54.00",
-  "closePriceValue": 54,
+  "closePrice": "$51.30",
+  "closePriceValue": 51.3,
   "dataFile": "funds/ARKG/meta.json",
   "distributions": {
     "dividend": "$0.3820",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkg",
-  "generatedAt": "2026-10-04T03:27:02Z",
+  "generatedAt": "2026-10-11T05:10:35Z",
   "history": {
-    "asOfDate": "Oct 02 2026",
+    "asOfDate": "Oct 09 2026",
     "headers": [
       "Date",
       "NAV",
@@ -53,13 +53,14 @@
     "pages": [
       "history/001.json",
       "history/002.json",
-      "history/003.json"
+      "history/003.json",
+      "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2997
+    "totalRows": 3002
   },
   "holdings": {
-    "asOfDate": "Oct 02 2026",
+    "asOfDate": "Oct 09 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -74,7 +75,7 @@
       "holdings/001.json"
     ],
     "source": "official ARK daily holdings CSV",
-    "totalRows": 33
+    "totalRows": 34
   },
   "identifiers": {
     "cusip": "00214Q302",
@@ -101,10 +102,10 @@
     "performanceAsOf": "2026-08-31"
   },
   "name": "ARK Genomic Revolution ETF",
-  "nav": "$53.94",
-  "navValue": 53.94,
-  "premiumDiscount": "0.1112%",
-  "premiumDiscountValue": 0.1112,
+  "nav": "$51.32",
+  "navValue": 51.32,
+  "premiumDiscount": "-0.0390%",
+  "premiumDiscountValue": -0.039,
   "returns": {
     "monthEnd": {
       "asOfDate": "Aug 31 2026",
@@ -138,7 +139,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkg",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1003?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-02",
+    "holdingsAsOfDate": "2026-10-09",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_GENOMIC_REVOLUTION_ETF_ARKG_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
