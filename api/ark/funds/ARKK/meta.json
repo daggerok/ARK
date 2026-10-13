@@ -1,7 +1,7 @@
 {
   "asOfDate": "Oct 09 2026",
-  "aum": "$5,562 Million",
-  "aumValue": 5562000000,
+  "aum": "$7,917 Million",
+  "aumValue": 7917000000,
   "category": "Thematic Equity",
   "closePrice": "$89.62",
   "closePriceValue": 89.62,
@@ -48,7 +48,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkk",
-  "generatedAt": "2026-10-11T05:10:44Z",
+  "generatedAt": "2026-10-13T01:36:40Z",
   "history": {
     "asOfDate": "Oct 09 2026",
     "headers": [
@@ -68,7 +68,7 @@
     "totalRows": 3002
   },
   "holdings": {
-    "asOfDate": "Oct 09 2026",
+    "asOfDate": "Oct 12 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -92,22 +92,22 @@
   },
   "inceptionDate": "Oct 31 2014",
   "metrics": {
-    "ytd": 11.13,
-    "tr1y": 14.07,
-    "tr3y": 95.41,
-    "tr5y": -29.3,
-    "tr10y": 346.88,
-    "cagr3y": 25.02,
-    "cagr5y": -6.7,
-    "cagr10y": 16.15,
-    "siAnn": 13.98,
+    "ytd": 15.75,
+    "tr1y": 3.65,
+    "tr3y": 124.71,
+    "tr5y": -18.72,
+    "tr10y": 332.85,
+    "cagr3y": 30.98,
+    "cagr5y": -4.06,
+    "cagr10y": 15.78,
+    "siAnn": 14.26,
     "dividendYield": null,
     "dividendYieldText": null,
     "dividendYieldBasis": null,
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-08-31"
+    "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Innovation ETF",
   "nav": "$89.63",
@@ -116,28 +116,28 @@
   "premiumDiscountValue": -0.0112,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Aug 31 2026",
-      "mo1": 20.2,
-      "mo3": 4.37,
-      "sinceInception": 13.98,
-      "sinceInceptionCumulative": 370.38,
-      "yr1": 14.07,
-      "yr10": 16.15,
-      "yr3": 25.02,
-      "yr5": -6.7,
-      "ytd": 11.13
+      "asOfDate": "Sep 30 2026",
+      "mo1": 4.15,
+      "mo3": 10.39,
+      "sinceInception": 14.26,
+      "sinceInceptionCumulative": 389.93,
+      "yr1": 3.65,
+      "yr10": 15.78,
+      "yr3": 30.98,
+      "yr5": -4.06,
+      "ytd": 15.75
     },
     "quarterEnd": {
-      "asOfDate": "Jun 30 2026",
-      "mo1": -1.53,
-      "mo3": 19.45,
-      "sinceInception": 13.63,
-      "sinceInceptionCumulative": 343.82,
-      "yr1": 14.82,
-      "yr10": 16.16,
-      "yr3": 22.29,
-      "yr5": -9.05,
-      "ytd": 4.85
+      "asOfDate": "Sep 30 2026",
+      "mo1": 4.15,
+      "mo3": 10.39,
+      "sinceInception": 14.26,
+      "sinceInceptionCumulative": 389.93,
+      "yr1": 3.65,
+      "yr10": 15.78,
+      "yr3": 30.98,
+      "yr5": -4.06,
+      "ytd": 15.75
     }
   },
   "source": {
@@ -147,7 +147,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkk",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1004?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-09",
+    "holdingsAsOfDate": "2026-10-12",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_INNOVATION_ETF_ARKK_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

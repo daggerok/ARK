@@ -1,7 +1,7 @@
 {
   "asOfDate": "Oct 09 2026",
-  "aum": "$759.5 Million",
-  "aumValue": 759500000,
+  "aum": "$737.1 Million",
+  "aumValue": 737100000,
   "category": "Thematic Equity",
   "closePrice": "$32.20",
   "closePriceValue": 32.2,
@@ -19,7 +19,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkx",
-  "generatedAt": "2026-10-11T05:11:02Z",
+  "generatedAt": "2026-10-13T01:36:48Z",
   "history": {
     "asOfDate": "Oct 09 2026",
     "headers": [
@@ -37,7 +37,7 @@
     "totalRows": 1390
   },
   "holdings": {
-    "asOfDate": "Oct 09 2026",
+    "asOfDate": "Oct 12 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -52,7 +52,7 @@
       "holdings/001.json"
     ],
     "source": "official ARK daily holdings CSV",
-    "totalRows": 34
+    "totalRows": 33
   },
   "identifiers": {
     "cusip": "00214Q807",
@@ -61,22 +61,22 @@
   },
   "inceptionDate": "Mar 30 2021",
   "metrics": {
-    "ytd": 11.96,
-    "tr1y": 23.64,
-    "tr3y": 121.63,
-    "tr5y": 53.93,
+    "ytd": 10.24,
+    "tr1y": 11.91,
+    "tr3y": 131.25,
+    "tr5y": 62.67,
     "tr10y": null,
-    "cagr3y": 30.38,
-    "cagr5y": 9.01,
+    "cagr3y": 32.24,
+    "cagr5y": 10.22,
     "cagr10y": null,
-    "siAnn": 9.31,
+    "siAnn": 8.86,
     "dividendYield": null,
     "dividendYieldText": null,
     "dividendYieldBasis": null,
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-08-31"
+    "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Space & Defense Innovation ETF",
   "nav": "$32.19",
@@ -85,28 +85,28 @@
   "premiumDiscountValue": 0.0311,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Aug 31 2026",
-      "mo1": 5.82,
-      "mo3": -13.32,
-      "sinceInception": 9.31,
-      "sinceInceptionCumulative": 62.03,
-      "yr1": 23.64,
+      "asOfDate": "Sep 30 2026",
+      "mo1": -1.53,
+      "mo3": -6.52,
+      "sinceInception": 8.86,
+      "sinceInceptionCumulative": 59.55,
+      "yr1": 11.91,
       "yr10": null,
-      "yr3": 30.38,
-      "yr5": 9.01,
-      "ytd": 11.96
+      "yr3": 32.24,
+      "yr5": 10.22,
+      "ytd": 10.24
     },
     "quarterEnd": {
-      "asOfDate": "Jun 30 2026",
-      "mo1": -8.69,
-      "mo3": 16.59,
-      "sinceInception": 10.72,
-      "sinceInceptionCumulative": 70.68,
-      "yr1": 41.52,
+      "asOfDate": "Sep 30 2026",
+      "mo1": -1.53,
+      "mo3": -6.52,
+      "sinceInception": 8.86,
+      "sinceInceptionCumulative": 59.55,
+      "yr1": 11.91,
       "yr10": null,
-      "yr3": 30.95,
-      "yr5": 10.21,
-      "ytd": 17.93
+      "yr3": 32.24,
+      "yr5": 10.22,
+      "ytd": 10.24
     }
   },
   "source": {
@@ -116,7 +116,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkx",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1008?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-09",
+    "holdingsAsOfDate": "2026-10-12",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_SPACE_%26_DEFENSE_INNOVATION_ETF_ARKX_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

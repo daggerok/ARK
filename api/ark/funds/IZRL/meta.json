@@ -1,7 +1,7 @@
 {
   "asOfDate": "Oct 09 2026",
-  "aum": "$136.9 Million",
-  "aumValue": 136900000,
+  "aum": "$133.7 Million",
+  "aumValue": 133699999.99999999,
   "category": "Thematic Equity",
   "closePrice": "$28.35",
   "closePriceValue": 28.35,
@@ -40,7 +40,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-10-11T05:11:11Z",
+  "generatedAt": "2026-10-13T01:36:49Z",
   "history": {
     "asOfDate": "Oct 09 2026",
     "headers": [
@@ -59,7 +59,7 @@
     "totalRows": 2223
   },
   "holdings": {
-    "asOfDate": "Oct 09 2026",
+    "asOfDate": "Oct 12 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -83,22 +83,22 @@
   },
   "inceptionDate": "Dec 05 2017",
   "metrics": {
-    "ytd": -1.41,
-    "tr1y": 8.43,
-    "tr3y": 54.96,
-    "tr5y": -2.48,
+    "ytd": -3.19,
+    "tr1y": 1.75,
+    "tr3y": 59.75,
+    "tr5y": 0.9,
     "tr10y": null,
-    "cagr3y": 15.72,
-    "cagr5y": -0.5,
+    "cagr3y": 16.9,
+    "cagr5y": 0.18,
     "cagr10y": null,
-    "siAnn": 5.49,
+    "siAnn": 5.22,
     "dividendYield": 2.73,
     "dividendYieldText": "2.73%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-08-31"
+    "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Israel Innovative Technology ETF",
   "nav": "$28.44",
@@ -107,28 +107,28 @@
   "premiumDiscountValue": -0.3165,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Aug 31 2026",
-      "mo1": -0.56,
-      "mo3": -10.36,
-      "sinceInception": 5.49,
-      "sinceInceptionCumulative": 59.49,
-      "yr1": 8.43,
+      "asOfDate": "Sep 30 2026",
+      "mo1": -1.8,
+      "mo3": -5.55,
+      "sinceInception": 5.22,
+      "sinceInceptionCumulative": 56.62,
+      "yr1": 1.75,
       "yr10": null,
-      "yr3": 15.72,
-      "yr5": -0.5,
-      "ytd": -1.41
+      "yr3": 16.9,
+      "yr5": 0.18,
+      "ytd": -3.19
     },
     "quarterEnd": {
-      "asOfDate": "Jun 30 2026",
-      "mo1": -6.8,
-      "mo3": 13.3,
-      "sinceInception": 6.08,
-      "sinceInceptionCumulative": 65.82,
-      "yr1": 15.42,
+      "asOfDate": "Sep 30 2026",
+      "mo1": -1.8,
+      "mo3": -5.55,
+      "sinceInception": 5.22,
+      "sinceInceptionCumulative": 56.62,
+      "yr1": 1.75,
       "yr10": null,
-      "yr3": 18.38,
-      "yr5": -0.41,
-      "ytd": 2.5
+      "yr3": 16.9,
+      "yr5": 0.18,
+      "ytd": -3.19
     }
   },
   "source": {
@@ -138,7 +138,7 @@
     "fundPage": "https://www.ark-funds.com/funds/izrl",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-09",
+    "holdingsAsOfDate": "2026-10-12",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

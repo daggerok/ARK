@@ -14,38 +14,38 @@
     {
       "Asset Category": "Fund",
       "Identifier": "00214Q104",
-      "Market Value": "$1,128,025.20",
+      "Market Value": "$1,154,036.74",
       "Name": "ARK INNOVATION ETF",
       "Shares Held": "12,877",
       "Ticker": "ARKK",
-      "Weight": "107.04%"
+      "Weight": "107.89%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "D26C08077",
-      "Market Value": "$82,123.20",
+      "Market Value": "$92,270.40",
       "Name": "4ARKK US 12/31/26 C80.77",
       "Shares Held": "80",
       "Ticker": "",
-      "Weight": "7.79%"
+      "Weight": "8.63%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "D26P07692",
-      "Market Value": "$12,276.18",
+      "Market Value": "$10,425.87",
       "Name": "4ARKK US 12/31/26 P76.92",
       "Shares Held": "63",
       "Ticker": "",
-      "Weight": "1.16%"
+      "Weight": "0.97%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "D26C07692",
-      "Market Value": "-$168,572.04",
+      "Market Value": "-$187,061.61",
       "Name": "4ARKK US 12/31/26 C76.92",
       "Shares Held": "-129",
       "Ticker": "",
-      "Weight": "-16.00%"
+      "Weight": "-17.49%"
     }
   ],
   "ticker": "ARKD",
