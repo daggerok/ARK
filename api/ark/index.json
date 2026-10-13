@@ -22,7 +22,7 @@
   },
   "counts": {
     "funds": 14,
-    "history": 21553,
+    "history": 21554,
     "holdings": 417
   },
   "funds": [
@@ -465,12 +465,12 @@
       "ticker": "ARKI"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 12 2026",
       "aum": "$7,917 Million",
       "aumValue": 7917000000,
       "category": "Thematic Equity",
-      "closePrice": "$89.62",
-      "closePriceValue": 89.62,
+      "closePrice": "$88.02",
+      "closePriceValue": 88.02,
       "cusip": "00214Q104",
       "dataFile": "funds/ARKK/meta.json",
       "distributions": {
@@ -480,7 +480,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkk",
-      "history": 3002,
+      "history": 3003,
       "holdings": 46,
       "inceptionDate": "Oct 31 2014",
       "isin": "US00214Q1040",
@@ -503,10 +503,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Innovation ETF",
-      "nav": "$89.63",
-      "navValue": 89.63,
-      "premiumDiscount": "-0.0112%",
-      "premiumDiscountValue": -0.0112,
+      "nav": "$88.02",
+      "navValue": 88.02,
+      "premiumDiscount": "0.0000%",
+      "premiumDiscountValue": 0,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -1049,5 +1049,5 @@
       "ticker": "PRNT"
     }
   ],
-  "generatedAt": "2026-10-13T01:36:49Z"
+  "generatedAt": "2026-10-13T06:18:28Z"
 }
