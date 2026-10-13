@@ -700,6 +700,34 @@ describe('pipeline', () => {
     });
   });
 
+  test('two runs on the same source data write zero changes even when Yahoo adjusted closes jitter across a cent boundary', async () => {
+    await withTempRoot(async (root) => {
+      // Yahoo float32 noise seen live: AAM SPDV 2024-11-12 came back as 31.544998 and 31.545001 a minute apart
+      const jittered = (tail: number[]) => ({
+        ...clientsFor({}),
+        yahoo: async (url: string) => {
+          const payload: any = yahooPayload(4);
+          const adjclose: number[] = payload.chart.result[0].indicators.adjclose[0].adjclose;
+          payload.chart.result[0].indicators.adjclose = [{ adjclose: adjclose.map((value, i) => (i >= adjclose.length - tail.length ? tail[i - adjclose.length + tail.length] : value)) }];
+          return respondWith(JSON.stringify(payload), url);
+        },
+      });
+      // Yahoo history is the fallback when the issuer is skipped: the history pages carry Adj Close
+      const env = { TICKERS: 'ARKK', SKIP_ARK: '1', EDGAR_FALLBACK: '0' };
+      const files = () => Promise.all(['meta.json', 'history/001.json'].map((name) => readFile(join(root, 'funds', 'ARKK', name), 'utf8')));
+      await run(root, env, jittered([23.915001, 24.984999, 25.995001]));
+      const first = await files();
+      const index = await readFile(join(root, 'index.json'), 'utf8');
+      expect(JSON.parse(first[1]).headers).toEqual(['Date', 'Close', 'Adj Close', 'Volume']);
+      await run(root, env, jittered([23.914998, 24.985002, 25.994999]));
+      expect(await files()).toEqual(first);
+      expect(await readFile(join(root, 'index.json'), 'utf8')).toBe(index);
+      // a real change beyond the noise is still written
+      await run(root, env, jittered([23.9, 24.97, 25.98]));
+      expect(JSON.parse((await files())[1]).rows.slice(-3).map((row: any) => row['Adj Close'])).toEqual(['23.90', '24.97', '25.98']);
+    });
+  });
+
   test('a failed source keeps the whole fund as published: CSV (never an older N-PORT) and performance', async () => {
     await withTempRoot(async (root) => {
       await update(root, {});
