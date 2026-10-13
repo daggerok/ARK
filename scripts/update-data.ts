@@ -281,7 +281,8 @@ export type ParsedHoldings = {
   sourceKind: 'official ARK daily holdings CSV' | 'official ARKY structured-note holdings CSV';
 };
 export type ArkDailyPoint = { date: string; nav: number | null; marketPrice: number | null; premiumDiscount: number | null };
-export type YahooPricePoint = { date: string; close: number | null; adjClose: number | null; volume: number | null };
+// adjCloseRaw: Yahoo's unrounded value, only used to tell float noise from a real change (never persisted).
+export type YahooPricePoint = { date: string; close: number | null; adjClose: number | null; volume: number | null; adjCloseRaw?: number | null };
 export type YahooDividend = { date: string; amount: number };
 export type YahooChart = {
   points: YahooPricePoint[];
@@ -874,6 +875,7 @@ export function parseYahooChart(payload: unknown): YahooChart {
       // Yahoo recomputes adjusted-close values, so persist the stable two-decimal value.
       adjClose: adjRaw === null ? null : round(adjRaw, 2),
       volume: numberOrNull(quoteVolume[index]),
+      adjCloseRaw: adjRaw,
     });
   }
   points.sort((a, b) => a.date.localeCompare(b.date));
@@ -2056,8 +2058,28 @@ function buildHistoryRows(points: ArkDailyPoint[]): JsonRecord[] {
   }));
 }
 
-function buildYahooHistoryRows(chart: YahooChart): JsonRecord[] {
-  return chart.points.map((point) => ({
+// Yahoo's adjusted close is float32 and its last digits move with the request's period2, so a value
+// sitting on a cent boundary (31.544998 vs 31.545001) flips between runs. Within that noise the
+// published cent is kept: a rerun with the same source data changes nothing. Close and Volume
+// update as usual; a real change beyond the noise is written.
+export const ADJ_CLOSE_NOISE = 1e-4;
+export function keepPublishedAdjClose(points: YahooPricePoint[], published: { headers: string[]; rows: JsonRecord[] }): YahooPricePoint[] {
+  if (published.headers.join('|') !== YAHOO_HISTORY_HEADERS.join('|')) return points;
+  const cents = new Map<string, number>();
+  for (const row of published.rows) {
+    const date = toIsoDate(row.Date);
+    const value = numberOrNull(row['Adj Close']);
+    if (date && value !== null) cents.set(date, value);
+  }
+  return points.map((point) => {
+    const prior = cents.get(point.date);
+    const raw = point.adjCloseRaw ?? point.adjClose;
+    return prior !== undefined && raw !== null && prior !== point.adjClose && Math.abs(raw - prior) <= 0.005 + ADJ_CLOSE_NOISE ? { ...point, adjClose: prior } : point;
+  });
+}
+
+function buildYahooHistoryRows(points: YahooPricePoint[]): JsonRecord[] {
+  return points.map((point) => ({
     Date: displayDate(point.date),
     Close: point.close === null ? '' : point.close.toFixed(2),
     'Adj Close': point.adjClose === null ? '' : point.adjClose.toFixed(2),
@@ -2443,7 +2465,7 @@ export async function updateArkFund(
   }
   if (!config.skipYahoo && !yahoo) failedSources.push('Yahoo chart');
 
-  const yahooPoints = yahoo?.points ?? [];
+  const yahooPoints = keepPublishedAdjClose(yahoo?.points ?? [], previousHistory);
   const yahooHistoryHeaders: readonly string[] = YAHOO_HISTORY_HEADERS;
   const previousIsOfficialHistory = previousHistory.rows.length > 0 && previousHistory.headers.join('|') !== yahooHistoryHeaders.join('|');
   let historyRows: JsonRecord[] = [];
@@ -2467,7 +2489,7 @@ export async function updateArkFund(
     onNote(`[ ${'history'.padEnd(9)}] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
   } else if (yahoo && yahooPoints.length) {
     historyHeaders = yahooHistoryHeaders;
-    historyRows = mergeHistoryRows(previousHistory, historyHeaders, buildYahooHistoryRows(yahoo));
+    historyRows = mergeHistoryRows(previousHistory, historyHeaders, buildYahooHistoryRows(yahooPoints));
     historyAsOfDate = yahooPoints[yahooPoints.length - 1].date;
     historySource = 'Yahoo Finance daily adjusted-close fallback';
   } else if (previousHistory.rows.length) {
