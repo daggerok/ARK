@@ -62,10 +62,12 @@ function outputConfigEntries(config: Record<string, any>): [string, string][] {
     performanceRanges: 'PERFORMANCE', totalReturnRanges: 'TOTAL_RETURN',
     skipVanEck: 'SKIP_VANECK', skipProShares: 'SKIP_PROSHARES',
     skipWisdomTree: 'SKIP_WISDOMTREE', skipGoldmanSachs: 'SKIP_GOLDMANSACHS',
+    skipGlobalX: 'SKIP_GLOBALX', skipNorthernTrust: 'SKIP_NORTHERNTRUST',
   };
-  const range = (v: any): string => v?.source ?? `${Number.isFinite(v?.min) ? v.min : ''}:${Number.isFinite(v?.max) ? v.max : ''}`;
+  const range = (v: any): string => typeof v === 'string' ? v : v?.source ?? `${Number.isFinite(v?.min) ? v.min : ''}:${Number.isFinite(v?.max) ? v.max : ''}`;
   for (const [key, value] of Object.entries(config)) {
-    const name = aliases[key] ?? key.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toUpperCase();
+    if (['proxyGapMs', 'fetchTimeoutMs', 'retryDelayMs'].includes(key)) continue;
+    const name = aliases[key] ?? (/^[A-Z0-9_]+$/.test(key) ? key : key.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toUpperCase());
     if (name === 'PERFORMANCE' || name === 'TOTAL_RETURN') {
       for (const period of ['YTD', '1Y', '3Y', '5Y', '10Y']) values.set(`${name}_${period}`, range(value?.[period]));
     } else if (['AUM', 'TER', 'DIVIDEND_YIELD', 'SEC_YIELD'].includes(name)) {
@@ -3022,7 +3024,8 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
     await writeJsonIfChanged(stateFile, { scopes, generatedAt: isoStamp() });
   }
   console.log(reporter.summary(startedAt));
-  console.log(outputCounts(indexDocument.counts.funds, indexDocument.counts.holdings, indexDocument.counts.history));
+  const counts = indexDocument.counts as { funds: number; holdings: number; history: number };
+  console.log(outputCounts(counts.funds, counts.holdings, counts.history));
 
   return {
     selectedTickers: selectedFunds.map((fund) => fund.ticker),
