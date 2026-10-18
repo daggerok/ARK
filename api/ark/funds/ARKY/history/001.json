@@ -229,8 +229,38 @@
       "Market Price": "20.41",
       "NAV": "20.42",
       "Premium/Discount": "-0.0490%"
+    },
+    {
+      "Date": "Oct 12 2026",
+      "Market Price": "20.31",
+      "NAV": "20.32",
+      "Premium/Discount": "-0.0492%"
+    },
+    {
+      "Date": "Oct 13 2026",
+      "Market Price": "20.24",
+      "NAV": "20.20",
+      "Premium/Discount": "0.1980%"
+    },
+    {
+      "Date": "Oct 14 2026",
+      "Market Price": "19.91",
+      "NAV": "19.84",
+      "Premium/Discount": "0.3528%"
+    },
+    {
+      "Date": "Oct 15 2026",
+      "Market Price": "20.07",
+      "NAV": "20.00",
+      "Premium/Discount": "0.3500%"
+    },
+    {
+      "Date": "Oct 16 2026",
+      "Market Price": "19.74",
+      "NAV": "19.66",
+      "Premium/Discount": "0.4069%"
     }
   ],
   "ticker": "ARKY",
-  "totalRows": 37
+  "totalRows": 42
 }

@@ -4141,8 +4141,38 @@
       "Market Price": "27.28",
       "NAV": "27.31",
       "Premium/Discount": "-0.1098%"
+    },
+    {
+      "Date": "Oct 12 2026",
+      "Market Price": "27.43",
+      "NAV": "27.36",
+      "Premium/Discount": "0.2558%"
+    },
+    {
+      "Date": "Oct 13 2026",
+      "Market Price": "27.59",
+      "NAV": "27.56",
+      "Premium/Discount": "0.1089%"
+    },
+    {
+      "Date": "Oct 14 2026",
+      "Market Price": "27.09",
+      "NAV": "27.07",
+      "Premium/Discount": "0.0739%"
+    },
+    {
+      "Date": "Oct 15 2026",
+      "Market Price": "27.27",
+      "NAV": "27.30",
+      "Premium/Discount": "-0.1099%"
+    },
+    {
+      "Date": "Oct 16 2026",
+      "Market Price": "27.00",
+      "NAV": "26.95",
+      "Premium/Discount": "0.1855%"
     }
   ],
   "ticker": "ARKB",
-  "totalRows": 689
+  "totalRows": 694
 }

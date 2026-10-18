@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 09 2026",
+  "asOfDate": "Oct 16 2026",
   "aum": "$42 Million",
   "aumValue": 42000000,
   "category": "Structured Income",
-  "closePrice": "$20.41",
-  "closePriceValue": 20.41,
+  "closePrice": "$19.74",
+  "closePriceValue": 19.74,
   "dataFile": "funds/ARKY/meta.json",
   "distributions": {
     "dividend": "$0.2700",
@@ -24,9 +24,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arky",
-  "generatedAt": "2026-10-13T01:36:48Z",
+  "generatedAt": "2026-10-18T03:59:41Z",
   "history": {
-    "asOfDate": "Oct 09 2026",
+    "asOfDate": "Oct 16 2026",
     "headers": [
       "Date",
       "NAV",
@@ -38,10 +38,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 37
+    "totalRows": 42
   },
   "holdings": {
-    "asOfDate": "Oct 12 2026",
+    "asOfDate": "Oct 17 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -75,19 +75,19 @@
     "cagr5y": null,
     "cagr10y": null,
     "siAnn": null,
-    "dividendYield": 1.32,
-    "dividendYieldText": "1.32%",
+    "dividendYield": 1.37,
+    "dividendYieldText": "1.37%",
     "dividendYieldBasis": "computed-trailing-12m",
-    "secYield": null,
-    "secYieldText": null,
+    "secYield": 2.84,
+    "secYieldText": "2.84%",
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Active Autocallable Income ETF",
-  "nav": "$20.42",
-  "navValue": 20.42,
-  "premiumDiscount": "-0.0490%",
-  "premiumDiscountValue": -0.049,
+  "nav": "$19.66",
+  "navValue": 19.66,
+  "premiumDiscount": "0.4069%",
+  "premiumDiscountValue": 0.4069,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -121,7 +121,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arky",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1015?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-12",
+    "holdingsAsOfDate": "2026-10-17",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ACTIVE_AUTOCALLABLE_INCOME_ETF_ARKY_HOLDINGS.csv",
     "holdingsDateBasis": "Azure Last-Modified HTTP header (ARKY CSV omits a date column)",
     "holdingsSource": "official ARKY structured-note holdings CSV",
@@ -137,12 +137,12 @@
   "terValue": 0.85,
   "ticker": "ARKY",
   "yields": {
-    "dividendYield": 1.32,
+    "dividendYield": 1.37,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.32%",
-    "secYield": null,
+    "dividendYieldText": "1.37%",
+    "secYield": 2.84,
     "secYieldKind": "ARK Invest official fund-page 30-day SEC yield",
-    "secYieldText": null
+    "secYieldText": "2.84%"
   }
 }

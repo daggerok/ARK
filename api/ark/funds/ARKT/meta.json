@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 09 2026",
+  "asOfDate": "Oct 16 2026",
   "aum": "$2 Million",
   "aumValue": 2000000,
   "category": "Defined Outcome",
-  "closePrice": "$20.02",
-  "closePriceValue": 20.02,
+  "closePrice": "$19.00",
+  "closePriceValue": 19,
   "dataFile": "funds/ARKT/meta.json",
   "distributions": {
     "dividend": "$0.0460",
@@ -24,9 +24,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkt",
-  "generatedAt": "2026-10-13T01:36:39Z",
+  "generatedAt": "2026-10-18T03:59:32Z",
   "history": {
-    "asOfDate": "Oct 09 2026",
+    "asOfDate": "Oct 16 2026",
     "headers": [
       "Date",
       "NAV",
@@ -38,10 +38,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 258
+    "totalRows": 263
   },
   "holdings": {
-    "asOfDate": "Oct 12 2026",
+    "asOfDate": "Oct 16 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -74,8 +74,8 @@
     "cagr5y": null,
     "cagr10y": null,
     "siAnn": null,
-    "dividendYield": 0.23,
-    "dividendYieldText": "0.23%",
+    "dividendYield": 0.24,
+    "dividendYieldText": "0.24%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -83,10 +83,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK DIET Q4 Buffer ETF",
-  "nav": "$20.05",
-  "navValue": 20.05,
-  "premiumDiscount": "-0.1496%",
-  "premiumDiscountValue": -0.1496,
+  "nav": "$18.90",
+  "navValue": 18.9,
+  "premiumDiscount": "0.5291%",
+  "premiumDiscountValue": 0.5291,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -120,7 +120,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1011?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-12",
+    "holdingsAsOfDate": "2026-10-16",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q4_BUFFER_ETF_ARKT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
@@ -136,10 +136,10 @@
   "terValue": 0.89,
   "ticker": "ARKT",
   "yields": {
-    "dividendYield": 0.23,
+    "dividendYield": 0.24,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.23%",
+    "dividendYieldText": "0.24%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

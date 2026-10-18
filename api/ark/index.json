@@ -22,17 +22,17 @@
   },
   "counts": {
     "funds": 14,
-    "history": 21554,
-    "holdings": 417
+    "history": 21623,
+    "holdings": 418
   },
   "funds": [
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$2,909 Million",
       "aumValue": 2909000000,
       "category": "Defined Outcome",
-      "closePrice": "$27.28",
-      "closePriceValue": 27.28,
+      "closePrice": "$27.00",
+      "closePriceValue": 27,
       "cusip": "40919102",
       "dataFile": "funds/ARKB/meta.json",
       "distributions": {
@@ -42,7 +42,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkb",
-      "history": 689,
+      "history": 694,
       "holdings": 1,
       "inceptionDate": "Jan 10 2024",
       "isin": "US0409191022",
@@ -65,10 +65,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK 21Shares Bitcoin ETF",
-      "nav": "$27.31",
-      "navValue": 27.31,
-      "premiumDiscount": "-0.1098%",
-      "premiumDiscountValue": -0.1098,
+      "nav": "$26.95",
+      "navValue": 26.95,
+      "premiumDiscount": "0.1855%",
+      "premiumDiscountValue": 0.1855,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -100,12 +100,12 @@
       "ticker": "ARKB"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$1.1 Million",
       "aumValue": 1100000,
       "category": "Defined Outcome",
-      "closePrice": "$21.51",
-      "closePriceValue": 21.51,
+      "closePrice": "$20.38",
+      "closePriceValue": 20.38,
       "cusip": "00214Q864",
       "dataFile": "funds/ARKD/meta.json",
       "distributions": {
@@ -115,7 +115,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkd",
-      "history": 194,
+      "history": 199,
       "holdings": 4,
       "inceptionDate": "Jan 02 2026",
       "isin": "US00214Q8649",
@@ -138,10 +138,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK DIET Q1 Buffer ETF",
-      "nav": "$21.54",
-      "navValue": 21.54,
-      "premiumDiscount": "-0.1393%",
-      "premiumDiscountValue": -0.1393,
+      "nav": "$20.37",
+      "navValue": 20.37,
+      "premiumDiscount": "0.0491%",
+      "premiumDiscountValue": 0.0491,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -173,12 +173,12 @@
       "ticker": "ARKD"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$1.6 Million",
       "aumValue": 1600000,
       "category": "Defined Outcome",
-      "closePrice": "$21.16",
-      "closePriceValue": 21.16,
+      "closePrice": "$20.01",
+      "closePriceValue": 20.01,
       "cusip": "00214Q849",
       "dataFile": "funds/ARKE/meta.json",
       "distributions": {
@@ -188,7 +188,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arke",
-      "history": 71,
+      "history": 76,
       "holdings": 5,
       "inceptionDate": "Jul 01 2026",
       "isin": "US00214Q8490",
@@ -211,10 +211,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK DIET Q3 Buffer ETF",
-      "nav": "$21.16",
-      "navValue": 21.16,
-      "premiumDiscount": "0.0000%",
-      "premiumDiscountValue": 0,
+      "nav": "$19.90",
+      "navValue": 19.9,
+      "premiumDiscount": "0.5528%",
+      "premiumDiscountValue": 0.5528,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -246,12 +246,12 @@
       "ticker": "ARKE"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$830.9 Million",
       "aumValue": 830900000,
       "category": "Thematic Equity",
-      "closePrice": "$47.59",
-      "closePriceValue": 47.59,
+      "closePrice": "$45.51",
+      "closePriceValue": 45.51,
       "cusip": "00214Q708",
       "dataFile": "funds/ARKF/meta.json",
       "distributions": {
@@ -261,7 +261,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkf",
-      "history": 1932,
+      "history": 1937,
       "holdings": 44,
       "inceptionDate": "Feb 04 2019",
       "isin": "US00214Q7088",
@@ -284,10 +284,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Blockchain & Fintech Innovation ETF",
-      "nav": "$47.64",
-      "navValue": 47.64,
-      "premiumDiscount": "-0.1050%",
-      "premiumDiscountValue": -0.105,
+      "nav": "$45.56",
+      "navValue": 45.56,
+      "premiumDiscount": "-0.1097%",
+      "premiumDiscountValue": -0.1097,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -319,12 +319,12 @@
       "ticker": "ARKF"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$2,219 Million",
       "aumValue": 2219000000,
       "category": "Thematic Equity",
-      "closePrice": "$51.30",
-      "closePriceValue": 51.3,
+      "closePrice": "$46.70",
+      "closePriceValue": 46.7,
       "cusip": "00214Q302",
       "dataFile": "funds/ARKG/meta.json",
       "distributions": {
@@ -334,8 +334,8 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkg",
-      "history": 3002,
-      "holdings": 34,
+      "history": 3007,
+      "holdings": 35,
       "inceptionDate": "Oct 31 2014",
       "isin": "US00214Q3020",
       "metrics": {
@@ -357,10 +357,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Genomic Revolution ETF",
-      "nav": "$51.32",
-      "navValue": 51.32,
-      "premiumDiscount": "-0.0390%",
-      "premiumDiscountValue": -0.039,
+      "nav": "$46.64",
+      "navValue": 46.64,
+      "premiumDiscount": "0.1286%",
+      "premiumDiscountValue": 0.1286,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -392,12 +392,12 @@
       "ticker": "ARKG"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$1.2 Million",
       "aumValue": 1200000,
       "category": "Defined Outcome",
-      "closePrice": "$23.66",
-      "closePriceValue": 23.66,
+      "closePrice": "$22.25",
+      "closePriceValue": 22.25,
       "cusip": "00214Q856",
       "dataFile": "funds/ARKI/meta.json",
       "distributions": {
@@ -407,7 +407,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arki",
-      "history": 133,
+      "history": 138,
       "holdings": 5,
       "inceptionDate": "Apr 01 2026",
       "isin": "US00214Q8565",
@@ -430,10 +430,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK DIET Q2 Buffer ETF",
-      "nav": "$23.70",
-      "navValue": 23.7,
-      "premiumDiscount": "-0.1688%",
-      "premiumDiscountValue": -0.1688,
+      "nav": "$22.16",
+      "navValue": 22.16,
+      "premiumDiscount": "0.4061%",
+      "premiumDiscountValue": 0.4061,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -465,12 +465,12 @@
       "ticker": "ARKI"
     },
     {
-      "asOfDate": "Oct 12 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$7,917 Million",
       "aumValue": 7917000000,
       "category": "Thematic Equity",
-      "closePrice": "$88.02",
-      "closePriceValue": 88.02,
+      "closePrice": "$81.65",
+      "closePriceValue": 81.65,
       "cusip": "00214Q104",
       "dataFile": "funds/ARKK/meta.json",
       "distributions": {
@@ -480,7 +480,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkk",
-      "history": 3003,
+      "history": 3007,
       "holdings": 46,
       "inceptionDate": "Oct 31 2014",
       "isin": "US00214Q1040",
@@ -503,10 +503,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Innovation ETF",
-      "nav": "$88.02",
-      "navValue": 88.02,
-      "premiumDiscount": "0.0000%",
-      "premiumDiscountValue": 0,
+      "nav": "$81.72",
+      "navValue": 81.72,
+      "premiumDiscount": "-0.0857%",
+      "premiumDiscountValue": -0.0857,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -538,12 +538,12 @@
       "ticker": "ARKK"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$1,891 Million",
       "aumValue": 1891000000,
       "category": "Thematic Equity",
-      "closePrice": "$123.51",
-      "closePriceValue": 123.51,
+      "closePrice": "$112.24",
+      "closePriceValue": 112.24,
       "cusip": "00214Q203",
       "dataFile": "funds/ARKQ/meta.json",
       "distributions": {
@@ -553,7 +553,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkq",
-      "history": 3025,
+      "history": 3030,
       "holdings": 37,
       "inceptionDate": "Sep 30 2014",
       "isin": "US00214Q2030",
@@ -567,8 +567,8 @@
         "cagr5y": 9.42,
         "cagr10y": 19.16,
         "siAnn": 16.9,
-        "dividendYield": 0.25,
-        "dividendYieldText": "0.25%",
+        "dividendYield": 0.27,
+        "dividendYieldText": "0.27%",
         "dividendYieldBasis": "computed-trailing-12m",
         "secYield": null,
         "secYieldText": null,
@@ -576,10 +576,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Autonomous Technology & Robotics ETF",
-      "nav": "$123.53",
-      "navValue": 123.53,
-      "premiumDiscount": "-0.0162%",
-      "premiumDiscountValue": -0.0162,
+      "nav": "$112.27",
+      "navValue": 112.27,
+      "premiumDiscount": "-0.0267%",
+      "premiumDiscountValue": -0.0267,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -611,12 +611,12 @@
       "ticker": "ARKQ"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$2 Million",
       "aumValue": 2000000,
       "category": "Defined Outcome",
-      "closePrice": "$20.02",
-      "closePriceValue": 20.02,
+      "closePrice": "$19.00",
+      "closePriceValue": 19,
       "cusip": "00214Q872",
       "dataFile": "funds/ARKT/meta.json",
       "distributions": {
@@ -626,7 +626,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkt",
-      "history": 258,
+      "history": 263,
       "holdings": 5,
       "inceptionDate": "Oct 01 2025",
       "isin": "US00214Q8722",
@@ -640,8 +640,8 @@
         "cagr5y": null,
         "cagr10y": null,
         "siAnn": null,
-        "dividendYield": 0.23,
-        "dividendYieldText": "0.23%",
+        "dividendYield": 0.24,
+        "dividendYieldText": "0.24%",
         "dividendYieldBasis": "computed-trailing-12m",
         "secYield": null,
         "secYieldText": null,
@@ -649,10 +649,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK DIET Q4 Buffer ETF",
-      "nav": "$20.05",
-      "navValue": 20.05,
-      "premiumDiscount": "-0.1496%",
-      "premiumDiscountValue": -0.1496,
+      "nav": "$18.90",
+      "navValue": 18.9,
+      "premiumDiscount": "0.5291%",
+      "premiumDiscountValue": 0.5291,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -684,12 +684,12 @@
       "ticker": "ARKT"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$2,028 Million",
       "aumValue": 2028000000,
       "category": "Thematic Equity",
-      "closePrice": "$167.14",
-      "closePriceValue": 167.14,
+      "closePrice": "$154.85",
+      "closePriceValue": 154.85,
       "cusip": "00214Q401",
       "dataFile": "funds/ARKW/meta.json",
       "distributions": {
@@ -699,7 +699,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkw",
-      "history": 3025,
+      "history": 3030,
       "holdings": 43,
       "inceptionDate": "Sep 30 2014",
       "isin": "US00214Q4010",
@@ -713,8 +713,8 @@
         "cagr5y": 3.8,
         "cagr10y": 22.55,
         "siAnn": 21.16,
-        "dividendYield": 1.41,
-        "dividendYieldText": "1.41%",
+        "dividendYield": 1.52,
+        "dividendYieldText": "1.52%",
         "dividendYieldBasis": "computed-trailing-12m",
         "secYield": null,
         "secYieldText": null,
@@ -722,10 +722,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Next Generation Technology ETF",
-      "nav": "$167.41",
-      "navValue": 167.41,
-      "premiumDiscount": "-0.1613%",
-      "premiumDiscountValue": -0.1613,
+      "nav": "$155.02",
+      "navValue": 155.02,
+      "premiumDiscount": "-0.1097%",
+      "premiumDiscountValue": -0.1097,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -757,12 +757,12 @@
       "ticker": "ARKW"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$737.1 Million",
       "aumValue": 737100000,
       "category": "Thematic Equity",
-      "closePrice": "$32.20",
-      "closePriceValue": 32.2,
+      "closePrice": "$29.88",
+      "closePriceValue": 29.88,
       "cusip": "00214Q807",
       "dataFile": "funds/ARKX/meta.json",
       "distributions": {
@@ -772,7 +772,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arkx",
-      "history": 1390,
+      "history": 1395,
       "holdings": 33,
       "inceptionDate": "Mar 30 2021",
       "isin": "US00214Q8078",
@@ -795,10 +795,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Space & Defense Innovation ETF",
-      "nav": "$32.19",
-      "navValue": 32.19,
-      "premiumDiscount": "0.0311%",
-      "premiumDiscountValue": 0.0311,
+      "nav": "$29.93",
+      "navValue": 29.93,
+      "premiumDiscount": "-0.1671%",
+      "premiumDiscountValue": -0.1671,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -830,12 +830,12 @@
       "ticker": "ARKX"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$42 Million",
       "aumValue": 42000000,
       "category": "Structured Income",
-      "closePrice": "$20.41",
-      "closePriceValue": 20.41,
+      "closePrice": "$19.74",
+      "closePriceValue": 19.74,
       "cusip": "00214Q724",
       "dataFile": "funds/ARKY/meta.json",
       "distributions": {
@@ -845,7 +845,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arky",
-      "history": 37,
+      "history": 42,
       "holdings": 50,
       "inceptionDate": "Aug 19 2026",
       "isin": "US00214Q7245",
@@ -859,19 +859,19 @@
         "cagr5y": null,
         "cagr10y": null,
         "siAnn": null,
-        "dividendYield": 1.32,
-        "dividendYieldText": "1.32%",
+        "dividendYield": 1.37,
+        "dividendYieldText": "1.37%",
         "dividendYieldBasis": "computed-trailing-12m",
-        "secYield": null,
-        "secYieldText": null,
+        "secYield": 2.84,
+        "secYieldText": "2.84%",
         "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Active Autocallable Income ETF",
-      "nav": "$20.42",
-      "navValue": 20.42,
-      "premiumDiscount": "-0.0490%",
-      "premiumDiscountValue": -0.049,
+      "nav": "$19.66",
+      "navValue": 19.66,
+      "premiumDiscount": "0.4069%",
+      "premiumDiscountValue": 0.4069,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -903,12 +903,12 @@
       "ticker": "ARKY"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$133.7 Million",
       "aumValue": 133699999.99999999,
       "category": "Thematic Equity",
-      "closePrice": "$28.35",
-      "closePriceValue": 28.35,
+      "closePrice": "$27.50",
+      "closePriceValue": 27.5,
       "cusip": "00214Q609",
       "dataFile": "funds/IZRL/meta.json",
       "distributions": {
@@ -918,7 +918,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/izrl",
-      "history": 2223,
+      "history": 2228,
       "holdings": 66,
       "inceptionDate": "Dec 05 2017",
       "isin": "US00214Q6098",
@@ -932,8 +932,8 @@
         "cagr5y": 0.18,
         "cagr10y": null,
         "siAnn": 5.22,
-        "dividendYield": 2.73,
-        "dividendYieldText": "2.73%",
+        "dividendYield": 2.82,
+        "dividendYieldText": "2.82%",
         "dividendYieldBasis": "computed-trailing-12m",
         "secYield": null,
         "secYieldText": null,
@@ -941,10 +941,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "ARK Israel Innovative Technology ETF",
-      "nav": "$28.44",
-      "navValue": 28.44,
-      "premiumDiscount": "-0.3165%",
-      "premiumDiscountValue": -0.3165,
+      "nav": "$27.81",
+      "navValue": 27.81,
+      "premiumDiscount": "-1.1147%",
+      "premiumDiscountValue": -1.1147,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -976,12 +976,12 @@
       "ticker": "IZRL"
     },
     {
-      "asOfDate": "Oct 09 2026",
+      "asOfDate": "Oct 16 2026",
       "aum": "$61.1 Million",
       "aumValue": 61100000,
       "category": "Thematic Equity",
-      "closePrice": "$25.50",
-      "closePriceValue": 25.5,
+      "closePrice": "$24.54",
+      "closePriceValue": 24.54,
       "cusip": "00214Q500",
       "dataFile": "funds/PRNT/meta.json",
       "distributions": {
@@ -991,7 +991,7 @@
       },
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/prnt",
-      "history": 2572,
+      "history": 2577,
       "holdings": 44,
       "inceptionDate": "Jul 19 2016",
       "isin": "US00214Q5009",
@@ -1005,8 +1005,8 @@
         "cagr5y": -6.73,
         "cagr10y": 1.24,
         "siAnn": 2.62,
-        "dividendYield": 0.69,
-        "dividendYieldText": "0.69%",
+        "dividendYield": 0.71,
+        "dividendYieldText": "0.71%",
         "dividendYieldBasis": "computed-trailing-12m",
         "secYield": null,
         "secYieldText": null,
@@ -1014,10 +1014,10 @@
         "performanceAsOf": "2026-09-30"
       },
       "name": "The 3D Printing ETF",
-      "nav": "$25.54",
-      "navValue": 25.54,
-      "premiumDiscount": "-0.1566%",
-      "premiumDiscountValue": -0.1566,
+      "nav": "$24.72",
+      "navValue": 24.72,
+      "premiumDiscount": "-0.7282%",
+      "premiumDiscountValue": -0.7282,
       "returns": {
         "monthEnd": {
           "asOfDate": "Sep 30 2026",
@@ -1049,5 +1049,5 @@
       "ticker": "PRNT"
     }
   ],
-  "generatedAt": "2026-10-13T06:18:28Z"
+  "generatedAt": "2026-10-18T03:59:50Z"
 }
