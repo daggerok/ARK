@@ -44,7 +44,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-10-18T03:59:23Z",
+  "generatedAt": "2026-10-20T02:47:35Z",
   "history": {
     "asOfDate": "Oct 16 2026",
     "headers": [
@@ -64,7 +64,7 @@
     "totalRows": 3030
   },
   "holdings": {
-    "asOfDate": "Oct 16 2026",
+    "asOfDate": "Oct 19 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -143,7 +143,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkq",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1001?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-16",
+    "holdingsAsOfDate": "2026-10-19",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_AUTONOMOUS_TECH._%26_ROBOTICS_ETF_ARKQ_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

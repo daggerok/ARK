@@ -19,7 +19,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkx",
-  "generatedAt": "2026-10-18T03:59:41Z",
+  "generatedAt": "2026-10-20T02:47:54Z",
   "history": {
     "asOfDate": "Oct 16 2026",
     "headers": [
@@ -37,7 +37,7 @@
     "totalRows": 1395
   },
   "holdings": {
-    "asOfDate": "Oct 16 2026",
+    "asOfDate": "Oct 19 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -116,7 +116,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkx",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1008?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-16",
+    "holdingsAsOfDate": "2026-10-19",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_SPACE_%26_DEFENSE_INNOVATION_ETF_ARKX_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

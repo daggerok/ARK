@@ -40,7 +40,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-10-18T03:59:50Z",
+  "generatedAt": "2026-10-20T02:48:03Z",
   "history": {
     "asOfDate": "Oct 16 2026",
     "headers": [
@@ -59,7 +59,7 @@
     "totalRows": 2228
   },
   "holdings": {
-    "asOfDate": "Oct 16 2026",
+    "asOfDate": "Oct 19 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -74,7 +74,7 @@
       "holdings/001.json"
     ],
     "source": "official ARK daily holdings CSV",
-    "totalRows": 66
+    "totalRows": 65
   },
   "identifiers": {
     "cusip": "00214Q609",
@@ -138,7 +138,7 @@
     "fundPage": "https://www.ark-funds.com/funds/izrl",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-16",
+    "holdingsAsOfDate": "2026-10-19",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
