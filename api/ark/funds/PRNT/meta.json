@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 16 2026",
+  "asOfDate": "Oct 19 2026",
   "aum": "$61.1 Million",
   "aumValue": 61100000,
   "category": "Thematic Equity",
-  "closePrice": "$24.54",
-  "closePriceValue": 24.54,
+  "closePrice": "$24.59",
+  "closePriceValue": 24.59,
   "dataFile": "funds/PRNT/meta.json",
   "distributions": {
     "dividend": "$0.1750",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/prnt",
-  "generatedAt": "2026-10-20T02:48:03Z",
+  "generatedAt": "2026-10-21T04:10:34Z",
   "history": {
-    "asOfDate": "Oct 16 2026",
+    "asOfDate": "Oct 19 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,10 +64,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2577
+    "totalRows": 2578
   },
   "holdings": {
-    "asOfDate": "Oct 19 2026",
+    "asOfDate": "Oct 20 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -82,7 +82,7 @@
       "holdings/001.json"
     ],
     "source": "official ARK daily holdings CSV",
-    "totalRows": 44
+    "totalRows": 43
   },
   "identifiers": {
     "cusip": "00214Q500",
@@ -109,10 +109,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "The 3D Printing ETF",
-  "nav": "$24.72",
-  "navValue": 24.72,
-  "premiumDiscount": "-0.7282%",
-  "premiumDiscountValue": -0.7282,
+  "nav": "$24.67",
+  "navValue": 24.67,
+  "premiumDiscount": "-0.3243%",
+  "premiumDiscountValue": -0.3243,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -146,7 +146,7 @@
     "fundPage": "https://www.ark-funds.com/funds/prnt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1005?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-19",
+    "holdingsAsOfDate": "2026-10-20",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/THE_3D_PRINTING_ETF_PRNT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
