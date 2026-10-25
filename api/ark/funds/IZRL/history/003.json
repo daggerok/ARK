@@ -1381,8 +1381,32 @@
       "Market Price": "27.96",
       "NAV": "28.11",
       "Premium/Discount": "-0.5336%"
+    },
+    {
+      "Date": "Oct 20 2026",
+      "Market Price": "28.36",
+      "NAV": "28.44",
+      "Premium/Discount": "-0.2813%"
+    },
+    {
+      "Date": "Oct 21 2026",
+      "Market Price": "28.49",
+      "NAV": "28.64",
+      "Premium/Discount": "-0.5237%"
+    },
+    {
+      "Date": "Oct 22 2026",
+      "Market Price": "28.08",
+      "NAV": "28.27",
+      "Premium/Discount": "-0.6721%"
+    },
+    {
+      "Date": "Oct 23 2026",
+      "Market Price": "28.08",
+      "NAV": "28.29",
+      "Premium/Discount": "-0.7423%"
     }
   ],
   "ticker": "IZRL",
-  "totalRows": 2229
+  "totalRows": 2233
 }

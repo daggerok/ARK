@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 19 2026",
+  "asOfDate": "Oct 23 2026",
   "aum": "$2,219 Million",
   "aumValue": 2219000000,
   "category": "Thematic Equity",
-  "closePrice": "$47.37",
-  "closePriceValue": 47.37,
+  "closePrice": "$48.16",
+  "closePriceValue": 48.16,
   "dataFile": "funds/ARKG/meta.json",
   "distributions": {
     "dividend": "$0.3820",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkg",
-  "generatedAt": "2026-10-21T04:09:58Z",
+  "generatedAt": "2026-10-25T04:07:51Z",
   "history": {
-    "asOfDate": "Oct 19 2026",
+    "asOfDate": "Oct 23 2026",
     "headers": [
       "Date",
       "NAV",
@@ -57,10 +57,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3008
+    "totalRows": 3012
   },
   "holdings": {
-    "asOfDate": "Oct 20 2026",
+    "asOfDate": "Oct 23 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -102,10 +102,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Genomic Revolution ETF",
-  "nav": "$47.33",
-  "navValue": 47.33,
-  "premiumDiscount": "0.0845%",
-  "premiumDiscountValue": 0.0845,
+  "nav": "$48.17",
+  "navValue": 48.17,
+  "premiumDiscount": "-0.0208%",
+  "premiumDiscountValue": -0.0208,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -139,7 +139,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkg",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1003?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-20",
+    "holdingsAsOfDate": "2026-10-23",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_GENOMIC_REVOLUTION_ETF_ARKG_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

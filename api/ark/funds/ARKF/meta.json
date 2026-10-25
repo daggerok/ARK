@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 19 2026",
+  "asOfDate": "Oct 23 2026",
   "aum": "$830.9 Million",
   "aumValue": 830900000,
   "category": "Thematic Equity",
-  "closePrice": "$45.41",
-  "closePriceValue": 45.41,
+  "closePrice": "$45.16",
+  "closePriceValue": 45.16,
   "dataFile": "funds/ARKF/meta.json",
   "distributions": {
     "dividend": "$0.0430",
@@ -32,9 +32,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkf",
-  "generatedAt": "2026-10-21T04:09:49Z",
+  "generatedAt": "2026-10-25T04:07:42Z",
   "history": {
-    "asOfDate": "Oct 19 2026",
+    "asOfDate": "Oct 23 2026",
     "headers": [
       "Date",
       "NAV",
@@ -47,7 +47,7 @@
       "history/002.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 1938
+    "totalRows": 1942
   },
   "holdings": {
     "asOfDate": "Jan 02 2026",
@@ -83,8 +83,8 @@
     "cagr5y": -1.6,
     "cagr10y": null,
     "siAnn": 11.58,
-    "dividendYield": 0.09,
-    "dividendYieldText": "0.09%",
+    "dividendYield": 0.1,
+    "dividendYieldText": "0.10%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -92,10 +92,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Blockchain & Fintech Innovation ETF",
-  "nav": "$45.47",
-  "navValue": 45.47,
-  "premiumDiscount": "-0.1320%",
-  "premiumDiscountValue": -0.132,
+  "nav": "$45.01",
+  "navValue": 45.01,
+  "premiumDiscount": "0.3333%",
+  "premiumDiscountValue": 0.3333,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -145,10 +145,10 @@
   "terValue": 0.75,
   "ticker": "ARKF",
   "yields": {
-    "dividendYield": 0.09,
+    "dividendYield": 0.1,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.09%",
+    "dividendYieldText": "0.10%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null
