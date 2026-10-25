@@ -37,6 +37,7 @@ import {
   extractFundPageId,
   formatDistributionFrequency,
   historyWindowStartEpoch,
+  holdingsGuard,
   inferDistributionFrequency,
   installSystemCa,
   isCertError,
@@ -121,7 +122,7 @@ const quarterPerformanceSample = performanceSample('06/30/2026', ['14.82%', '22.
 const DISCLAIMER = '"Investors should carefully consider the investment objectives and risks of an ARK ETF before investing. ""NAV"" may differ from market price."';
 const arkkCsv = [
   'date,fund,company,ticker,cusip,shares,market value ($),weight (%)',
-  '09/28/2026,ARKK,TESLA INC,TSLA,88160R101,"2,141,056","$796,708,348.16",9.12%',
+  '09/28/2026,ARKK,TESLA INC,TSLA,88160R101,"2,141,056","$796,708,348.16",89.12%',
   '09/28/2026,ARKK,SPACE EXPLORATION TECHN-CL A,SPCX,84615Q103,"3,514,048","$522,468,656.64",5.98%',
   '09/28/2026,ARKK,BRERA HOLDINGS PLC WTS,,BREADUMMY,"431,626","$936,627.77",0.01%',
   DISCLAIMER,
@@ -161,7 +162,7 @@ const yahooPayload = (count: number, firstTrade = '2014-10-31', dividends: Scena
     error: null,
   },
 });
-const csvAt = (date: string): string => ['date,fund,company,ticker,cusip,shares,market value ($),weight (%)', `${date},ARKK,TESLA INC,TSLA,88160R101,"2","$3",9%`].join('\r\n');
+const csvAt = (date: string): string => ['date,fund,company,ticker,cusip,shares,market value ($),weight (%)', `${date},ARKK,TESLA INC,TSLA,88160R101,"2","$3",99%`].join('\r\n');
 const respondWith = (text: string, url: string, headers: Record<string, string> = {}) => ({ text, url, headers: new Headers(headers) });
 const clientsFor = (scenario: Scenario = {}) => ({
   ark: async (url: string) => {
@@ -202,7 +203,7 @@ const oldNport = (repPdDate: string) => async () => ({
   parsed: { repPdDate, positions: [], regCik: '', seriesName: '', seriesId: '', netAssets: null },
   accessions: [],
   selected: { accession: 'acc', filed: repPdDate, reportDate: repPdDate, url: 'https://example.test/primary_doc.xml' },
-  holdings: [{ Name: 'N-PORT CO', Ticker: 'NPT', Identifier: '1', Weight: '1%', 'Market Value': '1', 'Shares Held': '1', 'Asset Category': 'Equity' }],
+  holdings: [{ Name: 'N-PORT CO', Ticker: 'NPT', Identifier: '1', Weight: '100%', 'Market Value': '1', 'Shares Held': '1', 'Asset Category': 'Equity' }],
 });
 const metaOf = (root: string) => readJson(join(root, 'funds', 'ARKK', 'meta.json'));
 // a hung promise would stall the whole run: fail instead (the guard is far above any provider timeout used here)
@@ -377,7 +378,7 @@ describe('parsing', () => {
     const standard = parseArkHoldingsCsv(arkkCsv, 'ARKK');
     expect(standard.headers).toEqual([...HOLDINGS_HEADERS]);
     expect(standard).toMatchObject({ totalRows: 3, asOfDate: '2026-09-28' }); // the trailing legal disclaimer is not a row
-    expect(standard.rows[0]).toMatchObject({ Name: 'TESLA INC', Ticker: 'TSLA', Identifier: '88160R101', Weight: '9.12%', 'Market Value': '$796,708,348.16', 'Shares Held': '2,141,056', 'Asset Category': 'Equity' });
+    expect(standard.rows[0]).toMatchObject({ Name: 'TESLA INC', Ticker: 'TSLA', Identifier: '88160R101', Weight: '89.12%', 'Market Value': '$796,708,348.16', 'Shares Held': '2,141,056', 'Asset Category': 'Equity' });
     const arky = parseArkHoldingsCsv(arkyCsv, 'ARKY', 'Mon, 28 Sep 2026 06:05:49 GMT');
     expect(arky.headers).toEqual([...ARKY_HOLDINGS_HEADERS]);
     expect(arky).toMatchObject({ totalRows: 3, asOfDate: '2026-09-28' });
@@ -388,6 +389,21 @@ describe('parsing', () => {
     expect(() => parseArkHoldingsCsv('html error', 'ARKK')).toThrow('header row not found');
     expect(() => parseArkHoldingsCsv(arkkCsv.replace('ARKK,', 'ARKQ,'), 'ARKK')).toThrow('contains fund ARKQ');
     expect(() => parseArkHoldingsCsv(arkyCsv, 'ARKK')).toThrow('unexpected structured-note layout');
+  });
+
+  test('holdings guard: header-only, renamed weight column, broken weights, a bad weight sum and a halved sheet are rejected', () => {
+    const headers = ['Name', 'Ticker', 'Weight'];
+    const rows = [{ Name: 'A', Ticker: 'A', Weight: '60%' }, { Name: 'B', Ticker: 'B', Weight: '40%' }];
+    expect(holdingsGuard(headers, rows, 2)).toBeNull();
+    expect(holdingsGuard(headers, [['A', 'A', '60'], ['B', 'B', '40']], null)).toBeNull();
+    expect(holdingsGuard([], [], 0)).toBeNull(); // nothing published before: an empty sheet is honest
+    expect(holdingsGuard(headers, [], 505)).toContain('no holdings rows');
+    expect(holdingsGuard(['Name', 'Ticker', 'Wt'], rows, 2)).toContain('no weight column');
+    expect(holdingsGuard(headers, rows.map((row) => ({ ...row, Weight: '6\u200B0' })), 2)).toContain('numeric weight');
+    const allocation = [{ Name: 'Cash&Collateral', Ticker: '-', Weight: '100' }, { Name: 'Equities', Ticker: '-', Weight: '476' }];
+    expect(holdingsGuard(headers, allocation, 2)).toContain('outside 50..150');
+    expect(holdingsGuard(headers, allocation, 2, ['sum'])).toBeNull();
+    expect(holdingsGuard(headers, rows, 5)).toContain('less than half');
   });
 
   test('numbers and dates: unavailable values are null never 0, dates are time-zone independent', () => {
@@ -642,7 +658,7 @@ describe('pipeline', () => {
       const holdingsPage = await readJson(join(fundRoot, 'holdings', '001.json'));
       expect(holdingsPage).toMatchObject({ ticker: 'ARKK', page: 1, totalRows: 3, headers: ['Name', 'Ticker', 'Identifier', 'Weight', 'Market Value', 'Shares Held', 'Asset Category'] });
       expect(holdingsPage.rows).toHaveLength(2);
-      expect(holdingsPage.rows[0]).toMatchObject({ Ticker: 'TSLA', Weight: '9.12%' });
+      expect(holdingsPage.rows[0]).toMatchObject({ Ticker: 'TSLA', Weight: '89.12%' });
       expect(await readJson(join(fundRoot, 'history', '001.json'))).toMatchObject({ totalRows: 4, headers: ['Date', 'NAV', 'Market Price', 'Premium/Discount'] });
 
       const paths = ['meta.json', 'holdings/001.json', 'holdings/002.json', 'history/001.json', 'history/002.json'].map((name) => join(fundRoot, name));
@@ -745,6 +761,31 @@ describe('pipeline', () => {
       expect(perfFailed.status).toBe('failed');
       expect(perfFailed.reason).toContain('performance');
       expect(await files()).toEqual(before);
+    });
+  });
+
+  test('holdings that fail the guard keep the fund exactly as published and report it failed', async () => {
+    const broken = arkkCsv.replace(/,[0-9.]+%(?=\r\n)/g, ',-'); // every weight cell becomes "-"
+    await withTempRoot(async (root) => {
+      const snapshot = async (): Promise<Array<[string, string]>> => {
+        const out: Array<[string, string]> = [];
+        const walk = async (dir: string): Promise<void> => {
+          for (const entry of await readdir(dir, { withFileTypes: true })) {
+            const full = join(dir, entry.name);
+            if (entry.isDirectory()) await walk(full);
+            else out.push([full, await readFile(full, 'utf8')]);
+          }
+        };
+        await walk(root);
+        return out.sort((a, b) => a[0].localeCompare(b[0]));
+      };
+      const env = { TICKERS: 'ARKK', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0' };
+      await main([], env, { apiRoot: root, clients: clientsFor({}), referenceDate: REF, ...quiet });
+      const first = await snapshot();
+      const report = await main([], env, { apiRoot: root, clients: clientsFor({ csv: broken }), referenceDate: REF, ...quiet });
+      expect(report?.failedTickers).toEqual(['ARKK']);
+      expect(process.exitCode).toBe(1);
+      expect(await snapshot()).toEqual(first);
     });
   });
 
