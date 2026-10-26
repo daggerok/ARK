@@ -386,6 +386,10 @@ describe('parsing', () => {
     expect(arky).toMatchObject({ totalRows: 3, asOfDate: '2026-09-28' });
     expect(arky.rows[0]).toMatchObject({ Name: 'GOLDMAN FS TRSY OBLIG INST 468', Identifier: 'X9USDGSFT', 'Shares Held': '', 'Asset Category': 'Cash & Equivalents', 'Notional per Note': '35,922,746' });
     expect(arky.rows.map((row) => row['Asset Category'])).toEqual(['Cash & Equivalents', 'Treasury', 'Structured Note']);
+    // ARK-1: the trailing legal disclaimer (no CUSIP, no weight) is not published as a holding; a real 0.00% note stays
+    const disclaimer = '"Investors should carefully consider the investment objectives and risks of an ARK ETF before investing.",,,,\r\n';
+    const withDisclaimer = parseArkHoldingsCsv(arkyCsv + 'PLTR Autocall ELN LONG TRS 9.9 PA 01/01/2027,1802436,"1","$0.00",0.00%\r\n' + disclaimer, 'ARKY', '2026-09-28');
+    expect(withDisclaimer.rows.map((row) => row.Identifier)).toEqual(['X9USDGSFT', '912797VR5', '1740056', '1802436']);
     const heavy = parseArkHoldingsCsv(arkyCsv + 'OVERWEIGHT NOTE,CUSIP-X,1,1,101.25%\r\n', 'ARKY', '2026-09-28');
     expect(numberOrNull(heavy.rows.at(-1)?.Weight)).toBe(101.25);
     expect(() => parseArkHoldingsCsv('html error', 'ARKK')).toThrow('header row not found');

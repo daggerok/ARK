@@ -24,7 +24,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arky",
-  "generatedAt": "2026-10-25T04:08:18Z",
+  "generatedAt": "2026-10-26T05:20:18Z",
   "history": {
     "asOfDate": "Oct 23 2026",
     "headers": [
@@ -57,7 +57,7 @@
       "holdings/001.json"
     ],
     "source": "official ARKY structured-note holdings CSV",
-    "totalRows": 49
+    "totalRows": 48
   },
   "identifiers": {
     "cusip": "00214Q724",
