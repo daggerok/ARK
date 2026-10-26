@@ -11,6 +11,7 @@ import {
   CLOSED_FUNDS,
   CONTROL_NAMES,
   DEFAULT_SEC_UA,
+  HOLDINGS_GUARD_RELAX,
   HOLDINGS_HEADERS,
   ISSUER_PROXY_MIN_INTERVAL_MS,
   ISSUER_USER_AGENT,
@@ -35,11 +36,11 @@ import {
   cumulativeFromAnnualized,
   detectUnlistedArkFunds,
   displayDate,
-  edgarSeriesFilingsUrl,
   extractFundPageId,
   formatDistributionFrequency,
   historyWindowStartEpoch,
   holdingsGuard,
+  holdingsWeightCount,
   inferDistributionFrequency,
   installSystemCa,
   isCertError,
@@ -47,8 +48,9 @@ import {
   jinaReaderUrl,
   main,
   mergeHistoryRows,
+  nportIsFresh,
   nportToHoldings,
-  nportUrlFor,
+  nportTickers,
   numberOrNull,
   pageFileName,
   parseAumRange,
@@ -58,14 +60,12 @@ import {
   parseArkNavHistory,
   parseArkOverview,
   parseArkPerformance,
-  parseCompanyTickerMap,
   parseCsv,
-  parseEdgarAtomFilings,
-  parseFundTickerMap,
-  parseNportAccessions,
-  parseNportXml,
+  parseNportFiling,
   parseProviderJson,
   parseRange,
+  parseSecCompanyNames,
+  parseSecFundTickers,
   parseYahooChart,
   passesMetricFilters,
   passesStaticFilters,
@@ -140,6 +140,7 @@ const arkyCsv = [
 // Pipeline helpers: a mocked provider and a per-test temp root
 // ---------------------------------------------------------------------------
 type Scenario = {
+  overview?: unknown;
   csv?: string | Error;
   month?: unknown;
   quarter?: unknown;
@@ -169,7 +170,7 @@ const respondWith = (text: string, url: string, headers: Record<string, string> 
 const clientsFor = (scenario: Scenario = {}) => ({
   ark: async (url: string) => {
     if (url.endsWith('/funds/arkk')) return respondWith('url: "/api/fund/overview/1004"', url);
-    if (url.includes('/api/fund/overview/')) return respondWith(JSON.stringify(overviewSample), url);
+    if (url.includes('/api/fund/overview/')) return respondWith(JSON.stringify(scenario.overview ?? overviewSample), url);
     if (url.includes('/api/fund/nav-historical-change/')) return respondWith(JSON.stringify(scenario.history ?? navHistorySample), url);
     if (url.includes('/api/fund/performance/')) {
       const quarter = new URL(url).searchParams.get('Range') === 'quarter-end';
@@ -201,12 +202,28 @@ const update = (root: string, scenario: Scenario, env: Record<string, string> = 
   updateArkFund(arkkFund, quietConfig(env), clientsFor(scenario), { apiRoot: root, referenceDate: REF, onNote: () => undefined, onWarn: (message) => warns.push(message), ...extra });
 const run = (root: string, env: Record<string, string>, clients = clientsFor({})) =>
   runUpdater({ config: quietConfig(env), apiRoot: root, clients, referenceDate: REF, ...quiet });
-const oldNport = (repPdDate: string) => async () => ({
-  parsed: { repPdDate, positions: [], regCik: '', seriesName: '', seriesId: '', netAssets: null },
-  accessions: [],
-  selected: { accession: 'acc', filed: repPdDate, reportDate: repPdDate, url: 'https://example.test/primary_doc.xml' },
-  holdings: [{ Name: 'N-PORT CO', Ticker: 'NPT', Identifier: '1', Weight: '100%', 'Market Value': '1', 'Shares Held': '1', 'Asset Category': 'Equity' }],
-});
+// SEC EDGAR as the shared nport-reader sees it: ticker tables, the trust's submissions, the series feed (filed by an agent
+// whose CIK prefixes the accession) and primary_doc.xml in the trust's own folder; another series' filing comes first
+const nportXml = (seriesId: string, period: string): string => `<edgarSubmission><genInfo><regName>ARK ETF Trust</regName><regCik>0001579982</regCik><seriesName>ARK Innovation ETF</seriesName><seriesId>${seriesId}</seriesId><repPdDate>${period}</repPdDate></genInfo><fundInfo><totAssets>1000500</totAssets><netAssets>1000000</netAssets></fundInfo><invstOrSecs>
+<invstOrSec><name>TESLA INC</name><title>TESLA INC</title><cusip>88160R101</cusip><identifiers><isin value="US88160R1014"/><ticker value="TSLA"/></identifiers><balance>100.00000000</balance><units>NS</units><curCd>USD</curCd><valUSD>1000.5</valUSD><pctVal>89.12</pctVal><assetCat>EC</assetCat><invCountry>US</invCountry></invstOrSec>
+<invstOrSec><name>Roku Inc</name><cusip>77543R102</cusip><identifiers><isin value="US77543R1023"/></identifiers><balance>5</balance><curCd>USD</curCd><valUSD>2000</valUSD><assetCat>EC</assetCat></invstOrSec>
+<invstOrSec><name>CRISPR THERAPEUTICS AG</name><cusip>H17182108</cusip><identifiers><isin value="CH0334081137"/><ticker value="CRSP"/></identifiers><balance>7</balance><curCd>USD</curCd><valUSD>3000</valUSD><pctVal>0.3</pctVal><assetCat>EC</assetCat></invstOrSec>
+<invstOrSec><name>GOLDMAN FS TRSY OBLIG INST 468</name><cusip>000000000</cusip><identifiers><other otherDesc="Internal" value="X9USDGSFT"/></identifiers><curCd>USD</curCd><pctVal>10.38</pctVal><assetCat>STIV</assetCat></invstOrSec>
+</invstOrSecs></edgarSubmission>`;
+const secWorld = (period: string, calls: string[] = []) => async (url: string) => {
+  calls.push(url);
+  if (url.endsWith('company_tickers_mf.json')) return respondWith(JSON.stringify({ fields: ['cik', 'seriesId', 'classId', 'symbol'], data: [[1579982, 'S000042977', 'C000132931', 'ARKK'], [1869699, 'S000077777', 'C000077777', 'ARKB']] }), url);
+  if (url.endsWith('company_tickers.json')) return respondWith(JSON.stringify({ 0: { cik_str: 1318605, ticker: 'TSLA', title: 'Tesla, Inc.' }, 1: { cik_str: 1428439, ticker: 'ROKU', title: 'Roku, Inc' } }), url);
+  if (url.includes('/submissions/CIK0001579982.json')) return respondWith(JSON.stringify({ cik: '1579982', filings: { recent: { form: ['NPORT-P', 'NPORT-P'], accessionNumber: ['0001752724-26-200001', '0001752724-26-200002'], filingDate: ['2026-09-25', '2026-09-25'], reportDate: [period, period] } } }), url);
+  if (url.includes('browse-edgar')) {
+    const entry = (accession: string) => `<entry><content><accession-number>${accession}</accession-number><filing-date>2026-09-25</filing-date><filing-href>https://www.sec.gov/Archives/edgar/data/1579982/${accession.replace(/-/g, '')}/${accession}-index.htm</filing-href><filing-type>NPORT-P</filing-type></content></entry>`;
+    return respondWith(`<feed>${entry('0001752724-26-200001')}${entry('0001752724-26-200002')}</feed>`, url);
+  }
+  if (url.endsWith('/1579982/000175272426200001/primary_doc.xml')) return respondWith(nportXml('S000042978', period), url);
+  if (url.endsWith('/1579982/000175272426200002/primary_doc.xml')) return respondWith(nportXml('S000042977', period), url);
+  throw new Error(`unexpected SEC URL: ${url}`);
+};
+const nportFallback = (period: string, calls: string[] = []) => createSecFallbackResolver({ ...clientsFor(), sec: secWorld(period, calls) });
 const metaOf = (root: string) => readJson(join(root, 'funds', 'ARKK', 'meta.json'));
 // a hung promise would stall the whole run: fail instead (the guard is far above any provider timeout used here)
 const guarded = <T>(promise: Promise<T>, ms = 5000): Promise<T> =>
@@ -446,44 +463,58 @@ describe('parsing 2', () => {
     expect(parsed).toMatchObject({ exchangeName: 'Cboe BZX', regularMarketPrice: 101.99 });
   });
 
-  test('SEC N-PORT: XML, ticker tables, accession URLs, Atom feeds and the fallback resolver', async () => {
-    const xml = '<edgarSubmission><genInfo><regName>ARK ETF Trust</regName><regCik>0001579982</regCik><seriesName>ARK Innovation ETF</seriesName><seriesId>S000012345</seriesId><repPdDate>2026-06-30</repPdDate></genInfo><fundInfo><netAssets>1000000</netAssets></fundInfo><invstOrSec><name>EXAMPLE CORP</name><ticker>EXM</ticker><cusip>123456789</cusip><balance>25</balance><valUSD>1000</valUSD><pctVal>0.1</pctVal><assetCat>EC</assetCat></invstOrSec></edgarSubmission>';
-    const parsed = parseNportXml(xml);
-    expect(parsed).toMatchObject({ regName: 'ARK ETF Trust', regCik: '0001579982', seriesName: 'ARK Innovation ETF', seriesId: 'S000012345', repPdDate: '2026-06-30', netAssets: 1_000_000 });
-    expect(nportToHoldings(parsed)[0]).toMatchObject({ Name: 'EXAMPLE CORP', Identifier: '123456789', Weight: '0.1%', 'Market Value': '1000', 'Shares Held': '25', 'Asset Category': 'EC' });
-    const companies = parseCompanyTickerMap({ '0': { cik_str: 1, ticker: 'EXM', title: 'Example Corporation' } });
-    const unticked = parseNportXml('<edgarSubmission><invstOrSec><name>Example Corporation</name><balance>1</balance><valUSD>50</valUSD><pctVal>0.1</pctVal><assetCat>EC</assetCat></invstOrSec></edgarSubmission>');
-    expect(nportToHoldings(unticked, companies)[0].Ticker).toBe('EXM');
+  test('SEC N-PORT (shared nport-reader): attribute identifiers, tickers only for U.S. equities, a missing weight from valUSD / net assets, empty missing numbers', () => {
+    const filing = parseNportFiling(nportXml('S000042977', '2026-07-31'));
+    expect([filing.seriesId, filing.repPdDate, filing.netAssets, filing.positions.length]).toEqual(['S000042977', '2026-07-31', 1_000_000, 4]);
+    const names = parseSecCompanyNames({ 0: { ticker: 'TSLA', title: 'Tesla, Inc.' }, 1: { ticker: 'ROKU', title: 'Roku, Inc' } });
+    const rows = nportToHoldings(filing, nportTickers(filing.positions, names));
+    // TSLA from the filer's <ticker value>, ROKU from the SEC name table, its weight 2000 / 1,000,000 net assets; CRISPR has a
+    // Swiss ISIN (no ticker), the money market fund keeps its own "other" code and an empty value and balance, never 0
+    expect(rows.map((row) => [row.Ticker, row.Identifier, row.Weight, row['Market Value'], row['Shares Held'], row['Asset Category']])).toEqual([
+      ['TSLA', '88160R101', '89.12%', '1000.5', '100', 'EC'],
+      ['ROKU', '77543R102', '0.2%', '2000', '5', 'EC'],
+      ['', 'H17182108', '0.3%', '3000', '7', 'EC'],
+      ['', 'X9USDGSFT', '10.38%', '', '', 'STIV'],
+    ]);
+    expect(parseSecFundTickers({ fields: ['cik', 'seriesId', 'classId', 'symbol'], data: [[1579982, 'S000042977', 'C000132931', 'ARKK']] }).get('ARKK')).toEqual({ cik: '0001579982', seriesId: 'S000042977', classId: 'C000132931' });
+  });
 
-    const map = parseFundTickerMap({ fields: ['cik', 'seriesId', 'classId', 'symbol'], data: [[1579982, 'S000012345', 'C000012345', 'ARKK'], [1869699, 'S000067890', 'C000067890', 'ARKB']] });
-    expect(map.get('ARKK')).toEqual({ cik: '0001579982', seriesId: 'S000012345', classId: 'C000012345' });
-    expect(map.get('ARKB')?.cik).toBe('0001869699');
-    const accessions = parseNportAccessions({ cik: '1579982', filings: { recent: {
-      form: ['NPORT-P', '497K'], accessionNumber: ['0001579982-26-000001', '0001579982-26-000002'], filingDate: ['2026-08-15', '2026-08-16'], reportDate: ['2026-06-30', ''],
-    } } });
-    expect(accessions).toHaveLength(1);
-    expect(accessions[0].url).toBe('https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/primary_doc.xml');
-    expect(nportUrlFor('0001579982', '0001579982-26-000001')).toContain('/1579982/000157998226000001/');
-    expect(edgarSeriesFilingsUrl('S000012345')).toContain('CIK=S000012345');
-    const atomLink = '<feed><entry><filing-type>NPORT-P</filing-type><accession-number>0001579982-26-000001</accession-number><filing-href>https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/</filing-href><period>2026-06-30</period></entry></feed>';
-    expect(parseEdgarAtomFilings(atomLink)[0].url).toContain('/1579982/000157998226000001/primary_doc.xml');
-    expect(parseEdgarAtomFilings('<feed><entry><category term="NPORT-P"/><updated>2026-09-01T00:00:00Z</updated><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/" rel="alternate"/></entry></feed>')).toEqual([{
-      accession: '0001579982-26-000001', filed: '2026-09-01T00:00:00Z', reportDate: '',
-      url: 'https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/primary_doc.xml',
-    }]);
-
+  test('N-PORT fallback resolver: own series only, the trust folder (never the filer agent), only strictly newer than the published holdings', async () => {
     const calls: string[] = [];
-    const sec = async (url: string) => {
-      calls.push(url);
-      if (url.endsWith('company_tickers_mf.json')) return respondWith(JSON.stringify({ fields: ['cik', 'seriesId', 'classId', 'symbol'], data: [[1579982, 'S000012345', 'C000012345', 'ARKK']] }), url);
-      if (url.includes('browse-edgar')) return respondWith('<feed><entry><category term="NPORT-P"/><link href="https://www.sec.gov/Archives/edgar/data/1579982/000157998226000001/"/></entry></feed>', url);
-      return respondWith(xml, url);
-    };
-    const result = await createSecFallbackResolver({ ...clientsFor(), sec })(arkkFund);
-    expect(result?.selected.accession).toBe('0001579982-26-000001');
-    expect(result?.parsed.seriesId).toBe('S000012345');
-    expect(result?.holdings[0]).toMatchObject({ Ticker: 'EXM', Weight: '0.1%', 'Shares Held': '25' });
-    expect(calls.some((url) => url.includes('/Archives/edgar/data/1579982/000157998226000001/primary_doc.xml'))).toBe(true);
+    const resolve = nportFallback('2026-07-31', calls);
+    const read = await resolve(arkkFund, { asOf: '', rows: 0 });
+    if ('problem' in read) throw new Error(read.problem);
+    expect([read.candidate.accession, read.filing.seriesId, read.holdings.length]).toEqual(['0001752724-26-200002', 'S000042977', 4]);
+    expect(read.holdings.map((row) => row.Ticker)).toEqual(['TSLA', 'ROKU', '', '']);
+    expect(calls).toContain('https://www.sec.gov/Archives/edgar/data/1579982/000175272426200002/primary_doc.xml');
+    expect(calls.some((url) => url.includes('/data/1752724/'))).toBe(false);
+    expect(await resolve(arkkFund, { asOf: '2026-10-23', rows: 46 })).toEqual({ problem: 'ARKK: N-PORT 2026-07-31 is not newer than the published holdings (2026-10-23)' });
+    expect('problem' in (await resolve(arkkFund, { asOf: '2026-06-30', rows: 46 }))).toBe(false);
+    // the SEC tables, the submissions and the documents are read once per run
+    expect(calls.filter((url) => url.endsWith('company_tickers_mf.json'))).toHaveLength(1);
+    expect(calls.filter((url) => url.endsWith('/000175272426200002/primary_doc.xml'))).toHaveLength(1);
+  });
+});
+
+describe('parsing 3', () => {
+  test('N-PORT freshness: a report replaces published holdings only when strictly newer; nothing published accepts any report', () => {
+    expect(nportIsFresh('2026-07-31', '2026-10-23', 46)).toBe(false); // the daily CSV sheet is newer than any N-PORT report
+    expect(nportIsFresh('2026-07-31', '2026-07-31', 46)).toBe(false);
+    expect(nportIsFresh('2026-07-31', '2026-06-30', 46)).toBe(true);
+    expect(nportIsFresh('', '2026-06-30', 46)).toBe(false);
+    expect(nportIsFresh('2026-07-31', '', 0)).toBe(true);
+    expect(nportIsFresh('2026-07-31', '', 46)).toBe(false); // published rows without a date cannot be compared: keep them
+  });
+
+  test('dates: month-name and U.S. dates are the same calendar day in every time zone', () => {
+    for (const tz of ['Asia/Tokyo', 'America/Los_Angeles', 'UTC']) {
+      process.env.TZ = tz;
+      expect(['Oct 24, 2026', 'October 24 2026', '24 Oct 2026', '10/24/2026', '10/24/26', '2026/10/24', '2026-10-24'].map((raw) => toIsoDate(raw))).toEqual(Array(7).fill('2026-10-24'));
+      expect(toIsoDate('Sat, 24 Oct 2026 23:30:00 GMT')).toBe('2026-10-24');
+      expect(toIsoDate('Sept. 30, 2026')).toBe('2026-09-30');
+      expect(toIsoDate('02/30/2026')).toBe(''); // no such day
+      expect(toIsoDate('not a date')).toBe('');
+    }
   });
 
   test('issuer API paths mirror the page parameters and proxy JSON is unwrapped', () => {
@@ -576,6 +607,22 @@ describe('metrics', () => {
       expect(arkk.metrics.dividendYieldBasis).toBe('computed-trailing-12m');
       expect(arkq.metrics.dividendYieldBasis).toBeNull();
       for (const row of after.funds) expect(Object.keys(row.metrics)).toEqual(Object.keys(arkq.metrics));
+    });
+  });
+
+  test('a fund younger than one year publishes no 1y or since-inception return, also when the returns come from Yahoo', async () => {
+    const young = { ...(overviewSample as Record<string, unknown>), detailsView: String((overviewSample as Record<string, unknown>).detailsView).replace('10/31/2014', '01/15/2026') };
+    const blank = performanceSample('08/31/2026', ['', '', '', '', ''], ['', '', '', '']); // the issuer table without figures: Yahoo is the source
+    const scenario = { overview: young, month: blank, quarter: blank, yahooPoints: 800, firstTrade: '2024-07-15' };
+    await withTempRoot(async (root) => {
+      await update(root, scenario);
+      const meta = await metaOf(root);
+      expect(meta.metrics.returnsBasis).toBe(YAHOO_RETURNS_BASIS);
+      expect([meta.metrics.ytd === null, meta.metrics.tr1y, meta.metrics.siAnn, meta.returns.monthEnd.yr1, meta.returns.monthEnd.sinceInception]).toEqual([false, null, null, null, null]);
+    });
+    await withTempRoot(async (root) => {
+      await update(root, { ...scenario, overview: overviewSample }); // the same history for a fund started in 2014 keeps them
+      expect((await metaOf(root)).metrics.tr1y).not.toBeNull();
     });
   });
 
@@ -759,7 +806,7 @@ describe('pipeline', () => {
       await update(root, {});
       const files = () => Promise.all(['meta.json', 'holdings/001.json', 'history/001.json'].map((name) => readFile(join(root, 'funds', 'ARKK', name), 'utf8')));
       const before = await files();
-      const csvFailed = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: oldNport('2026-06-30') });
+      const csvFailed = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: nportFallback('2026-06-30') });
       expect(csvFailed.status).toBe('failed');
       expect(csvFailed.reason).toContain('holdings CSV');
       expect(await files()).toEqual(before);
@@ -855,9 +902,14 @@ describe('pipeline 2', () => {
     });
     await withTempRoot(async (root) => {
       await update(root, { csv: csvAt('06/01/2026') });
-      const result = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: oldNport('2026-08-31') });
+      const result = await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: nportFallback('2026-08-31') });
       expect(result.status).toBeUndefined();
-      expect((await metaOf(root)).holdings).toMatchObject({ source: 'SEC EDGAR Form N-PORT-P fallback', asOfDate: 'Aug 31 2026' });
+      const meta = await metaOf(root);
+      expect(meta.holdings).toMatchObject({ source: 'SEC EDGAR Form N-PORT-P fallback (accession 0001752724-26-200002, report period 2026-08-31)', asOfDate: 'Aug 31 2026', totalRows: 4 });
+      expect(meta.source).toMatchObject({ nportDoc: 'https://www.sec.gov/Archives/edgar/data/1579982/000175272426200002/primary_doc.xml', edgarFiling: { accession: '0001752724-26-200002', reportDate: '2026-08-31' } });
+      // the next run with the CSV still down: the same report is not newer than the N-PORT sheet it published, the fund is kept
+      expect((await update(root, { csv: new Error('HTTP 403') }, { EDGAR_FALLBACK: '1' }, { secFallback: nportFallback('2026-08-31') })).status).toBe('failed');
+      expect((await metaOf(root)).holdings.asOfDate).toBe('Aug 31 2026');
     });
   });
 
@@ -1012,7 +1064,124 @@ describe('pipeline 3', () => {
       const clients = { ...base, ark: async (url: string) => url.endsWith('/our-etfs/') ? respondWith(html, url) : base.ark(url) };
       const report = await runUpdater({ config: quietConfig({ CATEGORY: 'nothing-matches' }), apiRoot: root, clients, ...quiet });
       expect(report.newFunds).toEqual(['ARKZ']);
-      expect(await readFile(summary, 'utf8')).toContain('NEW FUNDS: ARKZ');
+      expect(await readFile(summary, 'utf8')).toBe('### NEW FUNDS\n\nNEW FUNDS (not in the ARK catalog): ARKZ listed on https://www.ark-funds.com/our-etfs/ but missing from ARK_FUNDS: add them to the catalog\n');
+    });
+  });
+});
+
+describe('pipeline 4', () => {
+  const tree = async (root: string): Promise<Record<string, string>> => {
+    const out: Record<string, string> = {};
+    const walk = async (dir: string): Promise<void> => {
+      for (const item of (await readdir(dir, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
+        const full = join(dir, item.name);
+        if (item.isDirectory()) await walk(full);
+        else out[full.slice(root.length)] = await readFile(full, 'utf8');
+      }
+    };
+    await walk(root);
+    return out;
+  };
+  const epoch = (date: string): number => Math.floor(Date.parse(`${date}T00:00:00Z`) / 1000);
+  // Yahoo answers a HISTORY_RANGE window with the newest `days` of the same series, distributions inside the window only
+  const windowedYahoo = (full: number, days: number, dividends: NonNullable<Scenario['dividends']>, firstTrade?: string) => async (url: string) => {
+    const payload: any = yahooPayload(full, firstTrade, dividends);
+    const result = payload.chart.result[0];
+    result.timestamp = result.timestamp.slice(-days);
+    result.indicators.quote[0].close = result.indicators.quote[0].close.slice(-days);
+    result.indicators.quote[0].volume = result.indicators.quote[0].volume.slice(-days);
+    result.indicators.adjclose[0].adjclose = result.indicators.adjclose[0].adjclose.slice(-days);
+    result.events.dividends = Object.fromEntries(Object.entries(dividends).filter(([, event]) => event.date >= result.timestamp[0]));
+    return respondWith(JSON.stringify(payload), url);
+  };
+
+  test('a HISTORY_RANGE run after a full run keeps the older history and distributions and writes nothing (Q25)', async () => {
+    const dividends = { a: { date: epoch('2025-03-20'), amount: 0.25 }, b: { date: epoch('2026-06-18'), amount: 0.3 } };
+    // official NAV history (every ARK fund today): only the distributions come from Yahoo
+    await withTempRoot(async (root) => {
+      await update(root, { history: navPoints(800), yahooPoints: 800, dividends });
+      const first = await tree(root);
+      expect((await metaOf(root)).distributions.rows).toEqual([['Jun 18 2026', '$0.3000'], ['Mar 20 2025', '$0.2500']]);
+      await updateArkFund(arkkFund, quietConfig({ HISTORY_RANGE: '1y' }), { ...clientsFor({ history: navPoints(800) }), yahoo: windowedYahoo(800, 300, dividends) }, { apiRoot: root, referenceDate: REF, ...quiet });
+      expect(await tree(root)).toEqual(first);
+    });
+    // a Yahoo history (the issuer skipped): older days are joined back, an empty published Volume cell stays empty
+    await withTempRoot(async (root) => {
+      const env = { SKIP_ARK: '1', EDGAR_FALLBACK: '0' };
+      await update(root, { yahooPoints: 800, dividends, firstTrade: '2024-07-15' }, env);
+      const page = join(root, 'funds', 'ARKK', 'history', '001.json');
+      const history = await readJson(page);
+      history.rows[0].Volume = '';
+      await Bun.write(page, JSON.stringify(history));
+      const first = await tree(root);
+      await updateArkFund(arkkFund, quietConfig({ ...env, HISTORY_RANGE: '1y' }), { ...clientsFor({}), yahoo: windowedYahoo(800, 300, dividends, '2024-07-15') }, { apiRoot: root, referenceDate: REF, ...quiet });
+      expect(await tree(root)).toEqual(first);
+      expect((await metaOf(root)).history.totalRows).toBe(800);
+    });
+  });
+
+  test('a relaxed guard still keeps numeric published weights from an all-dash sheet (Q24)', async () => {
+    const dashes = arkkCsv.replace(/,[0-9.]+%(?=\r\n)/g, ',-');
+    await withTempRoot(async (root) => {
+      await update(root, {});
+      const first = await tree(root);
+      HOLDINGS_GUARD_RELAX.ARKK = ['numeric', 'sum'];
+      try {
+        const result = await update(root, { csv: dashes });
+        expect(result.status).toBe('failed');
+        expect(result.reason).toContain('no row has a numeric weight, the published sheet had 3');
+      } finally {
+        delete HOLDINGS_GUARD_RELAX.ARKK;
+      }
+      expect(await tree(root)).toEqual(first);
+      expect(holdingsWeightCount(['Name', 'Weight'], [['A', '-'], ['B', '2%']])).toBe(1);
+    });
+  });
+
+  test('TICKERS outside the catalog and the published feed stops the run before any request; a stale catalog-only row is dropped (Q27)', async () => {
+    await withTempRoot(async (root) => {
+      await run(root, { TICKERS: 'ARKK', EDGAR_FALLBACK: '0' });
+      const index = await readJson(join(root, 'index.json'));
+      index.funds.push({ ...index.funds.find((row: any) => row.ticker === 'ARKQ'), ticker: 'NOPE', name: 'NOPE' });
+      await Bun.write(join(root, 'index.json'), JSON.stringify(index));
+      const before = await tree(root);
+      const calls: string[] = [];
+      const base = clientsFor({});
+      const counted = (fetchOne: (url: string) => Promise<ReturnType<typeof respondWith>>) => async (url: string) => { calls.push(url); return fetchOne(url); };
+      const clients = { ...base, ark: counted(base.ark), azure: counted(base.azure), yahoo: counted(base.yahoo), sec: counted(base.sec) };
+      const config = { ...quietConfig({ EDGAR_FALLBACK: '0' }), tickers: ['NOPE'] };
+      await expect(runUpdater({ config, apiRoot: root, clients, referenceDate: REF, ...quiet })).rejects.toThrow('TICKERS: NOPE not in the ARK catalog or published feed; nothing was fetched or written');
+      expect(calls).toEqual([]);
+      expect(await tree(root)).toEqual(before);
+      await run(root, { TICKERS: 'ARKK', EDGAR_FALLBACK: '0' });
+      const rows = (await readJson(join(root, 'index.json'))).funds;
+      expect(rows).toHaveLength(14);
+      expect(rows.some((row: any) => row.ticker === 'NOPE')).toBe(false);
+    });
+  });
+
+  test('NEW FUNDS announces a fund on its first successful publish, a new unread fund as not published yet (Q28)', async () => {
+    await withTempRoot(async (root) => {
+      await run(root, { TICKERS: 'ARKK', EDGAR_FALLBACK: '0' });
+      const index = await readJson(join(root, 'index.json'));
+      index.funds = index.funds.filter((row: any) => !['ARKB', 'ARKY'].includes(row.ticker)); // two funds the feed never listed
+      await Bun.write(join(root, 'index.json'), JSON.stringify(index));
+      process.env.GITHUB_STEP_SUMMARY = join(root, 'summary.md');
+      const lines: string[] = [];
+      const log = console.log;
+      console.log = (line: unknown) => { if (/^NEW FUNDS/.test(String(line))) lines.push(String(line)); };
+      try {
+        await run(root, { TICKERS: 'ARKK ARKY', EDGAR_FALLBACK: '0' });
+        expect(lines).toEqual(['NEW FUNDS: ARKY', 'NEW FUNDS (not published yet): ARKB']);
+        expect(await readFile(process.env.GITHUB_STEP_SUMMARY, 'utf8')).toBe('### NEW FUNDS\n\nNEW FUNDS: ARKY\nNEW FUNDS (not published yet): ARKB\n');
+        lines.length = 0;
+        await run(root, { TICKERS: 'ARKK ARKY', EDGAR_FALLBACK: '0' });
+        expect(lines).toEqual([]);
+        await run(root, { TICKERS: 'ARKB', EDGAR_FALLBACK: '0' });
+        expect(lines).toEqual(['NEW FUNDS: ARKB']);
+      } finally {
+        console.log = log;
+      }
     });
   });
 });
