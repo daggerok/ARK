@@ -506,6 +506,12 @@ describe('parsing 3', () => {
     expect(nportIsFresh('2026-07-31', '', 46)).toBe(false); // published rows without a date cannot be compared: keep them
   });
 
+  test('holdings CSV tickers: a U.S. composite or exchange suffix is dropped, a foreign exchange code stays (Q34)', () => {
+    const csv = ['date,fund,company,ticker,cusip,shares,market value ($),weight (%)', ...[['DENTSPLY SIRONA INC', 'XRAY UW'], ['ROCKET LAB CORP', 'RKLB UQ'], ['GARMIN LTD', 'GRMN UN'], ['ACME INC', 'ACME US'], ['DASSAULT SYSTEMES SE', 'DSY FP'], ['HEXAGON AB-B SHS', 'HEXAB SS'], ['AUTODESK INC', 'ADSK'], ['BERKSHIRE HATHAWAY INC-CL B', 'BRK/B UN']]
+      .map(([name, ticker], i) => `09/28/2026,PRNT,${name},${ticker},CUSIP${i},"1","$1",12.5%`)].join('\n');
+    expect(parseArkHoldingsCsv(csv, 'PRNT').rows.map((row) => row.Ticker)).toEqual(['XRAY', 'RKLB', 'GRMN', 'ACME', 'DSY FP', 'HEXAB SS', 'ADSK', 'BRK/B']);
+  });
+
   test('dates: month-name and U.S. dates are the same calendar day in every time zone', () => {
     for (const tz of ['Asia/Tokyo', 'America/Los_Angeles', 'UTC']) {
       process.env.TZ = tz;
