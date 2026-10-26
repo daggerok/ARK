@@ -68,7 +68,7 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 - `ytd` / `tr1y` — official YTD and 1-year NAV returns → *YTD Return*, *TR 1Y*
 - `cagr3y` / `cagr5y` / `cagr10y` — published annualized 3Y/5Y/10Y figures → *CAGR 3Y/5Y/10Y*
 - `tr3y` / `tr5y` / `tr10y` — cumulative 3Y/5Y/10Y figures `(1 + CAGR)^n - 1` → *TR 3Y/5Y/10Y*
-- `siAnn` — since-inception annualized → *SI Ann.*; only for funds at least one year old (and, for Yahoo-derived values, only when the history window reaches the first trade, so `HISTORY_RANGE=2y` never labels the window start as inception). Horizons longer than the fund's age (for example 3Y for a fund under three years old) are `null`
+- `siAnn` — since-inception annualized → *SI Ann.*; only for funds at least one year old (and, for Yahoo-derived values, only when the history window reaches the first trade, so `HISTORY_RANGE=2y` never labels the window start as inception). Horizons longer than the fund's age (for example 3Y for a fund under three years old) are `null`: a fund younger than one year (calendar anniversary of its inception date, inclusive) publishes no 1-year or since-inception return, and no 3, 5 or 10-year one before those anniversaries, official, Yahoo-derived or retained alike
 - `dividendYield` — indicated yield (latest Yahoo Finance distribution × inferred payments per year ÷ market price; monthly 12, quarterly 4, semi-annual 2, annual 1) or trailing 12-month yield; `—` when no distributions are reported
 - `dividendYieldBasis` — short code of the definition behind `dividendYield`, `null` exactly when `dividendYield` is `null`. ARK publishes no distribution yield, so every ARK yield is an updater figure, never an official one. A retained yield keeps its code; a pre-existing row without one is derived from its `dividendYieldKind` text in `meta.json`:
 
@@ -84,13 +84,15 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 - Every `metrics` object carries the full key set in a fixed order, with `returnsBasis` and `performanceAsOf` last; unavailable values are `null`
 
 - Official NAV returns come from ark-funds.com; market-price history and distribution-based yields come from Yahoo Finance and are estimates, not official figures
-- Unavailable values are shown as `—` and are never written as `0`
+- Unavailable values are shown as `—` and are never written as `0` (a missing N-PORT value, balance or weight is an empty cell)
+- Dates such as `09/28/2026`, `Sep 28 2026` or `September 28, 2026` are read as plain calendar text, never through the local time zone, so local runs match CI
 - ARKVX (an interval fund) is excluded from the catalog; ARKY uses a structured-note holdings layout
-- The 14-fund catalog stays built in: the official ETF page lists only fund slugs (no names, CSV file names or trust data), so a new ARK fund cannot be fully described automatically. Each run reads the page, prints `NEW FUNDS: A, B` (also appended to `$GITHUB_STEP_SUMMARY`) for any fund that is listed there or missing from the previous index, and the fund must then be added to `ARK_FUNDS`
+- The 14-fund catalog stays built in: the official ETF page lists only fund slugs (no names, CSV file names or trust data), so a new ARK fund cannot be fully described automatically. Each run reads the page and prints `NEW FUNDS (not in the ARK catalog): ...` for a fund listed there but missing from `ARK_FUNDS`, which must then be added by hand. After the index is written, `NEW FUNDS: A, B` names funds published for the first time (also when the first read failed and a later run succeeds) and `NEW FUNDS (not published yet): ...` new catalog funds whose first read failed; all of these lines are also appended to `$GITHUB_STEP_SUMMARY` under `### NEW FUNDS`. A catalog-only row whose ticker `ARK_FUNDS` no longer lists is dropped
 - TER: ARK publishes one expense ratio (the fund page `EXPENSE RATIO`, or `TOTAL FEES`); it is published as `terValue` (net, the only figure available) and no gross figure is invented
-- Holdings `asOfDate` is the newest row date of the CSV; a snapshot older than 7 days is always printed as a `[ stale ]` warning and an N-PORT-P fallback never replaces holdings that are newer than its report period
+- Holdings `asOfDate` is the newest row date of the CSV; a snapshot older than 7 days is always printed as a `[ stale ]` warning
 - The index row of a fund without `funds/<T>/meta.json` has `dataFile: null` and a full `metrics` object of nulls
 - Each fund records its holdings source (official CSV or SEC EDGAR N-PORT-P fallback) and as-of date; a fund whose sources fail keeps its previously published data
+- SEC EDGAR N-PORT-P is read only when the CSV is unavailable and `EDGAR_FALLBACK` is on: the filing must name the fund's own series (the series id SEC lists for the ticker under the fund's trust CIK, the fund name only when SEC lists none), the newest report period comes first, `primary_doc.xml` is read from the trust's own EDGAR folder, and it replaces the published holdings only when its report period is strictly newer than them (the daily CSV sheet is always newer, so it is kept; an undated published sheet is kept too). N-PORT identifiers are the position's own (a derivative never takes its reference security's CUSIP or ticker), a ticker is set only for a U.S. equity traded in USD and never on two different securities, a missing weight is the filing's own value / net assets, and a missing value stays empty
 
 ### Update controls
 
@@ -104,13 +106,13 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
 | `DIVIDEND_YIELD` | `:` | Dividend-yield percentage range. |
 | `SEC_YIELD` | `:` | 30-day SEC yield percentage range. |
 | `CATEGORY` | all | Case-insensitive substring of the fund category, e.g. `Thematic`. |
-| `TICKERS` | all | Space-, comma- or semicolon-separated ticker allowlist, e.g. `ARKK ARKW ARKG ARKB`. |
+| `TICKERS` | all | Space-, comma- or semicolon-separated ticker allowlist, e.g. `ARKK ARKW ARKG ARKB`; a ticker that is neither in the ARK catalog nor a published fund is an error before any request (nothing is written). |
 | `PERFORMANCE_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Official annualized NAV return ranges in %; a bounded range excludes funds without that figure. |
 | `TOTAL_RETURN_YTD` / `_1Y` / `_3Y` / `_5Y` / `_10Y` | `:` | Cumulative NAV total-return ranges in %; a bounded range excludes funds without that figure. |
 | `HOLDINGS_PAGE_SIZE` | `250` | Rows in each generated current-holdings JSON page. |
 | `HISTORY_PAGE_SIZE` | `1000` | Rows in each generated daily-history JSON page. |
 | `MAX_RETRIES` | `2` | Retries after the initial request (integer >= 1). Only network errors (including the 45-second per-request timeout) and HTTP 408/425/429/5xx are retried with exponential backoff and `Retry-After`. |
-| `HISTORY_RANGE` | `max` | `max` or `Ny` (for example `5y`): limits the Yahoo request window (explicit period1/period2) and the fresh daily-history rows to the last N years; older published rows are merged back and no history page is pruned because of a shorter window. |
+| `HISTORY_RANGE` | `max` | `max` or `Ny` (for example `5y`): limits the Yahoo request window (explicit period1/period2) and the fresh daily-history rows to the last N years; older published rows are merged back and no history page is pruned because of a shorter window. A Yahoo history window keeps the older published days (rescaled by the overlapping days) and distributions; a window that does not join the published history keeps the fund as published. |
 | `SEC_UA` | `daggerok ETF feed daggerok@gmail.com` | SEC User-Agent; SEC policy requires automated tools to declare a contact. The protected `SEC_UA` Actions variable overrides it when nonblank. |
 | `EDGAR_FALLBACK` | on | Set to `0`/`false` to disable the SEC EDGAR N-PORT-P holdings fallback. |
 | `SKIP_ARK` | off | Do not request ark-funds.com; keep the fixed catalog and previously published official data and only run the fallbacks. |
