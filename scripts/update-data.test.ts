@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import {
   ARK_FUNDS,
   ARKY_HOLDINGS_HEADERS,
+  CLOSED_FUNDS,
   CONTROL_NAMES,
   DEFAULT_SEC_UA,
   HOLDINGS_HEADERS,
@@ -27,6 +28,7 @@ import {
   buildOfficialReturns,
   buildPageEnvelope,
   buildYahooReturns,
+  closedFund,
   createPacedGate,
   createRequestClients,
   createSecFallbackResolver,
@@ -405,7 +407,9 @@ describe('parsing', () => {
     expect(holdingsGuard(headers, allocation, 2, ['sum'])).toBeNull();
     expect(holdingsGuard(headers, rows, 5)).toContain('less than half');
   });
+});
 
+describe('parsing 2', () => {
   test('numbers and dates: unavailable values are null never 0, dates are time-zone independent', () => {
     for (const value of ['$', '%', ',', '$,%', ' $ ', '—']) expect(numberOrNull(value)).toBeNull();
     expect(numberOrNull('$0')).toBe(0);
@@ -580,7 +584,9 @@ describe('metrics', () => {
     expect(buildOfficialReturns(month, null, '2023-09-26').metrics).toMatchObject({ tr1y: 1.1, cagr3y: null, tr3y: null, siAnn: 1.38 }); // 2.93 years old
     expect(buildOfficialReturns(month, null, '2020-01-01').metrics).toMatchObject({ cagr3y: 5, cagr5y: 6 });
   });
+});
 
+describe('metrics 2', () => {
   test('Yahoo-derived returns: completed month/quarter ends only, inception figures only from a window that reaches the first trade', () => {
     const points = [
       { date: '2025-06-30', close: 100, adjClose: 100, volume: 1 },
@@ -763,7 +769,9 @@ describe('pipeline', () => {
       expect(await files()).toEqual(before);
     });
   });
+});
 
+describe('pipeline 2', () => {
   test('holdings that fail the guard keep the fund exactly as published and report it failed', async () => {
     const broken = arkkCsv.replace(/,[0-9.]+%(?=\r\n)/g, ',-'); // every weight cell becomes "-"
     await withTempRoot(async (root) => {
@@ -786,6 +794,51 @@ describe('pipeline', () => {
       expect(report?.failedTickers).toEqual(['ARKK']);
       expect(process.exitCode).toBe(1);
       expect(await snapshot()).toEqual(first);
+    });
+  });
+
+  test('a closed fund is never fetched or reported failed: its files stay as published, its index row says closed, a rerun writes nothing', async () => {
+    const entry = { ticker: 'ARKK', closed: '2026-10-01', source: 'https://www.sec.gov/Archives/edgar/data/1/notice.htm' };
+    expect(() => closedFund([{ ...entry, closed: 'soon' }], 'ARKK')).toThrow('CLOSED_FUNDS');
+    expect(closedFund([entry], 'arkk')).toEqual(entry);
+    const broken = arkkCsv.replace(/,[0-9.]+%(?=\r\n)/g, ',-'); // the guard would reject these holdings
+    await withTempRoot(async (root) => {
+      const snapshot = async (): Promise<Record<string, string>> => {
+        const out: Record<string, string> = {};
+        const walk = async (dir: string): Promise<void> => {
+          for (const item of (await readdir(dir, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
+            const full = join(dir, item.name);
+            if (item.isDirectory()) await walk(full);
+            else out[full.slice(root.length)] = await readFile(full, 'utf8');
+          }
+        };
+        await walk(root);
+        return out;
+      };
+      const env = { TICKERS: 'ARKK', EDGAR_FALLBACK: '0', REQUEST_SLEEP: '0' };
+      await main([], env, { apiRoot: root, clients: clientsFor({}), referenceDate: REF, ...quiet });
+      const first = await snapshot();
+      const calls: string[] = [];
+      const base = clientsFor({ csv: broken });
+      const record = (fetchOne: (url: string) => Promise<ReturnType<typeof respondWith>>) => async (url: string) => { calls.push(url); return fetchOne(url); };
+      const clients = { ...base, ark: record(base.ark), azure: record(base.azure), yahoo: record(base.yahoo), sec: record(base.sec) };
+      CLOSED_FUNDS.push(entry);
+      try {
+        const report = await main([], env, { apiRoot: root, clients, referenceDate: REF, ...quiet });
+        expect(calls.filter((url) => /arkk/i.test(url))).toEqual([]);
+        expect(report?.failedTickers).toEqual([]);
+        expect(process.exitCode).not.toBe(1);
+        const closed = await snapshot();
+        for (const file of Object.keys(first)) if (file !== '/index.json') expect([file, closed[file]]).toEqual([file, first[file]]);
+        const rows = JSON.parse(closed['/index.json']).funds;
+        expect(rows).toHaveLength(14);
+        expect(rows.find((row: any) => row.ticker === 'ARKK')).toMatchObject({ status: 'closed', closedDate: '2026-10-01', closedSource: entry.source, dataFile: 'funds/ARKK/meta.json' });
+        expect(rows.filter((row: any) => row.status === 'closed')).toHaveLength(1);
+        await main([], env, { apiRoot: root, clients, referenceDate: REF, ...quiet });
+        expect(await snapshot()).toEqual(closed);
+      } finally {
+        CLOSED_FUNDS.splice(CLOSED_FUNDS.indexOf(entry), 1);
+      }
     });
   });
 
@@ -829,7 +882,9 @@ describe('pipeline', () => {
       expect((await metaOf(root)).metrics.siAnn).toBeNull();
     });
   });
+});
 
+describe('pipeline 3', () => {
   test('writes are atomic and deterministic; stale pages go only after meta.json is written', async () => {
     expect(splitPages([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
     expect(() => splitPages([1], 0)).toThrow('positive integer');
@@ -1085,7 +1140,9 @@ describe('network', () => {
     await expect(guarded(stalledBody.azure('https://assets.example.test/fund.csv'))).resolves.toMatchObject({ text: 'recovered' });
     expect(bodyCalls).toBe(2);
   }, 10_000);
+});
 
+describe('network 2', () => {
   test('timeout starts when the request starts, not while it waits in a pacing queue', async () => {
     const retries: string[] = [];
     // 4 requests behind a 300 ms lane with a 1 s timeout: queue wait of the last one (900 ms) must not count
