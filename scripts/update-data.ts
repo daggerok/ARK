@@ -505,6 +505,8 @@ export function parseArkHoldingsCsv(text: string, tickerValue: string, modifiedA
       const name = at(row, 'position');
       if (!name) continue;
       const cusip = at(row, 'cusip');
+      // the issuer appends its legal disclaimer as one more "position" without a CUSIP or a weight: it is no holding
+      if (!cusip && numberOrNull(at(row, 'marketweight')) === null) continue;
       const notional = at(row, 'notionalpernote');
       rows.push({
         Name: name,

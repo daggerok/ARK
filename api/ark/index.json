@@ -23,7 +23,7 @@
   "counts": {
     "funds": 14,
     "history": 21693,
-    "holdings": 416
+    "holdings": 415
   },
   "funds": [
     {
@@ -846,7 +846,7 @@
       "exchange": "Cboe BZX",
       "fundPage": "https://www.ark-funds.com/funds/arky",
       "history": 47,
-      "holdings": 49,
+      "holdings": 48,
       "inceptionDate": "Aug 19 2026",
       "isin": "US00214Q7245",
       "metrics": {
@@ -1049,5 +1049,5 @@
       "ticker": "PRNT"
     }
   ],
-  "generatedAt": "2026-10-25T04:08:27Z"
+  "generatedAt": "2026-10-26T05:20:19Z"
 }
