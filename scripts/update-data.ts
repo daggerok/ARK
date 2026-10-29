@@ -172,7 +172,7 @@ function outputFundLine(index: number, total: number, ticker: string, status: st
     field('sec', outputPercent(data.secYield ?? data.yields?.secYield ?? metrics.secYield)),
     field('wp', data.workplaceRaw),
   ].filter(part => part !== '').join(' ');
-  return `[ ${String(index).padStart(width)}/${String(total).padEnd(width)}  ] ${outputClean(ticker).padEnd(5)} ${status.padEnd(9)}${detail ? ` ${detail}` : ''}${reason ? ` reason=${outputClean(reason)}` : ''}`;
+  return `[ ${`${String(index).padStart(width)}/${total}`.padEnd(8)} ] ${outputClean(ticker).padEnd(5)} ${status.padEnd(9)}${detail ? ` ${detail}` : ''}${reason ? ` reason=${outputClean(reason)}` : ''}`;
 }
 function outputCreateReporter(root: URL | string, total: number) {
   let completed = 0;
@@ -1583,7 +1583,7 @@ async function requestTextWithRetry(
         throw new Error(`${provider} request failed for ${url} after ${attempt + 1} attempt(s): ${detail}`);
       }
       const wait = Math.min(30_000, 500 * (2 ** attempt));
-      const message = `[ ${'retry'.padEnd(9)}] ${provider} network error (${detail.slice(0, 120)}) for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
+      const message = `[ ${'retry'.padEnd(8)} ] ${provider} network error (${detail.slice(0, 120)}) for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
       (runtime.onRetry ?? outputNote)(message);
       await sleep(wait);
       continue;
@@ -1592,7 +1592,7 @@ async function requestTextWithRetry(
     const failure = new ProviderHttpError(provider, url, response.status, response.statusText, responseText);
     if (!retryableStatus(response.status) || attempt >= config.maxRetries) throw failure;
     const wait = retryDelay(response, attempt, now);
-    const message = `[ ${'retry'.padEnd(9)}] ${provider} HTTP ${response.status} for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
+    const message = `[ ${'retry'.padEnd(8)} ] ${provider} HTTP ${response.status} for ${url}; retry ${attempt + 1}/${config.maxRetries} in ${wait}ms`;
     (runtime.onRetry ?? outputNote)(message);
     await sleep(wait);
   }
@@ -1694,7 +1694,7 @@ export function createRequestClients(config: UpdaterConfig, runtime: RequestRunt
         const firstSwitch = !arkProxyActive;
         arkProxyActive = true;
         if (firstSwitch) {
-          const notice = `[ ${'issuer'.padEnd(9)}] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests (shared limit of about 20 requests per minute).`;
+          const notice = `[ ${'issuer'.padEnd(8)} ] ARK direct requests returned ${consecutiveArkDenials} consecutive HTTP 403 responses; using the read-only r.jina.ai proxy for remaining issuer requests (shared limit of about 20 requests per minute).`;
           // Printed through outputNote so it never lands between fund lines; runUpdater reports the switch before the fund loop.
           (runtime.onIssuerProxy ?? outputNote)(notice);
         }
@@ -1782,7 +1782,7 @@ export function createSecFallbackResolver(clients: RequestClients): SecFallbackR
   return async (fund: ArkFund, published: { asOf: string; rows: number }): Promise<SecHoldingResult> => {
     const series = (await fundTickers()).get(fund.ticker);
     if (series && series.cik !== fund.trustCik) {
-      outputNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} SEC ticker map CIK ${series.cik} did not match expected trust ${fund.trustCik}; matching the filing by fund name`);
+      outputNote(`[ ${'edgar'.padEnd(8)} ] ${fund.ticker} SEC ticker map CIK ${series.cik} did not match expected trust ${fund.trustCik}; matching the filing by fund name`);
     }
     const seriesId = series && series.cik === fund.trustCik ? series.seriesId : null;
     const read = await readNportHoldings(
@@ -1793,7 +1793,7 @@ export function createSecFallbackResolver(clients: RequestClients): SecFallbackR
     );
     if ('problem' in read) return read;
     const names = await companyNames().catch((error: unknown) => {
-      outputNote(`[ ${'edgar'.padEnd(9)}] SEC company ticker map unavailable: ${error instanceof Error ? error.message : cleanText(error)}`);
+      outputNote(`[ ${'edgar'.padEnd(8)} ] SEC company ticker map unavailable: ${error instanceof Error ? error.message : cleanText(error)}`);
       return null;
     });
     return { ...read, holdings: nportToHoldings(read.filing, nportTickers(read.filing.positions, names, await loadUsListings())) };
@@ -2110,7 +2110,7 @@ type OfficialFundData = {
 
 function noteSourceFailure(onNote: (message: string) => void, source: string, ticker: string, error: unknown): void {
   const detail = error instanceof Error ? error.message : cleanText(error);
-  onNote(`[ ${source.padEnd(9)}] ${ticker} ${detail}`);
+  onNote(`[ ${source.padEnd(8)} ] ${ticker} ${detail}`);
 }
 
 async function fetchOfficialFundData(
@@ -2294,7 +2294,7 @@ export async function updateArkFund(
   let yahoo = fetchedYahoo;
   if (yahoo && historyWindowStartEpoch(config.historyRange, Math.floor(referenceDate.getTime() / 1000)) > 0) {
     yahoo = joinYahooWindow(yahoo, previousHistory, readDistributionWorksheet(previousCombined).rows);
-    if (!yahoo) onNote(`[ ${'chart'.padEnd(9)}] ${fund.ticker} chart window does not join the published history (${config.historyRange})`);
+    if (!yahoo) onNote(`[ ${'chart'.padEnd(8)} ] ${fund.ticker} chart window does not join the published history (${config.historyRange})`);
   }
 
   const failedSources: string[] = [];
@@ -2316,7 +2316,7 @@ export async function updateArkFund(
       // the fund's own newest filing, used only when strictly newer than the published holdings (shared nport-reader block):
       // the issuer's daily CSV is newer than any N-PORT report, so a published CSV sheet is kept
       const read = await secFallback(fund, { asOf: previousHoldingsAsOf, rows: previousHoldings.rows.length });
-      if ('problem' in read) onNote(`[ ${'edgar'.padEnd(9)}] ${read.problem}; keeping the published rows`);
+      if ('problem' in read) onNote(`[ ${'edgar'.padEnd(8)} ] ${read.problem}; keeping the published rows`);
       else {
         holdingsRows = read.holdings;
         holdingsHeaders = HOLDINGS_HEADERS;
@@ -2324,7 +2324,7 @@ export async function updateArkFund(
         holdingsSource = `SEC EDGAR Form N-PORT-P fallback (accession ${read.candidate.accession}, report period ${read.filing.repPdDate || 'n/a'})`;
         edgarFiling = { accession: read.candidate.accession, filed: read.candidate.filed, reportDate: read.filing.repPdDate, url: read.url };
         nportDoc = read.url;
-        onNote(`[ ${'edgar'.padEnd(9)}] ${fund.ticker} using N-PORT-P ${read.candidate.accession} (${read.filing.repPdDate}, ${holdingsRows.length} positions)`);
+        onNote(`[ ${'edgar'.padEnd(8)} ] ${fund.ticker} using N-PORT-P ${read.candidate.accession} (${read.filing.repPdDate}, ${holdingsRows.length} positions)`);
       }
     } catch (error) { noteSourceFailure(onNote, 'edgar', fund.ticker, error); }
   }
@@ -2335,7 +2335,7 @@ export async function updateArkFund(
     holdingsAsOfDate = previousHoldingsAsOf;
     holdingsSource = stringField(record(previousMeta?.holdings), 'source', stringField(previousSource, 'holdingsSource', 'previously published holdings (retained)'));
     nportDoc = stringField(previousSource, 'nportDoc') || null;
-    onNote(`[ ${'holdings'.padEnd(9)}] ${fund.ticker} retaining ${holdingsRows.length} previously published holdings rows`);
+    onNote(`[ ${'holdings'.padEnd(8)} ] ${fund.ticker} retaining ${holdingsRows.length} previously published holdings rows`);
   }
   if (!holdingsHeaders.length) holdingsHeaders = fund.ticker === 'ARKY' ? ARKY_HOLDINGS_HEADERS : HOLDINGS_HEADERS;
   if (!holdingsAsOfDate) holdingsAsOfDate = toIsoDate(record(previousMeta?.holdings).asOfDate);
@@ -2371,7 +2371,7 @@ export async function updateArkFund(
     historyRows = previousHistory.rows;
     historyAsOfDate = toIsoDate(previousHistory.asOfDate) || stringField(record(previousMeta?.history), 'asOfDate');
     historySource = stringField(record(previousMeta?.history), 'source', stringField(previousSource, 'historySource', 'previously published history (retained)'));
-    onNote(`[ ${'history'.padEnd(9)}] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
+    onNote(`[ ${'history'.padEnd(8)} ] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
   } else if (yahoo && yahooPoints.length) {
     historyHeaders = yahooHistoryHeaders;
     historyRows = mergeHistoryRows(previousHistory, historyHeaders, buildYahooHistoryRows(yahooPoints));
@@ -2382,7 +2382,7 @@ export async function updateArkFund(
     historyRows = previousHistory.rows;
     historyAsOfDate = toIsoDate(previousHistory.asOfDate) || stringField(record(previousMeta?.history), 'asOfDate');
     historySource = stringField(record(previousMeta?.history), 'source', stringField(previousSource, 'historySource', 'previously published history (retained)'));
-    onNote(`[ ${'history'.padEnd(9)}] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
+    onNote(`[ ${'history'.padEnd(8)} ] ${fund.ticker} retaining ${historyRows.length} previously published history rows`);
   }
   if (!historyHeaders.length) historyHeaders = config.skipYahoo ? HISTORY_HEADERS : YAHOO_HISTORY_HEADERS;
 
@@ -2492,7 +2492,7 @@ export async function updateArkFund(
   const holdingsAgeDays = dateAgeDays(holdingsAsOfDate, referenceDate);
   if (csvResult && holdingsAgeDays !== null && holdingsAgeDays > 7) {
     // Always printed (not only with VERBOSE): a stale snapshot must not be published silently.
-    onWarn(`[ ${'stale'.padEnd(9)}] ${fund.ticker} holdings CSV snapshot is ${holdingsAgeDays} days old (as of ${holdingsAsOfDate}); the source date is preserved and HTTP 200 is not treated as evidence of freshness.`);
+    onWarn(`[ ${'stale'.padEnd(8)} ] ${fund.ticker} holdings CSV snapshot is ${holdingsAgeDays} days old (as of ${holdingsAsOfDate}); the source date is preserved and HTTP 200 is not treated as evidence of freshness.`);
   }
   const sourceProvider = [
     overview ? 'ARK Invest official fund API' : '',
@@ -2789,7 +2789,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
   let catalogSource = 'fixed 14-fund ARK ETF catalog';
   if (config.skipArk) {
     catalogSource = 'fixed 14-fund ARK ETF catalog (SKIP_ARK enabled)';
-    console.log(`[ ${'catalog'.padEnd(9)}] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
+    console.log(`[ ${'catalog'.padEnd(8)} ] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
   } else {
     try {
       let catalogPage: ProviderResponse;
@@ -2806,12 +2806,12 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
       unlistedOnPage = detectUnlistedArkFunds(catalogPage.text);
       catalogSource = `official ETF page; ${discovered.length} supported fund paths observed; fixed 14-fund catalog retained`;
       if (discovered.length !== ARK_FUNDS.length) {
-        console.warn(`[ ${'catalog'.padEnd(9)}] official page exposed ${discovered.length}/${ARK_FUNDS.length} supported ETFs; retaining the full fixed catalog`);
+        console.warn(`[ ${'catalog'.padEnd(8)} ] official page exposed ${discovered.length}/${ARK_FUNDS.length} supported ETFs; retaining the full fixed catalog`);
       }
-      console.log(`[ ${'catalog'.padEnd(9)}] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
+      console.log(`[ ${'catalog'.padEnd(8)} ] ${ARK_FUNDS.length} ARK Invest ETFs (${catalogSource})`);
     } catch (error) {
       catalogSource = 'fixed 14-fund ARK ETF catalog (official discovery unavailable)';
-      console.warn(`[ ${'catalog'.padEnd(9)}] official catalog unavailable; retaining all ${ARK_FUNDS.length} supported ETFs: ${error instanceof Error ? error.message : cleanText(error)}`);
+      console.warn(`[ ${'catalog'.padEnd(8)} ] official catalog unavailable; retaining all ${ARK_FUNDS.length} supported ETFs: ${error instanceof Error ? error.message : cleanText(error)}`);
     }
   }
 
@@ -2842,14 +2842,14 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
     // Wrap around the end of the candidate list so every batch is full-sized.
     selectedFunds = Array.from({ length: count }, (_, offset) => candidates[(startCursor + offset) % total]);
     nextCursor = total ? (startCursor + count) % total : 0;
-    console.log(`[ ${'cursor'.padEnd(9)}] starting at ${total ? startCursor + 1 : 0} of ${total}; processing ${selectedFunds.length}; next ${total ? nextCursor + 1 : 0}`);
+    console.log(`[ ${'cursor'.padEnd(8)} ] starting at ${total ? startCursor + 1 : 0} of ${total}; processing ${selectedFunds.length}; next ${total ? nextCursor + 1 : 0}`);
   } else if (!config.tickers.length && existsSync(stateFile)) {
     // A full refresh resets the cursor; a TICKERS run never touches the cursor state.
     await rm(stateFile, { force: true });
   }
 
   if (clients.isArkProxyActive() && !outputVerbose()) {
-    console.warn(`[ ${'issuer'.padEnd(9)}] ARK direct requests are denied from this network; using the read-only r.jina.ai proxy for remaining issuer requests`);
+    console.warn(`[ ${'issuer'.padEnd(8)} ] ARK direct requests are denied from this network; using the read-only r.jina.ai proxy for remaining issuer requests`);
   }
   const reporter = outputCreateReporter(apiRoot, selectedFunds.length);
   const secFallback = config.edgarFallback ? createSecFallbackResolver(clients) : undefined;
@@ -2863,7 +2863,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
       if (now() - startedAt >= deadlineMs) {
         if (nextFundIndex < selectedFunds.length && !deadlineReached) {
           deadlineReached = true;
-          console.warn(`[ ${'deadline'.padEnd(9)}] soft deadline of ${Math.round(deadlineMs / 1000)}s reached; ${selectedFunds.length - nextFundIndex} fund(s) not started, the index is still written`);
+          console.warn(`[ ${'deadline'.padEnd(8)} ] soft deadline of ${Math.round(deadlineMs / 1000)}s reached; ${selectedFunds.length - nextFundIndex} fund(s) not started, the index is still written`);
         }
         return;
       }
@@ -2883,7 +2883,7 @@ export async function runUpdater(options: RunUpdaterOptions = {}): Promise<RunUp
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : cleanText(error);
-        onNote(`[ ${'product'.padEnd(9)}] ${fund.ticker} failed: ${message}`);
+        onNote(`[ ${'product'.padEnd(8)} ] ${fund.ticker} failed: ${message}`);
         result = {
           entry: indexEntries.get(fund.ticker) ?? seedIndexEntry(fund),
           status: 'failed',
@@ -3053,7 +3053,7 @@ export async function main(argv: string[] = process.argv.slice(2), env: Record<s
 if (import.meta.main) {
   main().catch((error: unknown) => {
     const detail = error instanceof Error ? error.message : cleanText(error);
-    console.error(`[ ${'error'.padEnd(9)}] ${cleanText(detail)}`);
+    console.error(`[ ${'error'.padEnd(8)} ] ${cleanText(detail)}`);
     process.exitCode = 1;
   });
 }
