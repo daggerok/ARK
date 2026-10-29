@@ -14,299 +14,299 @@
     {
       "Asset Category": "Equity",
       "Identifier": "84615Q103",
-      "Market Value": "$76,147,329.75",
+      "Market Value": "$76,399,839.03",
       "Name": "SPACE EXPLORATION TECHN-CL A",
       "Shares Held": "526,061",
       "Ticker": "SPCX",
-      "Weight": "11.19%"
+      "Weight": "10.77%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "502431109",
-      "Market Value": "$48,536,066.22",
+      "Market Value": "$49,754,097.54",
       "Name": "L3HARRIS TECHNOLOGIES INC",
       "Shares Held": "190,914",
       "Ticker": "LHX",
-      "Weight": "7.13%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "244199105",
-      "Market Value": "$39,292,357.38",
-      "Name": "DEERE & CO",
-      "Shares Held": "61,049",
-      "Ticker": "DE",
-      "Weight": "5.78%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "67066G104",
-      "Market Value": "$36,521,977.63",
-      "Name": "NVIDIA CORP",
-      "Shares Held": "172,103",
-      "Ticker": "NVDA",
-      "Weight": "5.37%"
+      "Weight": "7.01%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "50077B207",
-      "Market Value": "$36,055,736.07",
+      "Market Value": "$41,610,560.17",
       "Name": "KRATOS DEFENSE & SECURITY",
-      "Shares Held": "942,141",
+      "Shares Held": "1,010,701",
       "Ticker": "KTOS",
-      "Weight": "5.30%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "773121108",
-      "Market Value": "$33,040,280.52",
-      "Name": "ROCKET LAB",
-      "Shares Held": "645,066",
-      "Ticker": "RKLB UQ",
-      "Weight": "4.86%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "023135106",
-      "Market Value": "$32,624,263.62",
-      "Name": "AMAZON.COM INC",
-      "Shares Held": "130,299",
-      "Ticker": "AMZN",
-      "Weight": "4.79%"
+      "Weight": "5.86%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "008073108",
-      "Market Value": "$31,039,373.20",
+      "Market Value": "$39,500,187.10",
       "Name": "AEROVIRONMENT INC",
-      "Shares Held": "263,716",
+      "Shares Held": "313,618",
       "Ticker": "AVAV",
-      "Weight": "4.56%"
+      "Weight": "5.57%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "244199105",
+      "Market Value": "$39,112,262.83",
+      "Name": "DEERE & CO",
+      "Shares Held": "61,049",
+      "Ticker": "DE",
+      "Weight": "5.51%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "773121108",
+      "Market Value": "$37,800,867.60",
+      "Name": "ROCKET LAB",
+      "Shares Held": "645,066",
+      "Ticker": "RKLB",
+      "Weight": "5.33%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "67066G104",
+      "Market Value": "$37,067,544.14",
+      "Name": "NVIDIA CORP",
+      "Shares Held": "172,103",
+      "Ticker": "NVDA",
+      "Weight": "5.22%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "023135106",
+      "Market Value": "$33,174,125.40",
+      "Name": "AMAZON.COM INC",
+      "Shares Held": "130,299",
+      "Ticker": "AMZN",
+      "Weight": "4.68%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "69608A108",
-      "Market Value": "$28,407,331.05",
+      "Market Value": "$28,497,103.95",
       "Name": "PALANTIR TECHNOLOGIES INC-A",
       "Shares Held": "144,795",
       "Ticker": "PLTR",
-      "Weight": "4.18%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "02079K107",
-      "Market Value": "$27,532,755.36",
-      "Name": "ALPHABET INC-CL C",
-      "Shares Held": "85,836",
-      "Ticker": "GOOG",
-      "Weight": "4.05%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "007903107",
-      "Market Value": "$27,481,552.65",
-      "Name": "ADVANCED MICRO DEVICES",
-      "Shares Held": "54,105",
-      "Ticker": "AMD",
-      "Weight": "4.04%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "896239100",
-      "Market Value": "$26,565,174.16",
-      "Name": "TRIMBLE INC",
-      "Shares Held": "415,016",
-      "Ticker": "TRMB",
-      "Weight": "3.90%"
+      "Weight": "4.02%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "88160R101",
-      "Market Value": "$25,704,428.76",
+      "Market Value": "$27,738,384.84",
       "Name": "TESLA INC",
       "Shares Held": "68,622",
       "Ticker": "TSLA",
-      "Weight": "3.78%"
+      "Weight": "3.91%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6496584",
-      "Market Value": "$22,042,094.48",
-      "Name": "KOMATSU LTD",
-      "Shares Held": "509,825",
-      "Ticker": "6301",
-      "Weight": "3.24%"
+      "Identifier": "02079K107",
+      "Market Value": "$27,629,750.04",
+      "Name": "ALPHABET INC-CL C",
+      "Shares Held": "85,836",
+      "Ticker": "GOOG",
+      "Weight": "3.89%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "896239100",
+      "Market Value": "$26,706,279.60",
+      "Name": "TRIMBLE INC",
+      "Shares Held": "415,016",
+      "Ticker": "TRMB",
+      "Weight": "3.76%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "03945R102",
-      "Market Value": "$18,838,329.00",
+      "Market Value": "$25,297,182.96",
       "Name": "ARCHER AVIATION INC-A",
-      "Shares Held": "4,957,455",
+      "Shares Held": "5,828,844",
       "Ticker": "ACHR",
-      "Weight": "2.77%"
+      "Weight": "3.57%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6496584",
+      "Market Value": "$21,995,805.11",
+      "Name": "KOMATSU LTD",
+      "Shares Held": "509,825",
+      "Ticker": "6301",
+      "Weight": "3.10%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "007903107",
+      "Market Value": "$20,553,130.08",
+      "Name": "ADVANCED MICRO DEVICES",
+      "Shares Held": "35,532",
+      "Ticker": "AMD",
+      "Weight": "2.90%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "880770102",
-      "Market Value": "$18,215,632.50",
+      "Market Value": "$20,283,229.72",
       "Name": "TERADYNE INC",
-      "Shares Held": "58,998",
+      "Shares Held": "64,753",
       "Ticker": "TER",
-      "Weight": "2.68%"
+      "Weight": "2.86%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "46125A100",
-      "Market Value": "$14,565,471.25",
+      "Market Value": "$16,154,431.75",
       "Name": "INTUITIVE MACHINES INC",
       "Shares Held": "1,393,825",
       "Ticker": "LUNR",
-      "Weight": "2.14%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "25809K105",
-      "Market Value": "$13,228,143.48",
-      "Name": "DOORDASH INC - A",
-      "Shares Held": "71,142",
-      "Ticker": "DASH",
-      "Weight": "1.94%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "874039100",
-      "Market Value": "$12,957,274.05",
-      "Name": "TAIWAN SEMICONDUCTOR-SP ADR",
-      "Shares Held": "31,423",
-      "Ticker": "TSM",
-      "Weight": "1.90%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "4162791",
-      "Market Value": "$11,671,934.94",
-      "Name": "THALES SA",
-      "Shares Held": "45,900",
-      "Ticker": "HO",
-      "Weight": "1.72%"
+      "Weight": "2.28%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "G65163100",
-      "Market Value": "$11,543,975.50",
+      "Market Value": "$15,771,368.00",
       "Name": "JOBY AVIATION INC",
-      "Shares Held": "2,456,165",
+      "Shares Held": "3,104,600",
       "Ticker": "JOBY",
+      "Weight": "2.22%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "25809K105",
+      "Market Value": "$12,057,857.58",
+      "Name": "DOORDASH INC - A",
+      "Shares Held": "71,142",
+      "Ticker": "DASH",
       "Weight": "1.70%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "B3Z5T14",
-      "Market Value": "$11,460,338.40",
-      "Name": "GARMIN LTD",
-      "Shares Held": "38,796",
-      "Ticker": "GRMN UN",
-      "Weight": "1.68%"
+      "Identifier": "4162791",
+      "Market Value": "$11,982,956.45",
+      "Name": "THALES SA",
+      "Shares Held": "45,900",
+      "Ticker": "HO",
+      "Weight": "1.69%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "422806109",
-      "Market Value": "$10,690,312.64",
+      "Market Value": "$11,075,138.24",
       "Name": "HEICO CORP",
       "Shares Held": "35,632",
       "Ticker": "HEI",
-      "Weight": "1.57%"
+      "Weight": "1.56%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "B3Z5T14",
+      "Market Value": "$10,572,297.96",
+      "Name": "GARMIN LTD",
+      "Shares Held": "38,796",
+      "Ticker": "GRMN",
+      "Weight": "1.49%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "05605H100",
-      "Market Value": "$9,856,839.00",
+      "Market Value": "$10,449,952.80",
       "Name": "BWX TECHNOLOGIES INC",
       "Shares Held": "77,430",
       "Ticker": "BWXT",
-      "Weight": "1.45%"
+      "Weight": "1.47%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M3760D101",
-      "Market Value": "$8,670,404.52",
+      "Market Value": "$9,091,080.48",
       "Name": "ELBIT SYSTEMS LTD",
       "Shares Held": "11,666",
       "Ticker": "ESLT",
-      "Weight": "1.27%"
+      "Weight": "1.28%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "879360105",
-      "Market Value": "$8,061,766.71",
+      "Market Value": "$8,647,621.08",
       "Name": "TELEDYNE TECHNOLOGIES INC",
       "Shares Held": "12,993",
       "Ticker": "TDY",
-      "Weight": "1.18%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "98386P102",
-      "Market Value": "$7,450,269.36",
-      "Name": "X-ENERGY INC",
-      "Shares Held": "700,872",
-      "Ticker": "XE",
-      "Weight": "1.10%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "539830109",
-      "Market Value": "$7,332,581.30",
-      "Name": "LOCKHEED MARTIN CORP",
-      "Shares Held": "12,430",
-      "Ticker": "LMT",
-      "Weight": "1.08%"
+      "Weight": "1.22%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "871607107",
-      "Market Value": "$7,374,810.88",
+      "Market Value": "$8,411,871.84",
       "Name": "SYNOPSYS INC",
       "Shares Held": "17,456",
       "Ticker": "SNPS",
-      "Weight": "1.08%"
+      "Weight": "1.19%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "98386P102",
+      "Market Value": "$8,088,062.88",
+      "Name": "X-ENERGY INC",
+      "Shares Held": "700,872",
+      "Ticker": "XE",
+      "Weight": "1.14%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "539830109",
+      "Market Value": "$7,827,792.50",
+      "Name": "LOCKHEED MARTIN CORP",
+      "Shares Held": "12,430",
+      "Ticker": "LMT",
+      "Weight": "1.10%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BNMBPD9",
-      "Market Value": "$6,921,206.07",
+      "Market Value": "$6,992,082.51",
       "Name": "JD LOGISTICS INC",
       "Shares Held": "5,580,258",
       "Ticker": "2618",
-      "Weight": "1.02%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "4012250",
-      "Market Value": "$6,701,830.31",
-      "Name": "AIRBUS SE",
-      "Shares Held": "30,674",
-      "Ticker": "AIR",
       "Weight": "0.99%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "43849R105",
-      "Market Value": "$3,010,979.40",
-      "Name": "HONEYWELL AEROSPACE INC",
-      "Shares Held": "18,470",
-      "Ticker": "HONA",
-      "Weight": "0.44%"
+      "Identifier": "4012250",
+      "Market Value": "$6,570,701.25",
+      "Name": "AIRBUS SE",
+      "Shares Held": "30,674",
+      "Ticker": "AIR",
+      "Weight": "0.93%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "874039100",
+      "Market Value": "$5,774,721.89",
+      "Name": "TAIWAN SEMICONDUCTOR-SP ADR",
+      "Shares Held": "13,139",
+      "Ticker": "TSM",
+      "Weight": "0.81%"
     },
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$929,720.14",
+      "Market Value": "$3,756,525.90",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "929,720",
+      "Shares Held": "3,756,526",
       "Ticker": "",
-      "Weight": "0.14%"
+      "Weight": "0.53%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "43849R105",
+      "Market Value": "$3,269,744.10",
+      "Name": "HONEYWELL AEROSPACE INC",
+      "Shares Held": "18,470",
+      "Ticker": "HONA",
+      "Weight": "0.46%"
     }
   ],
   "ticker": "ARKX",

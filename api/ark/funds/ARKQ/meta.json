@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 23 2026",
+  "asOfDate": "Oct 28 2026",
   "aum": "$1,891 Million",
   "aumValue": 1891000000,
   "category": "Thematic Equity",
-  "closePrice": "$112.01",
-  "closePriceValue": 112.01,
+  "closePrice": "$116.66",
+  "closePriceValue": 116.66,
   "dataFile": "funds/ARKQ/meta.json",
   "distributions": {
     "dividend": "$0.3060",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-10-25T04:08:00Z",
+  "generatedAt": "2026-10-29T19:09:41Z",
   "history": {
-    "asOfDate": "Oct 23 2026",
+    "asOfDate": "Oct 28 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,10 +61,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3035
+    "totalRows": 3038
   },
   "holdings": {
-    "asOfDate": "Oct 23 2026",
+    "asOfDate": "Oct 29 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -97,8 +97,8 @@
     "cagr5y": 9.42,
     "cagr10y": 19.16,
     "siAnn": 16.9,
-    "dividendYield": 0.27,
-    "dividendYieldText": "0.27%",
+    "dividendYield": 0.26,
+    "dividendYieldText": "0.26%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Autonomous Technology & Robotics ETF",
-  "nav": "$112.00",
-  "navValue": 112,
-  "premiumDiscount": "0.0089%",
-  "premiumDiscountValue": 0.0089,
+  "nav": "$116.60",
+  "navValue": 116.6,
+  "premiumDiscount": "0.0515%",
+  "premiumDiscountValue": 0.0515,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -143,7 +143,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkq",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1001?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-23",
+    "holdingsAsOfDate": "2026-10-29",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_AUTONOMOUS_TECH._%26_ROBOTICS_ETF_ARKQ_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
@@ -159,10 +159,10 @@
   "terValue": 0.75,
   "ticker": "ARKQ",
   "yields": {
-    "dividendYield": 0.27,
+    "dividendYield": 0.26,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.27%",
+    "dividendYieldText": "0.26%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

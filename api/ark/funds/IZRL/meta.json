@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 23 2026",
+  "asOfDate": "Oct 28 2026",
   "aum": "$133.7 Million",
   "aumValue": 133699999.99999999,
   "category": "Thematic Equity",
-  "closePrice": "$28.08",
-  "closePriceValue": 28.08,
+  "closePrice": "$28.11",
+  "closePriceValue": 28.11,
   "dataFile": "funds/IZRL/meta.json",
   "distributions": {
     "dividend": "$0.7750",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-10-25T04:08:27Z",
+  "generatedAt": "2026-10-29T19:10:08Z",
   "history": {
-    "asOfDate": "Oct 23 2026",
+    "asOfDate": "Oct 28 2026",
     "headers": [
       "Date",
       "NAV",
@@ -56,10 +56,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2233
+    "totalRows": 2236
   },
   "holdings": {
-    "asOfDate": "Oct 23 2026",
+    "asOfDate": "Oct 29 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -101,10 +101,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Israel Innovative Technology ETF",
-  "nav": "$28.29",
-  "navValue": 28.29,
-  "premiumDiscount": "-0.7423%",
-  "premiumDiscountValue": -0.7423,
+  "nav": "$28.26",
+  "navValue": 28.26,
+  "premiumDiscount": "-0.5308%",
+  "premiumDiscountValue": -0.5308,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -138,7 +138,7 @@
     "fundPage": "https://www.ark-funds.com/funds/izrl",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-23",
+    "holdingsAsOfDate": "2026-10-29",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

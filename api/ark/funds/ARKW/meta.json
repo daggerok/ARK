@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 23 2026",
+  "asOfDate": "Oct 28 2026",
   "aum": "$2,028 Million",
   "aumValue": 2028000000,
   "category": "Thematic Equity",
-  "closePrice": "$154.89",
-  "closePriceValue": 154.89,
+  "closePrice": "$156.82",
+  "closePriceValue": 156.82,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-10-25T04:08:10Z",
+  "generatedAt": "2026-10-29T19:09:50Z",
   "history": {
-    "asOfDate": "Oct 23 2026",
+    "asOfDate": "Oct 28 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3035
+    "totalRows": 3038
   },
   "holdings": {
     "asOfDate": "Oct 06 2026",
@@ -97,8 +97,8 @@
     "cagr5y": 3.8,
     "cagr10y": 22.55,
     "siAnn": 21.16,
-    "dividendYield": 1.52,
-    "dividendYieldText": "1.52%",
+    "dividendYield": 1.5,
+    "dividendYieldText": "1.50%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$154.65",
-  "navValue": 154.65,
-  "premiumDiscount": "0.1552%",
-  "premiumDiscountValue": 0.1552,
+  "nav": "$157.01",
+  "navValue": 157.01,
+  "premiumDiscount": "-0.1210%",
+  "premiumDiscountValue": -0.121,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -159,10 +159,10 @@
   "terValue": 0.76,
   "ticker": "ARKW",
   "yields": {
-    "dividendYield": 1.52,
+    "dividendYield": 1.5,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.52%",
+    "dividendYieldText": "1.50%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

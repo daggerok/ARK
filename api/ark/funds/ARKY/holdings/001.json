@@ -15,28 +15,28 @@
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$55,854,699.66",
+      "Market Value": "$55,764,832.47",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Notional per Note": "55,854,700",
+      "Notional per Note": "55,764,832",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "85.74%"
+      "Weight": "82.96%"
     },
     {
       "Asset Category": "Treasury",
       "Identifier": "912797VR5",
-      "Market Value": "$10,687,399.44",
+      "Market Value": "$11,658,274.86",
       "Name": "TREASURY BILL 0 8/5/2027",
-      "Notional per Note": "11,050,000",
+      "Notional per Note": "12,050,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "16.41%"
+      "Weight": "17.34%"
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740035",
-      "Market Value": "$157,483.01",
-      "Name": "FIG Autocall ELN LONG TRS 34.83 PA 09/14/2027 M",
+      "Identifier": "1767342",
+      "Market Value": "$160,530.00",
+      "Name": "RBRK Autocall ELN LONG TRS 25.76% PA 03/13/2028",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -44,9 +44,9 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1767342",
-      "Market Value": "$152,709.01",
-      "Name": "RBRK Autocall ELN LONG TRS 25.76% PA 03/13/2028",
+      "Identifier": "1740035",
+      "Market Value": "$151,367.00",
+      "Name": "FIG Autocall ELN LONG TRS 34.83 PA 09/14/2027 M",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -54,9 +54,9 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740058",
-      "Market Value": "$116,855.00",
-      "Name": "TEM Autocall ELN LONG TRS 31.74 PA 07/29/2027 M",
+      "Identifier": "1737390",
+      "Market Value": "$123,361.00",
+      "Name": "AMD Autocall ELN LONG TRS 26.46 PA 08/03/2027 M",
       "Notional per Note": "800,000",
       "Shares Held": "",
       "Ticker": "",
@@ -64,28 +64,28 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1737390",
-      "Market Value": "$110,256.00",
-      "Name": "AMD Autocall ELN LONG TRS 26.46 PA 08/03/2027 M",
-      "Notional per Note": "800,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.17%"
-    },
-    {
-      "Asset Category": "Structured Note",
       "Identifier": "1718144",
-      "Market Value": "$104,640.00",
+      "Market Value": "$102,586.01",
       "Name": "RBLX Autocall ELN LONG TRS 27.81 PA 11/18/2027",
       "Notional per Note": "1,500,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "0.16%"
+      "Weight": "0.15%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1737391",
+      "Market Value": "$90,952.00",
+      "Name": "DDOG Autocall ELN LONG TRS 22.48 PA 08/06/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.14%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740056",
-      "Market Value": "$87,749.00",
+      "Market Value": "$88,760.00",
       "Name": "BMNR Autocall ELN LONG TRS 31.22 PA 10/18/2027",
       "Notional per Note": "800,000",
       "Shares Held": "",
@@ -95,57 +95,67 @@
     {
       "Asset Category": "Structured Note",
       "Identifier": "1737384",
-      "Market Value": "$63,051.00",
+      "Market Value": "$72,040.00",
       "Name": "CAI Autocall ELN LONG TRS 29.78 PA 06/15/2027 M",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "0.10%"
+      "Weight": "0.11%"
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1737391",
-      "Market Value": "$66,794.00",
-      "Name": "DDOG Autocall ELN LONG TRS 22.48 PA 08/06/2027",
+      "Identifier": "1718092",
+      "Market Value": "$71,344.00",
+      "Name": "RXRX Autocall ELN LONG TRS 25.72 PA 12/01/2026",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.11%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740058",
+      "Market Value": "$77,005.00",
+      "Name": "TEM Autocall ELN LONG TRS 31.74 PA 07/29/2027 M",
+      "Notional per Note": "800,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.11%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1809678",
+      "Market Value": "$66,034.99",
+      "Name": "KYMR Autocall ELN LONG TRS 34.52% PA 10/24/2028",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
       "Weight": "0.10%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718170",
-      "Market Value": "$61,996.00",
-      "Name": "TSLA Autocall ELN LONG TRS 20.47 PA 07/30/2027",
-      "Notional per Note": "800,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.10%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1737387",
-      "Market Value": "$60,923.00",
-      "Name": "PINS Autocall ELN LONG TRS 19.96 PA 05/07/2027",
-      "Notional per Note": "1,500,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.09%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1780349",
-      "Market Value": "$58,516.01",
+      "Market Value": "$64,516.99",
       "Name": "SHOP Autocall ELN LONG TRS 22.64% PA 12/28/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "0.09%"
+      "Weight": "0.10%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1718167",
+      "Market Value": "$56,415.00",
+      "Name": "BLSH Autocall ELN LONG TRS 25.15 PA 10/25/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.08%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1718152",
-      "Market Value": "$53,223.00",
+      "Market Value": "$53,168.00",
       "Name": "GTLB Autocall ELN LONG TRS 27.26 PA 06/04/2027",
       "Notional per Note": "800,000",
       "Shares Held": "",
@@ -154,9 +164,19 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740018",
-      "Market Value": "$54,837.00",
-      "Name": "RDDT Autocall ELN LONG TRS 24.16 PA 08/10/2027",
+      "Identifier": "1756187",
+      "Market Value": "$51,716.01",
+      "Name": "NET Autocall ELN LONG TRS 21.12% PA 02/29/2028",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.08%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1737387",
+      "Market Value": "$55,229.00",
+      "Name": "PINS Autocall ELN LONG TRS 19.96 PA 05/07/2027",
       "Notional per Note": "1,500,000",
       "Shares Held": "",
       "Ticker": "",
@@ -165,7 +185,7 @@
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740010",
-      "Market Value": "$51,618.00",
+      "Market Value": "$52,315.00",
       "Name": "U Autocall ELN LONG TRS 26.09 PA 02/09/2027 MS",
       "Notional per Note": "915,000",
       "Shares Held": "",
@@ -174,18 +194,8 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1788406",
-      "Market Value": "$54,021.00",
-      "Name": "Z Autocall ELN LONG TRS 20.16% PA 10/07/2027 - MS",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.08%"
-    },
-    {
-      "Asset Category": "Structured Note",
       "Identifier": "1718149",
-      "Market Value": "$44,145.00",
+      "Market Value": "$48,455.00",
       "Name": "GH Autocall ELN LONG TRS 23.94 PA 06/04/2027 MS",
       "Notional per Note": "915,000",
       "Shares Held": "",
@@ -195,7 +205,7 @@
     {
       "Asset Category": "Structured Note",
       "Identifier": "1718107",
-      "Market Value": "$47,265.00",
+      "Market Value": "$48,351.00",
       "Name": "XYZ Autocall ELN LONG TRS 14.65 PA 05/04/2027 M",
       "Notional per Note": "1,500,000",
       "Shares Held": "",
@@ -204,9 +214,29 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1756187",
-      "Market Value": "$30,303.99",
-      "Name": "NET Autocall ELN LONG TRS 21.12% PA 02/29/2028",
+      "Identifier": "1718108",
+      "Market Value": "$43,388.01",
+      "Name": "BEAM Autocall ELN LONG TRS 22.93 PA 06/11/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.06%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1718105",
+      "Market Value": "$43,415.99",
+      "Name": "CRSP Autocall ELN LONG TRS 20.36 PA 05/03/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.06%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1788406",
+      "Market Value": "$30,468.00",
+      "Name": "Z Autocall ELN LONG TRS 20.16% PA 10/07/2027 - MS",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -214,9 +244,29 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1718129",
-      "Market Value": "$25,553.00",
-      "Name": "COIN Autocall ELN LONG TRS 26.92 PA 12/29/2026",
+      "Identifier": "1740048",
+      "Market Value": "$24,958.00",
+      "Name": "AVAV Autocall ELN LONG TRS 27.70 PA 12/30/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.04%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1737386",
+      "Market Value": "$24,796.00",
+      "Name": "NTLA Autocall ELN LONG TRS 23.06 PA 01/28/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.04%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740018",
+      "Market Value": "$25,223.00",
+      "Name": "RDDT Autocall ELN LONG TRS 24.16 PA 08/10/2027",
       "Notional per Note": "1,500,000",
       "Shares Held": "",
       "Ticker": "",
@@ -224,9 +274,29 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1718167",
-      "Market Value": "$18,967.00",
-      "Name": "BLSH Autocall ELN LONG TRS 25.15 PA 10/25/2027",
+      "Identifier": "1718170",
+      "Market Value": "$25,473.00",
+      "Name": "TSLA Autocall ELN LONG TRS 20.47 PA 07/30/2027",
+      "Notional per Note": "800,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.04%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1718129",
+      "Market Value": "$20,326.01",
+      "Name": "COIN Autocall ELN LONG TRS 26.92 PA 12/29/2026",
+      "Notional per Note": "1,500,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.03%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740021",
+      "Market Value": "$21,116.00",
+      "Name": "FSLY Autocall ELN LONG TRS 40.75 PA 07/01/2027",
       "Notional per Note": "800,000",
       "Shares Held": "",
       "Ticker": "",
@@ -234,18 +304,8 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1718110",
-      "Market Value": "$21,225.00",
-      "Name": "CRCL Autocall ELN LONG TRS 24.82 PA 07/09/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.03%"
-    },
-    {
-      "Asset Category": "Structured Note",
       "Identifier": "1740012",
-      "Market Value": "$17,573.00",
+      "Market Value": "$22,731.00",
       "Name": "HOOD Autocall ELN LONG TRS 27.76 PA 05/25/2027",
       "Notional per Note": "1,500,000",
       "Shares Held": "",
@@ -254,39 +314,29 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1718092",
-      "Market Value": "$19,233.00",
-      "Name": "RXRX Autocall ELN LONG TRS 25.72 PA 12/01/2026",
+      "Identifier": "1718110",
+      "Market Value": "$10,612.00",
+      "Name": "CRCL Autocall ELN LONG TRS 24.82 PA 07/09/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "0.03%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718141",
-      "Market Value": "$9,096.00",
-      "Name": "DKNG Autocall ELN LONG TRS 23.31 PA 11/01/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.01%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1737386",
-      "Market Value": "-$2,738.00",
-      "Name": "NTLA Autocall ELN LONG TRS 23.06 PA 01/28/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "0.00%"
+      "Weight": "0.02%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1802436",
-      "Market Value": "-$1,507.01",
+      "Market Value": "$13,584.00",
       "Name": "PLTR Autocall ELN LONG TRS 20.35% PA 04/18/2028",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "0.02%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740057",
+      "Market Value": "-$1,644.00",
+      "Name": "KTOS Autocall ELN LONG TRS 30.21 PA 07/23/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -294,68 +344,58 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1718105",
-      "Market Value": "-$8,686.00",
-      "Name": "CRSP Autocall ELN LONG TRS 20.36 PA 05/03/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.01%"
-    },
-    {
-      "Asset Category": "Structured Note",
       "Identifier": "1740011",
-      "Market Value": "-$5,036.00",
+      "Market Value": "-$11,151.00",
       "Name": "SNAP Autocall ELN LONG TRS 25.24 PA 05/10/2027",
       "Notional per Note": "800,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.01%"
+      "Weight": "-0.02%"
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740048",
-      "Market Value": "-$16,560.01",
-      "Name": "AVAV Autocall ELN LONG TRS 27.70 PA 12/30/2027",
+      "Identifier": "1791150",
+      "Market Value": "-$26,250.01",
+      "Name": "SNOW Autocall ELN LONG TRS 20.40% PA 10/12/2027MS",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.03%"
+      "Weight": "-0.04%"
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740021",
-      "Market Value": "-$30,202.00",
-      "Name": "FSLY Autocall ELN LONG TRS 40.75 PA 07/01/2027",
-      "Notional per Note": "800,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.05%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718108",
-      "Market Value": "-$37,210.01",
-      "Name": "BEAM Autocall ELN LONG TRS 22.93 PA 06/11/2027",
+      "Identifier": "1718103",
+      "Market Value": "-$27,425.00",
+      "Name": "SOFI Autocall ELN LONG TRS 19.85 PA 01/14/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.06%"
+      "Weight": "-0.04%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740037",
+      "Market Value": "-$45,395.00",
+      "Name": "TER Autocall ELN LONG TRS 34.51 PA 03/18/2027 M",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "-0.07%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740042",
-      "Market Value": "-$49,757.00",
+      "Market Value": "-$48,936.00",
       "Name": "TTD Autocall ELN LONG TRS 27.27 PA 06/28/2027 M",
       "Notional per Note": "800,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.08%"
+      "Weight": "-0.07%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740019",
-      "Market Value": "-$56,082.00",
+      "Market Value": "-$58,980.00",
       "Name": "KLAR Autocall ELN LONG TRS 28.38 PA 05/14/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
@@ -364,9 +404,19 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1740057",
-      "Market Value": "-$68,076.00",
-      "Name": "KTOS Autocall ELN LONG TRS 30.21 PA 07/23/2027",
+      "Identifier": "1718113",
+      "Market Value": "-$59,495.00",
+      "Name": "LUNR Autocall ELN LONG TRS 43.00 PA 08/09/2027",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "-0.09%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1789782",
+      "Market Value": "-$69,517.00",
+      "Name": "AUR Autocall ELN LONG TRS 23.00% PA 01/10/2028 -MS",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -374,29 +424,9 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1791150",
-      "Market Value": "-$79,386.99",
-      "Name": "SNOW Autocall ELN LONG TRS 20.40% PA 10/12/2027MS",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.12%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718095",
-      "Market Value": "-$75,384.00",
-      "Name": "SYM Autocall ELN LONG TRS 26.20 PA 12/28/2026 M",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.12%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1740037",
-      "Market Value": "-$94,252.99",
-      "Name": "TER Autocall ELN LONG TRS 34.51 PA 03/18/2027 M",
+      "Identifier": "1718141",
+      "Market Value": "-$92,632.00",
+      "Name": "DKNG Autocall ELN LONG TRS 23.31 PA 11/01/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
@@ -404,95 +434,75 @@
     },
     {
       "Asset Category": "Structured Note",
-      "Identifier": "1789782",
-      "Market Value": "-$94,888.00",
-      "Name": "AUR Autocall ELN LONG TRS 23.00% PA 01/10/2028 -MS",
+      "Identifier": "1718095",
+      "Market Value": "-$91,462.00",
+      "Name": "SYM Autocall ELN LONG TRS 26.20 PA 12/28/2026 M",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.15%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718113",
-      "Market Value": "-$139,600.00",
-      "Name": "LUNR Autocall ELN LONG TRS 43.00 PA 08/09/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.21%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1740020",
-      "Market Value": "-$136,649.99",
-      "Name": "WGS Autocall ELN LONG TRS 26.04 PA 02/24/2027 M",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.21%"
+      "Weight": "-0.14%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1756217",
-      "Market Value": "-$215,388.01",
+      "Market Value": "-$110,426.01",
       "Name": "ACHR Autocall ELN LONG TRS 30.80% PA 11/29/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.33%"
-    },
-    {
-      "Asset Category": "Structured Note",
-      "Identifier": "1718103",
-      "Market Value": "-$216,195.01",
-      "Name": "SOFI Autocall ELN LONG TRS 19.85 PA 01/14/2027",
-      "Notional per Note": "1,575,000",
-      "Shares Held": "",
-      "Ticker": "",
-      "Weight": "-0.33%"
+      "Weight": "-0.16%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740017",
-      "Market Value": "-$308,130.01",
+      "Market Value": "-$149,106.01",
       "Name": "CRWV Autocall ELN LONG TRS 35.82 PA 05/04/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.47%"
+      "Weight": "-0.22%"
+    },
+    {
+      "Asset Category": "Structured Note",
+      "Identifier": "1740020",
+      "Market Value": "-$146,146.00",
+      "Name": "WGS Autocall ELN LONG TRS 26.04 PA 02/24/2027 M",
+      "Notional per Note": "1,575,000",
+      "Shares Held": "",
+      "Ticker": "",
+      "Weight": "-0.22%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1740013",
-      "Market Value": "-$371,399.00",
+      "Market Value": "-$222,969.99",
       "Name": "RKLB Autocall ELN LONG TRS 34.72 PA 07/26/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.57%"
+      "Weight": "-0.33%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1718155",
-      "Market Value": "-$394,909.00",
+      "Market Value": "-$305,001.00",
       "Name": "JOBY Autocall ELN LONG TRS 30.94 PA 09/14/2027",
       "Notional per Note": "1,575,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.61%"
+      "Weight": "-0.45%"
     },
     {
       "Asset Category": "Structured Note",
       "Identifier": "1718116",
-      "Market Value": "-$481,494.00",
+      "Market Value": "-$481,164.00",
       "Name": "OKLO Autocall ELN LONG TRS 38.39 PA 12/02/2026",
       "Notional per Note": "1,100,000",
       "Shares Held": "",
       "Ticker": "",
-      "Weight": "-0.74%"
+      "Weight": "-0.72%"
     }
   ],
   "ticker": "ARKY",
-  "totalRows": 48
+  "totalRows": 49
 }

@@ -3499,8 +3499,26 @@
       "Market Price": "24.26",
       "NAV": "24.50",
       "Premium/Discount": "-0.9796%"
+    },
+    {
+      "Date": "Oct 26 2026",
+      "Market Price": "24.52",
+      "NAV": "24.68",
+      "Premium/Discount": "-0.6483%"
+    },
+    {
+      "Date": "Oct 27 2026",
+      "Market Price": "25.02",
+      "NAV": "25.14",
+      "Premium/Discount": "-0.4773%"
+    },
+    {
+      "Date": "Oct 28 2026",
+      "Market Price": "24.88",
+      "NAV": "25.02",
+      "Premium/Discount": "-0.5596%"
     }
   ],
   "ticker": "PRNT",
-  "totalRows": 2582
+  "totalRows": 2585
 }

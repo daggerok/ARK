@@ -1615,8 +1615,26 @@
       "Market Price": "19.03",
       "NAV": "19.08",
       "Premium/Discount": "-0.2621%"
+    },
+    {
+      "Date": "Oct 26 2026",
+      "Market Price": "19.02",
+      "NAV": "19.06",
+      "Premium/Discount": "-0.2099%"
+    },
+    {
+      "Date": "Oct 27 2026",
+      "Market Price": "19.36",
+      "NAV": "19.51",
+      "Premium/Discount": "-0.7688%"
+    },
+    {
+      "Date": "Oct 28 2026",
+      "Market Price": "19.55",
+      "NAV": "19.63",
+      "Premium/Discount": "-0.4075%"
     }
   ],
   "ticker": "ARKT",
-  "totalRows": 268
+  "totalRows": 271
 }
