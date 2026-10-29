@@ -748,6 +748,9 @@ describe('pipeline', () => {
       expect(arkk.dataFile).toBe('funds/ARKK/meta.json');
       expect(arkq.dataFile).toBeNull();
       expect(Object.keys(arkq.metrics)).toEqual(Object.keys(arkk.metrics));
+      // the 52-week keys are in every row, computed from its history pages (range-52w block)
+      const RANGE_KEYS = ['week52Low', 'week52High', 'range52w', 'range52wClose', 'range52wAsOf', 'range52wSince', 'range52wBasis'];
+      for (const row of index.funds) expect(Object.keys(row.metrics)).toEqual(expect.arrayContaining(RANGE_KEYS));
       expect(arkq.metrics).toMatchObject({ returnsBasis: UNAVAILABLE_RETURNS_BASIS, performanceAsOf: null, ytd: null });
       await run(root, { TICKERS: 'ARKY' }); // another filtered run does not drop ARKK either
       const again = await readJson(join(root, 'index.json'));
