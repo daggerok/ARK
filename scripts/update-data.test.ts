@@ -1126,6 +1126,22 @@ describe('pipeline 4', () => {
       await updateArkFund(arkkFund, quietConfig({ ...env, HISTORY_RANGE: '1y' }), { ...clientsFor({}), yahoo: windowedYahoo(800, 300, dividends, '2024-07-15') }, { apiRoot: root, referenceDate: REF, ...quiet });
       expect(await tree(root)).toEqual(first);
       expect((await metaOf(root)).history.totalRows).toBe(800);
+      // a truncated default-range (`max`) answer never shrinks the history either (Yahoo served 2 bars for Franklin DVAL and USFI on 2026-10-29):
+      // one that joins the published days keeps them all, one that does not join keeps the fund as published
+      await updateArkFund(arkkFund, quietConfig(env), { ...clientsFor({}), yahoo: windowedYahoo(800, 2, dividends, '2024-07-15') }, { apiRoot: root, referenceDate: REF, ...quiet });
+      expect(await tree(root)).toEqual(first);
+      const lone = async (url: string) => {
+        const payload: any = yahooPayload(800, '2024-07-15', dividends);
+        const result = payload.chart.result[0];
+        result.timestamp = [epoch('2027-01-05')];
+        result.indicators.quote[0].close = result.indicators.quote[0].close.slice(-1);
+        result.indicators.quote[0].volume = result.indicators.quote[0].volume.slice(-1);
+        result.indicators.adjclose[0].adjclose = result.indicators.adjclose[0].adjclose.slice(-1);
+        result.events.dividends = {};
+        return respondWith(JSON.stringify(payload), url);
+      };
+      await updateArkFund(arkkFund, quietConfig(env), { ...clientsFor({}), yahoo: lone }, { apiRoot: root, referenceDate: REF, ...quiet });
+      expect((await metaOf(root)).history.totalRows).toBe(800);
     });
   });
 
