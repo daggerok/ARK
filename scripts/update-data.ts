@@ -2289,12 +2289,15 @@ export async function updateArkFund(
       } catch (error) { noteSourceFailure(onNote, 'holdings', fund.ticker, error); return null; }
     })(),
   ]);
-  // A HISTORY_RANGE window never shrinks the published Yahoo history or distributions (shared windowed-chart block);
-  // a window that does not join the published history counts as a failed chart: the fund is kept as published.
+  // A fresh chart never shrinks the published Yahoo history or distributions (shared windowed-chart block); a chart that does
+  // not join the published history counts as a failed chart: the fund is kept as published. This covers a HISTORY_RANGE window
+  // and a truncated `max` answer (2026-10-29: Yahoo returned 2 bars for Franklin DVAL and USFI). A full `max` answer starts
+  // at inception: nothing published is older, so it comes back unchanged
   let yahoo = fetchedYahoo;
-  if (yahoo && historyWindowStartEpoch(config.historyRange, Math.floor(referenceDate.getTime() / 1000)) > 0) {
+  if (yahoo) {
+    const freshDays = yahoo.points.length;
     yahoo = joinYahooWindow(yahoo, previousHistory, readDistributionWorksheet(previousCombined).rows);
-    if (!yahoo) onNote(`[ ${'chart'.padEnd(8)} ] ${fund.ticker} chart window does not join the published history (${config.historyRange})`);
+    if (!yahoo) onNote(`[ ${'chart'.padEnd(8)} ] ${fund.ticker} chart does not join the published history (${config.historyRange}, ${freshDays} days)`);
   }
 
   const failedSources: string[] = [];
