@@ -1249,8 +1249,20 @@
       "Market Price": "20.96",
       "NAV": "21.05",
       "Premium/Discount": "-0.4276%"
+    },
+    {
+      "Date": "Oct 29 2026",
+      "Market Price": "20.93",
+      "NAV": "21.00",
+      "Premium/Discount": "-0.3333%"
+    },
+    {
+      "Date": "Oct 30 2026",
+      "Market Price": "20.26",
+      "NAV": "20.25",
+      "Premium/Discount": "0.0494%"
     }
   ],
   "ticker": "ARKD",
-  "totalRows": 207
+  "totalRows": 209
 }

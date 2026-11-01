@@ -14,29 +14,29 @@
     {
       "Asset Category": "Fund",
       "Identifier": "00214Q104",
-      "Market Value": "$1,584,521.88",
+      "Market Value": "$1,581,762.03",
       "Name": "ARK INNOVATION ETF",
       "Shares Held": "18,399",
       "Ticker": "ARKK",
-      "Weight": "102.29%"
+      "Weight": "102.52%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "E27C08486",
-      "Market Value": "$132,071.80",
+      "Market Value": "$134,745.60",
       "Name": "4ARKK US 06/30/27 C84.86",
       "Shares Held": "116",
       "Ticker": "",
-      "Weight": "8.53%"
+      "Weight": "8.73%"
     },
     {
       "Asset Category": "Other",
       "Identifier": "E27P08082",
-      "Market Value": "$70,416.71",
+      "Market Value": "$68,762.33",
       "Name": "4ARKK US 06/30/27 P80.82",
       "Shares Held": "91",
       "Ticker": "",
-      "Weight": "4.55%"
+      "Weight": "4.46%"
     },
     {
       "Asset Category": "Cash & Equivalents",
@@ -50,11 +50,11 @@
     {
       "Asset Category": "Other",
       "Identifier": "E27C08082",
-      "Market Value": "-$249,472.50",
+      "Market Value": "-$254,029.05",
       "Name": "4ARKK US 06/30/27 C80.82",
       "Shares Held": "-185",
       "Ticker": "",
-      "Weight": "-16.10%"
+      "Weight": "-16.47%"
     }
   ],
   "ticker": "ARKE",

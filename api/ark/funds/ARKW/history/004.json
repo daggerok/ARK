@@ -235,8 +235,20 @@
       "Market Price": "156.82",
       "NAV": "157.01",
       "Premium/Discount": "-0.1210%"
+    },
+    {
+      "Date": "Oct 29 2026",
+      "Market Price": "155.16",
+      "NAV": "154.94",
+      "Premium/Discount": "0.1420%"
+    },
+    {
+      "Date": "Oct 30 2026",
+      "Market Price": "147.02",
+      "NAV": "146.97",
+      "Premium/Discount": "0.0340%"
     }
   ],
   "ticker": "ARKW",
-  "totalRows": 3038
+  "totalRows": 3040
 }
