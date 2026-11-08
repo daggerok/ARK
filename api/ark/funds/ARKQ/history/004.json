@@ -247,8 +247,38 @@
       "Market Price": "111.08",
       "NAV": "111.05",
       "Premium/Discount": "0.0270%"
+    },
+    {
+      "Date": "Nov 02 2026",
+      "Market Price": "109.85",
+      "NAV": "109.82",
+      "Premium/Discount": "0.0273%"
+    },
+    {
+      "Date": "Nov 03 2026",
+      "Market Price": "110.95",
+      "NAV": "110.93",
+      "Premium/Discount": "0.0180%"
+    },
+    {
+      "Date": "Nov 04 2026",
+      "Market Price": "107.74",
+      "NAV": "107.79",
+      "Premium/Discount": "-0.0464%"
+    },
+    {
+      "Date": "Nov 05 2026",
+      "Market Price": "99.38",
+      "NAV": "99.47",
+      "Premium/Discount": "-0.0905%"
+    },
+    {
+      "Date": "Nov 06 2026",
+      "Market Price": "104.80",
+      "NAV": "104.91",
+      "Premium/Discount": "-0.1049%"
     }
   ],
   "ticker": "ARKQ",
-  "totalRows": 3040
+  "totalRows": 3045
 }

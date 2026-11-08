@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Oct 30 2026",
+  "asOfDate": "Nov 06 2026",
   "aum": "$61.1 Million",
   "aumValue": 61100000,
   "category": "Thematic Equity",
-  "closePrice": "$24.07",
-  "closePriceValue": 24.07,
+  "closePrice": "$23.50",
+  "closePriceValue": 23.5,
   "dataFile": "funds/PRNT/meta.json",
   "distributions": {
     "dividend": "$0.1750",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/prnt",
-  "generatedAt": "2026-11-01T05:28:52Z",
+  "generatedAt": "2026-11-08T05:31:02Z",
   "history": {
-    "asOfDate": "Oct 30 2026",
+    "asOfDate": "Nov 06 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,10 +64,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2587
+    "totalRows": 2592
   },
   "holdings": {
-    "asOfDate": "Oct 30 2026",
+    "asOfDate": "Nov 06 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -100,8 +100,8 @@
     "cagr5y": -6.73,
     "cagr10y": 1.24,
     "siAnn": 2.62,
-    "dividendYield": 0.73,
-    "dividendYieldText": "0.73%",
+    "dividendYield": 0.74,
+    "dividendYieldText": "0.74%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -109,10 +109,10 @@
     "performanceAsOf": "2026-09-30"
   },
   "name": "The 3D Printing ETF",
-  "nav": "$24.24",
-  "navValue": 24.24,
-  "premiumDiscount": "-0.7013%",
-  "premiumDiscountValue": -0.7013,
+  "nav": "$23.67",
+  "navValue": 23.67,
+  "premiumDiscount": "-0.7182%",
+  "premiumDiscountValue": -0.7182,
   "returns": {
     "monthEnd": {
       "asOfDate": "Sep 30 2026",
@@ -146,7 +146,7 @@
     "fundPage": "https://www.ark-funds.com/funds/prnt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1005?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-10-30",
+    "holdingsAsOfDate": "2026-11-06",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/THE_3D_PRINTING_ETF_PRNT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
@@ -162,10 +162,10 @@
   "terValue": 0.66,
   "ticker": "PRNT",
   "yields": {
-    "dividendYield": 0.73,
+    "dividendYield": 0.74,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.73%",
+    "dividendYieldText": "0.74%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null
