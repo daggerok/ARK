@@ -184,6 +184,8 @@ const clientsFor = (scenario: Scenario = {}) => ({
   },
   yahoo: async (url: string) => {
     if (scenario.yahooPoints instanceof Error) throw scenario.yahooPoints;
+    // the swing block's own chart request (period1=0, daily bars since listing): 300 daily closes from 2025-11-30
+    if (url.includes('includePrePost=false')) return respondWith(JSON.stringify(yahooPayload(300)), url);
     return respondWith(JSON.stringify(yahooPayload(scenario.yahooPoints ?? 4, scenario.firstTrade, scenario.dividends)), url);
   },
   sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
@@ -740,7 +742,9 @@ describe('pipeline', () => {
 
   test('a one-ticker run keeps every catalog row; rows without meta have dataFile null and the same metrics keys', async () => {
     await withTempRoot(async (root) => {
-      await run(root, { TICKERS: 'ARKK' });
+      const yahooUrls: string[] = [];
+      const base = clientsFor({});
+      await run(root, { TICKERS: 'ARKK' }, { ...base, yahoo: async (url: string) => { yahooUrls.push(url); return base.yahoo(url); } });
       const index = await readJson(join(root, 'index.json'));
       expect(index.funds).toHaveLength(14);
       const arkk = index.funds.find((row: any) => row.ticker === 'ARKK');
@@ -751,6 +755,12 @@ describe('pipeline', () => {
       // the 52-week keys are in every row, computed from its history pages (range-52w block)
       const RANGE_KEYS = ['week52Low', 'week52High', 'range52w', 'range52wClose', 'range52wAsOf', 'range52wSince', 'range52wBasis'];
       for (const row of index.funds) expect(Object.keys(row.metrics)).toEqual(expect.arrayContaining(RANGE_KEYS));
+      // the swing keys from the Yahoo daily closes (period1=0) of the fund the run updated (swing block); only ARKK is requested
+      const SWING_KEYS = ['pctFrom52wHigh', 'athPrice', 'athDate', 'athBasis', 'pctFromAth', 'volatility1y', 'sigmaFromMean60d', 'high60d', 'low60d'];
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-11, -2)).toEqual(SWING_KEYS);
+      expect(yahooUrls.filter((url) => /chart\/[A-Z]+\?period1=0&period2=\d+&interval=1d&includePrePost=false/.test(url)).map((url) => url.replace(/^.*chart\/|\?.*$/g, ''))).toEqual(['ARKK']);
+      expect([arkk.metrics.athBasis, arkk.metrics.athPrice, arkk.metrics.high60d, arkk.metrics.volatility1y]).toEqual(['daily closes since 2025-11-30', 52.99, 52.99, expect.any(Number)]);
+      expect(arkq.metrics.athPrice).toBeNull();
       expect(arkq.metrics).toMatchObject({ returnsBasis: UNAVAILABLE_RETURNS_BASIS, performanceAsOf: null, ytd: null });
       await run(root, { TICKERS: 'ARKY' }); // another filtered run does not drop ARKK either
       const again = await readJson(join(root, 'index.json'));

@@ -79,6 +79,13 @@ Each fund carries a derived `metrics` object that powers the catalog columns sha
   | `null` | no yield |
 
 - `secYield` — 30-day SEC yield when published on the fund page; `null` otherwise (an honest null is never replaced by an older number)
+- Swing metrics (shared `swing` block, the formulas of the Stocks feed) from the Yahoo Finance daily closes since listing (chart API, split-adjusted, not dividend-adjusted; the published NAV and market price history is not split-adjusted), with the last close as the price. Read for every fund the run updates; a failed chart, or one that starts more than 31 days after the published history, keeps the published values; `null` (never `0`) when the history is too short:
+  - `pctFrom52wHigh` - last close against the highest close of the last 52 weeks, in percent
+  - `athPrice`, `athDate`, `athBasis` - highest close of the whole history, its date and the history it covers (`daily closes since <first date>`)
+  - `pctFromAth` - last close against `athPrice`, in percent
+  - `volatility1y` - annualized volatility of the last 252 daily log returns, in percent (needs 253 closes)
+  - `sigmaFromMean60d` - distance of the last close from the mean of the last 60 closes, in sample standard deviations
+  - `high60d`, `low60d` - highest and lowest of the last 60 closes
 - `returnsBasis` — always a non-empty label of how the returns were computed: official ARK Invest NAV total returns, Yahoo Finance adjusted close estimates, or the previous publication's label when both sources are down (never empty and never `-`). All return figures of a fund come from one source as a unit (no per-figure mixing): a figure ARK later nulls stays `null`
 - `performanceAsOf` — ISO `YYYY-MM-DD` date the returns are as of: the month-end date of the ark-funds.com performance table for official returns, the Yahoo close the derived returns end on (the last close at or before the month end); `null` when unknown. It is not the NAV date
 - Every `metrics` object carries the full key set in a fixed order, with `returnsBasis` and `performanceAsOf` last; unavailable values are `null`
