@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 06 2026",
-  "aum": "$1.1 Million",
-  "aumValue": 1100000,
+  "asOfDate": "Nov 13 2026",
+  "aum": "$1 Million",
+  "aumValue": 1000000,
   "category": "Defined Outcome",
-  "closePrice": "$19.56",
-  "closePriceValue": 19.56,
+  "closePrice": "$19.52",
+  "closePriceValue": 19.52,
   "dataFile": "funds/ARKD/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkd",
-  "generatedAt": "2026-11-08T05:30:08Z",
+  "generatedAt": "2026-11-15T07:44:14Z",
   "history": {
-    "asOfDate": "Nov 06 2026",
+    "asOfDate": "Nov 13 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,10 +33,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 214
+    "totalRows": 219
   },
   "holdings": {
-    "asOfDate": "Nov 06 2026",
+    "asOfDate": "Nov 13 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -60,7 +60,7 @@
   },
   "inceptionDate": "Jan 02 2026",
   "metrics": {
-    "ytd": 7.31,
+    "ytd": 1.26,
     "tr1y": null,
     "tr3y": null,
     "tr5y": null,
@@ -75,25 +75,25 @@
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-09-30"
+    "performanceAsOf": "2026-10-31"
   },
   "name": "ARK DIET Q1 Buffer ETF",
-  "nav": "$19.61",
-  "navValue": 19.61,
-  "premiumDiscount": "-0.2550%",
-  "premiumDiscountValue": -0.255,
+  "nav": "$19.54",
+  "navValue": 19.54,
+  "premiumDiscount": "-0.1024%",
+  "premiumDiscountValue": -0.1024,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Sep 30 2026",
-      "mo1": 1.89,
-      "mo3": 4.93,
+      "asOfDate": "Oct 31 2026",
+      "mo1": -5.64,
+      "mo3": 5.95,
       "sinceInception": null,
-      "sinceInceptionCumulative": 7.31,
+      "sinceInceptionCumulative": 1.26,
       "yr1": null,
       "yr10": null,
       "yr3": null,
       "yr5": null,
-      "ytd": 7.31
+      "ytd": 1.26
     },
     "quarterEnd": {
       "asOfDate": "Sep 30 2026",
@@ -115,7 +115,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkd",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1012?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-06",
+    "holdingsAsOfDate": "2026-11-13",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q1_BUFFER_ETF_ARKD_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

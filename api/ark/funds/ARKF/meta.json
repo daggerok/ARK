@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 06 2026",
-  "aum": "$830.9 Million",
-  "aumValue": 830900000,
+  "asOfDate": "Nov 13 2026",
+  "aum": "$727 Million",
+  "aumValue": 727000000,
   "category": "Thematic Equity",
-  "closePrice": "$41.81",
-  "closePriceValue": 41.81,
+  "closePrice": "$41.51",
+  "closePriceValue": 41.51,
   "dataFile": "funds/ARKF/meta.json",
   "distributions": {
     "dividend": "$0.0430",
@@ -32,9 +32,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkf",
-  "generatedAt": "2026-11-08T05:30:17Z",
+  "generatedAt": "2026-11-15T07:44:24Z",
   "history": {
-    "asOfDate": "Nov 06 2026",
+    "asOfDate": "Nov 13 2026",
     "headers": [
       "Date",
       "NAV",
@@ -47,7 +47,7 @@
       "history/002.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 1952
+    "totalRows": 1957
   },
   "holdings": {
     "asOfDate": "Jan 02 2026",
@@ -74,40 +74,40 @@
   },
   "inceptionDate": "Feb 04 2019",
   "metrics": {
-    "ytd": -4.71,
-    "tr1y": -19.7,
-    "tr3y": 135.16,
-    "tr5y": -7.75,
+    "ytd": -11.53,
+    "tr1y": -25.33,
+    "tr3y": 134.1,
+    "tr5y": -20.77,
     "tr10y": null,
-    "cagr3y": 32.98,
-    "cagr5y": -1.6,
+    "cagr3y": 32.78,
+    "cagr5y": -4.55,
     "cagr10y": null,
-    "siAnn": 11.58,
+    "siAnn": 10.39,
     "dividendYield": 0.1,
     "dividendYieldText": "0.10%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-09-30"
+    "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Blockchain & Fintech Innovation ETF",
-  "nav": "$41.90",
-  "navValue": 41.9,
-  "premiumDiscount": "-0.2148%",
-  "premiumDiscountValue": -0.2148,
+  "nav": "$41.54",
+  "navValue": 41.54,
+  "premiumDiscount": "-0.0722%",
+  "premiumDiscountValue": -0.0722,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Sep 30 2026",
-      "mo1": -1.85,
-      "mo3": 15.39,
-      "sinceInception": 11.58,
-      "sinceInceptionCumulative": 131.55,
-      "yr1": -19.7,
+      "asOfDate": "Oct 31 2026",
+      "mo1": -7.16,
+      "mo3": 6.45,
+      "sinceInception": 10.39,
+      "sinceInceptionCumulative": 114.97,
+      "yr1": -25.33,
       "yr10": null,
-      "yr3": 32.98,
-      "yr5": -1.6,
-      "ytd": -4.71
+      "yr3": 32.78,
+      "yr5": -4.55,
+      "ytd": -11.53
     },
     "quarterEnd": {
       "asOfDate": "Sep 30 2026",

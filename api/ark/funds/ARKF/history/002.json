@@ -5719,8 +5719,38 @@
       "Market Price": "41.81",
       "NAV": "41.90",
       "Premium/Discount": "-0.2148%"
+    },
+    {
+      "Date": "Nov 09 2026",
+      "Market Price": "42.73",
+      "NAV": "42.75",
+      "Premium/Discount": "-0.0468%"
+    },
+    {
+      "Date": "Nov 10 2026",
+      "Market Price": "42.03",
+      "NAV": "42.05",
+      "Premium/Discount": "-0.0476%"
+    },
+    {
+      "Date": "Nov 11 2026",
+      "Market Price": "42.57",
+      "NAV": "42.59",
+      "Premium/Discount": "-0.0470%"
+    },
+    {
+      "Date": "Nov 12 2026",
+      "Market Price": "41.60",
+      "NAV": "41.61",
+      "Premium/Discount": "-0.0240%"
+    },
+    {
+      "Date": "Nov 13 2026",
+      "Market Price": "41.51",
+      "NAV": "41.54",
+      "Premium/Discount": "-0.0722%"
     }
   ],
   "ticker": "ARKF",
-  "totalRows": 1952
+  "totalRows": 1957
 }

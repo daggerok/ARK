@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 06 2026",
-  "aum": "$2,028 Million",
-  "aumValue": 2028000000,
+  "asOfDate": "Nov 13 2026",
+  "aum": "$1,675 Million",
+  "aumValue": 1675000000,
   "category": "Thematic Equity",
-  "closePrice": "$138.82",
-  "closePriceValue": 138.82,
+  "closePrice": "$142.56",
+  "closePriceValue": 142.56,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-11-08T05:30:44Z",
+  "generatedAt": "2026-11-15T07:44:51Z",
   "history": {
-    "asOfDate": "Nov 06 2026",
+    "asOfDate": "Nov 13 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3045
+    "totalRows": 3050
   },
   "holdings": {
     "asOfDate": "Oct 06 2026",
@@ -88,40 +88,40 @@
   },
   "inceptionDate": "Sep 30 2014",
   "metrics": {
-    "ytd": 8.66,
-    "tr1y": -6.54,
-    "tr3y": 200.34,
-    "tr5y": 20.5,
-    "tr10y": 664.07,
-    "cagr3y": 44.28,
-    "cagr5y": 3.8,
-    "cagr10y": 22.55,
-    "siAnn": 21.16,
-    "dividendYield": 1.69,
-    "dividendYieldText": "1.69%",
+    "ytd": -0.4,
+    "tr1y": -15.54,
+    "tr3y": 188.27,
+    "tr5y": -2.23,
+    "tr10y": 625.69,
+    "cagr3y": 42.32,
+    "cagr5y": -0.45,
+    "cagr10y": 21.92,
+    "siAnn": 20.13,
+    "dividendYield": 1.65,
+    "dividendYieldText": "1.65%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
     "returnsBasis": "official ARK Invest NAV total returns (fund performance API, month-end series)",
-    "performanceAsOf": "2026-09-30"
+    "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$139.12",
-  "navValue": 139.12,
-  "premiumDiscount": "-0.2156%",
-  "premiumDiscountValue": -0.2156,
+  "nav": "$142.46",
+  "navValue": 142.46,
+  "premiumDiscount": "0.0702%",
+  "premiumDiscountValue": 0.0702,
   "returns": {
     "monthEnd": {
-      "asOfDate": "Sep 30 2026",
-      "mo1": 1.92,
-      "mo3": 10.57,
-      "sinceInception": 21.16,
-      "sinceInceptionCumulative": 901.67,
-      "yr1": -6.54,
-      "yr10": 22.55,
-      "yr3": 44.28,
-      "yr5": 3.8,
-      "ytd": 8.66
+      "asOfDate": "Oct 31 2026",
+      "mo1": -8.34,
+      "mo3": 7.48,
+      "sinceInception": 20.13,
+      "sinceInceptionCumulative": 818.18,
+      "yr1": -15.54,
+      "yr10": 21.92,
+      "yr3": 42.32,
+      "yr5": -0.45,
+      "ytd": -0.4
     },
     "quarterEnd": {
       "asOfDate": "Sep 30 2026",
@@ -159,10 +159,10 @@
   "terValue": 0.76,
   "ticker": "ARKW",
   "yields": {
-    "dividendYield": 1.69,
+    "dividendYield": 1.65,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.69%",
+    "dividendYieldText": "1.65%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null
