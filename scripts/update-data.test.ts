@@ -184,8 +184,8 @@ const clientsFor = (scenario: Scenario = {}) => ({
   },
   yahoo: async (url: string) => {
     if (scenario.yahooPoints instanceof Error) throw scenario.yahooPoints;
-    // the swing block's own chart request (period1=0, daily bars since listing): 300 daily closes from 2025-11-30
-    if (url.includes('includePrePost=false')) return respondWith(JSON.stringify(yahooPayload(300)), url);
+    // the swing block's own chart request (period1=0, daily bars since listing, also read by the dividends block): 300 daily closes from 2025-11-30 and one dividend
+    if (url.includes('includePrePost=false')) { const paid = Date.parse('2026-09-21T00:00:00Z') / 1000; return respondWith(JSON.stringify(yahooPayload(300, '2025-11-30', { [String(paid)]: { amount: 0.25, date: paid } })), url); }
     return respondWith(JSON.stringify(yahooPayload(scenario.yahooPoints ?? 4, scenario.firstTrade, scenario.dividends)), url);
   },
   sec: async (url: string) => { throw new Error(`unexpected SEC URL: ${url}`); },
@@ -757,7 +757,13 @@ describe('pipeline', () => {
       for (const row of index.funds) expect(Object.keys(row.metrics)).toEqual(expect.arrayContaining(RANGE_KEYS));
       // the swing keys from the Yahoo daily closes (period1=0) of the fund the run updated (swing block); only ARKK is requested
       const SWING_KEYS = ['pctFrom52wHigh', 'athPrice', 'athDate', 'athBasis', 'pctFromAth', 'volatility1y', 'sigmaFromMean60d', 'high60d', 'low60d'];
-      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-11, -2)).toEqual(SWING_KEYS);
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-17, -8)).toEqual(SWING_KEYS);
+      // the dividend keys from the Yahoo dividend events of the same chart (dividends block, tap mode): one payment in the last 12 months,
+      // no complete year after the listing year, so growth, streak and cut are null (never 0)
+      const DIVIDEND_KEYS = ['dividendRate', 'dividendGrowth', 'dividendGrowth3y', 'dividendGrowth5y', 'dividendStreak', 'dividendCut10y'];
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-8, -2)).toEqual(DIVIDEND_KEYS);
+      expect(DIVIDEND_KEYS.map((key) => arkk.metrics[key])).toEqual([0.25, null, null, null, null, null]);
+      expect(yahooUrls.filter((url) => /chart\/ARKK\?period1=0&.*includePrePost=false/.test(url))).toHaveLength(1);
       expect(yahooUrls.filter((url) => /chart\/[A-Z]+\?period1=0&period2=\d+&interval=1d&includePrePost=false/.test(url)).map((url) => url.replace(/^.*chart\/|\?.*$/g, ''))).toEqual(['ARKK']);
       expect([arkk.metrics.athBasis, arkk.metrics.athPrice, arkk.metrics.high60d, arkk.metrics.volatility1y]).toEqual(['daily closes since 2025-11-30', 52.99, 52.99, expect.any(Number)]);
       expect(arkq.metrics.athPrice).toBeNull();
