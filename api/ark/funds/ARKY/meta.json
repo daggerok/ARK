@@ -28,7 +28,7 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arky",
-  "generatedAt": "2026-11-15T07:45:00Z",
+  "generatedAt": "2026-11-16T16:25:30Z",
   "history": {
     "asOfDate": "Nov 13 2026",
     "headers": [
@@ -45,7 +45,7 @@
     "totalRows": 62
   },
   "holdings": {
-    "asOfDate": "Nov 14 2026",
+    "asOfDate": "Nov 16 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -61,7 +61,7 @@
       "holdings/001.json"
     ],
     "source": "official ARKY structured-note holdings CSV",
-    "totalRows": 47
+    "totalRows": 46
   },
   "identifiers": {
     "cusip": "00214Q724",
@@ -125,7 +125,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arky",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1015?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-14",
+    "holdingsAsOfDate": "2026-11-16",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ACTIVE_AUTOCALLABLE_INCOME_ETF_ARKY_HOLDINGS.csv",
     "holdingsDateBasis": "Azure Last-Modified HTTP header (ARKY CSV omits a date column)",
     "holdingsSource": "official ARKY structured-note holdings CSV",

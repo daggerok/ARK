@@ -14,306 +14,306 @@
     {
       "Asset Category": "Equity",
       "Identifier": "88023B103",
-      "Market Value": "$208,807,768.17",
+      "Market Value": "$197,535,593.20",
       "Name": "TEMPUS AI INC-CL A",
-      "Shares Held": "2,751,453",
+      "Shares Held": "2,758,877",
       "Ticker": "TEM",
-      "Weight": "10.57%"
+      "Weight": "10.21%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "88025U109",
-      "Market Value": "$155,404,691.10",
+      "Market Value": "$153,869,256.64",
       "Name": "10X GENOMICS INC-CLASS A",
-      "Shares Held": "2,629,521",
+      "Shares Held": "2,644,256",
       "Ticker": "TXG",
-      "Weight": "7.87%"
+      "Weight": "7.95%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "90184D100",
-      "Market Value": "$149,326,430.76",
+      "Market Value": "$146,718,622.80",
       "Name": "TWIST BIOSCIENCE CORP",
-      "Shares Held": "1,307,358",
+      "Shares Held": "1,314,683",
       "Ticker": "TWST",
-      "Weight": "7.56%"
+      "Weight": "7.58%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "H17182108",
-      "Market Value": "$100,731,432.36",
+      "Market Value": "$100,392,779.52",
       "Name": "CRISPR THERAPEUTICS AG",
-      "Shares Held": "2,363,478",
+      "Shares Held": "2,376,723",
       "Ticker": "CRSP",
-      "Weight": "5.10%"
+      "Weight": "5.19%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "40131M109",
-      "Market Value": "$100,261,784.10",
+      "Market Value": "$98,765,802.00",
       "Name": "GUARDANT HEALTH INC",
-      "Shares Held": "647,435",
+      "Shares Held": "651,060",
       "Ticker": "GH",
-      "Weight": "5.08%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "00091E109",
-      "Market Value": "$98,754,109.34",
-      "Name": "ABSCI CORP",
-      "Shares Held": "10,810,521",
-      "Ticker": "ABSI",
-      "Weight": "5.00%"
+      "Weight": "5.10%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "532457108",
-      "Market Value": "$91,675,694.95",
+      "Market Value": "$93,349,701.50",
       "Name": "ELI LILLY & CO",
-      "Shares Held": "64,309",
+      "Shares Held": "64,669",
       "Ticker": "LLY",
-      "Weight": "4.64%"
+      "Weight": "4.82%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "00091E109",
+      "Market Value": "$91,860,930.20",
+      "Name": "ABSCI CORP",
+      "Shares Held": "10,871,116",
+      "Ticker": "ABSI",
+      "Weight": "4.75%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "632307104",
-      "Market Value": "$90,925,694.64",
+      "Market Value": "$90,344,270.79",
       "Name": "NATERA INC",
-      "Shares Held": "281,556",
+      "Shares Held": "283,131",
       "Ticker": "NTRA",
-      "Weight": "4.60%"
+      "Weight": "4.67%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "452327109",
-      "Market Value": "$87,318,227.70",
+      "Market Value": "$86,743,193.29",
       "Name": "ILLUMINA INC",
-      "Shares Held": "416,694",
+      "Shares Held": "419,029",
       "Ticker": "ILMN",
-      "Weight": "4.42%"
+      "Weight": "4.48%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "07373V105",
-      "Market Value": "$76,926,421.98",
+      "Market Value": "$73,494,472.98",
       "Name": "BEAM THERAPEUTICS INC",
-      "Shares Held": "3,201,266",
+      "Shares Held": "3,219,206",
       "Ticker": "BEAM",
-      "Weight": "3.90%"
+      "Weight": "3.80%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "80810D103",
-      "Market Value": "$74,447,343.40",
+      "Market Value": "$71,661,307.37",
       "Name": "SCHRODINGER INC",
-      "Shares Held": "2,413,204",
+      "Shares Held": "2,426,729",
       "Ticker": "SDGR",
-      "Weight": "3.77%"
+      "Weight": "3.70%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "14167L103",
-      "Market Value": "$71,852,543.95",
+      "Market Value": "$70,507,879.20",
       "Name": "CAREDX INC",
-      "Shares Held": "900,295",
+      "Shares Held": "905,340",
       "Ticker": "CDNA",
       "Weight": "3.64%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "00650F109",
-      "Market Value": "$57,830,061.08",
+      "Market Value": "$57,286,220.64",
       "Name": "ADAPTIVE BIOTECHNOLOGIES",
-      "Shares Held": "1,961,671",
+      "Shares Held": "1,972,666",
       "Ticker": "ADPT",
-      "Weight": "2.93%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "75629V104",
-      "Market Value": "$54,547,168.23",
-      "Name": "RECURSION PHARMACEUTICALS-A",
-      "Shares Held": "16,380,531",
-      "Ticker": "RXRX",
-      "Weight": "2.76%"
+      "Weight": "2.96%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "20451W101",
-      "Market Value": "$53,474,290.08",
+      "Market Value": "$53,125,428.74",
       "Name": "COMPASS PATHWAYS PLC",
-      "Shares Held": "5,863,409",
+      "Shares Held": "5,896,274",
       "Ticker": "CMPS",
+      "Weight": "2.74%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "75629V104",
+      "Market Value": "$52,464,422.01",
+      "Name": "RECURSION PHARMACEUTICALS-A",
+      "Shares Held": "16,472,346",
+      "Ticker": "RXRX",
       "Weight": "2.71%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "92337F107",
-      "Market Value": "$45,350,701.77",
+      "Market Value": "$45,049,403.67",
       "Name": "VERACYTE INC",
-      "Shares Held": "1,841,279",
+      "Shares Held": "1,851,599",
       "Ticker": "VCYT",
-      "Weight": "2.30%"
+      "Weight": "2.33%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "67080M103",
-      "Market Value": "$43,244,338.80",
+      "Market Value": "$43,152,171.84",
       "Name": "NURIX THERAPEUTICS INC",
-      "Shares Held": "2,772,073",
+      "Shares Held": "2,787,608",
       "Ticker": "NRIX",
-      "Weight": "2.19%"
+      "Weight": "2.23%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "74168J101",
-      "Market Value": "$39,054,915.36",
+      "Market Value": "$43,110,342.73",
       "Name": "PRIME MEDICINE INC",
-      "Shares Held": "10,039,824",
+      "Shares Held": "10,096,099",
       "Ticker": "PRME",
-      "Weight": "1.98%"
+      "Weight": "2.23%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "010911105",
-      "Market Value": "$38,106,410.24",
+      "Market Value": "$37,173,774.69",
       "Name": "ALAMAR BIOSCIENCES INC",
-      "Shares Held": "1,199,824",
+      "Shares Held": "1,206,549",
       "Ticker": "ALMR",
-      "Weight": "1.93%"
+      "Weight": "1.92%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "45826J105",
-      "Market Value": "$36,896,420.05",
+      "Market Value": "$33,923,722.70",
       "Name": "INTELLIA THERAPEUTICS INC",
       "Shares Held": "3,497,291",
       "Ticker": "NTLA",
-      "Weight": "1.87%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "124155102",
-      "Market Value": "$35,172,537.48",
-      "Name": "BUTTERFLY NETWORK INC",
-      "Shares Held": "5,273,244",
-      "Ticker": "BFLY",
-      "Weight": "1.78%"
+      "Weight": "1.75%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "81663L200",
-      "Market Value": "$32,063,803.59",
+      "Market Value": "$32,554,344.14",
       "Name": "GENEDX HOLDINGS CORP",
-      "Shares Held": "618,157",
+      "Shares Held": "621,622",
       "Ticker": "WGS",
-      "Weight": "1.62%"
+      "Weight": "1.68%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "03969T109",
-      "Market Value": "$26,617,067.64",
-      "Name": "ARCTURUS THERAPEUTICS HOLDIN",
-      "Shares Held": "3,153,681",
-      "Ticker": "ARCT",
-      "Weight": "1.35%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "811033109",
-      "Market Value": "$25,866,408.51",
-      "Name": "SCRIBE THERAPEUTICS INC",
-      "Shares Held": "1,522,449",
-      "Ticker": "SCTX",
-      "Weight": "1.31%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "45076A101",
-      "Market Value": "$25,769,452.24",
-      "Name": "IAMBIC THERAPEUTICS INC",
-      "Shares Held": "1,736,486",
-      "Ticker": "IAM",
-      "Weight": "1.30%"
+      "Identifier": "124155102",
+      "Market Value": "$32,241,017.92",
+      "Name": "BUTTERFLY NETWORK INC",
+      "Shares Held": "5,302,799",
+      "Ticker": "BFLY",
+      "Weight": "1.67%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "462222100",
-      "Market Value": "$25,592,692.58",
+      "Market Value": "$27,385,214.08",
       "Name": "IONIS PHARMACEUTICALS INC",
-      "Shares Held": "937,118",
+      "Shares Held": "942,368",
       "Ticker": "IONS",
-      "Weight": "1.30%"
+      "Weight": "1.41%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "03969T109",
+      "Market Value": "$26,512,536.16",
+      "Name": "ARCTURUS THERAPEUTICS HOLDIN",
+      "Shares Held": "3,171,356",
+      "Ticker": "ARCT",
+      "Weight": "1.37%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "811033109",
+      "Market Value": "$25,519,702.24",
+      "Name": "SCRIBE THERAPEUTICS INC",
+      "Shares Held": "1,559,884",
+      "Ticker": "SCTX",
+      "Weight": "1.32%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "69404D108",
-      "Market Value": "$24,570,823.03",
+      "Market Value": "$24,583,121.64",
       "Name": "PACIFIC BIOSCIENCES OF CALIF",
-      "Shares Held": "12,472,499",
+      "Shares Held": "12,542,409",
       "Ticker": "PACB",
-      "Weight": "1.24%"
+      "Weight": "1.27%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "370920100",
-      "Market Value": "$21,233,834.79",
-      "Name": "GENERATE BIOMEDICINES INC",
-      "Shares Held": "1,689,247",
-      "Ticker": "GENB",
-      "Weight": "1.08%"
+      "Identifier": "45076A101",
+      "Market Value": "$22,875,429.60",
+      "Name": "IAMBIC THERAPEUTICS INC",
+      "Shares Held": "1,746,216",
+      "Ticker": "IAM",
+      "Weight": "1.18%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "65443P102",
-      "Market Value": "$20,617,906.43",
+      "Market Value": "$20,627,586.28",
       "Name": "908 DEVICES INC",
-      "Shares Held": "2,106,017",
+      "Shares Held": "2,117,822",
       "Ticker": "MASS",
-      "Weight": "1.04%"
+      "Weight": "1.07%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "370920100",
+      "Market Value": "$20,503,453.84",
+      "Name": "GENERATE BIOMEDICINES INC",
+      "Shares Held": "1,698,712",
+      "Ticker": "GENB",
+      "Weight": "1.06%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "35661P100",
-      "Market Value": "$19,512,055.25",
+      "Market Value": "$19,251,525.30",
       "Name": "FREENOME INC",
-      "Shares Held": "1,839,025",
+      "Shares Held": "1,849,330",
       "Ticker": "FRNM",
       "Weight": "0.99%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "157085101",
-      "Market Value": "$16,028,361.48",
+      "Market Value": "$16,492,078.72",
       "Name": "CERUS CORP",
-      "Shares Held": "8,262,042",
+      "Shares Held": "8,308,352",
       "Ticker": "CERS",
-      "Weight": "0.81%"
+      "Weight": "0.85%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "501575104",
-      "Market Value": "$16,070,218.56",
+      "Market Value": "$16,210,702.61",
       "Name": "KYMERA THERAPEUTICS INC",
-      "Shares Held": "126,368",
+      "Shares Held": "127,073",
       "Ticker": "KYMR",
-      "Weight": "0.81%"
+      "Weight": "0.84%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "74765K105",
-      "Market Value": "$9,116,874.56",
+      "Market Value": "$8,641,942.95",
       "Name": "QUANTUM-SI INC",
-      "Shares Held": "7,472,848",
+      "Shares Held": "7,514,733",
       "Ticker": "QSI",
-      "Weight": "0.46%"
+      "Weight": "0.45%"
     },
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$1,777,803.56",
+      "Market Value": "$1,662,041.33",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "1,777,804",
+      "Shares Held": "1,662,041",
       "Ticker": "",
       "Weight": "0.09%"
     }
