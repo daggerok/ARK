@@ -757,14 +757,23 @@ describe('pipeline', () => {
       for (const row of index.funds) expect(Object.keys(row.metrics)).toEqual(expect.arrayContaining(RANGE_KEYS));
       // the swing keys from the Yahoo daily closes (period1=0) of the fund the run updated (swing block); only ARKK is requested
       const SWING_KEYS = ['pctFrom52wHigh', 'athPrice', 'athDate', 'athBasis', 'pctFromAth', 'volatility1y', 'sigmaFromMean60d', 'high60d', 'low60d'];
-      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-17, -8)).toEqual(SWING_KEYS);
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-51, -42)).toEqual(SWING_KEYS);
       // the dividend keys from the Yahoo dividend events of the same chart (dividends block, tap mode): one payment in the last 12 months,
       // no complete year after the listing year, so growth, streak and cut are null (never 0)
-      const DIVIDEND_KEYS = ['dividendRate', 'dividendGrowth', 'dividendGrowth3y', 'dividendGrowth5y', 'dividendStreak', 'dividendCut10y'];
-      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-8, -2)).toEqual(DIVIDEND_KEYS);
-      expect(DIVIDEND_KEYS.map((key) => arkk.metrics[key])).toEqual([0.25, null, null, null, null, null]);
+      const DIVIDEND_KEYS = ['dividendRate', 'dividendGrowth', 'dividendGrowth3y', 'dividendGrowth5y', 'dividendStreak', 'dividendCut10y', 'paymentsPerYear', 'payFrequency'];
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-42, -34)).toEqual(DIVIDEND_KEYS);
+      // 300 mocked daily bars (under a year) and one event: payFrequency is null (rule 4), paymentsPerYear 1
+      expect(DIVIDEND_KEYS.map((key) => arkk.metrics[key])).toEqual([0.25, null, null, null, null, null, 1, null]);
+      // the 32 keys of the benchmark block (SPY and QQQ), read from the same chart request, in front of returnsBasis and performanceAsOf
+      const BENCHMARK_KEYS = ['perf1y', 'perf3y', 'perf5y', 'perf10y', 'perfSi', 'maxDrawdown1y', 'maxDrawdown3y', 'maxDrawdown5y', 'maxDrawdown10y',
+        'vsSpy1y', 'vsSpy3y', 'vsSpy5y', 'vsSpy10y', 'beta1ySpy', 'corr1ySpy', 'upCapture3ySpy', 'downCapture3ySpy', 'relStrength3mSpy', 'stressReturnSpy', 'stressBasisSpy',
+        'vsQqq1y', 'vsQqq3y', 'vsQqq5y', 'vsQqq10y', 'beta1yQqq', 'corr1yQqq', 'upCapture3yQqq', 'downCapture3yQqq', 'relStrength3mQqq', 'stressReturnQqq', 'stressBasisQqq', 'benchmarkAsOf'];
+      for (const row of index.funds) expect(Object.keys(row.metrics).slice(-34, -2)).toEqual(BENCHMARK_KEYS);
+      // the benchmarks answer the same 300 bars as the fund: beta and correlation 1, relStrength3m 0, the horizons (a year and more) null; a row without a chart has no common date
+      expect([arkk.metrics.beta1ySpy, arkk.metrics.corr1yQqq, arkk.metrics.relStrength3mSpy, arkk.metrics.vsSpy1y, arkk.metrics.perf1y, arkk.metrics.benchmarkAsOf]).toEqual([1, 1, 0, null, null, '2026-09-25']);
+      expect([arkq.metrics.beta1ySpy, arkq.metrics.benchmarkAsOf]).toEqual([null, null]);
       expect(yahooUrls.filter((url) => /chart\/ARKK\?period1=0&.*includePrePost=false/.test(url))).toHaveLength(1);
-      expect(yahooUrls.filter((url) => /chart\/[A-Z]+\?period1=0&period2=\d+&interval=1d&includePrePost=false/.test(url)).map((url) => url.replace(/^.*chart\/|\?.*$/g, ''))).toEqual(['ARKK']);
+      expect(yahooUrls.filter((url) => /chart\/[A-Z]+\?period1=0&period2=\d+&interval=1d&includePrePost=false/.test(url)).map((url) => url.replace(/^.*chart\/|\?.*$/g, ''))).toEqual(['SPY', 'QQQ', 'ARKK']); // the benchmark block adds exactly two chart requests, read before the fund chart, no request per fund
       expect([arkk.metrics.athBasis, arkk.metrics.athPrice, arkk.metrics.high60d, arkk.metrics.volatility1y]).toEqual(['daily closes since 2025-11-30', 52.99, 52.99, expect.any(Number)]);
       expect(arkq.metrics.athPrice).toBeNull();
       expect(arkq.metrics).toMatchObject({ returnsBasis: UNAVAILABLE_RETURNS_BASIS, performanceAsOf: null, ytd: null });
