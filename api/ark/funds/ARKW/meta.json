@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 13 2026",
+  "asOfDate": "Nov 18 2026",
   "aum": "$1,675 Million",
   "aumValue": 1675000000,
   "category": "Thematic Equity",
-  "closePrice": "$142.56",
-  "closePriceValue": 142.56,
+  "closePrice": "$135.46",
+  "closePriceValue": 135.46,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-11-15T07:44:51Z",
+  "generatedAt": "2026-11-19T08:27:41Z",
   "history": {
-    "asOfDate": "Nov 13 2026",
+    "asOfDate": "Nov 18 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3050
+    "totalRows": 3053
   },
   "holdings": {
     "asOfDate": "Oct 06 2026",
@@ -97,8 +97,8 @@
     "cagr5y": -0.45,
     "cagr10y": 21.92,
     "siAnn": 20.13,
-    "dividendYield": 1.65,
-    "dividendYieldText": "1.65%",
+    "dividendYield": 1.74,
+    "dividendYieldText": "1.74%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$142.46",
-  "navValue": 142.46,
-  "premiumDiscount": "0.0702%",
-  "premiumDiscountValue": 0.0702,
+  "nav": "$135.68",
+  "navValue": 135.68,
+  "premiumDiscount": "-0.1621%",
+  "premiumDiscountValue": -0.1621,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -159,10 +159,10 @@
   "terValue": 0.76,
   "ticker": "ARKW",
   "yields": {
-    "dividendYield": 1.65,
+    "dividendYield": 1.74,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "1.65%",
+    "dividendYieldText": "1.74%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

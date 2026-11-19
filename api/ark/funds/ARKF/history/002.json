@@ -5749,8 +5749,26 @@
       "Market Price": "41.51",
       "NAV": "41.54",
       "Premium/Discount": "-0.0722%"
+    },
+    {
+      "Date": "Nov 16 2026",
+      "Market Price": "40.20",
+      "NAV": "40.21",
+      "Premium/Discount": "-0.0249%"
+    },
+    {
+      "Date": "Nov 17 2026",
+      "Market Price": "39.14",
+      "NAV": "39.13",
+      "Premium/Discount": "0.0256%"
+    },
+    {
+      "Date": "Nov 18 2026",
+      "Market Price": "39.13",
+      "NAV": "39.11",
+      "Premium/Discount": "0.0511%"
     }
   ],
   "ticker": "ARKF",
-  "totalRows": 1957
+  "totalRows": 1960
 }

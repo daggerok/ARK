@@ -1495,8 +1495,26 @@
       "Market Price": "25.71",
       "NAV": "25.92",
       "Premium/Discount": "-0.8102%"
+    },
+    {
+      "Date": "Nov 16 2026",
+      "Market Price": "25.31",
+      "NAV": "25.31",
+      "Premium/Discount": "0.0000%"
+    },
+    {
+      "Date": "Nov 17 2026",
+      "Market Price": "25.08",
+      "NAV": "25.27",
+      "Premium/Discount": "-0.7519%"
+    },
+    {
+      "Date": "Nov 18 2026",
+      "Market Price": "25.13",
+      "NAV": "25.19",
+      "Premium/Discount": "-0.2382%"
     }
   ],
   "ticker": "IZRL",
-  "totalRows": 2248
+  "totalRows": 2251
 }
