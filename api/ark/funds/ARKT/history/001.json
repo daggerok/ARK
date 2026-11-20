@@ -1723,8 +1723,14 @@
       "Market Price": "17.75",
       "NAV": "17.72",
       "Premium/Discount": "0.1693%"
+    },
+    {
+      "Date": "Nov 19 2026",
+      "Market Price": "17.51",
+      "NAV": "17.42",
+      "Premium/Discount": "0.5166%"
     }
   ],
   "ticker": "ARKT",
-  "totalRows": 286
+  "totalRows": 287
 }

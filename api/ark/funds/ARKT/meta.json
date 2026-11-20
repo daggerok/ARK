@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 18 2026",
+  "asOfDate": "Nov 19 2026",
   "aum": "$1.9 Million",
   "aumValue": 1900000,
   "category": "Defined Outcome",
-  "closePrice": "$17.75",
-  "closePriceValue": 17.75,
+  "closePrice": "$17.51",
+  "closePriceValue": 17.51,
   "dataFile": "funds/ARKT/meta.json",
   "distributions": {
     "dividend": "$0.0460",
@@ -24,9 +24,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkt",
-  "generatedAt": "2026-11-19T08:27:42Z",
+  "generatedAt": "2026-11-20T21:41:34Z",
   "history": {
-    "asOfDate": "Nov 18 2026",
+    "asOfDate": "Nov 19 2026",
     "headers": [
       "Date",
       "NAV",
@@ -38,10 +38,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 286
+    "totalRows": 287
   },
   "holdings": {
-    "asOfDate": "Nov 19 2026",
+    "asOfDate": "Nov 20 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -83,10 +83,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK DIET Q4 Buffer ETF",
-  "nav": "$17.72",
-  "navValue": 17.72,
-  "premiumDiscount": "0.1693%",
-  "premiumDiscountValue": 0.1693,
+  "nav": "$17.42",
+  "navValue": 17.42,
+  "premiumDiscount": "0.5166%",
+  "premiumDiscountValue": 0.5166,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -120,7 +120,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1011?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-19",
+    "holdingsAsOfDate": "2026-11-20",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q4_BUFFER_ETF_ARKT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 18 2026",
+  "asOfDate": "Nov 19 2026",
   "aum": "$1.5 Million",
   "aumValue": 1500000,
   "category": "Defined Outcome",
-  "closePrice": "$18.66",
-  "closePriceValue": 18.66,
+  "closePrice": "$18.37",
+  "closePriceValue": 18.37,
   "dataFile": "funds/ARKE/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arke",
-  "generatedAt": "2026-11-19T08:27:14Z",
+  "generatedAt": "2026-11-20T21:41:06Z",
   "history": {
-    "asOfDate": "Nov 18 2026",
+    "asOfDate": "Nov 19 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,10 +33,10 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 99
+    "totalRows": 100
   },
   "holdings": {
-    "asOfDate": "Nov 19 2026",
+    "asOfDate": "Nov 20 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -78,10 +78,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK DIET Q3 Buffer ETF",
-  "nav": "$18.61",
-  "navValue": 18.61,
-  "premiumDiscount": "0.2687%",
-  "premiumDiscountValue": 0.2687,
+  "nav": "$18.29",
+  "navValue": 18.29,
+  "premiumDiscount": "0.4374%",
+  "premiumDiscountValue": 0.4374,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -115,7 +115,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arke",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1014?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-19",
+    "holdingsAsOfDate": "2026-11-20",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_DIET_Q3_BUFFER_ETF_ARKE_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

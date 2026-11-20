@@ -14,16 +14,16 @@
     {
       "Asset Category": "Equity",
       "Identifier": "M6191J100",
-      "Market Value": "$2,500,689.94",
+      "Market Value": "$2,388,970.01",
       "Name": "JFROG LTD",
       "Shares Held": "21,863",
       "Ticker": "FROG",
-      "Weight": "2.20%"
+      "Weight": "2.14%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "72815L107",
-      "Market Value": "$2,293,796.96",
+      "Market Value": "$2,240,245.28",
       "Name": "PLAYTIKA HOLDING CORP",
       "Shares Held": "892,528",
       "Ticker": "PLTK",
@@ -31,17 +31,35 @@
     },
     {
       "Asset Category": "Equity",
+      "Identifier": "M15342104",
+      "Market Value": "$2,096,703.00",
+      "Name": "AUDIOCODES LTD",
+      "Shares Held": "232,967",
+      "Ticker": "AUDC",
+      "Weight": "1.88%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M96088105",
+      "Market Value": "$2,083,296.61",
+      "Name": "UROGEN PHARMA LTD",
+      "Shares Held": "65,657",
+      "Ticker": "URGN",
+      "Weight": "1.87%"
+    },
+    {
+      "Asset Category": "Equity",
       "Identifier": "M8216R109",
-      "Market Value": "$2,111,184.13",
+      "Market Value": "$2,076,680.61",
       "Name": "RISKIFIED LTD-A",
       "Shares Held": "215,647",
       "Ticker": "RSKD",
-      "Weight": "1.85%"
+      "Weight": "1.86%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M81865111",
-      "Market Value": "$2,084,073.60",
+      "Market Value": "$2,037,554.10",
       "Name": "RADCOM LTD",
       "Shares Held": "186,078",
       "Ticker": "RDCM",
@@ -49,71 +67,44 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M15342104",
-      "Market Value": "$2,064,087.62",
-      "Name": "AUDIOCODES LTD",
-      "Shares Held": "232,967",
-      "Ticker": "AUDC",
-      "Weight": "1.81%"
+      "Identifier": "M22465104",
+      "Market Value": "$1,998,486.00",
+      "Name": "CHECK POINT SOFTWARE TECH",
+      "Shares Held": "12,852",
+      "Ticker": "CHKP",
+      "Weight": "1.79%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6747754",
-      "Market Value": "$2,001,856.83",
+      "Market Value": "$1,941,112.28",
       "Name": "MATRIX IT LTD",
       "Shares Held": "58,615",
       "Ticker": "MTRX",
-      "Weight": "1.76%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M8T80P204",
-      "Market Value": "$1,992,043.35",
-      "Name": "NEXXEN INTERNATIONAL LTD",
-      "Shares Held": "208,155",
-      "Ticker": "NEXN",
-      "Weight": "1.75%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M7516K103",
-      "Market Value": "$1,988,336.97",
-      "Name": "NOVA LTD",
-      "Shares Held": "6,387",
-      "Ticker": "NVMI",
-      "Weight": "1.75%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M22465104",
-      "Market Value": "$1,979,593.56",
-      "Name": "CHECK POINT SOFTWARE TECH",
-      "Shares Held": "12,852",
-      "Ticker": "CHKP",
       "Weight": "1.74%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6267230",
-      "Market Value": "$1,962,381.54",
-      "Name": "HILAN LTD",
-      "Shares Held": "26,190",
-      "Ticker": "HLAN",
-      "Weight": "1.72%"
+      "Identifier": "M7516K103",
+      "Market Value": "$1,936,602.27",
+      "Name": "NOVA LTD",
+      "Shares Held": "6,387",
+      "Ticker": "NVMI",
+      "Weight": "1.74%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M96088105",
-      "Market Value": "$1,955,922.03",
-      "Name": "UROGEN PHARMA LTD",
-      "Shares Held": "65,657",
-      "Ticker": "URGN",
-      "Weight": "1.72%"
+      "Identifier": "M81873107",
+      "Market Value": "$1,938,194.30",
+      "Name": "RADWARE LTD",
+      "Shares Held": "57,445",
+      "Ticker": "RDWR",
+      "Weight": "1.74%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BMXT7N9",
-      "Market Value": "$1,944,446.89",
+      "Market Value": "$1,904,830.00",
       "Name": "NAYAX LTD",
       "Shares Held": "38,149",
       "Ticker": "NYAX",
@@ -122,7 +113,7 @@
     {
       "Asset Category": "Equity",
       "Identifier": "B23WQK8",
-      "Market Value": "$1,918,840.03",
+      "Market Value": "$1,879,602.94",
       "Name": "CELLCOM ISRAEL LTD",
       "Shares Held": "202,349",
       "Ticker": "CEL",
@@ -130,116 +121,134 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6253433",
-      "Market Value": "$1,924,150.65",
-      "Name": "DANEL (ADIR YEOSHUA) LTD",
-      "Shares Held": "14,387",
-      "Ticker": "DANE",
+      "Identifier": "6267230",
+      "Market Value": "$1,883,279.65",
+      "Name": "HILAN LTD",
+      "Shares Held": "26,190",
+      "Ticker": "HLAN",
       "Weight": "1.69%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6374420",
-      "Market Value": "$1,914,421.60",
-      "Name": "PARTNER COMMUNICATIONS CO",
-      "Shares Held": "183,032",
-      "Ticker": "PTNR",
-      "Weight": "1.68%"
+      "Identifier": "M8T80P204",
+      "Market Value": "$1,883,802.75",
+      "Name": "NEXXEN INTERNATIONAL LTD",
+      "Shares Held": "208,155",
+      "Ticker": "NEXN",
+      "Weight": "1.69%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6221689",
-      "Market Value": "$1,915,771.15",
-      "Name": "QUALITAU LTD",
-      "Shares Held": "24,481",
-      "Ticker": "QLTU",
-      "Weight": "1.68%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M8769Q102",
-      "Market Value": "$1,911,034.19",
-      "Name": "TEVA PHARMACEUTICAL IND LTD",
-      "Shares Held": "45,253",
-      "Ticker": "TEVJF",
-      "Weight": "1.68%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M81873107",
-      "Market Value": "$1,901,429.50",
-      "Name": "RADWARE LTD",
-      "Shares Held": "57,445",
-      "Ticker": "RDWR",
-      "Weight": "1.67%"
+      "Identifier": "B0H5D20",
+      "Market Value": "$1,888,615.48",
+      "Name": "TAT TECHNOLOGIES LTD",
+      "Shares Held": "50,698",
+      "Ticker": "TATTF",
+      "Weight": "1.69%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BG1YKN5",
-      "Market Value": "$1,892,033.15",
+      "Market Value": "$1,857,130.49",
       "Name": "FATTAL HOLDINGS 1998 LTD",
       "Shares Held": "9,656",
       "Ticker": "FTAL",
+      "Weight": "1.67%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6221689",
+      "Market Value": "$1,866,070.70",
+      "Name": "QUALITAU LTD",
+      "Shares Held": "24,481",
+      "Ticker": "QLTU",
+      "Weight": "1.67%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6374420",
+      "Market Value": "$1,851,012.66",
+      "Name": "PARTNER COMMUNICATIONS CO",
+      "Shares Held": "183,032",
+      "Ticker": "PTNR",
       "Weight": "1.66%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6432403",
-      "Market Value": "$1,880,152.35",
+      "Market Value": "$1,835,278.13",
       "Name": "COMPUGEN LTD",
-      "Shares Held": "940,636",
+      "Shares Held": "935,444",
       "Ticker": "CGEN",
       "Weight": "1.65%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "B0H5D20",
-      "Market Value": "$1,875,382.69",
-      "Name": "TAT TECHNOLOGIES LTD",
-      "Shares Held": "50,698",
-      "Ticker": "TATTF",
+      "Identifier": "6878977",
+      "Market Value": "$1,834,946.67",
+      "Name": "TELSYS LTD",
+      "Shares Held": "18,611",
+      "Ticker": "TLSY",
       "Weight": "1.65%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6335825",
-      "Market Value": "$1,862,688.12",
-      "Name": "AFCON HOLDINGS LTD",
-      "Shares Held": "11,839",
-      "Ticker": "AFHL",
-      "Weight": "1.64%"
-    },
-    {
-      "Asset Category": "Equity",
       "Identifier": "B054MX3",
-      "Market Value": "$1,862,174.49",
+      "Market Value": "$1,832,346.60",
       "Name": "P.C.B TECHNOLOGIES LTD",
-      "Shares Held": "443,410",
+      "Shares Held": "444,019",
       "Ticker": "PCBT",
       "Weight": "1.64%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6878977",
-      "Market Value": "$1,854,596.13",
-      "Name": "TELSYS LTD",
-      "Shares Held": "18,611",
-      "Ticker": "TLSY",
+      "Identifier": "M78673114",
+      "Market Value": "$1,831,734.52",
+      "Name": "PERION NETWORK LTD",
+      "Shares Held": "165,319",
+      "Ticker": "PERI",
+      "Weight": "1.64%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M20791105",
+      "Market Value": "$1,820,565.82",
+      "Name": "CAMTEK LTD",
+      "Shares Held": "18,619",
+      "Ticker": "CAMT",
       "Weight": "1.63%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "60741F104",
-      "Market Value": "$1,838,681.87",
-      "Name": "MOBILEYE GLOBAL INC-A",
-      "Shares Held": "353,253",
-      "Ticker": "MBLY",
+      "Identifier": "6253433",
+      "Market Value": "$1,820,314.38",
+      "Name": "DANEL (ADIR YEOSHUA) LTD",
+      "Shares Held": "14,398",
+      "Ticker": "DANE",
+      "Weight": "1.63%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6308913",
+      "Market Value": "$1,802,075.20",
+      "Name": "ELBIT SYSTEMS LTD",
+      "Shares Held": "2,597",
+      "Ticker": "ESLT",
+      "Weight": "1.62%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M68830112",
+      "Market Value": "$1,809,918.88",
+      "Name": "MEDIWOUND LTD",
+      "Shares Held": "133,672",
+      "Ticker": "MDWD",
       "Weight": "1.62%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6098032",
-      "Market Value": "$1,831,276.77",
+      "Market Value": "$1,793,185.07",
       "Name": "BEZEQ THE ISRAELI TELECOM CO",
       "Shares Held": "883,405",
       "Ticker": "BEZQ",
@@ -247,125 +256,125 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M20791105",
-      "Market Value": "$1,832,481.98",
-      "Name": "CAMTEK LTD",
-      "Shares Held": "18,619",
-      "Ticker": "CAMT",
+      "Identifier": "60741F104",
+      "Market Value": "$1,798,057.77",
+      "Name": "MOBILEYE GLOBAL INC-A",
+      "Shares Held": "353,253",
+      "Ticker": "MBLY",
       "Weight": "1.61%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "6308913",
-      "Market Value": "$1,834,295.47",
-      "Name": "ELBIT SYSTEMS LTD",
-      "Shares Held": "2,597",
-      "Ticker": "ESLT",
-      "Weight": "1.61%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M78673114",
-      "Market Value": "$1,835,040.90",
-      "Name": "PERION NETWORK LTD",
-      "Shares Held": "165,319",
-      "Ticker": "PERI",
-      "Weight": "1.61%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M9607U115",
-      "Market Value": "$1,836,210.40",
-      "Name": "VALENS SEMICONDUCTOR LTD",
-      "Shares Held": "1,266,352",
-      "Ticker": "VLN",
-      "Weight": "1.61%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M68830112",
-      "Market Value": "$1,819,275.92",
-      "Name": "MEDIWOUND LTD",
-      "Shares Held": "133,672",
-      "Ticker": "MDWD",
-      "Weight": "1.60%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "6987709",
-      "Market Value": "$1,823,438.55",
-      "Name": "ONE SOFTWARE TECHNOLOGIES LT",
-      "Shares Held": "86,273",
-      "Ticker": "ONE",
-      "Weight": "1.60%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BNNFCW8",
-      "Market Value": "$1,810,845.52",
+      "Market Value": "$1,790,138.91",
       "Name": "SOFWAVE MEDICAL LTD",
       "Shares Held": "161,008",
       "Ticker": "SOFW",
-      "Weight": "1.59%"
+      "Weight": "1.61%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6335825",
+      "Market Value": "$1,788,652.25",
+      "Name": "AFCON HOLDINGS LTD",
+      "Shares Held": "11,850",
+      "Ticker": "AFHL",
+      "Weight": "1.60%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "BRQQ0K0",
+      "Market Value": "$1,787,385.50",
+      "Name": "RP OPTICAL LAB LTD",
+      "Shares Held": "174,552",
+      "Ticker": "RPOL",
+      "Weight": "1.60%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6103936",
-      "Market Value": "$1,782,527.58",
+      "Market Value": "$1,775,226.88",
       "Name": "BET SHEMESH ENGINES HOLDINGS",
       "Shares Held": "8,197",
       "Ticker": "BSEN",
+      "Weight": "1.59%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "B5MN8M9",
+      "Market Value": "$1,752,319.36",
+      "Name": "ALLOT LTD",
+      "Shares Held": "217,647",
+      "Ticker": "ALLT",
       "Weight": "1.57%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6468226",
-      "Market Value": "$1,789,947.72",
+      "Market Value": "$1,748,790.06",
       "Name": "ISROTEL LTD",
-      "Shares Held": "45,782",
+      "Shares Held": "46,159",
       "Ticker": "ISRO",
       "Weight": "1.57%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M84137104",
-      "Market Value": "$1,780,978.32",
-      "Name": "SIMILARWEB LTD",
-      "Shares Held": "215,094",
-      "Ticker": "SMWB",
+      "Identifier": "6987709",
+      "Market Value": "$1,744,967.17",
+      "Name": "ONE SOFTWARE TECHNOLOGIES LT",
+      "Shares Held": "86,273",
+      "Ticker": "ONE",
+      "Weight": "1.57%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M9607U115",
+      "Market Value": "$1,747,565.76",
+      "Name": "VALENS SEMICONDUCTOR LTD",
+      "Shares Held": "1,266,352",
+      "Ticker": "VLN",
+      "Weight": "1.57%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M8769Q102",
+      "Market Value": "$1,744,050.62",
+      "Name": "TEVA PHARMACEUTICAL IND LTD",
+      "Shares Held": "45,253",
+      "Ticker": "TEVJF",
       "Weight": "1.56%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "B5MN8M9",
-      "Market Value": "$1,721,805.69",
-      "Name": "ALLOT LTD",
-      "Shares Held": "217,647",
-      "Ticker": "ALLT",
-      "Weight": "1.51%"
+      "Identifier": "M2197Q107",
+      "Market Value": "$1,722,439.88",
+      "Name": "CELLEBRITE DI LTD",
+      "Shares Held": "152,159",
+      "Ticker": "CLBT",
+      "Weight": "1.54%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M5425M103",
-      "Market Value": "$1,721,579.44",
+      "Market Value": "$1,697,520.10",
       "Name": "INMODE LTD",
       "Shares Held": "133,663",
       "Ticker": "INMD",
-      "Weight": "1.51%"
+      "Weight": "1.52%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6049740",
-      "Market Value": "$1,706,371.15",
-      "Name": "ARYT INDUSTRIES LTD",
-      "Shares Held": "492,585",
-      "Ticker": "ARYT",
-      "Weight": "1.50%"
+      "Identifier": "M84137104",
+      "Market Value": "$1,694,940.72",
+      "Name": "SIMILARWEB LTD",
+      "Shares Held": "215,094",
+      "Ticker": "SMWB",
+      "Weight": "1.52%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M25133105",
-      "Market Value": "$1,704,799.33",
+      "Market Value": "$1,672,552.18",
       "Name": "COGNYTE SOFTWARE LTD",
       "Shares Held": "214,981",
       "Ticker": "CGNT",
@@ -373,251 +382,242 @@
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "653656108",
-      "Market Value": "$1,703,556.00",
-      "Name": "NICE LTD - SPON ADR",
-      "Shares Held": "18,960",
-      "Ticker": "NICE",
-      "Weight": "1.50%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M2197Q107",
-      "Market Value": "$1,698,094.44",
-      "Name": "CELLEBRITE DI LTD",
-      "Shares Held": "152,159",
-      "Ticker": "CLBT",
+      "Identifier": "M6158M104",
+      "Market Value": "$1,661,554.84",
+      "Name": "ITURAN LOCATION AND CONTROL",
+      "Shares Held": "35,717",
+      "Ticker": "ITRN",
       "Weight": "1.49%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M6158M104",
-      "Market Value": "$1,680,842.02",
-      "Name": "ITURAN LOCATION AND CONTROL",
-      "Shares Held": "35,717",
-      "Ticker": "ITRN",
+      "Identifier": "653656108",
+      "Market Value": "$1,644,969.60",
+      "Name": "NICE LTD - SPON ADR",
+      "Shares Held": "18,960",
+      "Ticker": "NICE",
       "Weight": "1.48%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M87915274",
-      "Market Value": "$1,673,431.11",
+      "Market Value": "$1,612,840.71",
       "Name": "TOWER SEMICONDUCTOR LTD",
       "Shares Held": "12,623",
       "Ticker": "TSEM",
-      "Weight": "1.47%"
+      "Weight": "1.45%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6049740",
+      "Market Value": "$1,606,236.51",
+      "Name": "ARYT INDUSTRIES LTD",
+      "Shares Held": "495,875",
+      "Ticker": "ARYT",
+      "Weight": "1.44%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M4R82T106",
-      "Market Value": "$1,664,869.50",
+      "Market Value": "$1,601,756.80",
       "Name": "FIVERR INTERNATIONAL LTD",
       "Shares Held": "217,630",
       "Ticker": "FVRR",
-      "Weight": "1.46%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M0740A108",
-      "Market Value": "$1,624,136.32",
-      "Name": "ALPHA TAU MEDICAL LTD",
-      "Shares Held": "135,232",
-      "Ticker": "DRTS",
-      "Weight": "1.43%"
+      "Weight": "1.44%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "G32089107",
-      "Market Value": "$1,623,570.48",
+      "Market Value": "$1,554,228.00",
       "Name": "ETORO GROUP LTD-A",
       "Shares Held": "79,704",
       "Ticker": "ETOR",
-      "Weight": "1.43%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "BRQQ0K0",
-      "Market Value": "$1,615,664.16",
-      "Name": "RP OPTICAL LAB LTD",
-      "Shares Held": "174,305",
-      "Ticker": "RPOL",
-      "Weight": "1.42%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "BW5TWW1",
-      "Market Value": "$1,582,863.31",
-      "Name": "SMART SHOOTER LTD",
-      "Shares Held": "335,892",
-      "Ticker": "SMSH",
       "Weight": "1.39%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "BQ5J6B6",
-      "Market Value": "$1,547,658.00",
-      "Name": "PAGAYA TECHNOLOGIES LTD -A",
-      "Shares Held": "99,400",
-      "Ticker": "PGY",
-      "Weight": "1.36%"
+      "Identifier": "M8694L103",
+      "Market Value": "$1,555,070.40",
+      "Name": "SOL-GEL TECHNOLOGIES LTD",
+      "Shares Held": "28,755",
+      "Ticker": "SLGL",
+      "Weight": "1.39%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M85548101",
-      "Market Value": "$1,549,166.82",
+      "Market Value": "$1,535,185.17",
       "Name": "STRATASYS LTD",
       "Shares Held": "279,633",
       "Ticker": "SSYS",
+      "Weight": "1.38%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M0740A108",
+      "Market Value": "$1,529,473.92",
+      "Name": "ALPHA TAU MEDICAL LTD",
+      "Shares Held": "135,232",
+      "Ticker": "DRTS",
+      "Weight": "1.37%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "BW5TWW1",
+      "Market Value": "$1,514,704.99",
+      "Name": "SMART SHOOTER LTD",
+      "Shares Held": "337,200",
+      "Ticker": "SMSH",
       "Weight": "1.36%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M8694L103",
-      "Market Value": "$1,534,366.80",
-      "Name": "SOL-GEL TECHNOLOGIES LTD",
-      "Shares Held": "28,755",
-      "Ticker": "SLGL",
-      "Weight": "1.35%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "6458744",
-      "Market Value": "$1,527,880.79",
-      "Name": "ISSTA LTD",
-      "Shares Held": "58,550",
-      "Ticker": "ISTA",
-      "Weight": "1.34%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "10501L106",
-      "Market Value": "$1,516,730.98",
-      "Name": "BRAINSWAY LTD-ADR",
-      "Shares Held": "168,901",
-      "Ticker": "BWAY",
+      "Identifier": "M84116108",
+      "Market Value": "$1,479,447.53",
+      "Name": "SILICOM LTD",
+      "Shares Held": "59,249",
+      "Ticker": "SILC",
       "Weight": "1.33%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "BV6MJF4",
-      "Market Value": "$1,498,979.93",
-      "Name": "AMAL HOLDINGS",
-      "Shares Held": "323,114",
-      "Ticker": "AMAL",
+      "Identifier": "10501L106",
+      "Market Value": "$1,474,505.73",
+      "Name": "BRAINSWAY LTD-ADR",
+      "Shares Held": "168,901",
+      "Ticker": "BWAY",
       "Weight": "1.32%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "6051875",
-      "Market Value": "$1,504,891.58",
-      "Name": "ASHOT -ASHKELON INDUSTRIES",
-      "Shares Held": "117,091",
-      "Ticker": "ASHO",
-      "Weight": "1.32%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M84116108",
-      "Market Value": "$1,504,924.60",
-      "Name": "SILICOM LTD",
-      "Shares Held": "59,249",
-      "Ticker": "SILC",
-      "Weight": "1.32%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "M98068105",
-      "Market Value": "$1,491,601.50",
-      "Name": "WIX.COM LTD",
-      "Shares Held": "23,475",
-      "Ticker": "WIX",
+      "Identifier": "6458744",
+      "Market Value": "$1,463,953.40",
+      "Name": "ISSTA LTD",
+      "Shares Held": "56,858",
+      "Ticker": "ISTA",
       "Weight": "1.31%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M7S64H106",
-      "Market Value": "$1,448,740.68",
-      "Name": "MONDAY.COM LTD",
-      "Shares Held": "19,567",
-      "Ticker": "MNDY",
-      "Weight": "1.27%"
+      "Identifier": "BQ5J6B6",
+      "Market Value": "$1,453,228.00",
+      "Name": "PAGAYA TECHNOLOGIES LTD -A",
+      "Shares Held": "99,400",
+      "Ticker": "PGY",
+      "Weight": "1.30%"
     },
     {
       "Asset Category": "Equity",
-      "Identifier": "M8744T106",
-      "Market Value": "$1,389,184.30",
-      "Name": "TABOOLA.COM LTD",
-      "Shares Held": "687,715",
-      "Ticker": "TBLA",
-      "Weight": "1.22%"
+      "Identifier": "BV6MJF4",
+      "Market Value": "$1,424,069.19",
+      "Name": "AMAL HOLDINGS",
+      "Shares Held": "312,404",
+      "Ticker": "AMAL",
+      "Weight": "1.28%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M98068105",
+      "Market Value": "$1,390,893.75",
+      "Name": "WIX.COM LTD",
+      "Shares Held": "23,475",
+      "Ticker": "WIX",
+      "Weight": "1.25%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "6051875",
+      "Market Value": "$1,384,774.21",
+      "Name": "ASHOT -ASHKELON INDUSTRIES",
+      "Shares Held": "117,318",
+      "Ticker": "ASHO",
+      "Weight": "1.24%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M7S64H106",
+      "Market Value": "$1,367,733.30",
+      "Name": "MONDAY.COM LTD",
+      "Shares Held": "19,567",
+      "Ticker": "MNDY",
+      "Weight": "1.23%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M51474118",
-      "Market Value": "$1,339,859.91",
+      "Market Value": "$1,326,434.46",
       "Name": "GILAT SATELLITE NETWORKS LTD",
       "Shares Held": "268,509",
       "Ticker": "GILT",
-      "Weight": "1.18%"
+      "Weight": "1.19%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "M8744T106",
+      "Market Value": "$1,272,272.75",
+      "Name": "TABOOLA.COM LTD",
+      "Shares Held": "687,715",
+      "Ticker": "TBLA",
+      "Weight": "1.14%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M7518J104",
-      "Market Value": "$1,308,621.60",
+      "Market Value": "$1,196,931.45",
       "Name": "ODDITY TECH LTD-CL A",
       "Shares Held": "87,945",
       "Ticker": "ODD",
-      "Weight": "1.15%"
+      "Weight": "1.07%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "BSWT6L3",
-      "Market Value": "$1,188,316.01",
+      "Market Value": "$1,103,116.27",
       "Name": "TSG ADVANCED IT SYSTEMS LTD",
-      "Shares Held": "17,002",
+      "Shares Held": "16,542",
       "Ticker": "TSG",
-      "Weight": "1.04%"
+      "Weight": "0.99%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "M40527109",
-      "Market Value": "$720,358.94",
+      "Market Value": "$856,529.36",
       "Name": "ENTERA BIO LTD",
-      "Shares Held": "220,969",
+      "Shares Held": "261,137",
       "Ticker": "ENTX",
-      "Weight": "0.63%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "B0L2CR5",
-      "Market Value": "$589,550.79",
-      "Name": "KAMADA LTD",
-      "Shares Held": "72,536",
-      "Ticker": "KMDA",
-      "Weight": "0.52%"
-    },
-    {
-      "Asset Category": "Equity",
-      "Identifier": "BPJGWS5",
-      "Market Value": "$543,231.45",
-      "Name": "HIPER GLOBAL LTD",
-      "Shares Held": "56,006",
-      "Ticker": "HIPR",
-      "Weight": "0.48%"
+      "Weight": "0.77%"
     },
     {
       "Asset Category": "Cash & Equivalents",
       "Identifier": "X9USDGSFT",
-      "Market Value": "$504,215.58",
+      "Market Value": "$591,031.42",
       "Name": "GOLDMAN FS TRSY OBLIG INST 468",
-      "Shares Held": "504,216",
+      "Shares Held": "591,031",
       "Ticker": "",
-      "Weight": "0.44%"
+      "Weight": "0.53%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "B0L2CR5",
+      "Market Value": "$592,620.61",
+      "Name": "KAMADA LTD",
+      "Shares Held": "75,214",
+      "Ticker": "KMDA",
+      "Weight": "0.53%"
+    },
+    {
+      "Asset Category": "Equity",
+      "Identifier": "BPJGWS5",
+      "Market Value": "$562,486.02",
+      "Name": "HIPER GLOBAL LTD",
+      "Shares Held": "58,118",
+      "Ticker": "HIPR",
+      "Weight": "0.50%"
     },
     {
       "Asset Category": "Equity",
       "Identifier": "6047636",
-      "Market Value": "$33.08",
+      "Market Value": "$32.10",
       "Name": "MALAM-TEAM TECHNOLOGIES LTD",
       "Shares Held": "1",
       "Ticker": "MLTT",
