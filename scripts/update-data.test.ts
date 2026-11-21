@@ -78,6 +78,7 @@ import {
   splitPages,
   stableStringify,
   toIsoDate,
+  tooNewForHistory,
   trailingDividendYield,
   unwrapJinaReaderText,
   updateArkFund,
@@ -1128,6 +1129,27 @@ describe('pipeline 4', () => {
     result.events.dividends = Object.fromEntries(Object.entries(dividends).filter(([, event]) => event.date >= result.timestamp[0]));
     return respondWith(JSON.stringify(payload), url);
   };
+
+  test('a just-launched fund without issuer NAV history is published, an older one with the same answer still fails', async () => {
+    // Capital-Group CGBI and CGMI (launched 2026-11-17) failed every run after their first publication: the issuer had no history yet
+    const ago = (days: number) => { const d = new Date(REF.getTime() - days * DAY_MS); return `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${d.getUTCFullYear()}`; };
+    const born = (days: number): Scenario => ({
+      history: { chartData: [] },
+      overview: { ...(overviewSample as object), detailsView: (overviewSample as { detailsView: string }).detailsView.replace('10/31/2014', ago(days)) },
+    });
+    await withTempRoot(async (root) => {
+      expect((await update(root, born(3))).status).not.toBe('failed');
+      const first = await tree(root);
+      const second = await update(root, born(3));
+      expect(second.status).not.toBe('failed');
+      expect(await tree(root)).toEqual(first);
+      expect(tooNewForHistory(ago(3), '2026-09-28', 0)).toBe(true);
+      expect(tooNewForHistory(ago(90), '2026-09-28', 0)).toBe(false);
+      expect(tooNewForHistory(ago(3), '2026-09-28', 5)).toBe(false);
+      const old = await update(root, born(90));
+      expect([old.status, old.reason]).toEqual(['failed', expect.stringContaining('NAV history')]);
+    });
+  });
 
   test('a HISTORY_RANGE run after a full run keeps the older history and distributions and writes nothing (Q25)', async () => {
     const dividends = { a: { date: epoch('2025-03-20'), amount: 0.25 }, b: { date: epoch('2026-06-18'), amount: 0.3 } };

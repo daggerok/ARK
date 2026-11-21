@@ -2258,6 +2258,19 @@ function hasFundData(
     Boolean(yahoo?.points.length) || priorHoldings > 0 || priorHistory > 0 || priorFinancialFacts;
 }
 
+/** Days after inception during which a fund with no published official history may lack a NAV history at the issuer (Capital-Group CGBI and CGMI, launched 2026-11-17). */
+export const NEW_FUND_HISTORY_DAYS = 60;
+/**
+ * A just-launched fund has no daily NAV history at the issuer yet: an empty issuer history is then not a failed source, the
+ * fund is published from its holdings, overview and the Yahoo chart and picks up the official history once the issuer has it.
+ * Only when no official history is published yet: an empty answer for a fund with published history stays an outage.
+ */
+export function tooNewForHistory(inception: unknown, today: unknown, publishedHistoryRows: number): boolean {
+  const start = calendarIso(inception), end = calendarIso(today);
+  if (publishedHistoryRows > 0 || !start || !end) return false;
+  const days = (Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000;
+  return days >= 0 && days <= NEW_FUND_HISTORY_DAYS;
+}
 export async function updateArkFund(
   fund: ArkFund,
   config: UpdaterConfig,
@@ -2347,7 +2360,14 @@ export async function updateArkFund(
     if (!official.pageId) failedSources.push('issuer fund page');
     else {
       if (!official.overview) failedSources.push('overview');
-      if (!official.history.length) failedSources.push('NAV history');
+      if (!official.history.length) {
+        // the published sheet counts only when it is the official one: a Yahoo fallback sheet is not the issuer's history
+        const publishedOfficial = previousHistory.headers.join('|') !== YAHOO_HISTORY_HEADERS.join('|') ? previousHistory.rows.length : 0;
+        const launched = official.overview?.inceptionDate || toIsoDate(previousEntry.inceptionDate) || toIsoDate(record(previousMeta).inceptionDate) || null;
+        if (tooNewForHistory(launched, referenceDate.toISOString().slice(0, 10), publishedOfficial)) {
+          onNote(`[ ${'history'.padEnd(8)} ] ${fund.ticker}: launched ${launched}, no issuer NAV history yet - published without it`);
+        } else failedSources.push('NAV history');
+      }
       if (!official.monthEnd || !official.quarterEnd) failedSources.push('performance');
     }
   }
