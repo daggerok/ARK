@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 19 2026",
+  "asOfDate": "Nov 23 2026",
   "aum": "$1,743 Million",
   "aumValue": 1743000000,
   "category": "Thematic Equity",
-  "closePrice": "$98.52",
-  "closePriceValue": 98.52,
+  "closePrice": "$98.46",
+  "closePriceValue": 98.46,
   "dataFile": "funds/ARKQ/meta.json",
   "distributions": {
     "dividend": "$0.3060",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkq",
-  "generatedAt": "2026-11-20T21:41:24Z",
+  "generatedAt": "2026-11-25T03:46:33Z",
   "history": {
-    "asOfDate": "Nov 19 2026",
+    "asOfDate": "Nov 23 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,10 +61,10 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3054
+    "totalRows": 3056
   },
   "holdings": {
-    "asOfDate": "Nov 20 2026",
+    "asOfDate": "Nov 24 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Autonomous Technology & Robotics ETF",
-  "nav": "$98.36",
-  "navValue": 98.36,
-  "premiumDiscount": "0.1627%",
-  "premiumDiscountValue": 0.1627,
+  "nav": "$98.51",
+  "navValue": 98.51,
+  "premiumDiscount": "-0.0508%",
+  "premiumDiscountValue": -0.0508,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -143,7 +143,7 @@
     "fundPage": "https://www.ark-funds.com/funds/arkq",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1001?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-20",
+    "holdingsAsOfDate": "2026-11-24",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_AUTONOMOUS_TECH._%26_ROBOTICS_ETF_ARKQ_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",

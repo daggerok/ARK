@@ -193,8 +193,20 @@
       "Market Price": "68.93",
       "NAV": "68.84",
       "Premium/Discount": "0.1307%"
+    },
+    {
+      "Date": "Nov 20 2026",
+      "Market Price": "64.22",
+      "NAV": "64.27",
+      "Premium/Discount": "-0.0778%"
+    },
+    {
+      "Date": "Nov 23 2026",
+      "Market Price": "69.36",
+      "NAV": "69.38",
+      "Premium/Discount": "-0.0288%"
     }
   ],
   "ticker": "ARKK",
-  "totalRows": 3031
+  "totalRows": 3033
 }

@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 19 2026",
+  "asOfDate": "Nov 23 2026",
   "aum": "$126.3 Million",
   "aumValue": 126300000,
   "category": "Thematic Equity",
-  "closePrice": "$24.58",
-  "closePriceValue": 24.58,
+  "closePrice": "$24.42",
+  "closePriceValue": 24.42,
   "dataFile": "funds/IZRL/meta.json",
   "distributions": {
     "dividend": "$0.7750",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-11-20T21:41:52Z",
+  "generatedAt": "2026-11-25T03:47:00Z",
   "history": {
-    "asOfDate": "Nov 19 2026",
+    "asOfDate": "Nov 23 2026",
     "headers": [
       "Date",
       "NAV",
@@ -56,10 +56,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2252
+    "totalRows": 2254
   },
   "holdings": {
-    "asOfDate": "Nov 20 2026",
+    "asOfDate": "Nov 24 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -92,8 +92,8 @@
     "cagr5y": -1.73,
     "cagr10y": null,
     "siAnn": 4.56,
-    "dividendYield": 3.15,
-    "dividendYieldText": "3.15%",
+    "dividendYield": 3.17,
+    "dividendYieldText": "3.17%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -101,10 +101,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Israel Innovative Technology ETF",
-  "nav": "$24.60",
-  "navValue": 24.6,
-  "premiumDiscount": "-0.0813%",
-  "premiumDiscountValue": -0.0813,
+  "nav": "$24.66",
+  "navValue": 24.66,
+  "premiumDiscount": "-0.9732%",
+  "premiumDiscountValue": -0.9732,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -138,7 +138,7 @@
     "fundPage": "https://www.ark-funds.com/funds/izrl",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1006?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-20",
+    "holdingsAsOfDate": "2026-11-24",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/ARK_ISRAEL_INNOVATIVE_TECHNOLOGY_ETF_IZRL_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
@@ -154,10 +154,10 @@
   "terValue": 0.49,
   "ticker": "IZRL",
   "yields": {
-    "dividendYield": 3.15,
+    "dividendYield": 3.17,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "3.15%",
+    "dividendYieldText": "3.17%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

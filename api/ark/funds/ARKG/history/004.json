@@ -193,8 +193,20 @@
       "Market Price": "40.27",
       "NAV": "40.28",
       "Premium/Discount": "-0.0248%"
+    },
+    {
+      "Date": "Nov 20 2026",
+      "Market Price": "38.00",
+      "NAV": "38.10",
+      "Premium/Discount": "-0.2625%"
+    },
+    {
+      "Date": "Nov 23 2026",
+      "Market Price": "40.97",
+      "NAV": "40.97",
+      "Premium/Discount": "0.0000%"
     }
   ],
   "ticker": "ARKG",
-  "totalRows": 3031
+  "totalRows": 3033
 }

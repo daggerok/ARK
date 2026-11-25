@@ -2521,8 +2521,20 @@
       "Market Price": "26.60",
       "NAV": "26.65",
       "Premium/Discount": "-0.1876%"
+    },
+    {
+      "Date": "Nov 20 2026",
+      "Market Price": "24.87",
+      "NAV": "24.88",
+      "Premium/Discount": "-0.0402%"
+    },
+    {
+      "Date": "Nov 23 2026",
+      "Market Price": "26.53",
+      "NAV": "26.50",
+      "Premium/Discount": "0.1132%"
     }
   ],
   "ticker": "ARKX",
-  "totalRows": 1419
+  "totalRows": 1421
 }
