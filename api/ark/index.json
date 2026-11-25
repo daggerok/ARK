@@ -326,11 +326,11 @@
         "range52wAsOf": "2026-11-23",
         "range52wSince": "2026-07-01",
         "range52wBasis": "Market Price",
-        "pctFrom52wHigh": -15.72,
+        "pctFrom52wHigh": -15.7,
         "athPrice": 21.59,
         "athDate": "2026-10-05",
         "athBasis": "daily closes since 2026-07-01",
-        "pctFromAth": -15.72,
+        "pctFromAth": -15.7,
         "volatility1y": null,
         "sigmaFromMean60d": -2.24,
         "high60d": 21.59,
@@ -360,7 +360,7 @@
         "corr1ySpy": null,
         "upCapture3ySpy": null,
         "downCapture3ySpy": null,
-        "relStrength3mSpy": -5.8,
+        "relStrength3mSpy": -5.78,
         "stressReturnSpy": -16.08,
         "stressBasisSpy": "SPY -11% 2026-10-06 to 2026-11-20",
         "vsQqq1y": null,
@@ -371,7 +371,7 @@
         "corr1yQqq": null,
         "upCapture3yQqq": null,
         "downCapture3yQqq": null,
-        "relStrength3mQqq": -1.67,
+        "relStrength3mQqq": -1.65,
         "stressReturnQqq": -16.08,
         "stressBasisQqq": "QQQ -20% 2026-10-06 to 2026-11-20",
         "benchmarkAsOf": "2026-11-24",
@@ -1833,5 +1833,5 @@
       "ticker": "PRNT"
     }
   ],
-  "generatedAt": "2026-11-25T03:47:23Z"
+  "generatedAt": "2026-11-25T06:46:36Z"
 }
