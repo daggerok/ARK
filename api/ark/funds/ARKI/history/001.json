@@ -991,8 +991,14 @@
       "Market Price": "20.21",
       "NAV": "20.15",
       "Premium/Discount": "0.2978%"
+    },
+    {
+      "Date": "Nov 24 2026",
+      "Market Price": "19.89",
+      "NAV": "19.89",
+      "Premium/Discount": "0.0000%"
     }
   ],
   "ticker": "ARKI",
-  "totalRows": 164
+  "totalRows": 165
 }

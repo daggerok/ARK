@@ -415,8 +415,14 @@
       "Market Price": "18.30",
       "NAV": "18.01",
       "Premium/Discount": "1.6102%"
+    },
+    {
+      "Date": "Nov 24 2026",
+      "Market Price": "17.65",
+      "NAV": "17.52",
+      "Premium/Discount": "0.7420%"
     }
   ],
   "ticker": "ARKY",
-  "totalRows": 68
+  "totalRows": 69
 }

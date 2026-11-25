@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 23 2026",
+  "asOfDate": "Nov 24 2026",
   "aum": "$55.8 Million",
   "aumValue": 55800000,
   "category": "Thematic Equity",
-  "closePrice": "$21.56",
-  "closePriceValue": 21.56,
+  "closePrice": "$21.50",
+  "closePriceValue": 21.5,
   "dataFile": "funds/PRNT/meta.json",
   "distributions": {
     "dividend": "$0.1750",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/prnt",
-  "generatedAt": "2026-11-25T03:47:00Z",
+  "generatedAt": "2026-11-25T23:16:35Z",
   "history": {
-    "asOfDate": "Nov 23 2026",
+    "asOfDate": "Nov 24 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,10 +64,10 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2603
+    "totalRows": 2604
   },
   "holdings": {
-    "asOfDate": "Nov 24 2026",
+    "asOfDate": "Nov 25 2026",
     "headers": [
       "Name",
       "Ticker",
@@ -109,10 +109,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "The 3D Printing ETF",
-  "nav": "$21.74",
-  "navValue": 21.74,
-  "premiumDiscount": "-0.8280%",
-  "premiumDiscountValue": -0.828,
+  "nav": "$21.61",
+  "navValue": 21.61,
+  "premiumDiscount": "-0.5090%",
+  "premiumDiscountValue": -0.509,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -146,7 +146,7 @@
     "fundPage": "https://www.ark-funds.com/funds/prnt",
     "historyApi": "https://www.ark-funds.com/api/fund/nav-historical-change/1005?headingText=NAV+Historical+Change&overviewText=NAV+and+Market+Price",
     "historySource": "official ARK Invest daily NAV and market-price history API",
-    "holdingsAsOfDate": "2026-11-24",
+    "holdingsAsOfDate": "2026-11-25",
     "holdingsCsv": "https://assets.ark-funds.com/fund-documents/funds-etf-csv/THE_3D_PRINTING_ETF_PRNT_HOLDINGS.csv",
     "holdingsDateBasis": "official holdings CSV date column",
     "holdingsSource": "official ARK daily holdings CSV",
