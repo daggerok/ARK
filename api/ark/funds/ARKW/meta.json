@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 24 2026",
+  "asOfDate": "Nov 25 2026",
   "aum": "$1,675 Million",
   "aumValue": 1675000000,
   "category": "Thematic Equity",
-  "closePrice": "$129.03",
-  "closePriceValue": 129.03,
+  "closePrice": "$129.07",
+  "closePriceValue": 129.07,
   "dataFile": "funds/ARKW/meta.json",
   "distributions": {
     "dividend": "$2.3520",
@@ -44,9 +44,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkw",
-  "generatedAt": "2026-11-25T23:16:17Z",
+  "generatedAt": "2026-11-26T09:35:18Z",
   "history": {
-    "asOfDate": "Nov 24 2026",
+    "asOfDate": "Nov 25 2026",
     "headers": [
       "Date",
       "NAV",
@@ -61,7 +61,7 @@
       "history/004.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 3057
+    "totalRows": 3058
   },
   "holdings": {
     "asOfDate": "Oct 06 2026",
@@ -106,10 +106,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Next Generation Technology ETF",
-  "nav": "$129.00",
-  "navValue": 129,
-  "premiumDiscount": "0.0233%",
-  "premiumDiscountValue": 0.0233,
+  "nav": "$129.21",
+  "navValue": 129.21,
+  "premiumDiscount": "-0.1084%",
+  "premiumDiscountValue": -0.1084,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",

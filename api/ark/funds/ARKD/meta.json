@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 24 2026",
+  "asOfDate": "Nov 25 2026",
   "aum": "$1 Million",
   "aumValue": 1000000,
   "category": "Defined Outcome",
-  "closePrice": "$18.59",
-  "closePriceValue": 18.59,
+  "closePrice": "$18.58",
+  "closePriceValue": 18.58,
   "dataFile": "funds/ARKD/meta.json",
   "distributions": {
     "dividend": "—",
@@ -19,9 +19,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkd",
-  "generatedAt": "2026-11-25T23:15:41Z",
+  "generatedAt": "2026-11-26T09:34:42Z",
   "history": {
-    "asOfDate": "Nov 24 2026",
+    "asOfDate": "Nov 25 2026",
     "headers": [
       "Date",
       "NAV",
@@ -33,7 +33,7 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 226
+    "totalRows": 227
   },
   "holdings": {
     "asOfDate": "Nov 25 2026",
@@ -78,10 +78,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK DIET Q1 Buffer ETF",
-  "nav": "$18.62",
-  "navValue": 18.62,
-  "premiumDiscount": "-0.1611%",
-  "premiumDiscountValue": -0.1611,
+  "nav": "$18.63",
+  "navValue": 18.63,
+  "premiumDiscount": "-0.2684%",
+  "premiumDiscountValue": -0.2684,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",

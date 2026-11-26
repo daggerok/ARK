@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 24 2026",
+  "asOfDate": "Nov 25 2026",
   "aum": "$126.3 Million",
   "aumValue": 126300000,
   "category": "Thematic Equity",
-  "closePrice": "$24.48",
-  "closePriceValue": 24.48,
+  "closePrice": "$24.41",
+  "closePriceValue": 24.41,
   "dataFile": "funds/IZRL/meta.json",
   "distributions": {
     "dividend": "$0.7750",
@@ -40,9 +40,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/izrl",
-  "generatedAt": "2026-11-25T23:16:36Z",
+  "generatedAt": "2026-11-26T09:35:36Z",
   "history": {
-    "asOfDate": "Nov 24 2026",
+    "asOfDate": "Nov 25 2026",
     "headers": [
       "Date",
       "NAV",
@@ -56,7 +56,7 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2255
+    "totalRows": 2256
   },
   "holdings": {
     "asOfDate": "Nov 25 2026",
@@ -101,10 +101,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK Israel Innovative Technology ETF",
-  "nav": "$24.59",
-  "navValue": 24.59,
-  "premiumDiscount": "-0.4473%",
-  "premiumDiscountValue": -0.4473,
+  "nav": "$24.46",
+  "navValue": 24.46,
+  "premiumDiscount": "-0.2044%",
+  "premiumDiscountValue": -0.2044,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
