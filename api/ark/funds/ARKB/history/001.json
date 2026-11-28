@@ -4339,8 +4339,14 @@
       "Market Price": "19.95",
       "NAV": "19.87",
       "Premium/Discount": "0.4026%"
+    },
+    {
+      "Date": "Nov 27 2026",
+      "Market Price": "19.84",
+      "NAV": "19.80",
+      "Premium/Discount": "0.2020%"
     }
   ],
   "ticker": "ARKB",
-  "totalRows": 722
+  "totalRows": 723
 }

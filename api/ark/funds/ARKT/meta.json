@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 25 2026",
+  "asOfDate": "Nov 27 2026",
   "aum": "$1.9 Million",
   "aumValue": 1900000,
   "category": "Defined Outcome",
-  "closePrice": "$17.34",
-  "closePriceValue": 17.34,
+  "closePrice": "$17.56",
+  "closePriceValue": 17.56,
   "dataFile": "funds/ARKT/meta.json",
   "distributions": {
     "dividend": "$0.0460",
@@ -24,9 +24,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/arkt",
-  "generatedAt": "2026-11-27T09:43:46Z",
+  "generatedAt": "2026-11-28T08:57:00Z",
   "history": {
-    "asOfDate": "Nov 25 2026",
+    "asOfDate": "Nov 27 2026",
     "headers": [
       "Date",
       "NAV",
@@ -38,7 +38,7 @@
       "history/001.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 291
+    "totalRows": 292
   },
   "holdings": {
     "asOfDate": "Nov 27 2026",
@@ -74,8 +74,8 @@
     "cagr5y": null,
     "cagr10y": null,
     "siAnn": -5.19,
-    "dividendYield": 0.27,
-    "dividendYieldText": "0.27%",
+    "dividendYield": 0.26,
+    "dividendYieldText": "0.26%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -83,10 +83,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "ARK DIET Q4 Buffer ETF",
-  "nav": "$17.40",
-  "navValue": 17.4,
-  "premiumDiscount": "-0.3448%",
-  "premiumDiscountValue": -0.3448,
+  "nav": "$17.60",
+  "navValue": 17.6,
+  "premiumDiscount": "-0.2273%",
+  "premiumDiscountValue": -0.2273,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -136,10 +136,10 @@
   "terValue": 0.89,
   "ticker": "ARKT",
   "yields": {
-    "dividendYield": 0.27,
+    "dividendYield": 0.26,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.27%",
+    "dividendYieldText": "0.26%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null

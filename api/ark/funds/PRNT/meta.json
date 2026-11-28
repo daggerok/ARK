@@ -1,10 +1,10 @@
 {
-  "asOfDate": "Nov 25 2026",
+  "asOfDate": "Nov 27 2026",
   "aum": "$55.8 Million",
   "aumValue": 55800000,
   "category": "Thematic Equity",
-  "closePrice": "$21.71",
-  "closePriceValue": 21.71,
+  "closePrice": "$22.40",
+  "closePriceValue": 22.4,
   "dataFile": "funds/PRNT/meta.json",
   "distributions": {
     "dividend": "$0.1750",
@@ -48,9 +48,9 @@
   },
   "exchange": "Cboe BZX",
   "fundPage": "https://www.ark-funds.com/funds/prnt",
-  "generatedAt": "2026-11-27T09:44:04Z",
+  "generatedAt": "2026-11-28T08:57:18Z",
   "history": {
-    "asOfDate": "Nov 25 2026",
+    "asOfDate": "Nov 27 2026",
     "headers": [
       "Date",
       "NAV",
@@ -64,7 +64,7 @@
       "history/003.json"
     ],
     "source": "official ARK Invest daily NAV and market-price history API",
-    "totalRows": 2605
+    "totalRows": 2606
   },
   "holdings": {
     "asOfDate": "Nov 27 2026",
@@ -100,8 +100,8 @@
     "cagr5y": -8.07,
     "cagr10y": 2.03,
     "siAnn": 2.31,
-    "dividendYield": 0.81,
-    "dividendYieldText": "0.81%",
+    "dividendYield": 0.78,
+    "dividendYieldText": "0.78%",
     "dividendYieldBasis": "computed-trailing-12m",
     "secYield": null,
     "secYieldText": null,
@@ -109,10 +109,10 @@
     "performanceAsOf": "2026-10-31"
   },
   "name": "The 3D Printing ETF",
-  "nav": "$21.75",
-  "navValue": 21.75,
-  "premiumDiscount": "-0.1839%",
-  "premiumDiscountValue": -0.1839,
+  "nav": "$22.54",
+  "navValue": 22.54,
+  "premiumDiscount": "-0.6211%",
+  "premiumDiscountValue": -0.6211,
   "returns": {
     "monthEnd": {
       "asOfDate": "Oct 31 2026",
@@ -162,10 +162,10 @@
   "terValue": 0.66,
   "ticker": "PRNT",
   "yields": {
-    "dividendYield": 0.81,
+    "dividendYield": 0.78,
     "dividendYieldBasis": "computed-trailing-12m",
     "dividendYieldKind": "Yahoo Finance trailing 12-month distributions / market price",
-    "dividendYieldText": "0.81%",
+    "dividendYieldText": "0.78%",
     "secYield": null,
     "secYieldKind": "not published by ARK for this fund",
     "secYieldText": null
